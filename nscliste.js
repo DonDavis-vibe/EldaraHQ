@@ -59,7 +59,12 @@ function nscListeHinzufuegen(vorlage) {
         bild: (vorlage && vorlage.bild) || null,
         // Kartentoken-Größe in Feldern (0.5-8, Halbschritte) - Vorgabe beim
         // Platzieren (karten.js: karteNsPlatzieren), siehe nscListeGroesseAendern.
-        groesse: Number((vorlage && vorlage.groesse)) || 1
+        groesse: Number((vorlage && vorlage.groesse)) || 1,
+        // Vertikaler Bildausschnitt für den runden Kartentoken (0 = oben/Gesicht,
+        // 50 = Mitte/Standard, 100 = unten) - bei hohen Hochformat-Porträts zeigt
+        // eine reine Zentrierung sonst eher Bauch als Gesicht. Siehe
+        // nscListeBildPositionAendern und battlemap.js: setFigurBildPosition.
+        bildY: (vorlage && Number.isFinite(Number(vorlage.bildY))) ? Number(vorlage.bildY) : 50
     };
     nscListe = [eintrag].concat(nscListe);
     nscListeSichern();
@@ -168,6 +173,18 @@ function nscListeGroesseAendern(id, delta) {
     if (typeof karteNscGroessenAnwenden === 'function') karteNscGroessenAnwenden();
 }
 
+// Vertikaler Bildausschnitt (0-100, siehe Feldkommentar oben) - per Live-Regler
+// direkt im Vorschau-Icon UND auf einem schon platzierten Token sichtbar, ohne
+// bei jedem Ziehen die ganze Liste neu zu rendern (siehe renderNscListeGm).
+function nscListeBildPositionSetzen(id, wert) {
+    const eintrag = nscListe.find(n => n.id === id);
+    if (!eintrag) return;
+    const zahl = Number(wert);
+    eintrag.bildY = Math.max(0, Math.min(100, Number.isFinite(zahl) ? zahl : 50));
+    nscListeSichern();
+    if (typeof karteNscBildPositionAnwenden === 'function') karteNscBildPositionAnwenden();
+}
+
 // Klont einen NSC mit fortlaufender Nummer im Namen - für Gruppen identischer
 // Gegner ("Wache", "Wache 2", "Wache 3", ...). Zählt über ALLE Einträge mit
 // demselben Namensstamm (nicht nur den gerade geklickten), damit auch
@@ -239,7 +256,7 @@ function renderNscListeGm() {
         <div class="nsc-item">
             <div class="nsc-item-kopf">
                 <label style="cursor:pointer; display:inline-flex;" title="Eigenes Karten-Icon hochladen (wird auf platzierten Kartentoken übernommen)">
-                    ${n.bild ? `<img class="gr-bild" src="${n.bild}" alt="">` : `<span class="gr-bild gr-bild-leer"><i class="fa-solid fa-image"></i></span>`}
+                    ${n.bild ? `<img class="gr-bild" src="${n.bild}" alt="" style="object-position: 50% ${Number(n.bildY) || 50}%">` : `<span class="gr-bild gr-bild-leer"><i class="fa-solid fa-image"></i></span>`}
                     <input type="file" accept="image/*" style="display:none" data-nscbild="${escapeHtml(n.id)}">
                 </label>
                 <button class="x-mini" data-nscgalerie="${escapeHtml(n.id)}" title="Kartentoken aus vorgefertigter Galerie wählen"><i class="fa-solid fa-images"></i></button>
@@ -257,6 +274,10 @@ function renderNscListeGm() {
                 <button class="x-mini" data-nscdup="${escapeHtml(n.id)}" title="Duplizieren (z.B. Wache 2, Wache 3, ...)"><i class="fa-solid fa-copy"></i></button>
                 <button class="x-mini x-mini-danger" data-nscdel="${escapeHtml(n.id)}" title="NSC entfernen"><i class="fa-solid fa-trash"></i></button>
             </div>
+            ${n.bild ? `<div class="nsc-bildausschnitt" title="Bildausschnitt: welcher Teil des Bilds im runden Kartentoken zu sehen ist">
+                <i class="fa-solid fa-arrows-up-down"></i>
+                <input type="range" min="0" max="100" step="5" value="${Number(n.bildY) || 50}" data-nscbildy="${escapeHtml(n.id)}">
+            </div>` : ''}
             ${details ? `<div class="nsc-item-details">${details}</div>` : ''}
             <textarea class="x-input nsc-notiz" data-nscnotiz="${escapeHtml(n.id)}" placeholder="Eigene Notiz - z.B. wie es mit dem NSC weiterging …" rows="1">${escapeHtml(n.notiz)}</textarea>
         </div>`;
@@ -306,6 +327,14 @@ function renderNscListeGm() {
     box.querySelectorAll('[data-nscgroesse]').forEach(b => b.addEventListener('click', () => {
         const [id, delta] = b.dataset.nscgroesse.split(':');
         nscListeGroesseAendern(id, parseFloat(delta));
+    }));
+    // 'input' statt 'change': live beim Ziehen, ohne bei jedem Tick die ganze
+    // Liste neu zu rendern (das würde den Regler unter der Maus wegreißen) -
+    // nur das eigene Vorschau-Icon direkt aktualisieren.
+    box.querySelectorAll('[data-nscbildy]').forEach(inp => inp.addEventListener('input', () => {
+        nscListeBildPositionSetzen(inp.dataset.nscbildy, inp.value);
+        const vorschau = inp.closest('.nsc-item-kopf').querySelector('.gr-bild');
+        if (vorschau && vorschau.tagName === 'IMG') vorschau.style.objectPosition = `50% ${inp.value}%`;
     }));
     box.querySelectorAll('[data-nsckarte]').forEach(b => b.addEventListener('click', () => {
         const n = nscListe.find(x => x.id === b.dataset.nsckarte);

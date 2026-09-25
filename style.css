@@ -1996,6 +1996,14 @@ body.theme-pirates .btn-primary:hover {
 }
 .nsc-groesse-val { min-width: 1.6em; text-align: center; font-family: var(--font-mono); }
 
+.nsc-bildausschnitt {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.45rem;
+}
+.nsc-bildausschnitt input[type="range"] {
+    flex: 1; max-width: 220px; accent-color: var(--color-accent, #8b5cf6); cursor: pointer;
+}
+
 /* Galerie-Auswahl fuer Kartentoken (nscliste.js: nscListeGaleriePicker) */
 .nsc-galerie-modal { max-width: 900px; width: 92%; max-height: 82vh; overflow-y: auto; }
 .nsc-galerie-gruppe { margin-top: 1rem; }

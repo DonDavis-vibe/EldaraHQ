@@ -133,6 +133,7 @@ function karteSpielerFigurenAbgleichen() {
     karteFigurenPortraitsWiederherstellen();
     karteNscBilderAnwenden();
     karteNscGroessenAnwenden();
+    karteNscBildPositionAnwenden();
 }
 
 // Vom SL entfernt: seine Karten-Figur bleibt sonst als Leiche stehen.
@@ -163,6 +164,7 @@ function karteEinhaengen(canvas) {
     karteFigurenPortraitsWiederherstellen();
     karteNscBilderAnwenden();
     karteNscGroessenAnwenden();
+    karteNscBildPositionAnwenden();
 }
 
 function karteNeuDialog() {
@@ -198,6 +200,7 @@ function karteWechseln(id) {
     karteFigurenPortraitsWiederherstellen();
     karteNscBilderAnwenden();
     karteNscGroessenAnwenden();
+    karteNscBildPositionAnwenden();
     karteSichern();
     karteVerteilen();
     renderKarteGm();
@@ -274,7 +277,10 @@ function karteNsPlatzieren(nsc) {
     if (karteMap.figuren.find(f => f.id === id)) { renderKarteGm(); return; }
     const pos = karteFreieSpawnPosition();
     karteMap.addFigur({ id, name: nsc.name || 'NSC', x: pos.x, y: pos.y, groesse: Number(nsc.groesse) || 1, besitzer: 'sl', farbe: '#a3342b' });
-    if (nsc.bild) karteMap.setFigurBild(id, nsc.bild);
+    if (nsc.bild) {
+        karteMap.setFigurBild(id, nsc.bild);
+        karteMap.setFigurBildPosition(id, Number(nsc.bildY));
+    }
     if (typeof addGmLogEntry === 'function') addGmLogEntry('Spielleiter', `setzt "${nsc.name || 'NSC'}" auf die Karte.`, '🗺️');
     renderKarteGm();
 }
@@ -294,6 +300,19 @@ function karteNscBilderAnwenden() {
         // setFigurBild(id, null) löscht es aus battlemap.js' eigenem Cache,
         // sonst bliebe ein einmal gesetztes Icon dort für immer hängen.
         if (n) karteMap.setFigurBild(f.id, n.bild || null);
+    });
+}
+
+// Vertikaler Bildausschnitt je NSC (nscliste.js: n.bildY) auf jeden schon
+// platzierten Token nachziehen - aus demselben Grund wie das Bild selbst
+// (siehe karteNscBilderAnwenden), da auch das kein Teil von battlemap.js'
+// eigenem Zustand ist.
+function karteNscBildPositionAnwenden() {
+    if (!karteMap || typeof nscListe === 'undefined') return;
+    karteMap.figuren.forEach(f => {
+        if (!f.id.startsWith('nsc:')) return;
+        const n = nscListe.find(x => x.id === f.id.slice('nsc:'.length));
+        if (n) karteMap.setFigurBildPosition(f.id, Number(n.bildY));
     });
 }
 

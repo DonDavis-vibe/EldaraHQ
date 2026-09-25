@@ -129,6 +129,10 @@ const BattleMap = (() => {
         // während der Zustand bei jeder Bewegung übertragen wird.
         const figurBilder = {};    // id -> Image
         const figurBildQuellen = {};
+        // id -> vertikaler Ankerpunkt des Porträts in Prozent (0 = oben, 50 =
+        // Mitte/Standard, 100 = unten) - bei hohen Hochformat-Porträts landet
+        // sonst der Bauch statt des Gesichts in der Mitte des runden Tokens.
+        const figurBildPosition = {};
         let messung = null;                        // {vonX, vonY, zuX, zuY}
         let ziehen = null;
         let nurEigene = null;                      // Besitzer-Kennung für Spieler
@@ -448,7 +452,13 @@ const BattleMap = (() => {
                 const seite = radius * 2;
                 const skala = Math.max(seite / portrait.naturalWidth, seite / portrait.naturalHeight);
                 const bw = portrait.naturalWidth * skala, bh = portrait.naturalHeight * skala;
-                ctx.drawImage(portrait, mitte.x - bw / 2, mitte.y - bh / 2, bw, bh);
+                // Vertikaler Ankerpunkt statt fixer Mitte - bei hohen Porträts
+                // (z.B. 683x1024) ragt bh sonst weit über den Token hinaus und
+                // eine reine Zentrierung zeigt eher Bauch als Gesicht.
+                const ankerY = figurBildPosition[f.id] !== undefined ? figurBildPosition[f.id] : 50;
+                const ueberhangY = bh - seite;
+                const bildY = mitte.y - seite / 2 - ueberhangY * (ankerY / 100);
+                ctx.drawImage(portrait, mitte.x - bw / 2, bildY, bw, bh);
                 ctx.restore();
             } else {
                 ctx.beginPath();
@@ -829,6 +839,7 @@ const BattleMap = (() => {
             zustand.figuren = zustand.figuren.filter(f => f.id !== id);
             delete figurBilder[id];
             delete figurBildQuellen[id];
+            delete figurBildPosition[id];
             zeichnen();
             melden();
         }
@@ -839,6 +850,7 @@ const BattleMap = (() => {
             if (!dataUrl) {
                 delete figurBilder[id];
                 delete figurBildQuellen[id];
+                delete figurBildPosition[id];
                 zeichnen();
                 return;
             }
@@ -849,6 +861,16 @@ const BattleMap = (() => {
             bild.onerror = () => { delete figurBilder[id]; };
             bild.src = dataUrl;
             figurBilder[id] = bild;
+        }
+
+        // Vertikaler Bildausschnitt eines Porträts (0-100, siehe zeichneFigur) -
+        // genau wie das Porträt selbst bewusst NICHT Teil von getState().
+        function setFigurBildPosition(id, y) {
+            const zahl = Number(y);
+            const wert = Math.max(0, Math.min(100, Number.isFinite(zahl) ? zahl : 50));
+            if (figurBildPosition[id] === wert) return;
+            figurBildPosition[id] = wert;
+            zeichnen();
         }
 
         // Alle bekannten Porträts als {id: dataUrl} — zum Weitergeben ans Netz
@@ -1065,7 +1087,7 @@ const BattleMap = (() => {
 
         return {
             setBild, setRaster, addFigur, removeFigur, figurenLoeschen,
-            setFigurBild, getFigurBilder, setFigurGroesse,
+            setFigurBild, getFigurBilder, setFigurGroesse, setFigurBildPosition,
             setBestaetigung, zugBestaetigen, zugVerwerfen, offeneZuege,
             setMessModus, istMessModus, setVerdeckt, getStateFuerSpieler,
             setWerkzeug, getWerkzeug, setMalArt, getMalArt, setMalFarbe, getMalFarbe, formenLoeschen,
