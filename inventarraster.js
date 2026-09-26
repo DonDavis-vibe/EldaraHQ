@@ -100,6 +100,108 @@ const IR_RUESTUNGSSTUFE_MALI = {
     schwer: { bewegung: -2, handeln: -10, heimlichkeit: -15 }
 };
 
+// --- Katalog aus dem Regelwerk (RW4.3) fürs Item-Formular ------------------
+//
+// Nutzt dieselbe Datenquelle wie Tischmitte/Zufallsgenerator
+// (randomizerPaketeGeladen.eldora.tabellen, siehe randomizer/eldora.js) statt
+// die ~136 Items hier nochmal zu duplizieren. Vor allem für Spieler gedacht,
+// die von einem Papierbogen umsteigen und ihr bestehendes Inventar schnell
+// nachbauen wollen - ersetzt die freie Eingabe NICHT, ist nur eine Abkürzung.
+//
+// "Magische Gegenstände" tragen im Katalog ihre Art als Kategorie-Text
+// (z.B. "Schuhe", "Amulett", "Säbel") statt als Slot/Waffen-Flag - hier auf
+// unser Datenmodell übersetzt (irAusruestungsslot bzw. istWaffe), damit z.B.
+// Schuhe wirklich automatisch auf den Füße-Slot vorausgewählt werden und
+// nicht als loses, nirgends anziehbares Item im Rucksack landen.
+let irKatalogGeladen = false;
+
+const IR_KATALOG_KATEGORIE_SLOT = {
+    'Kopfbedeckung': 'kopf',
+    'Mantel': 'schulterhals',
+    'Oberteil': 'brust',
+    'Handschuhe': 'haende',
+    'Schuhe': 'fuesse',
+    'Amulett': 'schmuck',
+    'Schmuck': 'schmuck',
+    'Talisman': 'schmuck'
+};
+const IR_KATALOG_KATEGORIE_WAFFE = new Set([
+    'Axt', 'Bombe', 'Dolch', 'Faustwaffe', 'Kanone', 'Muskete', 'Pistole',
+    'Schusswaffe', 'Stab', 'Stock', 'Säbel', 'Zweihandwaffe'
+]);
+const IR_KATALOG_GRUPPEN = [
+    { key: 'waffen_shop', label: 'Waffen' },
+    { key: 'gegenstaende_magisch', label: 'Magische Gegenstände' },
+    { key: 'herstellbare_gegenstaende', label: 'Herstellbare Gegenstände' },
+    { key: 'handelswaren', label: 'Handelswaren' }
+];
+
+function irKatalogTabellen() {
+    const p = typeof randomizerPaketeGeladen !== 'undefined' ? randomizerPaketeGeladen.eldora : null;
+    return (p && p.tabellen) || null;
+}
+
+function irKatalogHtml() {
+    const t = irKatalogTabellen();
+    if (!t) return '';
+    const optionen = IR_KATALOG_GRUPPEN.map(g => {
+        const eintraege = (t[g.key] && t[g.key].eintraege) || [];
+        if (!eintraege.length) return '';
+        return `<optgroup label="${escapeHtml(g.label)}">${eintraege.map((e, i) =>
+            `<option value="${g.key}::${i}">${escapeHtml(e.haupt)}${e.neben ? ' – ' + escapeHtml(e.neben) : ''}</option>`
+        ).join('')}</optgroup>`;
+    }).join('');
+    if (!optionen) return '';
+    return `<select id="ir-neu-katalog" class="ir-input" title="Übernimmt Name (und Waffe/Schaden bzw. passenden Ausrüstungsplatz) aus dem Regelwerk" onchange="irKatalogAuswaehlen(this.value)">
+        <option value="">📖 Aus Regelwerk wählen …</option>
+        ${optionen}
+    </select>`;
+}
+
+function irKatalogAuswaehlen(wert) {
+    if (!wert) return;
+    const [gruppenKey, indexStr] = wert.split('::');
+    const t = irKatalogTabellen();
+    const eintrag = t && t[gruppenKey] && t[gruppenKey].eintraege[parseInt(indexStr, 10)];
+    if (!eintrag) return;
+
+    const nameEl = document.getElementById('ir-neu-name');
+    const descEl = document.getElementById('ir-neu-desc');
+    const istWaffeEl = document.getElementById('ir-neu-istwaffe');
+    const schadenEl = document.getElementById('ir-neu-schaden');
+    const ausrEl = document.getElementById('ir-neu-ausruestung');
+    const ruestungswertEl = document.getElementById('ir-neu-ruestungswert');
+    if (!nameEl) return;
+
+    nameEl.value = eintrag.haupt || '';
+    if (descEl) descEl.value = '';
+    if (schadenEl) schadenEl.value = '';
+    if (ruestungswertEl) ruestungswertEl.value = '';
+    // Erst zurücksetzen (inkl. change-Event, das die Schaden-/Rüstungswert-
+    // Felder ein-/ausblendet - siehe die Listener direkt nach dem
+    // box.innerHTML-Aufbau in renderInventarRaster), dann ggf. neu setzen.
+    if (istWaffeEl) { istWaffeEl.checked = false; istWaffeEl.dispatchEvent(new Event('change')); }
+    if (ausrEl) { ausrEl.value = ''; ausrEl.dispatchEvent(new Event('change')); }
+
+    if (gruppenKey === 'waffen_shop') {
+        if (istWaffeEl) { istWaffeEl.checked = true; istWaffeEl.dispatchEvent(new Event('change')); }
+        if (schadenEl) schadenEl.value = eintrag.neben || '';
+    } else if (gruppenKey === 'gegenstaende_magisch') {
+        const kategorie = eintrag.neben || '';
+        if (descEl) descEl.value = kategorie;
+        if (IR_KATALOG_KATEGORIE_WAFFE.has(kategorie)) {
+            if (istWaffeEl) { istWaffeEl.checked = true; istWaffeEl.dispatchEvent(new Event('change')); }
+        } else if (IR_KATALOG_KATEGORIE_SLOT[kategorie] && ausrEl) {
+            ausrEl.value = IR_KATALOG_KATEGORIE_SLOT[kategorie];
+            ausrEl.dispatchEvent(new Event('change'));
+        }
+    } else {
+        // herstellbare_gegenstaende / handelswaren: "neben" ist Effekt/Preis-Info
+        if (descEl) descEl.value = eintrag.neben || '';
+    }
+    nameEl.focus();
+}
+
 // --- Rüstung (getragene Ausrüstung, jetzt als Raster-Zonen) ----------------
 
 // Eine Zone pro Ausrüstungsplatz-Typ (Schmuck mit breite:3, alle anderen mit
@@ -187,17 +289,28 @@ function irZoneVonSlot(slot, kontext) {
     return irZonenDefinition(kontext).find(z => z.id === zoneId) || null;
 }
 
-// Waffen sollen beim automatischen Einsortieren bevorzugt ihre 2 dedizierten
-// Gürtelplätze bekommen (dort kostet die Waffe nur 1 Feld statt ihrer echten
-// Größe) statt zuerst die 5 normalen Gürtelplätze zu belegen. Alle anderen
-// Gegenstände ignorieren die Waffen-Zone ohnehin (irZonePasstFuerItem).
+// Automatisches Einsortieren (neues Item, Tischmitte/Kiste/Schiff-Empfang,
+// Größenänderung) soll zuerst den Rucksack (+ Zusatztaschen) füllen, der
+// Gürtel ist nur noch der letzte Ausweg, wenn dort nichts mehr passt - vorher
+// ging automatisch alles zuerst in den Gürtel, weil der einfach zuerst in der
+// Zonen-Liste stand (SL-Wunsch: Rucksack zuerst). Waffen bekommen weiterhin
+// bevorzugt ihre 2 dedizierten Gürtel-Waffenplätze (dort kostet die Waffe nur
+// 1 Feld statt ihrer echten Größe) - das ist eine eigene, bewusste Ausnahme,
+// noch vor dem Rucksack. Ausrüstungsplätze (Kopf/Schulter.../Schmuck) fallen
+// beim Auto-Einsortieren komplett raus - die bleiben bewusst Ziehen-only
+// (siehe irItemHinzufuegen), sonst würde ein neu angelegtes Ausrüstungsstück
+// sich sofort selbst anziehen.
 function irReihenfolgeFuer(item, kontext) {
-    const alle = irAlleSlots(kontext);
-    if (!item || !item.istWaffe) return alle;
-    return alle.slice().sort((a, b) => {
-        const za = irZoneVonSlot(a, kontext), zb = irZoneVonSlot(b, kontext);
-        return (za && za.nurWaffen ? 0 : 1) - (zb && zb.nurWaffen ? 0 : 1);
-    });
+    const prioritaet = zone => {
+        if (!zone) return 3;
+        if (zone.nurWaffen) return (item && item.istWaffe) ? 0 : 3;
+        if (zone.id === 'rucksack' || zone.zusatzIndex !== undefined) return 1;
+        if (zone.id === 'guertel') return 2;
+        return 3;
+    };
+    return irAlleSlots(kontext)
+        .filter(slot => !(irZoneVonSlot(slot, kontext) || {}).nurAusruestung)
+        .sort((a, b) => prioritaet(irZoneVonSlot(a, kontext)) - prioritaet(irZoneVonSlot(b, kontext)));
 }
 
 // Die beiden Gürtel-Waffenplätze (S.25f) sind waffen-exklusiv, die sieben
@@ -341,6 +454,29 @@ function irAutoPlatzieren(itemId) {
 
 function irFehlendeEinsortieren() {
     (appData.inventory || []).forEach(item => irAutoPlatzieren(item.id));
+}
+
+// Von Tischmitte/Kiste/Schiff aufgerufen, wenn irAutoPlatzieren nach dem
+// Empfang keinen Platz gefunden hat: der Gegenstand geht NICHT verloren
+// (bleibt in appData.inventory, siehe unplatziert-Zeile in
+// renderInventarRaster), aber ohne festen Hinweis fällt das leicht unter den
+// Tisch - wer gerade im Tischmitte- oder Schiffs-Panel schaut, sieht die
+// passive Warnzeile im Inventar unten drunter gar nicht. Deshalb ein
+// unübersehbarer Alert mit konkreten nächsten Schritten, plus Sprung samt
+// Hervorhebung zum Inventar, wo man sofort etwas löschen, umgrößern oder
+// aufs Schiff legen kann, um Platz zu schaffen.
+function irKeinPlatzHinweis(name) {
+    alert(`"${name || 'Der Gegenstand'}" passt gerade nirgends rein - Rucksack, Gürtel und Zusatztaschen sind voll.\n\nEr bleibt bei dir, aber ohne festen Platz im Raster, bis du Platz schaffst (z.B. im Inventar etwas löschen, verkleinern oder aufs Schiff legen). Danach sortiert er sich beim nächsten Öffnen automatisch ein.`);
+    // Inventar-Kategorie kann eingeklappt sein (details, siehe index.html) -
+    // ohne das würde der Sprung/die Hervorhebung ins Leere laufen.
+    const section = document.getElementById('inventory-section');
+    if (section && 'open' in section) section.open = true;
+    if (typeof mobilenavSpringenZu === 'function') {
+        mobilenavSpringenZu('inventar-raster');
+    } else {
+        const el = document.getElementById('inventar-raster');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 }
 
 // --- Waffen <-> Raster (siehe Kommentar am Dateikopf) ------------------------
@@ -714,6 +850,12 @@ function irZoneHtml(zone, raster, items) {
 function renderInventarRaster() {
     const box = document.getElementById('inventar-raster');
     if (!box) return;
+    // Katalog aus dem Regelwerk (RW4.3) fürs Item-Formular unten - dieselbe
+    // Datenquelle wie Zufallsgenerator/Tischmitte, lädt sich beim ersten
+    // Öffnen nach (wenige KB). Siehe irKatalogHtml/irKatalogAuswaehlen.
+    if (!irKatalogGeladen && typeof randomizerAlleLaden === 'function') {
+        randomizerAlleLaden(() => { irKatalogGeladen = true; renderInventarRaster(); });
+    }
     irFehlendeEinsortieren();
     const raster = irRasterDaten();
     const items = irItemsById();
@@ -742,7 +884,7 @@ function renderInventarRaster() {
             </div>
         </div>
         ${handelnMalus ? `<p class="ir-hint ir-warnung"><i class="fa-solid fa-triangle-exclamation"></i> Zusatztaschen kosten dich aktuell -${handelnMalus} auf Handeln, solange du sie trägst - beim Würfeln selbst im Bonus/Malus-Feld eintragen.</p>` : ''}
-        ${unplatziert.length ? `<p class="ir-hint ir-warnung"><i class="fa-solid fa-triangle-exclamation"></i> Kein Platz mehr für: ${unplatziert.map(i => escapeHtml(i.name)).join(', ')} - erst Platz schaffen (löschen, Größe ändern oder eine Zusatztasche anlegen).</p>` : ''}
+        ${unplatziert.length ? `<p class="ir-hint ir-warnung"><i class="fa-solid fa-triangle-exclamation"></i> Kein Platz mehr für: ${unplatziert.map(i => escapeHtml(i.name)).join(', ')} - erst Platz schaffen (löschen, Größe ändern, aufs Schiff legen oder eine Zusatztasche anlegen).</p>` : ''}
         ${(appData.weapons || []).length ? `<p class="ir-hint ir-warnung"><i class="fa-solid fa-triangle-exclamation"></i> Passt (noch) nicht ins Raster: ${appData.weapons.map(w => escapeHtml(w.name)).join(', ')} - bleibt vorerst im klassischen Waffen-Bestand, bis Platz frei ist.</p>` : ''}
         ${(() => {
             // Paperdoll-Anordnung (Diablo-artig, auf Wunsch der Runde): jeder
@@ -779,6 +921,7 @@ function renderInventarRaster() {
         })()}
         <div id="ir-status" class="x-hint"></div>
         <div class="ir-form">
+            ${irKatalogHtml()}
             <input type="text" id="ir-neu-name" class="ir-input" placeholder="Item Name..." onkeydown="if(event.key==='Enter') irItemHinzufuegen()">
             <select id="ir-neu-groesse" class="ir-input ir-input-groesse" title="Größe laut Regelwerk S.26">
                 ${IR_GROESSEN_KATALOG.map(g => `<option value="${g.wert}" ${g.wert === 1 ? 'selected' : ''}>${g.label}</option>`).join('')}

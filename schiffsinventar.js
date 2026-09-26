@@ -551,10 +551,11 @@ function schiffGeschenkEmpfangen(item) {
         irGroesse: Number(item.groesse) || 1
     };
     appData.inventory.push(neu);
-    if (typeof irAutoPlatzieren === 'function') irAutoPlatzieren(neu.id);
+    const platziert = typeof irAutoPlatzieren === 'function' ? irAutoPlatzieren(neu.id) : true;
     if (typeof addActivityLog === 'function') addActivityLog(`Vom Schiff genommen: ${schiffLabel(item)}`, 'activity-good', '<i class="fa-solid fa-sailboat"></i>');
     if (typeof saveData === 'function') saveData();
     if (typeof renderAll === 'function') renderAll();
+    if (!platziert && typeof irKeinPlatzHinweis === 'function') { irKeinPlatzHinweis(neu.name); return; }
     schiffHinweis(`${schiffLabel(item)} genommen.`);
 }
 
@@ -613,10 +614,11 @@ function kisteGeschenkEmpfangen(item) {
         irGroesse: 1
     };
     appData.inventory.push(neu);
-    if (typeof irAutoPlatzieren === 'function') irAutoPlatzieren(neu.id);
+    const platziert = typeof irAutoPlatzieren === 'function' ? irAutoPlatzieren(neu.id) : true;
     if (typeof addActivityLog === 'function') addActivityLog(`Aus der eigenen Kiste genommen: ${schiffLabel(item)}`, 'activity-good', '<i class="fa-solid fa-box-archive"></i>');
     if (typeof saveData === 'function') saveData();
     if (typeof renderAll === 'function') renderAll();
+    if (!platziert && typeof irKeinPlatzHinweis === 'function') { irKeinPlatzHinweis(neu.name); return; }
     schiffHinweis(`${schiffLabel(item)} genommen.`);
 }
 

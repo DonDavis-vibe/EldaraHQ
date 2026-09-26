@@ -2,20 +2,31 @@
 //
 // Reine Merkliste für den SL: NPCs, die im Laufe der Runde auftauchen - egal ob
 // von Hand eingetragen oder direkt aus dem Zufallsgenerator übernommen (Knopf
-// "In NSC-Liste übernehmen" beim NSC-Ergebnis, siehe randomizer.js). Bleibt
-// komplett lokal beim SL, geht nie an Spieler raus - anders als die Tischmitte
-// gibt es hier auch kein "Aufdecken", das wäre hier gar nicht der Punkt.
+// "In NSC-Liste übernehmen" beim NSC-Ergebnis, siehe randomizer.js). Die Liste
+// selbst bleibt komplett lokal beim SL, geht nie an Spieler raus - anders als
+// die Tischmitte gibt es hier auch kein "Aufdecken", das wäre hier gar nicht
+// der Punkt. Einzige Ausnahme: das Kartentoken-Porträt (bild/bildY) eines auf
+// der Karte platzierten NSCs geht gezielt einzeln an Spieler raus, siehe
+// Feldkommentar bei "Eintrag:" unten.
 //
 // Eintrag: { id, name, ort, rolle, haltung, auffaelligkeit, motivation, wesen, notiz, bild }
 // notiz ist frei editierbar - der Platz für "wie es mit dem NSC weiterging".
-// bild (optional, Data-URL) ist das Karten-Icon dieses NSCs - wird beim
-// Platzieren (karten.js: karteNsPlatzieren) als Kartentoken-Porträt gesetzt
-// UND auf jeden bereits platzierten Token automatisch nachgezogen, sobald es
-// sich ändert (karteNscBilderAnwenden) - battlemap.js hält Porträts bewusst
-// außerhalb seines eigenen synchronisierten Zustands (siehe dort), die
-// Quelle der Wahrheit ist hier in der NSC-Liste. Bleibt (wie der Rest der
-// Liste) rein SL-seitig - Spieler sehen weiterhin nur Name/Farbe ihrer
-// Kartentoken, keine NSC-Bilder.
+// bild (Data-URL bei eigenem Upload, sonst ein Pfad unter assets/npc-grafiken/
+// bei Galerie-Auswahl) ist das Karten-Icon dieses NSCs - wird beim Platzieren
+// (karten.js: karteNsPlatzieren) als Kartentoken-Porträt gesetzt UND auf jeden
+// bereits platzierten Token automatisch nachgezogen, sobald es sich ändert
+// (karteNscBilderAnwenden). battlemap.js hält Porträts bewusst außerhalb
+// seines eigenen synchronisierten Zustands (siehe dort), die Quelle der
+// Wahrheit ist hier in der NSC-Liste.
+//
+// Bild UND Bildausschnitt gehen inzwischen gezielt einzeln an Spieler raus
+// (karten.js: karteNscBildVerteilen/karteNscBildPositionVerteilen), sonst
+// bleibt ein platziertes NSC-Token beim Spieler für immer nur ein bunter
+// Kreis mit Namenskürzel, obwohl der SL selbst das Porträt sieht. Bei einem
+// Galerie-Pfad ist das nur eine kurze URL, die der Spieler-Browser sich ganz
+// normal selbst von assets/ lädt - keine Bilddaten über die Leitung. Der Rest
+// der Liste (ort, rolle, haltung, auffaelligkeit, motivation, wesen, notiz)
+// bleibt weiterhin rein SL-seitig und geht nie an Spieler raus.
 
 const NSC_LISTE_KEY = 'htbah_gm_nscliste';
 const NSC_LISTE_OFFEN_KEY = 'htbah_gm_nscliste_offen';
@@ -100,6 +111,7 @@ function nscListeBildHochladen(id, ereignis) {
         nscListeSichern();
         renderNscListeGm();
         if (typeof karteNscBilderAnwenden === 'function') karteNscBilderAnwenden();
+        if (typeof karteNscBildVerteilen === 'function') karteNscBildVerteilen('nsc:' + id, eintrag.bild, eintrag.bildY);
     }).catch(() => { alert('Bild konnte nicht geladen werden.'); });
     ereignis.target.value = '';
 }
@@ -111,6 +123,7 @@ function nscListeBildEntfernen(id) {
     nscListeSichern();
     renderNscListeGm();
     if (typeof karteNscBilderAnwenden === 'function') karteNscBilderAnwenden();
+    if (typeof karteNscBildVerteilen === 'function') karteNscBildVerteilen('nsc:' + id, null, eintrag.bildY);
 }
 
 // --- Kartentoken aus der vorgefertigten Galerie wählen (assets/npc-grafiken/) ---
@@ -158,6 +171,7 @@ function nscListeBildSetzen(id, pfad) {
     nscListeGalerieSchliessen();
     renderNscListeGm();
     if (typeof karteNscBilderAnwenden === 'function') karteNscBilderAnwenden();
+    if (typeof karteNscBildVerteilen === 'function') karteNscBildVerteilen('nsc:' + id, eintrag.bild, eintrag.bildY);
 }
 
 // Kartentoken-Größe in Feldern ändern (0.5-8, Halbschritte wie battlemap.js'
@@ -183,6 +197,7 @@ function nscListeBildPositionSetzen(id, wert) {
     eintrag.bildY = Math.max(0, Math.min(100, Number.isFinite(zahl) ? zahl : 50));
     nscListeSichern();
     if (typeof karteNscBildPositionAnwenden === 'function') karteNscBildPositionAnwenden();
+    if (typeof karteNscBildPositionVerteilen === 'function') karteNscBildPositionVerteilen('nsc:' + id, eintrag.bildY);
 }
 
 // Klont einen NSC mit fortlaufender Nummer im Namen - für Gruppen identischer

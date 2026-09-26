@@ -54,7 +54,7 @@ const blankData = {
     vorname: 'Testy',
     name: 'McTestface',
     geschlecht: 'Divers',
-    beruf: 'Ödland-Plünderer',
+    beruf: 'Freibeuter',
     alter: '28',
     statur: 'Zäh wie Leder',
     
@@ -64,15 +64,15 @@ const blankData = {
     attr_handeln: 15,
     gbp_handeln: 2,
     skills_handeln: [
-        {id: 's_h1', name: 'Schießen', invested: 60},
-        {id: 's_h2', name: 'Ausweichen', invested: 40},
-        {id: 's_h3', name: 'Klettern', invested: 50}
+        {id: 's_h1', name: 'Fernkampf', invested: 60},
+        {id: 's_h2', name: 'Wahrnehmung', invested: 40},
+        {id: 's_h3', name: 'Athletik', invested: 50}
     ],
 
     attr_wissen: 15,
     gbp_wissen: 2,
     skills_wissen: [
-        {id: 's_w1', name: 'Erste Hilfe', invested: 50},
+        {id: 's_w1', name: 'Medizin', invested: 50},
         {id: 's_w2', name: 'Überleben', invested: 50},
         {id: 's_w3', name: 'Technik', invested: 50}
     ],
@@ -87,17 +87,17 @@ const blankData = {
     inventory: [
         {id: 'i1', name: 'Verbandskasten', amount: 3, description: 'Heilt 2W10 HP', showDesc: false},
         {id: 'i2', name: 'Dietrich-Set', amount: 1, description: 'Zum Knacken von Schlössern (+10 auf Technik)', showDesc: false},
-        {id: 'i3', name: 'Geigerzähler', amount: 1, description: 'Knistert verdächtig.', showDesc: false}
+        {id: 'i3', name: 'Fernrohr', amount: 1, description: 'Klappbares Fernrohr aus Messing - unverzichtbar an Deck.', showDesc: false}
     ],
     weapons: [
-        {id: 'w1', name: 'Rostiger Revolver', damage: '1w10+2', description: 'Hat schon bessere Tage gesehen. 6 Schuss Trommel.', showDesc: false},
-        {id: 'w2', name: 'Kampfmesser', damage: '1w6', description: 'Scharf und zuverlässig im Nahkampf.', showDesc: false}
+        {id: 'w1', name: 'Rostige Pistole', damage: '1w10+2', description: 'Hat schon bessere Tage gesehen. Klemmt gern mal.', showDesc: false},
+        {id: 'w2', name: 'Entermesser', damage: '1w6', description: 'Kurze, breite Klinge zum Entern - scharf und zuverlässig im Nahkampf.', showDesc: false}
     ],
     statuses: [
-        {id: 'st1', name: 'Leicht Verstrahlt', value: 10, type: 'status-negative'},
-        {id: 'st2', name: 'Rausch', value: 5, type: 'status-bonus'}
+        {id: 'st1', name: 'Seekrank', value: 10, type: 'malus'},
+        {id: 'st2', name: 'Rausch', value: 5, type: 'bonus'}
     ],
-    currency: { name: 'Kronkorken', amount: 125 },
+    currency: { name: 'Tchambas', amount: 125 },
     layout3Col: false,
     notes: 'Ein fertig gebauter Charakter zum sofortigen Losspielen! 400 Punkte sind komplett verteilt (150 Handeln, 150 Wissen, 100 Soziales).',
     questlog: [],

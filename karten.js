@@ -280,6 +280,7 @@ function karteNsPlatzieren(nsc) {
     if (nsc.bild) {
         karteMap.setFigurBild(id, nsc.bild);
         karteMap.setFigurBildPosition(id, Number(nsc.bildY));
+        karteNscBildVerteilen(id, nsc.bild, nsc.bildY);
     }
     if (typeof addGmLogEntry === 'function') addGmLogEntry('Spielleiter', `setzt "${nsc.name || 'NSC'}" auf die Karte.`, '🗺️');
     renderKarteGm();
@@ -415,6 +416,47 @@ function karteAnVerbindung(conn) {
     if (!conn || !conn.open) return;
     const nachricht = karteZustandFuerSpieler();
     if (nachricht) { try { conn.send(nachricht); } catch (e) { /* weg */ } }
+    karteNscBilderAnVerbindung(conn);
+}
+
+// --- NSC-Porträts an Spieler -------------------------------------------------
+//
+// Porträts sind bewusst NICHT Teil des normalen Karten-Zustands (siehe
+// battlemap.js, getState()/Kommentar bei setFigurBild) - sie würden bei jeder
+// Positions-Übertragung unnötig mitgeschleppt. Für die eigene Spielerfigur
+// reicht das trotzdem (der Spieler kennt sein eigenes Bild schon, siehe
+// karteEmpfangen), aber NSC-Bilder kennt nur der SL (nscListe ist GM-only) -
+// die müssen gezielt einzeln raus, sonst bleiben NSC-Tokens beim Spieler für
+// immer nur bunte Kreise mit Kürzel, obwohl der SL selbst das Porträt sieht.
+function karteNscBildVerteilen(id, bild, bildY) {
+    if (typeof clientConnections === 'undefined' || !karteMap || !karteMap.figuren.find(f => f.id === id)) return;
+    const nachricht = { type: 'karteNscBild', id, bild: bild || null, bildY: Number(bildY) || 50 };
+    Object.values(clientConnections).forEach(conn => {
+        if (conn && conn.open) { try { conn.send(nachricht); } catch (e) { /* weg */ } }
+    });
+}
+
+// Nur die vertikale Bildposition (Live-Regler beim Ziehen) - ohne die
+// (potenziell große) Bilddaten bei jedem Tick erneut zu schicken.
+function karteNscBildPositionVerteilen(id, bildY) {
+    if (typeof clientConnections === 'undefined' || !karteMap || !karteMap.figuren.find(f => f.id === id)) return;
+    const nachricht = { type: 'karteNscBildPosition', id, bildY: Number(bildY) || 50 };
+    Object.values(clientConnections).forEach(conn => {
+        if (conn && conn.open) { try { conn.send(nachricht); } catch (e) { /* weg */ } }
+    });
+}
+
+// Neu beigetretener Spieler hat alle bisherigen Einzel-Verteilungen verpasst -
+// einmal alle Porträts schon platzierter NSCs nachreichen.
+function karteNscBilderAnVerbindung(conn) {
+    if (!conn || !conn.open || !karteMap || typeof nscListe === 'undefined') return;
+    karteMap.figuren.forEach(f => {
+        if (!f.id.startsWith('nsc:')) return;
+        const n = nscListe.find(x => x.id === f.id.slice('nsc:'.length));
+        if (n && n.bild) {
+            try { conn.send({ type: 'karteNscBild', id: f.id, bild: n.bild, bildY: Number(n.bildY) || 50 }); } catch (e) { /* weg */ }
+        }
+    });
 }
 
 // Zugvorschlag eines Spielers für seine eigene Figur - true = verarbeitet
@@ -745,6 +787,23 @@ function karteEmpfangen(payload) {
     }
 }
 
+// NSC-Porträt vom SL empfangen (siehe karteNscBildVerteilen in der SL-Hälfte
+// oben) - die Figur muss schon existieren (applyState() löscht figurBilder
+// selbst NICHT, ein einmal gesetztes Porträt übersteht also jeden normalen
+// Positions-Sync danach).
+function karteNscBildEmpfangen(payload) {
+    if (!karteSpielerMap || !payload || !payload.id) return;
+    if (!karteSpielerMap.figuren.find(f => f.id === payload.id)) return;
+    karteSpielerMap.setFigurBild(payload.id, payload.bild || null);
+    if (payload.bild) karteSpielerMap.setFigurBildPosition(payload.id, payload.bildY);
+}
+
+function karteNscBildPositionEmpfangen(payload) {
+    if (!karteSpielerMap || !payload || !payload.id) return;
+    if (!karteSpielerMap.figuren.find(f => f.id === payload.id)) return;
+    karteSpielerMap.setFigurBildPosition(payload.id, payload.bildY);
+}
+
 function karteSpielerBeitritt() {
     karteSpielerLetzte = null;
     renderKarteSpieler();
@@ -759,6 +818,8 @@ function karteSpielerGetrennt() {
 function karteNachrichtVerarbeiten(payload) {
     if (!payload || typeof payload !== 'object') return false;
     if (payload.type === 'karte') { karteEmpfangen(payload); return true; }
+    if (payload.type === 'karteNscBild') { karteNscBildEmpfangen(payload); return true; }
+    if (payload.type === 'karteNscBildPosition') { karteNscBildPositionEmpfangen(payload); return true; }
     return false;
 }
 

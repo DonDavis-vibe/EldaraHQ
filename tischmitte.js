@@ -40,6 +40,75 @@ let tischmitteOffenSpieler = false;
 let tischmitteOffenGm = true;
 // Spieler: welche Eintraege wir schon gesehen haben, um "neu aufgedeckt" zu erkennen
 let tischmitteBekannt = new Set();
+// Spieler: true bis zum ersten tischmitteEmpfangen nach einem (Wieder-)Beitritt -
+// der allererste Sync liefert den kompletten Altbestand, kein Popup dafür
+// (siehe tischmittePopup), sonst würde jeder Beitritt einen falschen "neu
+// aufgedeckt"-Alarm für längst bekannten Loot auslösen.
+let tischmitteErstSyncAusstehend = true;
+// SL: true sobald der Regelwerk-Katalog (randomizer/eldora.js) einmal
+// nachgeladen ist - siehe renderTischmitteGm/tischmitteKatalogHtml.
+let tischmitteKatalogGeladen = false;
+
+// --- Katalog aus dem Regelwerk (RW4.3) - "Aus Regelwerk wählen" im Formular -
+//
+// Nutzt bewusst dieselbe Datenquelle wie der Zufallsgenerator
+// (randomizerPaketeGeladen.eldora.tabellen, siehe randomizer/eldora.js) statt
+// die ~136 Items hier nochmal zu duplizieren. Ersetzt die freie Texteingabe
+// NICHT - wer etwas Eigenes/Hausgemachtes ablegen will, tippt weiterhin
+// einfach ins Namensfeld, der Katalog ist nur eine Abkürzung.
+const TISCHMITTE_KATALOG_GRUPPEN = [
+    { key: 'waffen_shop', label: 'Waffen', art: 'waffe' },
+    { key: 'gegenstaende_magisch', label: 'Magische Gegenstände', art: 'gegenstand' },
+    { key: 'herstellbare_gegenstaende', label: 'Herstellbare Gegenstände', art: 'gegenstand' },
+    { key: 'handelswaren', label: 'Handelswaren', art: 'gegenstand' }
+];
+
+function tischmitteKatalogTabellen() {
+    const p = typeof randomizerPaketeGeladen !== 'undefined' ? randomizerPaketeGeladen.eldora : null;
+    return (p && p.tabellen) || null;
+}
+
+function tischmitteKatalogHtml() {
+    const t = tischmitteKatalogTabellen();
+    if (!t) return '';
+    const optionen = TISCHMITTE_KATALOG_GRUPPEN.map(g => {
+        const eintraege = (t[g.key] && t[g.key].eintraege) || [];
+        if (!eintraege.length) return '';
+        return `<optgroup label="${escapeHtml(g.label)}">${eintraege.map((e, i) =>
+            `<option value="${g.key}::${i}">${escapeHtml(e.haupt)}${e.neben ? ' – ' + escapeHtml(e.neben) : ''}</option>`
+        ).join('')}</optgroup>`;
+    }).join('');
+    if (!optionen) return '';
+    return `<select id="tm-neu-katalog" class="gm-select" title="Übernimmt Name (und Schaden/Beschreibung) aus dem Regelwerk ins Formular" onchange="tischmitteKatalogAuswaehlen(this.value)">
+        <option value="">📖 Aus Regelwerk wählen …</option>
+        ${optionen}
+    </select>`;
+}
+
+function tischmitteKatalogAuswaehlen(wert) {
+    if (!wert) return;
+    const [gruppenKey, indexStr] = wert.split('::');
+    const gruppe = TISCHMITTE_KATALOG_GRUPPEN.find(g => g.key === gruppenKey);
+    const t = tischmitteKatalogTabellen();
+    const eintrag = t && t[gruppenKey] && t[gruppenKey].eintraege[parseInt(indexStr, 10)];
+    if (!gruppe || !eintrag) return;
+    const artEl = document.getElementById('tm-neu-art');
+    if (artEl) artEl.value = gruppe.art;
+    // Formular neu aufbauen: bei Waffen erscheint z.B. das Schaden- statt das
+    // Mengenfeld (siehe art-Fallunterscheidung oben) - die Werte selbst
+    // müssen danach in die frisch erzeugten Felder, siehe unten.
+    renderTischmitteGm();
+    const nameEl = document.getElementById('tm-neu-name');
+    const descEl = document.getElementById('tm-neu-desc');
+    const schadenEl = document.getElementById('tm-neu-schaden');
+    if (nameEl) nameEl.value = eintrag.haupt || '';
+    if (gruppe.art === 'waffe') {
+        if (schadenEl) schadenEl.value = eintrag.neben || '';
+    } else if (descEl) {
+        descEl.value = eintrag.neben || '';
+    }
+    if (nameEl) nameEl.focus();
+}
 
 function tischmitteNeueId() {
     return 'tm_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
@@ -193,6 +262,12 @@ function tischmitteAnfrageVerarbeiten(peerId, payload) {
 function renderTischmitteGm() {
     const box = document.getElementById('gm-tischmitte');
     if (!box) return;
+    // Katalog aus dem Regelwerk (RW4.3) lädt sich beim ersten Öffnen nach -
+    // dieselbe Datenquelle wie der Zufallsgenerator (randomizer/eldora.js,
+    // wenige KB), keine eigene Kopie der Items. Einmaliger Nachlade-Render.
+    if (!tischmitteKatalogGeladen && typeof randomizerAlleLaden === 'function') {
+        randomizerAlleLaden(() => { tischmitteKatalogGeladen = true; renderTischmitteGm(); });
+    }
     const sichtbar = tischmitteSichtbar().length;
     const versteckt = tischmitte.length - sichtbar;
     const spieler = typeof connectedPlayersData !== 'undefined' ? Object.keys(connectedPlayersData) : [];
@@ -238,6 +313,7 @@ function renderTischmitteGm() {
             </div>
         </summary>
         <div class="tm-form">
+            ${tischmitteKatalogHtml()}
             <select id="tm-neu-art" class="gm-select" onchange="renderTischmitteGm()">
                 ${Object.entries(TISCHMITTE_ARTEN).map(([k, v]) => `<option value="${k}" ${k === art ? 'selected' : ''}>${v.label}</option>`).join('')}
             </select>
@@ -279,9 +355,26 @@ function tischmitteEmpfangen(items) {
     // damit niemand die Beute übersieht. Eigene Ablagen zählen nicht als neu.
     const ich = typeof appData !== 'undefined' ? [appData.vorname, appData.name].filter(Boolean).join(' ') : '';
     const neu = tischmitte.filter(i => !tischmitteBekannt.has(i.id) && !(i.von && i.von === ich));
-    if (neu.length) tischmitteOffenSpieler = true;
+    if (neu.length) {
+        tischmitteOffenSpieler = true;
+        // Der allererste Sync nach einem (Wieder-)Beitritt liefert den ganzen
+        // Altbestand als "neu" - das ist kein frisch aufgedeckter Fund, dafür
+        // kein Popup (siehe tischmitteErstSyncAusstehend).
+        if (tischmitteErstSyncAusstehend) tischmitteErstSyncAusstehend = false;
+        else tischmittePopup(neu);
+    }
     tischmitteBekannt = new Set(tischmitte.map(i => i.id));
     renderTischmitteSpieler();
+}
+
+// Unübersehbarer Hinweis, sobald der SL live etwas Neues in die Tischmitte
+// legt oder aufdeckt - das stille Aufklappen des Panels (tischmitteOffenSpieler)
+// reicht allein nicht, wer gerade woanders im Tool schaut (Charakterbogen,
+// Karte, ...), würde die Beute sonst leicht verpassen.
+function tischmittePopup(neu) {
+    if (!neu || !neu.length) return;
+    const liste = neu.map(i => tischmitteLabel(i)).join(', ');
+    alert(`Der Spielleiter hat etwas in die Tischmitte gelegt:\n\n${liste}\n\nSchau in der Tischmitte nach, um es dir zu nehmen.`);
 }
 
 function tischmitteNehmen(id) {
@@ -307,8 +400,15 @@ function tischmitteGeschenkEmpfangen(item) {
         if (typeof addActivityLog === 'function') addActivityLog(`Erhalten: ${tischmitteLabel(item)} (Tischmitte)`, 'activity-good', '<i class="fa-solid fa-khanda"></i>');
     } else {
         if (!appData.inventory) appData.inventory = [];
-        appData.inventory.push({ id: 'inv_' + Date.now(), name, amount: Math.max(1, parseInt(item.amount) || 1), description, showDesc: !!description });
+        const neuId = 'inv_' + Date.now();
+        appData.inventory.push({ id: neuId, name, amount: Math.max(1, parseInt(item.amount) || 1), description, showDesc: !!description });
         if (typeof addActivityLog === 'function') addActivityLog(`Erhalten: ${tischmitteLabel(item)} (Tischmitte)`, 'activity-good', '<i class="fa-solid fa-box"></i>');
+        if (typeof irAutoPlatzieren === 'function' && !irAutoPlatzieren(neuId) && typeof irKeinPlatzHinweis === 'function') {
+            if (typeof saveData === 'function') saveData();
+            if (typeof renderAll === 'function') renderAll();
+            irKeinPlatzHinweis(name);
+            return;
+        }
     }
     if (typeof saveData === 'function') saveData();
     if (typeof renderAll === 'function') renderAll();
@@ -447,6 +547,7 @@ function tischmitteBeitritt() {
     tischmitte = [];
     tischmitteBekannt = new Set();
     tischmitteOffenSpieler = false;
+    tischmitteErstSyncAusstehend = true;
     Object.keys(tischmitteAnfragen).forEach(k => delete tischmitteAnfragen[k]);
     renderTischmitteSpieler();
 }
@@ -456,6 +557,7 @@ function tischmitteGetrennt() {
     tischmitte = [];
     tischmitteBekannt = new Set();
     tischmitteOffenSpieler = false;
+    tischmitteErstSyncAusstehend = true;
     Object.keys(tischmitteAnfragen).forEach(k => delete tischmitteAnfragen[k]);
     renderTischmitteSpieler();
 }

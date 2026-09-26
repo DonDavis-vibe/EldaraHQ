@@ -301,7 +301,7 @@ function renderSkills(attr) {
         totalSpan.onclick = () => {
             const currentAttrVal = parseInt(appData[`attr_${attr}`]) || 0;
             const currentTotal = (skill.excludeBonus ? 0 : currentAttrVal) + (skill.invested || 0);
-            rollSkillCheck(skill.name, currentTotal, false, attr);
+            rollSkillCheck(skill.name, currentTotal, false, attr, skill.id);
         };
 
         // Regelwerk S.4: "Der Bonus wird zu jeder Fähigkeit addiert, es sei denn, ein Spieler
@@ -1496,17 +1496,57 @@ function applyTheme() {
 
 
 // ==================== UTILITY PACK FUNCTIONS ====================
+
+// Alle Fertigkeiten über die 3 Begabungs-Kategorien hinweg flach - fürs
+// "Wirkt auf"-Dropdown bei Status-Effekten (statusBonusFuerSkill) und
+// perspektivisch überall sonst, wo man eine Fertigkeit per stabiler id statt
+// per (umbenennbarem) Namen referenzieren will.
+function alleSkills() {
+    const kategorien = [
+        { attr: 'handeln', label: 'Handeln' },
+        { attr: 'wissen', label: 'Wissen' },
+        { attr: 'soziales', label: 'Soziales' }
+    ];
+    const liste = [];
+    kategorien.forEach(k => {
+        (appData[`skills_${k.attr}`] || []).forEach(s => {
+            if (s && s.id) liste.push({ id: s.id, name: s.name || '(unbenannt)', kategorie: k.label });
+        });
+    });
+    return liste;
+}
+
+// Summe aller Status-Effekte, die explizit auf diese Fertigkeit wirken
+// (statusObj.wirktAufSkill === skillId, gesetzt beim Anlegen über das
+// "Wirkt auf"-Dropdown - siehe addCustomStatus). Nur numerische value-Felder
+// zählen; ein reiner Info-Status ohne Zahl (z.B. "Wahnsinn: 60%") bleibt
+// unangetastet und wird nirgends automatisch verrechnet.
+function statusBonusFuerSkill(skillId) {
+    const leer = { summe: 0, quellen: [] };
+    if (!skillId || !appData.statuses) return leer;
+    let summe = 0;
+    const quellen = [];
+    appData.statuses.forEach(s => {
+        if (!s || s.wirktAufSkill !== skillId) return;
+        const n = parseInt(s.value, 10);
+        if (!isNaN(n) && n !== 0) { summe += n; quellen.push(s.name); }
+    });
+    return { summe, quellen };
+}
+
 function renderStatuses() {
     const container = document.getElementById('status-container');
     if (!container) return;
     container.innerHTML = '';
-    
+
     if (!appData.statuses) appData.statuses = [];
-    
+
     if (appData.statuses.length > 0 && typeof appData.statuses[0] === 'string') {
         appData.statuses = appData.statuses.map(s => ({ id: 'st_' + Math.random().toString(36).substr(2, 9), name: s, value: '' }));
         saveData();
     }
+
+    const skills = alleSkills();
 
     appData.statuses.forEach(statusObj => {
         const badge = document.createElement('span');
@@ -1532,6 +1572,19 @@ function renderStatuses() {
             badge.appendChild(valInput);
         }
 
+        // Wirkt dieser Status auf eine konkrete Fertigkeit (siehe
+        // statusBonusFuerSkill/rollSkillCheck)? Kleiner Zielscheiben-Hinweis,
+        // damit sichtbar bleibt, wo der Wert automatisch mit einfließt -
+        // ändern geht nur über löschen+neu anlegen, wie bei Name/Typ auch.
+        if (statusObj.wirktAufSkill) {
+            const skill = skills.find(s => s.id === statusObj.wirktAufSkill);
+            const zielSpan = document.createElement('span');
+            zielSpan.title = 'Wirkt automatisch auf diese Fertigkeit ein';
+            zielSpan.style = 'margin-left: 0.4rem; opacity: 0.75; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 0.2rem;';
+            zielSpan.innerHTML = `<i class="fa-solid fa-crosshairs"></i> ${escapeHtml(skill ? skill.name : '?')}`;
+            badge.appendChild(zielSpan);
+        }
+
         const delIcon = document.createElement('i');
         delIcon.className = 'fa-solid fa-times';
         delIcon.style = 'margin-left: 0.5rem; opacity: 0.7; cursor: pointer; padding: 0.2rem;';
@@ -1542,9 +1595,19 @@ function renderStatuses() {
             }
         };
         badge.appendChild(delIcon);
-        
+
         container.appendChild(badge);
     });
+
+    // "Wirkt auf"-Auswahl beim Anlegen frisch halten (Fertigkeiten können sich
+    // jederzeit ändern) - aktuelle Auswahl nach Möglichkeit beibehalten.
+    const skillSel = document.getElementById('new-status-skill');
+    if (skillSel) {
+        const vorher = skillSel.value;
+        skillSel.innerHTML = '<option value="">Wirkt auf: keine Fertigkeit</option>' +
+            skills.map(s => `<option value="${escapeHtml(s.id)}">${escapeHtml(s.kategorie)}: ${escapeHtml(s.name)}</option>`).join('');
+        if (skills.some(s => s.id === vorher)) skillSel.value = vorher;
+    }
 }
 
 function removeStatus(id) {
@@ -1571,11 +1634,14 @@ function addCustomStatus() {
         if (!appData.statuses) appData.statuses = [];
         const typeInput = document.getElementById('new-status-type');
         const statusType = typeInput ? typeInput.value : 'malus';
-        appData.statuses.push({ id: 'st_' + Date.now(), name: name, value: val, type: statusType });
+        const skillSel = document.getElementById('new-status-skill');
+        const wirktAufSkill = skillSel && skillSel.value ? skillSel.value : null;
+        appData.statuses.push({ id: 'st_' + Date.now(), name: name, value: val, type: statusType, wirktAufSkill });
         const cssMap = { 'bonus': 'activity-good', 'malus': 'activity-bad', 'neutral': 'activity-neutral' };
         addActivityLog(`Neuer Status: ${name}`, cssMap[statusType] || 'activity-neutral', '<i class="fa-solid fa-masks-theater"></i>');
         nameInput.value = '';
         if (valInput) valInput.value = '';
+        if (skillSel) skillSel.value = '';
         saveData();
         renderStatuses();
     }
@@ -1935,7 +2001,7 @@ function rollInitiative() {
     }
 }
 
-function rollSkillCheck(skillName, skillValue, isBaseAttribute = false, category = null) {
+function rollSkillCheck(skillName, skillValue, isBaseAttribute = false, category = null, skillId = null) {
     // Regelwerk S.8: "keine Fähigkeiten über 100 Punkte haben kann" - der Fähigkeitswert selbst
     // wird für den Wurf hart bei 100 gedeckelt, auch wenn auf dem Bogen mehr investiert ist.
     let capHint = '';
@@ -1955,9 +2021,16 @@ function rollSkillCheck(skillName, skillValue, isBaseAttribute = false, category
     const critFailMin = 90 + Math.round(skillValue / 10);
 
     const modifier = consumeModifier();
-    if (modifier.mod !== 0) {
-        modifier.str = modifier.mod > 0 ? ` (inkl. +${modifier.mod} Bonus)` : ` (inkl. ${modifier.mod} Malus)`;
-    }
+    // Status-Effekte mit "wirkt auf" genau dieser Fertigkeit (siehe addCustomStatus/
+    // statusBonusFuerSkill) fließen automatisch mit ein, getrennt vom manuellen
+    // SL-Bonus-Feld ausgewiesen, damit im Logbuch klar bleibt, was woher kommt.
+    const statusBonus = statusBonusFuerSkill(skillId);
+    const manuellerAnteil = modifier.mod;
+    modifier.mod += statusBonus.summe;
+    const modTeile = [];
+    if (manuellerAnteil) modTeile.push(manuellerAnteil > 0 ? `+${manuellerAnteil} Bonus` : `${manuellerAnteil} Malus`);
+    if (statusBonus.summe) modTeile.push(`${statusBonus.summe > 0 ? '+' : ''}${statusBonus.summe} durch ${statusBonus.quellen.join(', ')}`);
+    modifier.str = modTeile.length ? ` (inkl. ${modTeile.join(', ')})` : '';
     // Erfolgsschwelle inklusive SL-Bonus. Auf dem W100 gibt es über 100 nichts mehr
     // zu treffen und unter 0 nichts mehr zu verlieren.
     const zielwert = Math.max(0, Math.min(100, skillValue + modifier.mod));
