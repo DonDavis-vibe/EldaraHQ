@@ -39,21 +39,25 @@
 //
 // Datenmodell: appData.inventory bleibt die Quelle für Item-Daten (Name,
 // Menge, Beschreibung) - neu ist `irGroesse` (0.5, 1, 2 oder 3, siehe
-// IR_GROESSEN_KATALOG). appData.inventarRaster ist die Platzierung:
-// { "<zone>_<index>": { itemId } | { itemId, cont: true } | null }.
-// appData.eldaraRuestungsteile (siehe IR_RUESTUNG_TEILE) und
-// appData.eldaraZusatztaschen (Array aus 'klein'|'gross', max. 3 Einträge)
-// steuern, welche Zonen mit wie vielen Plätzen existieren.
+// IR_GROESSEN_KATALOG), `istWaffe`+`schaden` sowie `irAusruestungsslot`+
+// `irRuestungswert` (siehe IR_AUSRUESTUNG_SLOTS). appData.inventarRaster ist
+// die Platzierung: { "<zone>_<index>": { itemId } | { itemId, cont: true } |
+// null }. appData.eldaraZusatztaschen (Array aus 'klein'|'gross', max. 3
+// Einträge) steuert zusätzlich, welche Zonen mit wie vielen Plätzen existieren.
 //
-// Rüstung (siehe IR_RUESTUNG_TEILE): sechs echte Ausrüstungs-Plätze (Helm,
-// 2x Schulter, Brust, 2x Bein), jeder wahlweise mit Leder/Kette/Platte
-// bestückt - jede Kombination hat laut Tabelle einen eigenen Rüstungswert und
-// Gold-Preis. Die Summe aller getragenen Werte ergibt die Rüstungsstufe
-// (Ungepanzert 0 / Leicht 1-10 / Mittel 11-20 / Schwer 21+), die wie bisher
-// den Rucksack verkleinert (-1 Mittel, -2 Schwer). Die zusätzlichen Bewegungs-/
-// Handeln-/Heimlichkeit-Mali pro Stufe (siehe IR_RUESTUNGSSTUFE_MALI) sind seit
-// zwischenstand.docx eindeutig - als Hinweis angezeigt, aber NICHT automatisch
-// in Würfe eingerechnet (siehe hausregeln/OFFENE_FRAGEN.md Punkt 10).
+// Rüstung (siehe IR_AUSRUESTUNG_SLOTS, zwischenstand.docx): sieben
+// Ausrüstungsplätze (Kopf, Schulter/Hals, Brust, Hände, Beine, Füße, 3x
+// Schmuck) - kein Material-Dropdown mehr wie früher, stattdessen wird ein
+// passendes Item aus Gürtel/Rucksack auf den Platz gezogen (genau wie eine
+// Waffe an den Gürtel-Waffenplatz). Jedes Item bringt seinen eigenen
+// Rüstungswert mit (freies Zahlenfeld, keine Nachschlagetabelle - Ausrüstung
+// ist hier frei erfunden/benannt). Die Summe aller getragenen Werte ergibt
+// die Rüstungsstufe (Ungepanzert 0 / Leicht 1-10 / Mittel 11-20 / Schwer
+// 21+), die wie bisher den Rucksack verkleinert (-1 Mittel, -2 Schwer). Die
+// zusätzlichen Bewegungs-/Handeln-/Heimlichkeit-Mali pro Stufe (siehe
+// IR_RUESTUNGSSTUFE_MALI) sind seit zwischenstand.docx eindeutig - als
+// Hinweis angezeigt, aber NICHT automatisch in Würfe eingerechnet (siehe
+// hausregeln/OFFENE_FRAGEN.md Punkt 10).
 
 const IR_GROESSEN_KATALOG = [
     { wert: 0.5, label: 'Klein (0,5)', beispiel: 'Dolch, Trank, Fläschchen' },
@@ -65,22 +69,22 @@ const IR_GROESSEN_KATALOG = [
 const IR_ZUSATZTASCHE_MAX = 3;
 const IR_ZUSATZTASCHE_DATEN = { klein: { breite: 3, malus: 3, label: 'Klein' }, gross: { breite: 5, malus: 5, label: 'Groß' } };
 
-// Rüstungsteile & Kosten (S.27f) - ein normaler Mensch hat Platz für 1 Helm,
-// 2 Schulterteile, 1 Brustschutz, 2 Beinteile; jedes Teil einzeln mit einem
-// von drei Materialien bestückbar. Wert = Rüstungswert-Beitrag, preis = Gold.
-const IR_RUESTUNG_SLOTS = {
-    helm: { label: 'Helm', anzahl: 1 },
-    schulter: { label: 'Schulter', anzahl: 2 },
-    brust: { label: 'Brust', anzahl: 1 },
-    bein: { label: 'Bein', anzahl: 2 }
-};
-const IR_RUESTUNG_MATERIAL = ['leder', 'kette', 'platte'];
-const IR_RUESTUNG_MATERIAL_LABEL = { leder: 'Leder', kette: 'Kette', platte: 'Platte' };
-const IR_RUESTUNG_WERTE = {
-    helm: { leder: { wert: 3, preis: 150 }, kette: { wert: 5, preis: 250 }, platte: { wert: 7, preis: 300 } },
-    schulter: { leder: { wert: 1, preis: 50 }, kette: { wert: 2, preis: 75 }, platte: { wert: 3, preis: 100 } },
-    brust: { leder: { wert: 5, preis: 250 }, kette: { wert: 10, preis: 500 }, platte: { wert: 15, preis: 600 } },
-    bein: { leder: { wert: 2, preis: 75 }, kette: { wert: 4, preis: 200 }, platte: { wert: 6, preis: 400 } }
+// Ausrüstungsplätze (zwischenstand.docx, SL-Überarbeitung 2026-09 - ersetzt
+// die alte 6-Platz-Lösung mit Material-Dropdown vollständig): statt aus einer
+// festen Leder/Kette/Platte-Tabelle zu wählen, wird jetzt ein echtes Item aus
+// dem Rasterinventar auf den passenden Platz gezogen (wie die Gürtel-
+// Waffenplätze, nur mit sieben verschiedenen "nur dieser Typ passt"-Zonen
+// statt einer). Jedes Item trägt seinen Rüstungswert selbst (Feld
+// `irRuestungswert`, freie Zahl statt Nachschlagetabelle - Ausrüstung ist
+// hier frei erfunden/benannt, genau wie der Schaden einer Waffe).
+const IR_AUSRUESTUNG_SLOTS = {
+    kopf: { label: 'Kopf', anzahl: 1, beispiele: 'Helm, Hut, Maske, Augenklappe' },
+    schulterhals: { label: 'Schulter/Hals', anzahl: 1, beispiele: 'Schulterpanzer, Umhang, Mantel' },
+    brust: { label: 'Brust', anzahl: 1, beispiele: 'Brustpanzer, Kleidung' },
+    haende: { label: 'Hände', anzahl: 1, beispiele: 'Handschuhe, Armschienen, Haken' },
+    beine: { label: 'Beine', anzahl: 1, beispiele: 'Beinschutz, Hosen' },
+    fuesse: { label: 'Füße', anzahl: 1, beispiele: 'Schuhe, Stiefel' },
+    schmuck: { label: 'Schmuck', anzahl: 3, beispiele: 'Ringe, Amulette, Broschen, Piercings' }
 };
 const IR_RUESTUNGSSTUFE_LABEL = { ungepanzert: 'Ungepanzert', leicht: 'Leicht', mittel: 'Mittel', schwer: 'Schwer' };
 
@@ -96,56 +100,42 @@ const IR_RUESTUNGSSTUFE_MALI = {
     schwer: { bewegung: -2, handeln: -10, heimlichkeit: -15 }
 };
 
-// --- Rüstung (getragene Ausrüstung, S.27f) --------------------------------
+// --- Rüstung (getragene Ausrüstung, jetzt als Raster-Zonen) ----------------
 
-// Alle sechs Rüstungsteil-Slots als flache Liste, in Anzeige-Reihenfolge.
-function irRuestungsteilSlots() {
-    const slots = [];
-    Object.keys(IR_RUESTUNG_SLOTS).forEach(typ => {
-        const info = IR_RUESTUNG_SLOTS[typ];
-        for (let i = 1; i <= info.anzahl; i++) slots.push(info.anzahl > 1 ? typ + '_' + i : typ);
+// Eine Zone pro Ausrüstungsplatz-Typ (Schmuck mit breite:3, alle anderen mit
+// breite:1) - dieselbe Bauart wie die Gürtel-Waffenplätze, nur mit sieben
+// verschiedenen "nur dieser Typ passt"-Zonen statt einer gemeinsamen.
+function irAusruestungsZonen() {
+    return Object.keys(IR_AUSRUESTUNG_SLOTS).map(typ => {
+        const info = IR_AUSRUESTUNG_SLOTS[typ];
+        return { id: 'ausr_' + typ, titel: info.label, breite: info.anzahl, deaktiviert: 0, nurAusruestung: typ };
     });
-    return slots;
 }
 
-function irRuestungsteilTyp(slot) {
-    return slot.replace(/_\d+$/, '');
-}
-
-function irRuestungsteile(kontext) {
+// Aktuell in den Ausrüstungszonen getragene Items, über das normale
+// Rasterinventar-Placement ermittelt - es gibt keine separate
+// appData.eldaraRuestungsteile mehr, die Zuordnung Item<->Platz steckt
+// bereits vollständig in appData.inventarRaster wie bei jedem anderen Slot.
+function irAusgeruesteteItems(kontext) {
     const daten = kontext || appData;
-    if (!daten.eldaraRuestungsteile || typeof daten.eldaraRuestungsteile !== 'object') {
-        const leer = {};
-        irRuestungsteilSlots().forEach(s => { leer[s] = null; });
-        daten.eldaraRuestungsteile = leer;
-    }
-    return daten.eldaraRuestungsteile;
+    const raster = (daten.inventarRaster && typeof daten.inventarRaster === 'object') ? daten.inventarRaster : {};
+    const itemsById = {};
+    (daten.inventory || []).forEach(i => { itemsById[i.id] = i; });
+    const ergebnis = [];
+    irAusruestungsZonen().forEach(zone => {
+        for (let i = 0; i < zone.breite; i++) {
+            const belegung = raster[zone.id + '_' + i];
+            const item = belegung && !belegung.cont ? itemsById[belegung.itemId] : null;
+            if (item) ergebnis.push(item);
+        }
+    });
+    return ergebnis;
 }
 
-// Summe aller getragenen Rüstungswerte (bestimmt die Stufe).
+// Summe aller getragenen Rüstungswerte (bestimmt die Stufe) - jedes Item
+// bringt seinen eigenen Wert mit (Feld irRuestungswert), keine Tabelle mehr.
 function irRuestungswert(kontext) {
-    const teile = irRuestungsteile(kontext);
-    let summe = 0;
-    Object.keys(teile).forEach(slot => {
-        const material = teile[slot];
-        if (!material) return;
-        const info = IR_RUESTUNG_WERTE[irRuestungsteilTyp(slot)];
-        if (info && info[material]) summe += info[material].wert;
-    });
-    return summe;
-}
-
-// Gold-Warenwert der aktuell getragenen Teile (nur zur Anzeige).
-function irRuestungspreis(kontext) {
-    const teile = irRuestungsteile(kontext);
-    let summe = 0;
-    Object.keys(teile).forEach(slot => {
-        const material = teile[slot];
-        if (!material) return;
-        const info = IR_RUESTUNG_WERTE[irRuestungsteilTyp(slot)];
-        if (info && info[material]) summe += info[material].preis;
-    });
-    return summe;
+    return irAusgeruesteteItems(kontext).reduce((summe, item) => summe + (Number(item.irRuestungswert) || 0), 0);
 }
 
 function irRuestungsstufe(wert) {
@@ -153,13 +143,6 @@ function irRuestungsstufe(wert) {
     if (wert >= 11) return 'mittel';
     if (wert >= 1) return 'leicht';
     return 'ungepanzert';
-}
-
-function irRuestungsteilAendern(slot, material) {
-    const teile = irRuestungsteile();
-    teile[slot] = IR_RUESTUNG_MATERIAL.includes(material) ? material : null;
-    saveData();
-    renderInventarRaster();
 }
 
 // --- Zonen (hängen von Rüstung/Zusatztaschen ab, darum als Funktion statt Konstante) ---
@@ -174,9 +157,10 @@ function irZonenDefinition(kontext) {
     const ruestungsMalus = stufe === 'schwer' ? 2 : (stufe === 'mittel' ? 1 : 0);
     const zonen = [
         { id: 'guertel', titel: 'Gürtel', breite: 5, deaktiviert: 0 },
-        { id: 'guertel_waffen', titel: 'Gürtel (Waffen)', breite: 2, deaktiviert: 0, nurWaffen: true },
+        { id: 'guertel_waffen', titel: 'Gürtel (Waffen)', breite: 2, deaktiviert: 0, nurWaffen: true }
+    ].concat(irAusruestungsZonen(), [
         { id: 'rucksack', titel: 'Rucksack', breite: 12, deaktiviert: ruestungsMalus }
-    ];
+    ]);
     (daten.eldaraZusatztaschen || []).forEach((art, i) => {
         const info = IR_ZUSATZTASCHE_DATEN[art] || IR_ZUSATZTASCHE_DATEN.klein;
         zonen.push({ id: 'zusatz' + i, titel: `Zusatztasche (${info.label})`, breite: info.breite, deaktiviert: 0, zusatzIndex: i, zusatzArt: art });
@@ -216,14 +200,20 @@ function irReihenfolgeFuer(item, kontext) {
     });
 }
 
-// Die beiden Gürtel-Waffenplätze (S.25f) sind waffen-exklusiv, dafür kostet
-// dort jede Waffe immer nur 1 Platz, unabhängig von ihrer sonstigen Größe.
+// Die beiden Gürtel-Waffenplätze (S.25f) sind waffen-exklusiv, die sieben
+// Ausrüstungsplätze jeweils auf ihren eigenen Typ beschränkt (Kopf, Schulter/
+// Hals, Brust, Hände, Beine, Füße, Schmuck - Feld irAusruestungsslot am
+// Item) - dafür kostet dort jedes passende Item immer nur 1 Platz,
+// unabhängig von seiner sonstigen Größe (siehe irGroesseInZone).
 function irZonePasstFuerItem(zone, item) {
-    return !(zone && zone.nurWaffen) || !!(item && item.istWaffe);
+    if (!zone) return true;
+    if (zone.nurWaffen) return !!(item && item.istWaffe);
+    if (zone.nurAusruestung) return !!(item && item.irAusruestungsslot === zone.nurAusruestung);
+    return true;
 }
 
 function irGroesseInZone(item, zone) {
-    return (zone && zone.nurWaffen) ? 1 : irSlotKosten(item);
+    return (zone && (zone.nurWaffen || zone.nurAusruestung)) ? 1 : irSlotKosten(item);
 }
 
 // --- Reine Platzierungs-Logik ---
@@ -308,7 +298,7 @@ function irVerschieben(raster, itemsById, itemId, targetSlot, kontext) {
     const item = itemsById[itemId];
     if (!item) return { ok: false, grund: 'unbekannt' };
     const zielZone = irZoneVonSlot(targetSlot, kontext);
-    if (!irZonePasstFuerItem(zielZone, item)) return { ok: false, grund: 'nurWaffen' };
+    if (!irZonePasstFuerItem(zielZone, item)) return { ok: false, grund: zielZone && zielZone.nurAusruestung ? 'falscherAusruestungsplatz' : 'nurWaffen' };
     const groesse = irGroesseInZone(item, zielZone);
     const zielZellen = irZellenFuer(targetSlot, groesse, kontext);
     if (zielZellen.length < groesse) return { ok: false, grund: 'passtNicht' };
@@ -434,13 +424,19 @@ function irItemHinzufuegen() {
     const descEl = document.getElementById('ir-neu-desc');
     const istWaffeEl = document.getElementById('ir-neu-istwaffe');
     const schadenEl = document.getElementById('ir-neu-schaden');
+    const ausrEl = document.getElementById('ir-neu-ausruestung');
+    const ruestungswertEl = document.getElementById('ir-neu-ruestungswert');
     const name = (nameEl ? nameEl.value : '').trim();
     if (!name) { if (nameEl) nameEl.focus(); return; }
     const groesse = groesseEl ? parseFloat(groesseEl.value) || 1 : 1;
     const istWaffe = !!(istWaffeEl && istWaffeEl.checked);
+    const ausruestungsslot = ausrEl && ausrEl.value ? ausrEl.value : null;
     if (!irHatPlatzFuer(groesse, istWaffe)) { irStatus(`Kein Platz mehr für einen Gegenstand dieser Größe (${groesse}).`, true); return; }
     if (!appData.inventory) appData.inventory = [];
 
+    // Neue Ausrüstung landet bewusst erstmal ganz normal im Gürtel/Rucksack,
+    // nicht automatisch im passenden Platz - der wird laut Wunsch der Runde
+    // gezielt per Ziehen bestückt (wie eine Waffe an den Gürtel).
     const item = {
         id: 'inv_' + Date.now(),
         name,
@@ -449,16 +445,20 @@ function irItemHinzufuegen() {
         showDesc: false,
         irGroesse: groesse,
         istWaffe,
-        schaden: istWaffe ? (schadenEl ? schadenEl.value.trim() : '') : ''
+        schaden: istWaffe ? (schadenEl ? schadenEl.value.trim() : '') : '',
+        irAusruestungsslot: ausruestungsslot,
+        irRuestungswert: ausruestungsslot ? (parseInt(ruestungswertEl ? ruestungswertEl.value : 0) || 0) : 0
     };
     appData.inventory.push(item);
     irAutoPlatzieren(item.id);
-    if (typeof addActivityLog === 'function') addActivityLog(`Erhalten: ${item.amount}x ${name}`, 'activity-good', `<i class="fa-solid fa-${istWaffe ? 'khanda' : 'box'}"></i>`);
+    if (typeof addActivityLog === 'function') addActivityLog(`Erhalten: ${item.amount}x ${name}`, 'activity-good', `<i class="fa-solid fa-${istWaffe ? 'khanda' : (ausruestungsslot ? 'shield-halved' : 'box')}"></i>`);
     if (nameEl) { nameEl.value = ''; nameEl.focus(); }
     if (mengeEl) mengeEl.value = '1';
     if (descEl) descEl.value = '';
     if (istWaffeEl) istWaffeEl.checked = false;
     if (schadenEl) { schadenEl.value = ''; schadenEl.style.display = 'none'; }
+    if (ausrEl) ausrEl.value = '';
+    if (ruestungswertEl) { ruestungswertEl.value = ''; ruestungswertEl.style.display = 'none'; }
     saveData();
     renderInventarRaster();
 }
@@ -507,6 +507,16 @@ function irSchadenAendern(itemId, wert) {
     if (!item) return;
     item.schaden = wert;
     saveData();
+}
+
+// Ändert sich live die Summe (Rüstungsstufe hängt u.a. am Rucksack-Malus),
+// deshalb hier komplett neu rendern statt nur den appData-Wert zu setzen.
+function irRuestungswertAendern(itemId, wert) {
+    const item = (appData.inventory || []).find(i => i.id === itemId);
+    if (!item) return;
+    item.irRuestungswert = parseInt(wert) || 0;
+    saveData();
+    renderInventarRaster();
 }
 
 function irBeschreibungToggle(itemId) {
@@ -620,6 +630,7 @@ function irDrop(itemId, targetSlot) {
     const res = irVerschieben(irRasterDaten(), irItemsById(), itemId, targetSlot);
     if (!res.ok) {
         const text = res.grund === 'nurWaffen' ? 'Diese Gürtelplätze sind nur für Waffen.'
+            : res.grund === 'falscherAusruestungsplatz' ? 'Dieser Ausrüstungsplatz passt nicht zu diesem Gegenstand.'
             : (res.grund === 'zuGross' || res.grund === 'passtNicht') ? 'Braucht mehr zusammenhängende freie Felder.'
             : 'Feld ist belegt.';
         irStatus(text, true);
@@ -642,16 +653,24 @@ function irSlotHtml(slot, item, breite) {
                 <input type="text" class="ir-input ir-schaden-input" value="${escapeHtml(item.schaden || '')}" placeholder="Schaden (1w10)" data-irschaden="${escapeHtml(item.id)}">
                 <button class="btn-icon-small ir-wuerfeln-btn" data-irwuerfeln="${escapeHtml(item.id)}" title="Schaden würfeln"><i class="fa-solid fa-dice"></i></button>
             </div>` : '';
+    const ausruestungInfo = item.irAusruestungsslot ? IR_AUSRUESTUNG_SLOTS[item.irAusruestungsslot] : null;
+    const ausruestungZeile = ausruestungInfo ? `
+            <div class="ir-karte-reihe ir-waffen-reihe" title="Ausrüstungsplatz: ${escapeHtml(ausruestungInfo.label)}">
+                <span class="ir-ausr-label"><i class="fa-solid fa-shield-halved"></i> ${escapeHtml(ausruestungInfo.label)}</span>
+                <input type="number" class="ir-input ir-schaden-input" value="${Number(item.irRuestungswert) || 0}" placeholder="Rüstungswert" data-irruestungswert="${escapeHtml(item.id)}">
+            </div>` : '';
     const gesperrt = irKampfGesperrt();
     return `
     <div class="ir-slot ${breite > 1 ? 'ir-slot-breit-' + breite : ''}" data-irslot="${slot}">
-        <div class="inv-item card-layout ir-karte ${item.istWaffe ? 'ir-karte-waffe' : ''}" data-iritem="${escapeHtml(item.id)}">
+        <div class="inv-item card-layout ir-karte ${item.istWaffe ? 'ir-karte-waffe' : ''} ${ausruestungInfo ? 'ir-karte-ausruestung' : ''}" data-iritem="${escapeHtml(item.id)}">
             <div class="ir-name-reihe">
                 <i class="fa-solid fa-grip-vertical ir-drag-griff ${gesperrt ? 'ir-drag-griff-gesperrt' : ''}" data-irgriff="${escapeHtml(item.id)}" title="${gesperrt ? 'Im Kampf-Modus gesperrt' : 'Ziehen zum Umsortieren'}"></i>
                 ${item.istWaffe ? '<i class="fa-solid fa-khanda ir-waffe-icon" title="Waffe"></i>' : ''}
+                ${ausruestungInfo ? '<i class="fa-solid fa-shield-halved ir-waffe-icon" title="Ausrüstung"></i>' : ''}
                 <input type="text" class="ir-name" value="${escapeHtml(item.name)}" data-irname="${escapeHtml(item.id)}" placeholder="Name …">
             </div>
             ${waffenZeile}
+            ${ausruestungZeile}
             <div class="ir-karte-reihe">
                 <div class="item-amount-wrapper">
                     <button class="btn-icon-small" data-irminus="${escapeHtml(item.id)}">-</button>
@@ -697,37 +716,19 @@ function renderInventarRaster() {
     const items = irItemsById();
     const zonen = irZonenDefinition();
     const unplatziert = (appData.inventory || []).filter(item => !irAnkerVon(raster, item.id));
-    const teile = irRuestungsteile();
     const ruestungswert = irRuestungswert();
     const ruestungsstufe = irRuestungsstufe(ruestungswert);
-    const ruestungspreis = irRuestungspreis();
     const taschen = appData.eldaraZusatztaschen || [];
     const handelnMalus = taschen.reduce((sum, art) => sum + (IR_ZUSATZTASCHE_DATEN[art] || IR_ZUSATZTASCHE_DATEN.klein).malus, 0);
 
     const gesperrt = irKampfGesperrt();
     box.innerHTML = `
         ${gesperrt ? '<p class="ir-hint ir-warnung"><i class="fa-solid fa-lock"></i> Kampf-Modus aktiv - Umsortieren ist gerade gesperrt.</p>' : ''}
-        <p class="ir-hint">Eldara-Regelwerk: Gürtel (5 Plätze + 2 eigene Waffenplätze), Rucksack und optionale Zusatztaschen - jede Zone hat feste Plätze, Gegenstände belegen 1-3 Zellen je nach Größe; die beiden Gürtel-Waffenplätze nehmen nur Waffen und kosten dort immer 1 Zelle. <i class="fa-solid fa-circle-question help-icon" onclick="showHelp('inventarraster')" title="Hilfe zum Rasterinventar"></i></p>
+        <p class="ir-hint">Eldara-Regelwerk: Gürtel (5 Plätze + 2 eigene Waffenplätze), Rucksack und optionale Zusatztaschen - jede Zone hat feste Plätze, Gegenstände belegen 1-3 Zellen je nach Größe; die beiden Gürtel-Waffenplätze nehmen nur Waffen und kosten dort immer 1 Zelle. Ausrüstung (Kopf/Schulter-Hals/Brust/Hände/Beine/Füße/Schmuck) wird genauso aus dem Inventar auf den passenden Platz gezogen. <i class="fa-solid fa-circle-question help-icon" onclick="showHelp('inventarraster')" title="Hilfe zum Rasterinventar"></i></p>
         <div class="ir-einstellungen">
             <div class="ir-einstellung ir-ruestung-block">
-                <div class="ir-ruestung-titel">Rüstung <span class="ir-zone-malus">${ruestungswert} Rüstungswert - ${IR_RUESTUNGSSTUFE_LABEL[ruestungsstufe]}${ruestungspreis ? ` (Warenwert ${ruestungspreis}G)` : ''}</span></div>
-                <div class="ir-ruestung-teile">
-                    ${irRuestungsteilSlots().map((slot) => {
-                        const typ = irRuestungsteilTyp(slot);
-                        const info = IR_RUESTUNG_SLOTS[typ];
-                        const nummer = slot.split('_')[1];
-                        const beschriftung = info.anzahl > 1 ? `${info.label} ${nummer === '1' ? 'L' : 'R'}` : info.label;
-                        return `<label class="ir-ruestung-teil">${beschriftung}
-                            <select data-irruestteil="${slot}" class="ir-input">
-                                <option value="" ${!teile[slot] ? 'selected' : ''}>-</option>
-                                ${IR_RUESTUNG_MATERIAL.map(mat => {
-                                    const d = IR_RUESTUNG_WERTE[typ][mat];
-                                    return `<option value="${mat}" ${teile[slot] === mat ? 'selected' : ''}>${IR_RUESTUNG_MATERIAL_LABEL[mat]} (+${d.wert}, ${d.preis}G)</option>`;
-                                }).join('')}
-                            </select>
-                        </label>`;
-                    }).join('')}
-                </div>
+                <div class="ir-ruestung-titel">Rüstung <span class="ir-zone-malus">${ruestungswert} Rüstungswert - ${IR_RUESTUNGSSTUFE_LABEL[ruestungsstufe]}</span></div>
+                <p class="ir-hint">Zieh Ausrüstung aus Gürtel/Rucksack auf die passenden Plätze weiter unten (Kopf, Schulter/Hals, Brust, Hände, Beine, Füße, Schmuck) - jedes Item bringt seinen eigenen Rüstungswert mit.</p>
                 <p class="ir-hint">Rucksack-Malus: ${ruestungsstufe === 'schwer' ? '-2 Plätze' : ruestungsstufe === 'mittel' ? '-1 Platz' : 'keiner'} durch diese Stufe.</p>
                 <p class="ir-hint">Weitere Mali durch diese Stufe: ${(() => { const m = IR_RUESTUNGSSTUFE_MALI[ruestungsstufe]; return (m.bewegung || m.handeln || m.heimlichkeit) ? `Bewegung ${m.bewegung}m, Handeln ${m.handeln || 0}, Heimlichkeit ${m.heimlichkeit}` : 'keine'; })()} - nicht automatisch verrechnet, bitte selbst beim Würfeln eintragen. <i class="fa-solid fa-circle-question help-icon" onclick="showHelp('inventarraster')" title="Hilfe zum Rasterinventar"></i></p>
             </div>
@@ -752,6 +753,11 @@ function renderInventarRaster() {
             <input type="number" id="ir-neu-menge" class="ir-input ir-input-menge" value="1" min="1" title="Menge">
             <label class="ir-waffe-check"><input type="checkbox" id="ir-neu-istwaffe"> Waffe</label>
             <input type="text" id="ir-neu-schaden" class="ir-input ir-input-schaden" placeholder="Schaden (z.B. 1w10)" style="display:none">
+            <select id="ir-neu-ausruestung" class="ir-input" title="Optional: macht das Item auf einen Ausrüstungsplatz ziehbar">
+                <option value="">Kein Ausrüstungsplatz</option>
+                ${Object.keys(IR_AUSRUESTUNG_SLOTS).map(typ => `<option value="${typ}" title="${escapeHtml(IR_AUSRUESTUNG_SLOTS[typ].beispiele)}">${escapeHtml(IR_AUSRUESTUNG_SLOTS[typ].label)}</option>`).join('')}
+            </select>
+            <input type="number" id="ir-neu-ruestungswert" class="ir-input ir-input-schaden" placeholder="Rüstungswert" style="display:none">
             <textarea id="ir-neu-desc" class="ir-input ir-input-desc" placeholder="Optionale Beschreibung / Effekte..." onkeydown="if(event.key==='Enter'){event.preventDefault(); irItemHinzufuegen();}"></textarea>
             <button class="ir-add-btn" onclick="irItemHinzufuegen()"><i class="fa-solid fa-plus"></i> Hinzufügen</button>
         </div>`;
@@ -761,8 +767,11 @@ function renderInventarRaster() {
         const schadenEl = document.getElementById('ir-neu-schaden');
         if (schadenEl) schadenEl.style.display = istWaffeCb.checked ? '' : 'none';
     });
-
-    box.querySelectorAll('[data-irruestteil]').forEach(el => el.addEventListener('change', () => irRuestungsteilAendern(el.dataset.irruestteil, el.value)));
+    const ausrSel = document.getElementById('ir-neu-ausruestung');
+    if (ausrSel) ausrSel.addEventListener('change', () => {
+        const ruestungswertEl = document.getElementById('ir-neu-ruestungswert');
+        if (ruestungswertEl) ruestungswertEl.style.display = ausrSel.value ? '' : 'none';
+    });
 
     box.querySelectorAll('[data-irgriff]').forEach(el => el.addEventListener('pointerdown', (e) => irDragPointerDown(e, el.dataset.irgriff, el.closest('.ir-karte'))));
     box.querySelectorAll('[data-irname]').forEach(el => el.addEventListener('input', () => irNameAendern(el.dataset.irname, el.value)));
@@ -773,6 +782,10 @@ function renderInventarRaster() {
     box.querySelectorAll('[data-irdesctoggle]').forEach(el => el.addEventListener('click', () => irBeschreibungToggle(el.dataset.irdesctoggle)));
     box.querySelectorAll('[data-irdesc]').forEach(el => el.addEventListener('input', () => irBeschreibungAendern(el.dataset.irdesc, el.value)));
     box.querySelectorAll('[data-irschaden]').forEach(el => el.addEventListener('input', () => irSchadenAendern(el.dataset.irschaden, el.value)));
+    // 'change' statt 'input': der Wert fließt in die oben angezeigte Rüstungs-
+    // Summe ein, ein Neu-Rendern bei jedem Tastendruck würde den Cursor aus
+    // dem Feld reißen - deshalb erst beim Verlassen des Felds aktualisieren.
+    box.querySelectorAll('[data-irruestungswert]').forEach(el => el.addEventListener('change', () => irRuestungswertAendern(el.dataset.irruestungswert, el.value)));
     box.querySelectorAll('[data-irwuerfeln]').forEach(el => el.addEventListener('click', () => {
         const item = irItemsById()[el.dataset.irwuerfeln];
         if (item && typeof rollWeaponDamage === 'function') rollWeaponDamage(item.schaden, item.name);

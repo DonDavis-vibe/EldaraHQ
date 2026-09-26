@@ -1294,6 +1294,12 @@ h2 {
 .ir-waffe-check { display: flex; align-items: center; gap: 0.3rem; font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; flex: 0 0 auto; }
 .ir-input-schaden { flex: 1 1 140px; }
 .ir-karte-reihe { display: flex; align-items: center; gap: 0.3rem; flex-wrap: wrap; width: 100%; }
+/* Ausrüstung (Kopf/Schulter-Hals/Brust/Hände/Beine/Füße/Schmuck) - eigene
+   Akzentfarbe statt Waffen-Rot, damit beides auf einen Blick zu unterscheiden ist. */
+.ir-karte-ausruestung { border-left: 2px solid var(--color-accent); }
+.ir-ausr-label { display: flex; align-items: center; gap: 0.3rem; font-size: 0.78rem; color: var(--color-accent); font-weight: 600; white-space: nowrap; flex-shrink: 0; }
+.ir-karte-ausruestung .ir-waffe-icon { color: var(--color-accent); }
+.ir-karte-ausruestung .ir-schaden-input { color: var(--color-accent); }
 .ir-karte-reihe .item-amount-wrapper { margin-right: auto; }
 .ir-karte .btn-delete-icon { font-size: 0.85rem; }
 .ir-desc-toggle { font-size: 0.75rem; padding: 0; align-self: flex-start; }
