@@ -92,6 +92,14 @@ const BattleMap = (() => {
         let malArt = 'freihand';     // 'freihand' | 'linie' | 'kreis' | 'rechteck'
         let nebelForm = 'rechteck';  // Form fürs Auf- und Zudecken
         let malFarbe = '#a3342b';
+        let malDeckkraft = 0.55;     // 0.1-1, gilt für Füllung UND Umriss der Markierung
+        // Rein lokale Anzeige-Einstellung (nicht Teil von `zustand`, geht nie
+        // über applyState/onChange raus): blendet Markierungen (zustand.formen)
+        // aus, deren Mittelpunkt in einem bereits AUFGEDECKTEN Nebelbereich
+        // liegt - fürs Aufräumen der eigenen Planungs-Kritzeleien, sobald die
+        // Spieler den Bereich ohnehin schon sehen können. Eldara-spezifische
+        // Ergänzung, siehe Datei-Kopfkommentar zum sonst 1:1 gehaltenen Modul.
+        let markierungenAusblenden = false;
 
         // Die Leinwand nimmt ihre Farben aus dem Stylesheet (--karte-*), damit
         // sie den Papier- bzw. Nachtmodus mitmacht. Faellt eine Variable aus,
@@ -216,7 +224,7 @@ const BattleMap = (() => {
             }
 
             if (zustand.raster.rasterSichtbar) zeichneRaster(breite, hoehe);
-            zustand.formen.forEach(zeichneForm);
+            zustand.formen.filter(f => !markierungVersteckt(f)).forEach(zeichneForm);
             if (entwurf) zeichneForm(entwurf, true);
             zeichneNebel(breite, hoehe);
             zustand.figuren.forEach(zeichneGeplantenZug);
@@ -226,6 +234,25 @@ const BattleMap = (() => {
 
         // --- Markierungen ---------------------------------------------------
 
+        // Repräsentativer Punkt einer Markierung, um sie gegen aufgedeckte
+        // Nebelbereiche zu prüfen (bereichEnthaelt prüft nur einzelne Punkte,
+        // keine echte Form-Überschneidung - für den Aufräum-Zweck reicht das).
+        function formMittelpunkt(form) {
+            const p = form.punkte || [];
+            if (!p.length) return null;
+            if (form.art === 'kreis') return p[0];
+            if (form.art === 'rechteck' && p.length >= 2) return { x: (p[0].x + p[1].x) / 2, y: (p[0].y + p[1].y) / 2 };
+            const letzter = p[p.length - 1];
+            return { x: (p[0].x + letzter.x) / 2, y: (p[0].y + letzter.y) / 2 };
+        }
+
+        function markierungVersteckt(form) {
+            if (!markierungenAusblenden || !zustand.nebel.aktiv) return false;
+            const mitte = formMittelpunkt(form);
+            if (!mitte) return false;
+            return (zustand.nebel.aufgedeckt || []).some(b => bereichEnthaelt(b, mitte.x, mitte.y));
+        }
+
         function zeichneForm(form, istEntwurf) {
             const p = form.punkte || [];
             if (!p.length) return;
@@ -233,7 +260,13 @@ const BattleMap = (() => {
 
             ctx.save();
             ctx.strokeStyle = form.farbe || malFarbe;
-            ctx.fillStyle = (form.farbe || malFarbe) + '33';
+            ctx.fillStyle = form.farbe || malFarbe;
+            // Deckkraft gilt für Füllung UND Umriss gemeinsam (ein Regler, eine
+            // Markierung). Alte, vor dieser Funktion gespeicherte Formen haben
+            // kein `deckkraft` - Fallback 0.2 entspricht ungefähr ihrer bisherigen
+            // festen Füllung, damit sie beim nächsten Laden nicht plötzlich
+            // kräftiger wirken als vorher gezeichnet.
+            ctx.globalAlpha = form.deckkraft != null ? form.deckkraft : 0.2;
             ctx.lineWidth = Math.max(1.5, 3 * ansicht.zoom);
             ctx.lineJoin = 'round';
             ctx.lineCap = 'round';
@@ -281,6 +314,7 @@ const BattleMap = (() => {
 
         function beschrifte(x, y, text, farbe) {
             ctx.save();
+            ctx.globalAlpha = 1; // Beschriftung bleibt immer lesbar, unabhängig von der Deckkraft der Markierung
             ctx.setLineDash([]);
             ctx.font = 'bold 12px "Segoe UI", sans-serif';
             const b = ctx.measureText(text).width;
@@ -563,7 +597,7 @@ const BattleMap = (() => {
 
             if (werkzeug === 'malen') {
                 entwurf = {
-                    id: 'form-' + Date.now(), art: malArt, farbe: malFarbe,
+                    id: 'form-' + Date.now(), art: malArt, farbe: malFarbe, deckkraft: malDeckkraft,
                     punkte: [{ x: feldJetzt.x, y: feldJetzt.y }, { x: feldJetzt.x, y: feldJetzt.y }]
                 };
                 ziehen = { art: 'malen' };
@@ -989,6 +1023,10 @@ const BattleMap = (() => {
         function getMalArt() { return malArt; }
         function setMalFarbe(farbe) { malFarbe = farbe; }
         function getMalFarbe() { return malFarbe; }
+        function setMalDeckkraft(wert) { malDeckkraft = Math.max(0.1, Math.min(1, Number(wert) || 0.55)); }
+        function getMalDeckkraft() { return malDeckkraft; }
+        function setMarkierungenAusblenden(an) { markierungenAusblenden = !!an; zeichnen(); }
+        function getMarkierungenAusblenden() { return markierungenAusblenden; }
 
         // --- Rückgängig ----------------------------------------------------
         // Nur für Markierungen und Nebel — nicht für Figuren-Positionen, die
@@ -1091,6 +1129,7 @@ const BattleMap = (() => {
             setBestaetigung, zugBestaetigen, zugVerwerfen, offeneZuege,
             setMessModus, istMessModus, setVerdeckt, getStateFuerSpieler,
             setWerkzeug, getWerkzeug, setMalArt, getMalArt, setMalFarbe, getMalFarbe, formenLoeschen,
+            setMalDeckkraft, getMalDeckkraft, setMarkierungenAusblenden, getMarkierungenAusblenden,
             rueckgaengig, kannRueckgaengig,
             setNebelDeckend, nebelAktiv, istNebelAktiv, nebelAllesZudecken, nebelAllesAufdecken,
             setNebelForm, getNebelForm, nebelFreigeben, nebelEntwurfVerwerfen, offeneNebelBereiche,

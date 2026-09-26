@@ -492,40 +492,69 @@ function renderKarteGm() {
                         <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('karte')" title="Hilfe zur Karte"></i>
                     </div>
                 </summary>
-                <div class="sk-karten-werkzeuge">
-                    <select id="kt-auswahl" class="sk-input"></select>
-                    <select id="kt-kategorie" class="sk-input">${Object.entries(KARTEN_KATEGORIEN).map(([k, v]) => `<option value="${k}">${v.label}</option>`).join('')}</select>
-                    <button class="tool-btn" onclick="karteNeuDialog()"><i class="fa-solid fa-plus"></i> Neue Karte</button>
-                    <button class="tool-btn" onclick="karteUmbenennenDialog()"><i class="fa-solid fa-pen"></i> Umbenennen</button>
-                    <button class="x-mini x-mini-danger" onclick="karteLoeschenBestaetigt()" title="Karte löschen"><i class="fa-solid fa-trash"></i></button>
+                <div class="sk-kt-gruppen">
+                    <div class="sk-kt-gruppe">
+                        <div class="sk-kt-gruppe-titel"><i class="fa-solid fa-layer-group"></i> Karten</div>
+                        <div class="sk-kt-gruppe-reihe">
+                            <select id="kt-auswahl" class="sk-input"></select>
+                            <select id="kt-kategorie" class="sk-input">${Object.entries(KARTEN_KATEGORIEN).map(([k, v]) => `<option value="${k}">${v.label}</option>`).join('')}</select>
+                            <button class="tool-btn" onclick="karteNeuDialog()"><i class="fa-solid fa-plus"></i> Neue Karte</button>
+                            <button class="tool-btn" onclick="karteUmbenennenDialog()"><i class="fa-solid fa-pen"></i> Umbenennen</button>
+                            <button class="x-mini x-mini-danger" onclick="karteLoeschenBestaetigt()" title="Karte löschen"><i class="fa-solid fa-trash"></i></button>
+                            <span class="sk-kt-trenner"></span>
+                            <label class="tool-btn" style="margin:0"><i class="fa-solid fa-image"></i> Bild laden<input type="file" accept="image/*" style="display:none" onchange="karteBildHochladen(event)"></label>
+                            <button class="tool-btn" onclick="karteBildEntfernen()"><i class="fa-solid fa-image-slash"></i> Bild entfernen</button>
+                            <button class="tool-btn" onclick="karteMap && karteMap.einpassen()"><i class="fa-solid fa-expand"></i> Einpassen</button>
+                            <button class="tool-btn" onclick="karteVollbildOeffnen('gm')" title="Karte großformatig anzeigen"><i class="fa-solid fa-up-right-and-down-left-from-center"></i> Vollbild</button>
+                        </div>
+                    </div>
+                    <div class="sk-kt-gruppe">
+                        <div class="sk-kt-gruppe-titel"><i class="fa-solid fa-pen-ruler"></i> Werkzeuge</div>
+                        <div class="sk-kt-gruppe-reihe">
+                            <button class="tool-btn" data-ktwerkzeug="zeigen"><i class="fa-solid fa-arrow-pointer"></i> Zeigen</button>
+                            <button class="tool-btn" data-ktwerkzeug="messen"><i class="fa-solid fa-ruler"></i> Messen</button>
+                            <button class="tool-btn" data-ktwerkzeug="malen"><i class="fa-solid fa-pen"></i> Zeichnen</button>
+                            <button class="tool-btn" data-ktwerkzeug="radieren"><i class="fa-solid fa-eraser"></i> Radieren</button>
+                            <span class="sk-kt-trenner"></span>
+                            <select id="kt-mal-art" class="sk-input sk-mal-art" title="Form">
+                                <option value="freihand">Freihand</option>
+                                <option value="linie">Linie</option>
+                                <option value="kreis">Kreis</option>
+                                <option value="rechteck">Rechteck</option>
+                            </select>
+                            <input type="color" id="kt-mal-farbe" class="sk-mal-farbe" value="#a3342b" title="Zeichenfarbe">
+                            <label class="sk-mal-deckkraft-label" title="Deckkraft der Markierung (Füllung und Umriss)">
+                                <i class="fa-solid fa-droplet"></i>
+                                <input type="range" id="kt-mal-deckkraft" min="0.15" max="1" step="0.05" value="0.55">
+                                <span id="kt-mal-deckkraft-wert">55%</span>
+                            </label>
+                            <button class="tool-btn" onclick="karteMap && karteMap.rueckgaengig()" title="Rückgängig"><i class="fa-solid fa-rotate-left"></i></button>
+                        </div>
+                    </div>
+                    <div class="sk-kt-gruppe">
+                        <div class="sk-kt-gruppe-titel"><i class="fa-solid fa-border-all"></i> Raster</div>
+                        <div id="kt-raster-werkzeuge" class="sk-kt-gruppe-reihe"></div>
+                    </div>
+                    <div class="sk-kt-gruppe">
+                        <div class="sk-kt-gruppe-titel"><i class="fa-solid fa-cloud"></i> Nebel des Krieges</div>
+                        <div class="sk-kt-gruppe-reihe">
+                            <label class="hr-check" style="margin:0"><input type="checkbox" id="kt-nebel-aktiv"> <span>Aktiv</span></label>
+                            <button class="tool-btn" data-ktwerkzeug="nebel-auf"><i class="fa-solid fa-cloud"></i> Nebel aufdecken</button>
+                            <button class="tool-btn" data-ktwerkzeug="nebel-zu"><i class="fa-solid fa-cloud-sun"></i> Nebel abdecken</button>
+                            <button class="tool-btn" onclick="karteNebelFreigeben()" title="Aufgedeckte Bereiche für Spieler freigeben"><i class="fa-solid fa-eye"></i> Für Spieler freigeben</button>
+                            <button class="tool-btn" onclick="karteNebelEntwurfVerwerfen()" title="Noch nicht freigegebenen Entwurf verwerfen"><i class="fa-solid fa-eye-slash"></i> Entwurf verwerfen</button>
+                            <span class="sk-kt-trenner"></span>
+                            <label class="hr-check" style="margin:0" title="Blendet Markierungen aus, sobald der Nebel über ihnen aufgedeckt ist (nur bei dir, nicht bei den Spielern)"><input type="checkbox" id="kt-markierung-ausblenden"> <span>Markierungen in aufgedecktem Bereich ausblenden</span></label>
+                        </div>
+                    </div>
+                    <div class="sk-kt-gruppe">
+                        <div class="sk-kt-gruppe-titel"><i class="fa-solid fa-users"></i> Spieler</div>
+                        <div class="sk-kt-gruppe-reihe">
+                            <label class="hr-check" style="margin:0"><input type="checkbox" id="kt-zuege-frei"> <span>Spieler bewegen ohne Bestätigung</span></label>
+                        </div>
+                    </div>
                 </div>
-                <div class="sk-karten-werkzeuge">
-                    <button class="tool-btn" data-ktwerkzeug="zeigen"><i class="fa-solid fa-arrow-pointer"></i> Zeigen</button>
-                    <button class="tool-btn" data-ktwerkzeug="messen"><i class="fa-solid fa-ruler"></i> Messen</button>
-                    <button class="tool-btn" data-ktwerkzeug="malen"><i class="fa-solid fa-pen"></i> Zeichnen</button>
-                    <button class="tool-btn" data-ktwerkzeug="radieren"><i class="fa-solid fa-eraser"></i> Radieren</button>
-                    <button class="tool-btn" data-ktwerkzeug="nebel-auf"><i class="fa-solid fa-cloud"></i> Nebel aufdecken</button>
-                    <button class="tool-btn" data-ktwerkzeug="nebel-zu"><i class="fa-solid fa-cloud-sun"></i> Nebel abdecken</button>
-                    <select id="kt-mal-art" class="sk-input sk-mal-art" title="Form">
-                        <option value="freihand">Freihand</option>
-                        <option value="linie">Linie</option>
-                        <option value="kreis">Kreis</option>
-                        <option value="rechteck">Rechteck</option>
-                    </select>
-                    <input type="color" id="kt-mal-farbe" class="sk-mal-farbe" value="#a3342b" title="Zeichenfarbe">
-                    <button class="tool-btn" onclick="karteMap && karteMap.rueckgaengig()" title="Rückgängig"><i class="fa-solid fa-rotate-left"></i></button>
-                    <button class="tool-btn" onclick="karteMap && karteMap.einpassen()"><i class="fa-solid fa-expand"></i> Einpassen</button>
-                    <label class="tool-btn" style="margin:0"><i class="fa-solid fa-image"></i> Bild laden<input type="file" accept="image/*" style="display:none" onchange="karteBildHochladen(event)"></label>
-                    <button class="tool-btn" onclick="karteBildEntfernen()"><i class="fa-solid fa-image-slash"></i> Bild entfernen</button>
-                </div>
-                <div id="kt-raster-werkzeuge" class="sk-karten-werkzeuge"></div>
-                <div class="sk-karten-werkzeuge">
-                    <label class="hr-check" style="margin:0"><input type="checkbox" id="kt-nebel-aktiv"> <span>Nebel des Krieges aktiv</span></label>
-                    <button class="tool-btn" onclick="karteNebelFreigeben()" title="Aufgedeckte Bereiche für Spieler freigeben"><i class="fa-solid fa-eye"></i> Für Spieler freigeben</button>
-                    <button class="tool-btn" onclick="karteNebelEntwurfVerwerfen()" title="Noch nicht freigegebenen Entwurf verwerfen"><i class="fa-solid fa-eye-slash"></i> Entwurf verwerfen</button>
-                    <label class="hr-check" style="margin:0"><input type="checkbox" id="kt-zuege-frei"> <span>Spieler bewegen ohne Bestätigung</span></label>
-                </div>
-                <canvas id="kt-canvas" class="sk-canvas"></canvas>
+                <div id="kt-canvas-heim"><canvas id="kt-canvas" class="sk-canvas"></canvas></div>
                 <p class="ir-hint">Spieler-Figuren entstehen automatisch. NSCs kommen über "Auf Karte platzieren" in der NSC-Liste dazu. Nebel: Bereich aufdecken (nur du siehst den Entwurf), dann "Für Spieler freigeben".</p>
                 <div id="kt-dynamic"></div>
             </details>`;
@@ -542,6 +571,15 @@ function renderKarteGm() {
         if (malArtSel) malArtSel.addEventListener('change', () => karteMap && karteMap.setMalArt(malArtSel.value));
         const malFarbeInput = document.getElementById('kt-mal-farbe');
         if (malFarbeInput) malFarbeInput.addEventListener('input', () => karteMap && karteMap.setMalFarbe(malFarbeInput.value));
+        const malDeckkraftInput = document.getElementById('kt-mal-deckkraft');
+        const malDeckkraftWert = document.getElementById('kt-mal-deckkraft-wert');
+        if (malDeckkraftInput) malDeckkraftInput.addEventListener('input', () => {
+            const wert = parseFloat(malDeckkraftInput.value) || 0.55;
+            if (karteMap) karteMap.setMalDeckkraft(wert);
+            if (malDeckkraftWert) malDeckkraftWert.textContent = Math.round(wert * 100) + '%';
+        });
+        const markierungAusblendenCb = document.getElementById('kt-markierung-ausblenden');
+        if (markierungAusblendenCb) markierungAusblendenCb.addEventListener('change', () => karteMap && karteMap.setMarkierungenAusblenden(markierungAusblendenCb.checked));
         const nebelAktivCb = document.getElementById('kt-nebel-aktiv');
         if (nebelAktivCb) nebelAktivCb.addEventListener('change', () => karteNebelUmschalten(nebelAktivCb.checked));
         const zuegeFreiCb = document.getElementById('kt-zuege-frei');
@@ -602,6 +640,89 @@ function renderKarteGm() {
         </div>`;
 }
 
+// --- Vollbild ---------------------------------------------------------------
+//
+// Es gibt keine eigene Vollbild-Leinwand: die vorhandene Karten-Instanz (GM
+// oder Spieler, jede mit eigenem <canvas> und eigener BattleMap-Instanz, siehe
+// Datei-Kopfkommentar bei renderKarteSpieler) wandert per appendChild in
+// #karte-vollbild-overlay und beim Schließen wieder zurück in ihren
+// "Heim"-Container (kt-canvas-heim/kt-spieler-canvas-heim) - das Verschieben
+// eines <canvas>-Knotens im DOM lässt Zeichenkontext und Inhalt unangetastet.
+// Während das Overlay offen ist, ist die kleine Werkzeugleiste im
+// Haupt-Panel unsichtbar (vom Overlay überdeckt) - keine Synchronisierung
+// zweier Knopf-Sätze nötig, außer beim Schließen den Werkzeug-Status im
+// Haupt-Panel aufzufrischen (siehe karteVollbildSchliessen).
+let karteVollbildRolle = null; // 'gm' | 'spieler' | null
+
+function karteVollbildWerkzeugleisteHtml(rolle) {
+    const gemeinsam = `
+        <button class="tool-btn" data-ktvwerkzeug="zeigen"><i class="fa-solid fa-arrow-pointer"></i> Zeigen</button>
+        <button class="tool-btn" data-ktvwerkzeug="messen"><i class="fa-solid fa-ruler"></i> Messen</button>`;
+    const nurGm = `
+        <button class="tool-btn" data-ktvwerkzeug="malen"><i class="fa-solid fa-pen"></i> Zeichnen</button>
+        <button class="tool-btn" data-ktvwerkzeug="radieren"><i class="fa-solid fa-eraser"></i> Radieren</button>
+        <span class="sk-kt-trenner"></span>
+        <button class="tool-btn" data-ktvwerkzeug="nebel-auf"><i class="fa-solid fa-cloud"></i> Nebel aufdecken</button>
+        <button class="tool-btn" data-ktvwerkzeug="nebel-zu"><i class="fa-solid fa-cloud-sun"></i> Nebel abdecken</button>`;
+    const mapVar = rolle === 'gm' ? 'karteMap' : 'karteSpielerMap';
+    return gemeinsam + (rolle === 'gm' ? nurGm : '') +
+        `<span class="sk-kt-trenner"></span>
+        <button class="tool-btn" onclick="${mapVar} && ${mapVar}.einpassen()"><i class="fa-solid fa-expand"></i> Einpassen</button>
+        <button class="tool-btn karte-vollbild-schliessen" onclick="karteVollbildSchliessen()"><i class="fa-solid fa-xmark"></i> Schließen (Esc)</button>`;
+}
+
+function karteVollbildOeffnen(rolle) {
+    const overlay = document.getElementById('karte-vollbild-overlay');
+    const map = rolle === 'gm' ? karteMap : karteSpielerMap;
+    const canvas = document.getElementById(rolle === 'gm' ? 'kt-canvas' : 'kt-spieler-canvas');
+    if (!overlay || !map || !canvas) return;
+    if (karteVollbildRolle) karteVollbildSchliessen(); // schon offen (z.B. Doppelklick) - erst sauber zurückräumen
+    karteVollbildRolle = rolle;
+
+    overlay.innerHTML = `
+        <div class="karte-vollbild-werkzeuge">${karteVollbildWerkzeugleisteHtml(rolle)}</div>
+        <div class="karte-vollbild-leinwand-host" id="karte-vollbild-leinwand-host"></div>`;
+    document.getElementById('karte-vollbild-leinwand-host').appendChild(canvas);
+    overlay.style.display = 'flex';
+
+    overlay.querySelectorAll('[data-ktvwerkzeug]').forEach(btn => {
+        btn.classList.toggle('tool-btn-aktiv', btn.dataset.ktvwerkzeug === map.getWerkzeug());
+        btn.addEventListener('click', () => {
+            map.setWerkzeug(btn.dataset.ktvwerkzeug);
+            overlay.querySelectorAll('[data-ktvwerkzeug]').forEach(b => b.classList.toggle('tool-btn-aktiv', b === btn));
+        });
+    });
+
+    document.addEventListener('keydown', karteVollbildEscHandler);
+    // Die Leinwand kennt ihre neue (viel größere) Größe erst nach dem Umhängen.
+    setTimeout(() => map.zeichnen(), 30);
+}
+
+function karteVollbildEscHandler(e) {
+    if (e.key === 'Escape') karteVollbildSchliessen();
+}
+
+function karteVollbildSchliessen() {
+    const overlay = document.getElementById('karte-vollbild-overlay');
+    const rolle = karteVollbildRolle;
+    if (!overlay || !rolle) return;
+    const map = rolle === 'gm' ? karteMap : karteSpielerMap;
+    const canvas = document.getElementById(rolle === 'gm' ? 'kt-canvas' : 'kt-spieler-canvas');
+    const heim = document.getElementById(rolle === 'gm' ? 'kt-canvas-heim' : 'kt-spieler-canvas-heim');
+    document.removeEventListener('keydown', karteVollbildEscHandler);
+    overlay.style.display = 'none';
+    overlay.innerHTML = '';
+    karteVollbildRolle = null;
+    if (heim && canvas) heim.appendChild(canvas);
+    if (map) setTimeout(() => map.zeichnen(), 30);
+    // Werkzeug kann sich im Vollbild geändert haben (Zeichnen/Radieren/Nebel) -
+    // Hervorhebung im Haupt-Panel nachziehen, das während des Vollbilds
+    // verdeckt und daher nicht live mitgepflegt war.
+    if (rolle === 'gm' && map) {
+        document.querySelectorAll('#gm-karte [data-ktwerkzeug]').forEach(b => b.classList.toggle('tool-btn-aktiv', b.dataset.ktwerkzeug === map.getWerkzeug()));
+    }
+}
+
 // --- Spieler --------------------------------------------------------------
 
 let karteSpielerMap = null;
@@ -631,6 +752,7 @@ function karteSpielerBeitritt() {
 
 function karteSpielerGetrennt() {
     karteSpielerLetzte = null;
+    if (karteVollbildRolle === 'spieler') karteVollbildSchliessen();
     renderKarteSpieler();
 }
 
@@ -661,8 +783,9 @@ function renderKarteSpieler() {
                 <div class="sk-karten-werkzeuge">
                     <button class="tool-btn" data-ktspielerwerkzeug="zeigen"><i class="fa-solid fa-arrow-pointer"></i> Zeigen</button>
                     <button class="tool-btn" data-ktspielerwerkzeug="messen"><i class="fa-solid fa-ruler"></i> Messen</button>
+                    <button class="tool-btn" onclick="karteVollbildOeffnen('spieler')" title="Karte großformatig anzeigen"><i class="fa-solid fa-up-right-and-down-left-from-center"></i> Vollbild</button>
                 </div>
-                <canvas id="kt-spieler-canvas" class="sk-canvas"></canvas>
+                <div id="kt-spieler-canvas-heim"><canvas id="kt-spieler-canvas" class="sk-canvas"></canvas></div>
                 <p class="ir-hint">Dein Zug erscheint beim Spielleiter erst als Vorschlag, den er bestätigt oder verwirft - außer er hat freie Bewegung erlaubt.</p>
             </details>`;
         const canvas = document.getElementById('kt-spieler-canvas');

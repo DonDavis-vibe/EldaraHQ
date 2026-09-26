@@ -2286,9 +2286,44 @@ body.gm-mode .gm-title { color: var(--color-accent); }
 }
 .sk-mal-art { max-width: 200px; }
 .sk-mal-farbe { width: 34px; height: 34px; padding: 2px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); background: transparent; cursor: pointer; }
+.sk-mal-deckkraft-label {
+    display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.6rem;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.14); border-radius: 7px;
+    color: var(--text-secondary); font-size: 0.78rem; cursor: pointer;
+}
+.sk-mal-deckkraft-label input[type="range"] { width: 70px; accent-color: var(--color-accent); cursor: pointer; }
+.sk-mal-deckkraft-label span { min-width: 2.4em; text-align: right; font-family: var(--font-mono); }
 .sk-raster-farben { display: inline-flex; align-items: center; gap: 0.3rem; }
 .sk-raster-farbpunkt { width: 20px; height: 20px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; display: inline-block; }
 .sk-raster-farbpunkt-aktiv { border-color: var(--color-accent); }
+
+/* Karten-Werkzeuge nach Themenbereich gruppiert statt einer einzigen langen,
+   umbrechenden Zeile (karten.js renderKarteGm) - eine Box pro Gruppe mit
+   kleiner Überschrift, gleiche Bauart wie .ir-gruppe im Rasterinventar. */
+.sk-kt-gruppen { display: flex; flex-direction: column; gap: 0.6rem; margin: 0.8rem 0; }
+.sk-kt-gruppe { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 0.6rem 0.8rem; }
+.sk-kt-gruppe-titel {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase;
+    color: var(--text-secondary); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;
+}
+.sk-kt-gruppe-titel i { color: var(--color-accent); }
+.sk-kt-gruppe-reihe { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+.sk-kt-trenner { width: 1px; align-self: stretch; min-height: 1.6rem; background: rgba(255,255,255,0.12); margin: 0 0.1rem; }
+
+/* Karten-Vollbild (index.html #karte-vollbild-overlay) - die vorhandene
+   Leinwand (GM oder Spieler) wandert per appendChild rein/raus, siehe
+   karteVollbildOeffnen/karteVollbildSchliessen in karten.js. Unter dem
+   Kampf-Popup (2000) und Konfetti (9999), aber über den normalen Panels. */
+.karte-vollbild-overlay {
+    position: fixed; inset: 0; z-index: 1200;
+    background: rgba(3, 7, 11, 0.97);
+    display: flex; flex-direction: column; padding: 1rem;
+}
+.karte-vollbild-werkzeuge { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-bottom: 0.7rem; flex-shrink: 0; }
+.karte-vollbild-werkzeuge .sk-kt-trenner { min-height: 1.8rem; }
+.karte-vollbild-schliessen { margin-left: auto; }
+.karte-vollbild-leinwand-host { flex: 1; min-height: 0; display: flex; }
+.karte-vollbild-leinwand-host .sk-canvas { flex: 1; height: auto; }
 .sk-raster-feld { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.78rem; color: var(--text-secondary); }
 .sk-num-stepper { display: inline-flex; align-items: stretch; }
 .sk-num-stepper button {

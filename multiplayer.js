@@ -394,6 +394,9 @@ function exitGmMode() {
     clientConnections = {};
     connectedPlayersData = {};
     clearMultiplayerSession();
+    // Sonst bliebe das Karten-Vollbild (über allem liegend, siehe karten.js)
+    // sichtbar hängen, obwohl das Dashboard dahinter schon weg ist.
+    if (typeof karteVollbildSchliessen === 'function') karteVollbildSchliessen();
 
     document.getElementById('gm-dashboard').style.display = 'none';
     document.querySelector('.app-container').style.display = 'grid';
