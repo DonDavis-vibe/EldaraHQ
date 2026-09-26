@@ -1176,6 +1176,24 @@ h2 {
    Scroll-Geste abfängt, bevor JS überhaupt reagieren kann. */
 .ir-drag-griff { color: var(--text-secondary); font-size: 0.85rem; flex-shrink: 0; cursor: grab; touch-action: none; padding: 0.3rem; margin: -0.3rem; }
 .ir-drag-griff:active { cursor: grabbing; }
+.ir-drag-griff-gesperrt { opacity: 0.3; cursor: not-allowed; }
+.ir-drag-griff-gesperrt:active { cursor: not-allowed; }
+
+/* Kampf-Start/Ende-Popup beim Spieler (kampf.js, kampfPopupZeigen) */
+.kampf-popup {
+    position: fixed; top: 1.2rem; left: 50%; transform: translateX(-50%) translateY(-30px);
+    z-index: 2000; display: flex; align-items: center; gap: 0.9rem;
+    background: rgba(15, 23, 42, 0.95); border: 1px solid var(--color-accent);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.7), 0 0 20px rgba(69, 214, 148, 0.4);
+    border-radius: 12px; padding: 1rem 1.5rem; max-width: min(90vw, 420px);
+    opacity: 0; pointer-events: none; transition: opacity 0.4s, transform 0.4s;
+    color: var(--text-primary); font-family: var(--font-main); cursor: pointer;
+}
+.kampf-popup.kampf-popup-sichtbar { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+.kampf-popup i { font-size: 1.8rem; color: var(--color-accent); flex-shrink: 0; }
+.kampf-popup strong { color: var(--color-accent); }
+.kampf-popup-ende { border-color: var(--color-heal); box-shadow: 0 10px 40px rgba(0,0,0,0.7), 0 0 20px rgba(16, 185, 129, 0.4); }
+.kampf-popup-ende i, .kampf-popup-ende strong { color: var(--color-heal); }
 .ir-karte-wird-gezogen { opacity: 0.35; }
 .ir-karte-geist {
     position: fixed; top: 0; left: 0; z-index: 1000; pointer-events: none;

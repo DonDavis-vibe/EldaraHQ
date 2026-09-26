@@ -525,6 +525,7 @@ function irGroesseAendern(itemId, neueGroesse) {
     const alteKosten = irSlotKosten(item);
     const neueKosten = irSlotKostenVon(neueGroesse);
     if (neueKosten === alteKosten) { item.irGroesse = neueGroesse; saveData(); return; }
+    if (irKampfGesperrt()) { irStatus('Inventar ist während des Kampfes gesperrt - Größe kann nicht geändert werden, wenn das den Platz verschiebt.', true); return; }
     const rasterOhne = irOhneItem(irRasterDaten(), itemId);
     const probeItem = Object.assign({}, item, { irGroesse: neueGroesse });
     const slot = irErstesFreies(rasterOhne, probeItem, undefined, irReihenfolgeFuer(probeItem));
@@ -548,9 +549,19 @@ function irGroesseAendern(itemId, neueGroesse) {
 let irDrag = null; // { itemId, pointerId, startX, startY, element, aktiv, geist, zielEl, zielSlot }
 const IR_DRAG_SCHWELLE = 6; // Pixel Bewegung, bevor aus einem Antippen ein Ziehen wird
 
+// Der SL kann per Kampf-Modus (kampf.js, kampfModusUmschalten) das Umsortieren
+// im Rasterinventar sperren, solange aktiv gekämpft wird - betrifft nur das
+// Verschieben zwischen Feldern, nicht das Hinzufügen/Entfernen/Ablegen aufs
+// Schiff o.ä. Gilt nur beim Spieler selbst, nicht beim SL (der hat kein
+// eigenes Rasterinventar im Dashboard).
+function irKampfGesperrt() {
+    return typeof kampfSpieler !== 'undefined' && !!kampfSpieler.modusAktiv;
+}
+
 function irDragPointerDown(e, itemId, kartenEl) {
     if (e.button !== undefined && e.button !== 0) return; // nur Primärtaste/erster Finger
     if (irDrag) return; // schon ein Zug im Gange (z.B. zweiter Finger)
+    if (irKampfGesperrt()) { irStatus('Inventar ist während des Kampfes gesperrt.', true); return; }
     irDrag = { itemId, pointerId: e.pointerId, startX: e.clientX, startY: e.clientY, element: kartenEl, aktiv: false, geist: null, zielEl: null, zielSlot: null };
     document.addEventListener('pointermove', irDragPointerMove);
     document.addEventListener('pointerup', irDragPointerEnde);
@@ -605,6 +616,7 @@ function irDragPointerEnde(e) {
 }
 
 function irDrop(itemId, targetSlot) {
+    if (irKampfGesperrt()) { irStatus('Inventar ist während des Kampfes gesperrt.', true); return; }
     const res = irVerschieben(irRasterDaten(), irItemsById(), itemId, targetSlot);
     if (!res.ok) {
         const text = res.grund === 'nurWaffen' ? 'Diese Gürtelplätze sind nur für Waffen.'
@@ -630,11 +642,12 @@ function irSlotHtml(slot, item, breite) {
                 <input type="text" class="ir-input ir-schaden-input" value="${escapeHtml(item.schaden || '')}" placeholder="Schaden (1w10)" data-irschaden="${escapeHtml(item.id)}">
                 <button class="btn-icon-small ir-wuerfeln-btn" data-irwuerfeln="${escapeHtml(item.id)}" title="Schaden würfeln"><i class="fa-solid fa-dice"></i></button>
             </div>` : '';
+    const gesperrt = irKampfGesperrt();
     return `
     <div class="ir-slot ${breite > 1 ? 'ir-slot-breit-' + breite : ''}" data-irslot="${slot}">
         <div class="inv-item card-layout ir-karte ${item.istWaffe ? 'ir-karte-waffe' : ''}" data-iritem="${escapeHtml(item.id)}">
             <div class="ir-name-reihe">
-                <i class="fa-solid fa-grip-vertical ir-drag-griff" data-irgriff="${escapeHtml(item.id)}" title="Ziehen zum Umsortieren"></i>
+                <i class="fa-solid fa-grip-vertical ir-drag-griff ${gesperrt ? 'ir-drag-griff-gesperrt' : ''}" data-irgriff="${escapeHtml(item.id)}" title="${gesperrt ? 'Im Kampf-Modus gesperrt' : 'Ziehen zum Umsortieren'}"></i>
                 ${item.istWaffe ? '<i class="fa-solid fa-khanda ir-waffe-icon" title="Waffe"></i>' : ''}
                 <input type="text" class="ir-name" value="${escapeHtml(item.name)}" data-irname="${escapeHtml(item.id)}" placeholder="Name …">
             </div>
@@ -691,7 +704,9 @@ function renderInventarRaster() {
     const taschen = appData.eldaraZusatztaschen || [];
     const handelnMalus = taschen.reduce((sum, art) => sum + (IR_ZUSATZTASCHE_DATEN[art] || IR_ZUSATZTASCHE_DATEN.klein).malus, 0);
 
+    const gesperrt = irKampfGesperrt();
     box.innerHTML = `
+        ${gesperrt ? '<p class="ir-hint ir-warnung"><i class="fa-solid fa-lock"></i> Kampf-Modus aktiv - Umsortieren ist gerade gesperrt.</p>' : ''}
         <p class="ir-hint">Eldara-Regelwerk: Gürtel (5 Plätze + 2 eigene Waffenplätze), Rucksack und optionale Zusatztaschen - jede Zone hat feste Plätze, Gegenstände belegen 1-3 Zellen je nach Größe; die beiden Gürtel-Waffenplätze nehmen nur Waffen und kosten dort immer 1 Zelle. <i class="fa-solid fa-circle-question help-icon" onclick="showHelp('inventarraster')" title="Hilfe zum Rasterinventar"></i></p>
         <div class="ir-einstellungen">
             <div class="ir-einstellung ir-ruestung-block">

@@ -118,7 +118,7 @@ let kampf = kampfLeererStand();
 let kampfOffenGm = true;
 
 function kampfLeererStand() {
-    return { runde: 0, teilnehmer: [], log: [] };
+    return { runde: 0, teilnehmer: [], log: [], modusAktiv: false };
 }
 
 function kampfLaden() {
@@ -564,6 +564,17 @@ function kampfAlleEntfernen() {
     renderKampfGm();
 }
 
+// Kampf-Modus: sperrt bei den Spielern nur das Verschieben/Umsortieren im
+// Rasterinventar (inventarraster.js prüft kampfSpieler.modusAktiv), damit
+// niemand mitten im Gefecht in Ruhe seinen Rucksack umpackt. Unabhängig von
+// Runde/Teilnehmerliste, damit der SL auch VOR der ersten Initiative schon
+// sperren kann ("Hinterhalt!").
+function kampfModusUmschalten() {
+    kampf.modusAktiv = !kampf.modusAktiv;
+    kampfLog(kampf.modusAktiv ? 'Kampf-Modus aktiviert - Inventar der Spieler ist gesperrt.' : 'Kampf-Modus beendet - Inventar der Spieler ist wieder frei.');
+    renderKampfGm();
+}
+
 // --- Live-Sync an die Spieler ------------------------------------------------
 
 let kampfVerteilenTimer = null;
@@ -576,7 +587,7 @@ function kampfVerteilen() {
 // eigenen Bogen jedes Spielers, siehe Datei-Kopfkommentar.
 function kampfZustandFuerSpieler() {
     return {
-        type: 'kampf', runde: kampf.runde,
+        type: 'kampf', runde: kampf.runde, modusAktiv: !!kampf.modusAktiv,
         teilnehmer: kampf.teilnehmer.map(t => ({
             id: t.id, art: t.art, name: t.name, seite: t.seite, farbe: t.farbe, init: t.init,
             hp: t.art === 'nsc' ? t.hp : undefined,
@@ -739,6 +750,11 @@ function renderKampfGm() {
                     <button class="x-mini x-mini-danger" onclick="kampfZuruecksetzen()" title="Runde, Initiative und Zustände zurücksetzen">Zurücksetzen</button>
                     <button class="x-mini x-mini-danger" onclick="kampfAlleEntfernen()" title="Alle Teilnehmer entfernen">Alle entfernen</button>
                 </div>
+                <div class="sk-aktion-zeile">
+                    <button class="x-mini ${kampf.modusAktiv ? 'x-mini-danger' : ''}" onclick="kampfModusUmschalten()" title="Sperrt/entsperrt bei allen Spielern das Verschieben/Umsortieren im Rasterinventar">
+                        <i class="fa-solid ${kampf.modusAktiv ? 'fa-lock' : 'fa-lock-open'}"></i> ${kampf.modusAktiv ? 'Kampf-Modus AKTIV - Inventar gesperrt' : 'Kampf-Modus starten (sperrt Inventar)'}
+                    </button>
+                </div>
 
                 <h4>Teilnehmer hinzufügen</h4>
                 ${verbundenePeers.length ? `<div class="sk-aktion-zeile">
@@ -802,17 +818,48 @@ function renderKampfGm() {
 
 // --- Spieler-Ansicht -------------------------------------------------------------
 
-let kampfSpieler = { runde: 0, teilnehmer: [] };
+let kampfSpieler = { runde: 0, teilnehmer: [], modusAktiv: false };
 
 function kampfEmpfangen(payload) {
+    const vorherModus = kampfSpieler.modusAktiv;
     kampfSpieler.runde = payload.runde || 0;
     kampfSpieler.teilnehmer = Array.isArray(payload.teilnehmer) ? payload.teilnehmer : [];
+    kampfSpieler.modusAktiv = !!payload.modusAktiv;
+    if (kampfSpieler.modusAktiv !== vorherModus) kampfPopupZeigen(kampfSpieler.modusAktiv ? 'start' : 'ende');
     renderKampfSpieler();
+    if (typeof renderInventarRaster === 'function' && typeof eldaraAktiv === 'function' && eldaraAktiv()) renderInventarRaster();
+}
+
+// Kurzes Popup beim Spieler, wenn der SL den Kampf-Modus umschaltet (nicht
+// bei jeder sonstigen Kampf-Änderung wie Schaden/Runde - nur beim tatsächlichen
+// Start/Ende, siehe kampfEmpfangen oben). Erstellt sich sein DOM-Element
+// selbst bei Bedarf, kein zusätzliches Markup in index.html nötig.
+let kampfPopupTimer = null;
+function kampfPopupZeigen(art) {
+    let el = document.getElementById('kampf-popup');
+    if (!el) {
+        el = document.createElement('div');
+        el.id = 'kampf-popup';
+        el.className = 'kampf-popup';
+        el.onclick = () => el.classList.remove('kampf-popup-sichtbar');
+        document.body.appendChild(el);
+    }
+    const start = art === 'start';
+    el.innerHTML = `<i class="fa-solid ${start ? 'fa-khanda' : 'fa-flag'}"></i>
+        <div><strong>${start ? 'Der Kampf beginnt!' : 'Der Kampf ist vorbei.'}</strong><br>${start ? 'Dein Inventar ist gesperrt, solange gekämpft wird.' : 'Dein Inventar ist wieder frei.'}</div>`;
+    el.classList.toggle('kampf-popup-ende', !start);
+    // Neu anstoßen statt nur Klasse behalten, falls schnell hintereinander
+    // start/ende/start umgeschaltet wird (Reflow erzwingt die CSS-Transition).
+    el.classList.remove('kampf-popup-sichtbar');
+    void el.offsetWidth;
+    el.classList.add('kampf-popup-sichtbar');
+    clearTimeout(kampfPopupTimer);
+    kampfPopupTimer = setTimeout(() => el.classList.remove('kampf-popup-sichtbar'), 4500);
 }
 
 function kampfSpielerBeitritt() { /* nichts extra zu tun - Zustand kommt mit der nächsten 'kampf'-Nachricht */ }
 function kampfSpielerGetrennt() {
-    kampfSpieler = { runde: 0, teilnehmer: [] };
+    kampfSpieler = { runde: 0, teilnehmer: [], modusAktiv: false };
     renderKampfSpieler();
 }
 
@@ -849,18 +896,25 @@ function renderKampfSpieler() {
     const section = document.getElementById('kampf-section');
     if (!section) return;
     const verbunden = typeof hostConnection !== 'undefined' && hostConnection && hostConnection.open;
-    if (!verbunden || (typeof isGmMode !== 'undefined' && isGmMode) || !kampfSpieler.teilnehmer.length) {
+    // Der Kampf-Modus (Inventar-Sperre) kann auch VOR der ersten Initiative
+    // aktiv sein, wenn also noch niemand in kampfSpieler.teilnehmer steht -
+    // die Sperr-Meldung soll trotzdem sichtbar sein, sonst wundert man sich,
+    // warum das Rasterinventar plötzlich nicht mehr reagiert.
+    if (!verbunden || (typeof isGmMode !== 'undefined' && isGmMode) || (!kampfSpieler.teilnehmer.length && !kampfSpieler.modusAktiv)) {
         section.style.display = 'none';
         section.innerHTML = '';
         return;
     }
     section.style.display = '';
+    const sperrHinweis = kampfSpieler.modusAktiv
+        ? `<p class="ir-hint ir-warnung"><i class="fa-solid fa-lock"></i> Kampf-Modus aktiv - dein Inventar ist gesperrt, solange gekämpft wird.</p>` : '';
     const sortiert = kampfSpieler.teilnehmer.slice().sort((a, b) => (b.init == null ? -1 : b.init) - (a.init == null ? -1 : a.init));
     section.innerHTML = `
         <details class="x-details gm-seekampf" open>
             <summary><h3 style="margin:0"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-hand-fist"></i> Kampf - Runde ${kampfSpieler.runde}
+                ${kampfSpieler.modusAktiv ? '<i class="fa-solid fa-lock" style="color:var(--color-dmg)" title="Inventar gesperrt"></i>' : ''}
                 <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('kampf')" title="Hilfe zum Kampf"></i></h3></summary>
-            <div class="sk-details">${sortiert.map(t => kampfTeilnehmerSpielerHtml(t)).join('')}</div>
+            <div class="sk-details">${sperrHinweis}${sortiert.map(t => kampfTeilnehmerSpielerHtml(t)).join('')}</div>
         </details>`;
 }
 
