@@ -151,6 +151,8 @@ const helpData = {
              "<li><b>Integriertes Soundboard:</b> Der GM kann live Sounds & Ambient-Tracks für alle Spieler abspielen, mixen und faden.</li>" +
              "<li><b>Drag & Drop Notizen:</b> Ziehe Einträge aus dem Logbuch oder deine gewürfelten Ergebnisse einfach mit der Maus rüber in dein Notizfeld.</li>" +
              "<li><b>Discord-Integration:</b> Verbinde einen Webhook, um alle Würfe direkt in euren Discord-Channel zu posten.</li>" +
+             "<li><b>Handy-Schnellnavigation:</b> Auf dem Smartphone bleibt unten eine Leiste mit Sprunglinks zu allen gerade sichtbaren Bereichen stehen (Inventar, Logbuch, Notizen, ...) - antippen springt direkt dorthin, kein langes Scrollen nötig. Oben zeigt zusätzlich eine schmale Leiste immer deine aktuellen Lebenspunkte.</li>" +
+             "<li><b>Klappbare Bereiche:</b> Fertigkeiten, Inventar, Würfel Tool, Talentbaum und die meisten anderen Panels lassen sich per Klick auf die Überschrift ein- und ausklappen - auf dem Handy starten die selten gebrauchten (z.B. Talentbaum, Karte, Seekampf) eingeklappt für mehr Überblick.</li>" +
              "</ul>" +
              "<p><i>Lokaler Speicher: Deine Eingaben werden live im Browser gespeichert. Dennoch solltest du vor/nach einer Session über 'Speichern (JSON)' ein Backup deiner Charakterdaten herunterladen!</i></p>"
 };

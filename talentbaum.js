@@ -352,6 +352,13 @@ function tbSchadenWuerfeln(schluessel) {
 
 // --- Darstellung ------------------------------------------------------------
 
+// Auf/zu-Zustand des GANZEN Talentbaum-Panels (nicht der Unter-Details wie
+// "Gelernte Fähigkeiten") - überlebt renderTalentbaum()-Neuaufbauten, weil
+// section.innerHTML bei jeder Skill-Wahl komplett neu geschrieben wird. Auf
+// dem Handy erstmal eingeklappt, weil der Baum der mit Abstand größte
+// Platzfresser auf der langen gestapelten Seite ist.
+let tbPanelOffen = window.innerWidth > 768;
+
 function tbStufenText(skill, regeln) {
     const zeilen = [skill.info || ''];
     (skill.stufen || []).forEach(st => {
@@ -553,26 +560,31 @@ function renderTalentbaum() {
         : '';
 
     section.innerHTML = `
-        <div class="tb-kopf">
-            <h2 class="cat-title" style="margin:0"><i class="fa-solid fa-diagram-project category-icon-fa"></i> Talentbaum
-                <i class="fa-solid fa-circle-question help-icon" onclick="showHelp('talentbaum')" title="Hilfe zum Talentbaum"></i></h2>
-            <div class="tb-punkte">
-                <span class="tb-pill ${gesamt.rpFrei < 0 ? 'tb-ueber' : ''}" title="Rangpunkte: 1 je Rangaufstieg in einem deiner drei Hauptbäume. Bezahlt AUSSCHLIESSLICH Besondere Eigenschaften - Skills lernst du rein mit Skillpunkten."><i class="fa-solid fa-ranking-star"></i> RP ${gesamt.rpFrei} / ${gesamt.rangpunkte}</span>
-            </div>
-        </div>
-        <p class="hr-hint">Skillpunkte entstehen getrennt je Ast, kein gemeinsamer Topf.</p>
-        <div class="tb-auswahl">${hauptSelects.join('')}${wesenSelect}</div>
-        ${wesenHtml}
-        <div id="tb-hinweis" class="x-hint"></div>
-        <div class="tb-baeume">${baeumeHtml}</div>
-        ${eigenschaftenHtml}
-        <details class="x-details tb-details" ${gelerntKeys.length ? 'open' : ''}>
-            <summary><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-list-check"></i> Gelernte Fähigkeiten (${gelerntKeys.length})
-                ${gelerntKeys.length ? `<button class="tool-btn tb-refresh" onclick="event.preventDefault(); event.stopPropagation(); tbAlleAuffrischen()" title="Alle als verfügbar markieren (z.B. nach dem Kampf)"><i class="fa-solid fa-rotate"></i> Alle auffrischen</button>` : ''}
+        <details class="x-details" id="tb-panel-details" ${tbPanelOffen ? 'open' : ''}>
+            <summary class="tb-kopf">
+                <h2 class="cat-title" style="margin:0"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-diagram-project category-icon-fa"></i> Talentbaum
+                    <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('talentbaum')" title="Hilfe zum Talentbaum"></i></h2>
+                <div class="tb-punkte">
+                    <span class="tb-pill ${gesamt.rpFrei < 0 ? 'tb-ueber' : ''}" title="Rangpunkte: 1 je Rangaufstieg in einem deiner drei Hauptbäume. Bezahlt AUSSCHLIESSLICH Besondere Eigenschaften - Skills lernst du rein mit Skillpunkten."><i class="fa-solid fa-ranking-star"></i> RP ${gesamt.rpFrei} / ${gesamt.rangpunkte}</span>
+                </div>
             </summary>
-            <div class="tb-gelernt-liste">${gelerntHtml || '<div class="x-leer">Noch nichts gelernt – klicke im Baum auf einen Skill.</div>'}</div>
-        </details>
-        ${tabellenHtml}`;
+            <p class="hr-hint">Skillpunkte entstehen getrennt je Ast, kein gemeinsamer Topf.</p>
+            <div class="tb-auswahl">${hauptSelects.join('')}${wesenSelect}</div>
+            ${wesenHtml}
+            <div id="tb-hinweis" class="x-hint"></div>
+            <div class="tb-baeume">${baeumeHtml}</div>
+            ${eigenschaftenHtml}
+            <details class="x-details tb-details" ${gelerntKeys.length ? 'open' : ''}>
+                <summary><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-list-check"></i> Gelernte Fähigkeiten (${gelerntKeys.length})
+                    ${gelerntKeys.length ? `<button class="tool-btn tb-refresh" onclick="event.preventDefault(); event.stopPropagation(); tbAlleAuffrischen()" title="Alle als verfügbar markieren (z.B. nach dem Kampf)"><i class="fa-solid fa-rotate"></i> Alle auffrischen</button>` : ''}
+                </summary>
+                <div class="tb-gelernt-liste">${gelerntHtml || '<div class="x-leer">Noch nichts gelernt – klicke im Baum auf einen Skill.</div>'}</div>
+            </details>
+            ${tabellenHtml}
+        </details>`;
+
+    const tbPanelDetails = document.getElementById('tb-panel-details');
+    if (tbPanelDetails) tbPanelDetails.addEventListener('toggle', () => { tbPanelOffen = tbPanelDetails.open; });
 
     // Bedienung per Delegation - die Knoten werden bei jeder Änderung neu gebaut
     section.querySelectorAll('.tb-node[data-tbkey]').forEach(n => n.addEventListener('click', () => tbLernen(n.dataset.tbkey)));

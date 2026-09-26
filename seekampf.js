@@ -1005,7 +1005,7 @@ function skLeererSpielerStand() {
 }
 
 let skSpieler = skLeererSpielerStand();
-let skSpielerOffen = true;
+let skSpielerOffen = window.innerWidth > 768; // auf dem Handy erstmal eingeklappt, mehr Überblick auf der langen Seite
 
 function skEmpfangen(payload) {
     skSpieler.wind = payload.wind || skSpieler.wind;

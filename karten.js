@@ -726,7 +726,7 @@ function karteVollbildSchliessen() {
 // --- Spieler --------------------------------------------------------------
 
 let karteSpielerMap = null;
-let karteSpielerOffen = true;
+let karteSpielerOffen = window.innerWidth > 768; // auf dem Handy erstmal eingeklappt, mehr Überblick auf der langen Seite
 let karteSpielerLetzte = null;  // letzte empfangene Nachricht ({karteId, name, kategorie, zuegeFrei, zustand})
 
 function karteEmpfangen(payload) {

@@ -76,6 +76,15 @@
 
     <div id="fx-layer" style="position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden;"></div>
 
+    <!-- Handy-Statusleiste: bleibt oben stehen und zeigt immer die aktuellen
+         Lebenspunkte, nur unterhalb der Mobile-Breakpoint sichtbar (mobilestatus.js) -->
+    <div id="mobile-status-bar" class="mobile-status-bar" role="button" aria-label="Zu Lebenspunkte springen"></div>
+
+    <!-- Handy-Schnellnavigation: mitscrollende Leiste mit Sprunglinks zu allen
+         gerade sichtbaren Panels, nur unterhalb der Mobile-Breakpoint sichtbar
+         (mobilenav.js) -->
+    <nav id="mobile-nav" class="mobile-nav" aria-label="Schnellnavigation"></nav>
+
     <div class="header-banner" style="max-width: 1200px; height: 220px; margin: 0.5rem auto 1.5rem auto; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.5); border: 1px solid var(--glass-border, rgba(255,255,255,0.2)); background: rgba(0,0,0,0.5); position: relative;">
         <img id="header-banner-img" src="assets/header-herohq.jpg" alt="EldaraHQ Banner" style="width: 100%; height: 100%; display: block; object-fit: cover; object-position: center 25%;">
         <div style="position: absolute; left: 18px; bottom: 16px; display: flex; align-items: center; gap: 12px;">
@@ -129,7 +138,7 @@
         <!-- Left Side: Character Sheet -->
         <div class="character-sheet glass-panel">
             
-            <header class="character-header">
+            <header class="character-header" id="charakter-kopf">
                 <label class="portrait-container" for="portrait-upload">
                     <img src="assets/giphy.gif" alt="Character Portrait" class="character-portrait" id="portrait-img">
                     <div class="portrait-overlay"><i class="fa-solid fa-camera"></i></div>
@@ -193,8 +202,10 @@
 
 
             <!-- Attributes Section -->
-            <div class="attributes-grid">
-                
+            <details class="x-details" id="fertigkeiten-details" open>
+                <summary class="tb-kopf"><h2 class="cat-title" style="margin:0"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-list-check category-icon-fa"></i> Fertigkeiten</h2></summary>
+            <div class="attributes-grid" id="attributes-grid">
+
                 <!-- Handeln -->
                 <div class="attribute-card" style="--accent: var(--color-action);">
                     <div class="attr-header" style="align-items: flex-start;">
@@ -274,14 +285,15 @@
                 </div>
 
             </div>
+            </details>
             <!-- Talentbaum (nur sichtbar, wenn ein Regelpaket mit Talentbaum aktiv ist - talentbaum.js) -->
             <div id="talentbaum-section" class="talentbaum-section" style="display: none;"></div>
 
             <!-- Inventory Section -->
-            <div class="inventory-section">
-                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem;">
-                    <h2 class="cat-title" style="margin: 0;"><img id="icon-inventar" src="assets/icon_inventar_pirates.jpg" class="category-icon" alt=""> Inventar <i class="fa-solid fa-circle-question help-icon" onclick="showHelp('inventory')" title="Hilfe zum Sortieren"></i></h2>
-                    <div class="currency-badge" style="display: flex; align-items: center; gap: 0.6rem; flex-shrink: 0; background: rgba(10,10,15,0.65); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border: 1px solid rgba(251,191,36,0.45); padding: 0.45rem 1rem; border-radius: 20px; color: #fbbf24; font-weight: bold; font-size: 1.05rem; text-shadow: 0 1px 3px rgba(0,0,0,0.9);">
+            <details class="x-details inventory-section" id="inventory-section" open>
+                <summary style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem;">
+                    <h2 class="cat-title" style="margin: 0;"><i class="fa-solid fa-chevron-right x-chevron"></i> <img id="icon-inventar" src="assets/icon_inventar_pirates.jpg" class="category-icon" alt=""> Inventar <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('inventory')" title="Hilfe zum Sortieren"></i></h2>
+                    <div class="currency-badge" onclick="event.preventDefault(); event.stopPropagation();" style="display: flex; align-items: center; gap: 0.6rem; flex-shrink: 0; background: rgba(10,10,15,0.65); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border: 1px solid rgba(251,191,36,0.45); padding: 0.45rem 1rem; border-radius: 20px; color: #fbbf24; font-weight: bold; font-size: 1.05rem; text-shadow: 0 1px 3px rgba(0,0,0,0.9);">
                         <i class="fa-solid fa-coins"></i>
                         <input type="text" id="currency-name" class="currency-name" value="Credits" oninput="autoSizeCurrencyName(this)" onchange="updateCurrency()" style="background: transparent; border: none; color: inherit; font-weight: inherit; text-shadow: inherit; outline: none; border-bottom: 1px dashed rgba(251,191,36,0.7); font-size: inherit; width: 90px; flex-shrink: 0;">
                         <div style="display: flex; align-items: center; gap: 5px;">
@@ -290,7 +302,7 @@
     <button onclick="let el = document.getElementById('currency-val'); el.value = parseInt(el.value || 0) + 1; updateCurrency();" style="background: rgba(255,255,255,0.1); border: none; color: white; cursor: pointer; border-radius: 3px; width: 24px; height: 24px;">+</button>
 </div>
                     </div>
-                </div>
+                </summary>
                 <div class="inventory-list" id="inventory-list">
                     <!-- Populated by JS -->
                 </div>
@@ -310,7 +322,7 @@
                     <textarea id="new-item-desc" placeholder="Optionale Beschreibung / Effekte..." style="width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 0.5rem; color: white; resize: vertical; min-height: 40px; outline: none; margin-bottom: 0.5rem;"></textarea>
                     <button onclick="addInventoryItem()" style="width: 100%; background: var(--accent-blue); color: white; border: none; border-radius: 4px; padding: 0.5rem; font-weight: bold; cursor: pointer; transition: opacity 0.2s;"><i class="fa-solid fa-plus"></i> Hinzufügen</button>
                 </div>
-            </div>
+            </details>
 
             <!-- Weapons Section - bei aktivem Eldara-Regelpaket ausgeblendet, weil
                  Waffen dort im Rasterinventar (inventarraster.js) leben -->
@@ -377,7 +389,7 @@
         <div class="tools-panel">
             
             <!-- Lebenspunkte (HP) -->
-            <div class="hp-tracker glass-panel">
+            <div class="hp-tracker glass-panel" id="hp-panel">
                 <h2 class="cat-title"><img id="icon-hp" src="assets/icon_hp_pirates.jpg" class="category-icon" alt=""> Lebenspunkte</h2>
                 <div class="hp-display">
                     <input type="number" id="hp-current" value="100" onchange="updateHp()">
@@ -405,9 +417,9 @@
             </div>
 
             <!-- Dice Roller -->
-            <div class="dice-roller glass-panel">
-                <h2><i class="fa-solid fa-dice-d20"></i> Würfel Tool <i class="fa-solid fa-circle-question help-icon" onclick="showHelp('dice')" title="Hilfe zu Custom Dice & Bonus"></i></h2>
-                
+            <details class="x-details dice-roller glass-panel" id="dice-panel" open>
+                <summary><h2 style="display:inline-flex;align-items:center;gap:0.4rem;margin:0"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-dice-d20"></i> Würfel Tool <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('dice')" title="Hilfe zu Custom Dice & Bonus"></i></h2></summary>
+
                 <div class="dice-buttons">
                     <button class="dice-btn w6" onclick="rollDice(6)">
                         <i class="fa-solid fa-dice-six"></i> 1W6
@@ -443,7 +455,7 @@
                         <!-- Populated by JS -->
                     </ul>
                 </div>
-            </div>
+            </details>
 
             <!-- Team-Würfel: Live-Feed der Würfe aller verbundenen Spieler, nur als
                  verbundener Spieler (teamwuerfel.js) -->
@@ -452,7 +464,7 @@
             <!-- Gruppenübersicht: Mitspieler mit HP und Status, nur als verbundener Spieler (gruppe.js) -->
             <div id="gruppe-panel" class="glass-panel gruppe-panel" style="margin-top: 1rem; display: none;"></div>
 
-            <div class="glass-panel" style="margin-top: 1rem;">
+            <div class="glass-panel" style="margin-top: 1rem;" id="activity-log-panel">
                 <details class="activity-log-container" open>
                     <summary class="logbuch-summary" style="display: flex; justify-content: space-between; align-items: center; outline: none; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); cursor: pointer;">
                         <h3 style="margin:0;"><i class="fa-solid fa-book"></i> Logbuch <i class="fa-solid fa-circle-question help-icon" onclick="showHelp('logs')" title="Hilfe zum Logbuch Drag & Drop"></i></h3>
@@ -497,6 +509,8 @@
     <script src="eingriff.js"></script>
     <script src="randomizer.js"></script>
     <script src="gmlayout.js"></script>
+    <script src="mobilenav.js"></script>
+    <script src="mobilestatus.js"></script>
 <div id="crit-fail-overlay"></div>
 
     <!-- Discord Modal -->

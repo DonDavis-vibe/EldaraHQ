@@ -143,10 +143,90 @@ body::after {
 }
 
 @media (max-width: 768px) {
-    .app-container { 
+    .app-container {
         grid-template-columns: 1fr;
         grid-template-areas: "toolbar" "left" "notes" "right";
     }
+}
+
+/* Handy-Schnellnavigation (mobilenav.js) - mitscrollende Leiste am unteren
+   Bildschirmrand mit Sprunglinks zu allen gerade sichtbaren Panels. Nur unter
+   der Mobile-Breakpoint sichtbar - auf dem Desktop stackt das Layout nicht,
+   da gibt's das lange Scrollen (und damit den Bedarf) gar nicht erst. */
+.mobile-nav {
+    display: none;
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 900; /* unter Modals (1000), Karten-Vollbild (1200), Kampf-Popup (2000) */
+    background: rgba(6, 13, 18, 0.94);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-top: 1px solid var(--glass-border);
+    padding: 0.5rem 0.6rem calc(0.5rem + env(safe-area-inset-bottom, 0px));
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    gap: 0.5rem;
+}
+.mobile-nav-chip {
+    display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.2rem;
+    flex-shrink: 0;
+    min-width: 60px;
+    padding: 0.4rem 0.5rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    color: var(--text-secondary);
+    font-family: var(--font-main);
+    font-size: 0.62rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+}
+.mobile-nav-chip i { font-size: 1.05rem; color: var(--color-accent); }
+.mobile-nav-chip:active { background: rgba(255,255,255,0.16); border-color: var(--color-accent); }
+.mobile-nav-chip span { white-space: nowrap; }
+
+/* Handy-Statusleiste (mobilestatus.js) - bleibt oben stehen, zeigt immer die
+   aktuellen Lebenspunkte. Eigene, etwas flachere Leiste als die Navigation
+   unten, damit beide zusammen nicht zu viel vom kleinen Bildschirm fressen. */
+.mobile-status-bar {
+    display: none;
+    position: fixed;
+    left: 0; right: 0; top: 0;
+    z-index: 900;
+    align-items: center; gap: 0.6rem;
+    background: rgba(6, 13, 18, 0.94);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--glass-border);
+    padding: calc(0.45rem + env(safe-area-inset-top, 0px)) 0.9rem 0.45rem;
+    cursor: pointer;
+}
+.mobile-status-bar i.fa-heart { color: var(--color-dmg); font-size: 0.95rem; flex-shrink: 0; }
+.mobile-status-track { flex: 1; height: 8px; border-radius: 4px; background: rgba(255,255,255,0.12); overflow: hidden; }
+.mobile-status-fill { height: 100%; width: 100%; background: var(--color-heal); transition: width 0.3s, background-color 0.3s; }
+.mobile-status-bar span { font-size: 0.78rem; font-weight: 700; color: var(--text-primary); font-family: var(--font-mono); flex-shrink: 0; }
+.mobile-status-warnung { animation: mobile-status-puls 1s ease infinite; }
+@keyframes mobile-status-puls {
+    0%, 100% { border-bottom-color: var(--glass-border); }
+    50% { border-bottom-color: var(--color-dmg); }
+}
+
+@media (max-width: 768px) {
+    .mobile-nav { display: flex; }
+    .mobile-status-bar { display: flex; }
+    /* Platz für die beiden fixen Leisten, sonst verdecken sie Kopf- und Fußzeile der Seite */
+    body { padding-bottom: 5.4rem; padding-top: 2.6rem; }
+}
+
+/* Kurzes Aufblitzen des Zielpanels nach einem Leisten-Sprung, damit klar ist,
+   wo man gelandet ist - scrollIntoView allein ist auf einem langen Handy-
+   Bildschirm manchmal nicht offensichtlich genug. */
+.mobile-nav-highlight { animation: mobilenav-blitz 1.2s ease; border-radius: 12px; }
+@keyframes mobilenav-blitz {
+    0% { box-shadow: 0 0 0 3px var(--color-accent); }
+    100% { box-shadow: 0 0 0 3px transparent; }
 }
 
 /* 3-Column Layout */

@@ -384,6 +384,8 @@ function enterGmMode(roomCode) {
     loadGmLogHistory();
     addGmLogSystemMessage(`Session gestartet! Raum-Code: ${roomCode}`);
     if (typeof refreshCustomSoundUI === 'function') refreshCustomSoundUI();
+    if (typeof mobilenavRender === 'function') mobilenavRender();
+    if (typeof mobilestatusRender === 'function') mobilestatusRender();
 }
 
 function exitGmMode() {
@@ -400,6 +402,8 @@ function exitGmMode() {
 
     document.getElementById('gm-dashboard').style.display = 'none';
     document.querySelector('.app-container').style.display = 'grid';
+    if (typeof mobilenavRender === 'function') mobilenavRender();
+    if (typeof mobilestatusRender === 'function') mobilestatusRender();
 }
 
 function handleIncomingData(peerId, payload) {

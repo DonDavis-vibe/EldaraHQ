@@ -23,7 +23,7 @@ let gruppeVerteilenTimer = null;
 const gruppeThumbs = {};
 const GRUPPE_THUMB_PX = 72;
 // Auf-/zugeklappt - das Panel wird bei jedem Update neu gebaut, die Wahl bleibt
-let gruppeOffen = true;
+let gruppeOffen = window.innerWidth > 768; // auf dem Handy erstmal eingeklappt, mehr Überblick auf der langen Seite
 
 // --- Spielleiter ------------------------------------------------------------
 
