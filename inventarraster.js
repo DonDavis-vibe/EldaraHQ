@@ -702,9 +702,12 @@ function irZoneHtml(zone, raster, items) {
     }
     const abbauKnopf = zone.zusatzArt ? `<button class="x-mini x-mini-danger" onclick="irZusatztascheEntfernen(${zone.zusatzIndex})" title="Zusatztasche ablegen"><i class="fa-solid fa-xmark"></i></button>` : '';
     const deaktiviertHinweis = zone.deaktiviert ? `<span class="ir-zone-malus">(-${zone.deaktiviert} durch Rüstung)</span>` : '';
-    return `<div class="ir-gruppe">
+    // Nie mehr Spalten als tatsächlich Plätze da sind - bei den einplätzigen
+    // Ausrüstungszonen sonst 2 leere Gitterspuren neben der einen echten Karte.
+    const spalten = Math.max(1, Math.min(nutzbar, 3));
+    return `<div class="ir-gruppe ${zone.nurAusruestung ? 'ir-gruppe-ausruestung' : ''}">
         <div class="ir-gruppe-titel">${escapeHtml(zone.titel)} <span class="ir-zone-count">${nutzbar} Plätze</span> ${deaktiviertHinweis} ${abbauKnopf}</div>
-        <div class="ir-slots">${zellenHtml.join('')}</div>
+        <div class="ir-slots" style="grid-template-columns: repeat(${spalten}, 1fr);">${zellenHtml.join('')}</div>
     </div>`;
 }
 
@@ -741,9 +744,39 @@ function renderInventarRaster() {
         ${handelnMalus ? `<p class="ir-hint ir-warnung"><i class="fa-solid fa-triangle-exclamation"></i> Zusatztaschen kosten dich aktuell -${handelnMalus} auf Handeln, solange du sie trägst - beim Würfeln selbst im Bonus/Malus-Feld eintragen.</p>` : ''}
         ${unplatziert.length ? `<p class="ir-hint ir-warnung"><i class="fa-solid fa-triangle-exclamation"></i> Kein Platz mehr für: ${unplatziert.map(i => escapeHtml(i.name)).join(', ')} - erst Platz schaffen (löschen, Größe ändern oder eine Zusatztasche anlegen).</p>` : ''}
         ${(appData.weapons || []).length ? `<p class="ir-hint ir-warnung"><i class="fa-solid fa-triangle-exclamation"></i> Passt (noch) nicht ins Raster: ${appData.weapons.map(w => escapeHtml(w.name)).join(', ')} - bleibt vorerst im klassischen Waffen-Bestand, bis Platz frei ist.</p>` : ''}
-        <div class="ir-gruppen">
-            ${zonen.map(z => irZoneHtml(z, raster, items)).join('')}
+        ${(() => {
+            // Paperdoll-Anordnung (Diablo-artig, auf Wunsch der Runde): jeder
+            // Ausrüstungsplatz sitzt möglichst nah an seiner Körperstelle am
+            // Piratenbild - Kopf oben drüber, Schulter/Hals+Brust auf
+            // Schulterhöhe links/rechts, Hände+Beine auf Höhe der Hände/Beine
+            // links/rechts, Füße und Schmuck unterhalb der Füße. Gürtel und
+            // Gürtel(Waffen) wandern zusammen mit Rucksack/Zusatztaschen in
+            // die Zeile darunter, dort stehen sie direkt nebeneinander.
+            const findZone = id => zonen.find(z => z.id === id);
+            const kopf = findZone('ausr_kopf');
+            const schulterhals = findZone('ausr_schulterhals');
+            const brust = findZone('ausr_brust');
+            const haende = findZone('ausr_haende');
+            const beine = findZone('ausr_beine');
+            const fuesse = findZone('ausr_fuesse');
+            const schmuck = findZone('ausr_schmuck');
+            const paperdollZonen = [kopf, schulterhals, brust, haende, beine, fuesse, schmuck].filter(Boolean);
+            const restZonen = zonen.filter(z => !paperdollZonen.includes(z));
+            return `
+        <div class="ir-paperdoll">
+            <div class="ir-paperdoll-kopf">${kopf ? irZoneHtml(kopf, raster, items) : ''}</div>
+            <div class="ir-paperdoll-links-oben">${schulterhals ? irZoneHtml(schulterhals, raster, items) : ''}</div>
+            <div class="ir-paperdoll-figur"><img src="assets/inv_pirat.webp" alt="" class="ir-paperdoll-bild"></div>
+            <div class="ir-paperdoll-rechts-oben">${brust ? irZoneHtml(brust, raster, items) : ''}</div>
+            <div class="ir-paperdoll-links-unten">${haende ? irZoneHtml(haende, raster, items) : ''}</div>
+            <div class="ir-paperdoll-rechts-unten">${beine ? irZoneHtml(beine, raster, items) : ''}</div>
+            <div class="ir-paperdoll-fuesse">${fuesse ? irZoneHtml(fuesse, raster, items) : ''}</div>
+            <div class="ir-paperdoll-schmuck">${schmuck ? irZoneHtml(schmuck, raster, items) : ''}</div>
         </div>
+        <div class="ir-gruppen">
+            ${restZonen.map(z => irZoneHtml(z, raster, items)).join('')}
+        </div>`;
+        })()}
         <div id="ir-status" class="x-hint"></div>
         <div class="ir-form">
             <input type="text" id="ir-neu-name" class="ir-input" placeholder="Item Name..." onkeydown="if(event.key==='Enter') irItemHinzufuegen()">

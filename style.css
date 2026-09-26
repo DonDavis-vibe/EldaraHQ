@@ -1249,6 +1249,60 @@ h2 {
 }
 .ir-slot-over { border-color: var(--color-accent) !important; color: var(--color-accent) !important; }
 .ir-slot:not(.ir-slot-leer).ir-slot-over .ir-karte { outline: 2px dashed var(--color-accent); outline-offset: 2px; }
+
+/* Paperdoll-Anordnung (inventarraster.js renderInventarRaster): jeder
+   Ausrüstungsplatz sitzt als eigene Grid-Zelle nah an seiner Körperstelle
+   am Piratenbild - Kopf oben drüber, Schulter/Hals+Brust auf Schulterhöhe
+   links/rechts, Hände+Beine tiefer links/rechts, Füße und Schmuck unter
+   den Füßen. Gürtel/Gürtel(Waffen) stehen NICHT mehr hier, die sind in die
+   Zeile darunter (.ir-gruppen) gewandert. Auf schmalen Bildschirmen wird
+   das zu einer einfachen Ein-Spalten-Reihenfolge von Kopf bis Fuß. */
+.ir-paperdoll {
+    display: grid;
+    grid-template-columns: minmax(130px, 1fr) minmax(170px, 1.3fr) minmax(130px, 1fr);
+    grid-template-areas:
+        "kopf kopf kopf"
+        "linksoben figur rechtsoben"
+        "linksunten figur rechtsunten"
+        "fuesse fuesse fuesse"
+        "schmuck schmuck schmuck";
+    gap: 0.8rem 1rem;
+    align-items: center;
+    margin-bottom: 1.2rem;
+}
+.ir-paperdoll-kopf { grid-area: kopf; }
+.ir-paperdoll-links-oben { grid-area: linksoben; }
+.ir-paperdoll-rechts-oben { grid-area: rechtsoben; }
+.ir-paperdoll-links-unten { grid-area: linksunten; }
+.ir-paperdoll-rechts-unten { grid-area: rechtsunten; }
+.ir-paperdoll-fuesse { grid-area: fuesse; }
+.ir-paperdoll-schmuck { grid-area: schmuck; }
+.ir-paperdoll-figur { grid-area: figur; align-self: center; justify-self: center; max-width: 240px; width: 100%; padding: 0 0.4rem; }
+.ir-paperdoll-bild { width: 100%; height: auto; display: block; filter: drop-shadow(0 12px 24px rgba(0,0,0,0.65)); }
+.ir-paperdoll-kopf .ir-gruppe,
+.ir-paperdoll-links-oben .ir-gruppe,
+.ir-paperdoll-rechts-oben .ir-gruppe,
+.ir-paperdoll-links-unten .ir-gruppe,
+.ir-paperdoll-rechts-unten .ir-gruppe,
+.ir-paperdoll-fuesse .ir-gruppe,
+.ir-paperdoll-schmuck .ir-gruppe { min-width: 0; height: 100%; }
+.ir-gruppe-ausruestung .ir-gruppe-titel { color: var(--color-accent); }
+
+@media (max-width: 640px) {
+    .ir-paperdoll {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "kopf"
+            "figur"
+            "linksoben"
+            "rechtsoben"
+            "linksunten"
+            "rechtsunten"
+            "fuesse"
+            "schmuck";
+    }
+    .ir-paperdoll-figur { max-width: 200px; margin: 0 auto; }
+}
 .ir-karte { margin: 0; gap: 0.4rem; padding: 0.6rem; }
 /* Griff statt ganzer Karte als Zugauslöser (siehe inventarraster.js) - läuft
    über Pointer Events, funktioniert also gleich auf Maus, Touch und Stift.
