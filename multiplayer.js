@@ -775,6 +775,10 @@ function renderGmDashboard() {
 }
 
 let gmLogHistory = [];
+// Letzter GM-Wurf, den man per gmWurfTeilen() an die Gruppe schicken kann -
+// bewusst nicht automatisch: der SL würfelt oft geheim (Fallen, NSC-Werte)
+// und soll selbst entscheiden, ob ein konkreter Wurf sichtbar wird.
+let gmLetzterWurf = null;
 
 function loadGmLogHistory() {
     try {
@@ -868,7 +872,9 @@ function rollGmDice(max) {
     const text = `1W${max}`;
     updateGmBigDiceResult(res, text);
     addGmLogEntry('Spielleiter (Lokal)', `${text}: ${res}`, '🎲');
-    
+    gmLetzterWurf = { text, big: res };
+    gmWurfTeilenButtonAktualisieren();
+
     if (typeof fireConfetti === 'function') {
         if (max === 100 && res <= 5) fireConfetti();
         else if (max === 100 && res >= 96) fireFumble();
@@ -902,11 +908,46 @@ function rollGmCustomDice(diceStr) {
     const text = `${diceStr} (${rolls.join(', ')})`;
     updateGmBigDiceResult(total, text);
     addGmLogEntry('Spielleiter (Lokal)', `${text}: ${total}`, '🎲');
-    
+    gmLetzterWurf = { text, big: total };
+    gmWurfTeilenButtonAktualisieren();
+
     if (typeof fireConfetti === 'function') {
         if (total === count * max) fireConfetti();
         else if (total === count) fireFumble();
     }
+}
+
+// Der SL sieht seinen Wurf immer zuerst lokal (siehe rollGmDice/
+// rollGmCustomDice oben) und kann ihn dann bewusst freigeben - Vorbild ist
+// teamwuerfel.js (Spieler-Würfe an die Gruppe verteilen), nur eben SL -> Gruppe
+// und explizit statt automatisch. Feste "Laternen-Bernstein"-Farbe
+// (#e0922f, siehe style.css "SL-Signaturfarbe"), damit ein geteilter SL-Wurf
+// im Team-Würfel-Feed der Spieler klar als SL-Wurf erkennbar bleibt.
+function gmWurfTeilenButtonAktualisieren() {
+    const btn = document.getElementById('gm-wurf-teilen-btn');
+    if (btn) btn.disabled = !gmLetzterWurf;
+}
+
+function gmWurfTeilen() {
+    if (!gmLetzterWurf) return;
+    if (typeof clientConnections === 'undefined') return;
+    const nachricht = {
+        type: 'teamWurf',
+        name: 'Spielleiter',
+        farbe: '#e0922f',
+        message: `${gmLetzterWurf.text}: ${gmLetzterWurf.big}`,
+        emoji: '🎲',
+        bigNumber: gmLetzterWurf.big,
+        subtitle: gmLetzterWurf.text,
+        zeit: Date.now()
+    };
+    let anzahl = 0;
+    Object.values(clientConnections).forEach(conn => {
+        if (conn && conn.open) { try { conn.send(nachricht); anzahl++; } catch (e) { /* weg */ } }
+    });
+    addGmLogSystemMessage(anzahl
+        ? `Wurf mit ${anzahl} Spieler${anzahl === 1 ? '' : 'n'} geteilt: ${gmLetzterWurf.text} = ${gmLetzterWurf.big}`
+        : 'Niemand verbunden - Wurf konnte nicht geteilt werden.');
 }
 
 // --- PLAYER MODE (CLIENT) ---
