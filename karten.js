@@ -256,6 +256,55 @@ function karteBildEntfernen() {
     karteVerteilen();
 }
 
+// --- Vorgefertigter Kartenhintergrund aus der Galerie ------------------------
+//
+// Alternative zum eigenen Hochladen: referenziert die Datei direkt per Pfad
+// statt sie wie beim Upload als Data-URL einzubetten - die Bilder liegen ja
+// schon online unter assets/, Spieler laden sie also ganz normal selbst per
+// HTTP, statt dass wir sie komplett über die P2P-Verbindung schicken müssten
+// (zustand.bild ist bei einem Pfad nur eine kurze Zeichenkette und reist
+// deshalb im normalen Karten-Sync einfach mit, kein Sonderweg nötig - anders
+// als bei den NSC-Porträts, siehe karteNscBildVerteilen). Liste kommt aus
+// assets/npc-grafiken/battlemaps/battlemap-bilder.js (erzeugt von
+// assets/npc-grafiken/battlemaps/erzeuge-manifest.py).
+function karteGaleriePicker() {
+    if (!karteMap) return;
+    if (typeof BATTLEMAP_BILDER === 'undefined' || !BATTLEMAP_BILDER.length) {
+        alert('Keine Galerie-Kartenhintergründe gefunden (assets/npc-grafiken/battlemaps/battlemap-bilder.js fehlt oder ist leer).');
+        return;
+    }
+    const body = document.getElementById('karte-galerie-body');
+    if (body) {
+        body.innerHTML = `
+            <div class="nsc-galerie-gruppe">
+                <div class="nsc-galerie-grid">
+                    ${BATTLEMAP_BILDER.map(b => `<button type="button" class="nsc-galerie-item" data-kartegaleriebild="${escapeHtml(b.pfad)}" title="${escapeHtml(b.name)}">
+                        <img src="${escapeHtml(b.pfad)}" alt="${escapeHtml(b.name)}" loading="lazy">
+                        <span>${escapeHtml(b.name)}</span>
+                    </button>`).join('')}
+                </div>
+            </div>`;
+        body.querySelectorAll('[data-kartegaleriebild]').forEach(btn => btn.addEventListener('click', () => karteGalerieBildSetzen(btn.dataset.kartegaleriebild)));
+    }
+    const overlay = document.getElementById('karte-galerie-modal-overlay');
+    if (overlay) overlay.classList.add('active');
+}
+
+function karteGalerieSchliessen() {
+    const overlay = document.getElementById('karte-galerie-modal-overlay');
+    if (overlay) overlay.classList.remove('active');
+}
+
+function karteGalerieBildSetzen(pfad) {
+    if (!karteMap) return;
+    karteMap.setBild(pfad);
+    karteMap.einpassen();
+    karteAktuelleZurueckschreiben();
+    karteSichern();
+    karteVerteilen();
+    karteGalerieSchliessen();
+}
+
 function karteMarkierungHinzufuegen() {
     const nameEl = document.getElementById('kt-marker-name');
     const name = (nameEl ? nameEl.value : '').trim() || 'Markierung';
@@ -545,6 +594,7 @@ function renderKarteGm() {
                             <button class="x-mini x-mini-danger" onclick="karteLoeschenBestaetigt()" title="Karte löschen"><i class="fa-solid fa-trash"></i></button>
                             <span class="sk-kt-trenner"></span>
                             <label class="tool-btn" style="margin:0"><i class="fa-solid fa-image"></i> Bild laden<input type="file" accept="image/*" style="display:none" onchange="karteBildHochladen(event)"></label>
+                            <button class="tool-btn" onclick="karteGaleriePicker()" title="Vorgefertigten Kartenhintergrund wählen"><i class="fa-solid fa-images"></i> Aus Galerie wählen</button>
                             <button class="tool-btn" onclick="karteBildEntfernen()"><i class="fa-solid fa-image-slash"></i> Bild entfernen</button>
                             <button class="tool-btn" onclick="karteMap && karteMap.einpassen()"><i class="fa-solid fa-expand"></i> Einpassen</button>
                             <button class="tool-btn" onclick="karteVollbildOeffnen('gm')" title="Karte großformatig anzeigen"><i class="fa-solid fa-up-right-and-down-left-from-center"></i> Vollbild</button>
