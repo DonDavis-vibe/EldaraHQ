@@ -19,6 +19,7 @@
     --color-heal: #10b981;
     --color-dmg: #ef4444;
     --color-accent: #57c2f0;
+    --panel-border: rgba(255, 255, 255, 0.15);
 
     --font-main: 'Outfit', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
@@ -851,6 +852,11 @@ h2 {
     border-radius: 12px;
     padding: 2rem;
     max-width: 500px; width: 90%;
+    /* Lange Hilfetexte (z.B. Talentbaum "Besondere Fähigkeiten") sonst auf
+       niedrigen Bildschirmen nicht lesbar, weil sie über den Viewport
+       hinausragten, ohne dass etwas davon scrollbar war. */
+    max-height: 85vh;
+    overflow-y: auto;
     position: relative;
     transform: translateY(20px);
     transition: transform 0.3s;
@@ -1278,40 +1284,97 @@ input[type="number"] { -moz-appearance: textfield; }
     box-shadow: 0 0 10px var(--color-accent);
 }
 
-/* Pirates Theme */
+/* Eldara-Theme (Voodoo-Piraten) - einziges Theme, siehe body.theme-pirates in
+   index.html (immer aktiv). Die Signaturfarbe ist das spektrale Grün der
+   Voodoo-Runen/des Nebels aus assets/bg_pirates.jpg (Geisterschiff bei Nacht),
+   nicht mehr generisches Piraten-Gold - Gold bleibt als zweiter Akzent für
+   Beute/Währung (--accent-gold). Für den SL-Bereich siehe die gm-mode-Variante
+   weiter unten - eigene Signaturfarbe (Laternen-Bernstein) und eigenes
+   Hintergrundbild (Kapitänstisch statt Geisterschiff), damit Spielerbogen und
+   SL-Dashboard auch auf den ersten Blick unterscheidbar sind. */
 body.theme-pirates {
-    --bg-color: #050a14; 
-    --glass-bg: rgba(5, 20, 30, 0.75); 
-    --glass-border: rgba(218, 165, 32, 0.3); 
-    --text-primary: #fdf5e6;
-    --text-secondary: #c0c0c0;
-    --color-action: #b22222; /* Firebrick */
-    --color-wissen: #20b2aa; /* Light Sea Green */
-    --color-soziales: #daa520; /* Goldenrod */
-    --color-accent: #d4af37; /* Metallic Gold */
-    background-image: url('assets/bg_pirates.jpg'); 
+    --bg-color: #060d12;
+    --glass-bg: rgba(7, 18, 22, 0.74);
+    --glass-border: rgba(69, 214, 148, 0.28);
+    --text-primary: #f2e7d3; /* warmes Pergament/Knochen statt reinem Weiß */
+    --text-secondary: #a89e8f;
+    --color-action: #b3372a; /* Blutrot (Handeln) */
+    --color-wissen: #2f86a3; /* nautisches Teal-Blau (Wissen), abgesetzt vom Akzent-Grün */
+    --color-soziales: #d1a13c; /* Laternen-Messing (Soziales) */
+    --color-accent: #45d694; /* spektrales Voodoo-Grün - Signaturfarbe */
+    --accent-gold: #e0ab42; /* Laternen-Gold, für Beute/Währung-Akzente */
+    /* Aliase für ältere/anderswo referenzierte Variablennamen (waren zuvor
+       nirgends definiert - siehe hausregeln/OFFENE_FRAGEN.md-artige Altlast:
+       .attr-header/.attr-val/.help-icon/.ir-name/.ir-add-btn etc. hingen an
+       --accent/--accent-blue/--color-primary, ohne dass die je gesetzt
+       wurden, und blieben dadurch unsichtbar bzw. transparent). */
+    --accent: var(--color-accent);
+    --accent-blue: var(--color-accent);
+    --color-primary: var(--color-accent);
+    background-image: url('assets/bg_pirates.jpg');
 }
 
 body.theme-pirates .app-container {
-    box-shadow: 0 0 50px rgba(218, 165, 32, 0.15); 
+    box-shadow: 0 0 50px rgba(69, 214, 148, 0.14);
 }
 
 body.theme-pirates .card-layout {
-    background: linear-gradient(135deg, rgba(5,20,30,0.8), rgba(2,10,15,0.8)); 
-    border: 1px solid rgba(218, 165, 32, 0.3);
+    background: linear-gradient(135deg, rgba(7,18,22,0.82), rgba(3,10,13,0.85));
+    border: 1px solid rgba(69, 214, 148, 0.22);
 }
 
 body.theme-pirates .btn-primary {
-    background: rgba(10, 30, 45, 0.8);
+    background: rgba(8, 22, 20, 0.8);
     border: 1px solid var(--color-accent);
     color: var(--color-accent);
 }
 
 body.theme-pirates .btn-primary:hover {
     background: var(--color-accent);
-    color: #000;
-    box-shadow: 0 0 15px rgba(218, 165, 32, 0.5); 
+    color: #04140d;
+    box-shadow: 0 0 15px rgba(69, 214, 148, 0.5);
 }
+
+/* SL-Dashboard: eigene Palette (multiplayer.js setzt/entfernt die Klasse
+   body.gm-mode in enterGmMode()/exitGmMode()) - warmes Laternen-Bernstein
+   statt des spektralen Grüns der Spieler, plus eigenes Hintergrundbild
+   (Kapitänstisch mit Schatzkarte/Kompass/Laterne statt Geisterschiff). */
+body.theme-pirates.gm-mode {
+    --bg-color: #100905;
+    --glass-bg: rgba(24, 14, 7, 0.76);
+    --glass-border: rgba(224, 146, 47, 0.32);
+    --text-primary: #f5e8d2;
+    --text-secondary: #b8a894;
+    --color-accent: #e0922f; /* Laternen-Bernstein - SL-Signaturfarbe */
+    --accent: var(--color-accent);
+    --accent-blue: var(--color-accent);
+    --color-primary: var(--color-accent);
+    background-image: url('assets/bg_pirates_.jpg');
+}
+
+body.theme-pirates.gm-mode .card-layout {
+    background: linear-gradient(135deg, rgba(24,14,7,0.85), rgba(10,6,3,0.88));
+    border: 1px solid rgba(224, 146, 47, 0.24);
+}
+
+body.theme-pirates.gm-mode .btn-primary {
+    background: rgba(22, 14, 6, 0.8);
+    border: 1px solid var(--color-accent);
+    color: var(--color-accent);
+}
+
+body.theme-pirates.gm-mode .btn-primary:hover {
+    background: var(--color-accent);
+    color: #1a0f04;
+    box-shadow: 0 0 15px rgba(224, 146, 47, 0.5);
+}
+
+/* Toolbar/Werkzeug-Gruppen des GM-Dashboards waren bisher neutral grau -
+   jetzt leicht bernsteinfarben eingefärbt statt reinem Weiß-Alpha, damit
+   auch die Chrome selbst nach "Kapitänstisch" statt "Admin-Panel" aussieht. */
+body.gm-mode .gm-toolbar { background: rgba(16, 10, 5, 0.66); border-bottom: 1px solid rgba(224, 146, 47, 0.22); }
+body.gm-mode .gm-group { background: rgba(16, 10, 5, 0.6); border: 1px solid rgba(224, 146, 47, 0.2); }
+body.gm-mode .gm-title { color: var(--color-accent); }
 
 @keyframes waveRoll {
     0% { background-position-x: 0px; }

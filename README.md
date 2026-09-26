@@ -97,8 +97,8 @@ Das Format ist in [DATA_FORMAT.md](DATA_FORMAT.md) beschrieben.
 
 ---
 
-## 🏴‍☠️ Piraten-Theme
-Der Charakterbogen läuft fest im **Piraten**-Design von Eldara - sanft rollende Ozeanwellen und riesige Kraken-Tentakel als Hintergrund-Effekt (abschaltbar für schwächere Geräte per Klick auf den 🚀).
+## 🏴‍☠️ Voodoo-Piraten-Theme
+Der Charakterbogen läuft fest im **Eldara**-Design: sanft rollende Ozeanwellen und riesige Kraken-Tentakel als Hintergrund-Effekt (abschaltbar für schwächere Geräte per Klick auf den 🚀). Die Farbpalette orientiert sich am spektralen Grün der Voodoo-Runen im Geisterschiff-Hintergrundbild statt an generischem Piraten-Gold. Das **SL-Dashboard** bekommt automatisch eine eigene, warme Bernstein-Palette samt eigenem Hintergrundbild (Kapitänstisch mit Schatzkarte, Kompass und Laterne statt Geisterschiff) - Spielerbogen und Spielleiter-Bereich sind dadurch auch auf den ersten Blick klar unterscheidbar.
 
 ---
 

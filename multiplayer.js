@@ -367,6 +367,7 @@ function setRoomStatus(online) {
 
 function enterGmMode(roomCode) {
     isGmMode = true;
+    document.body.classList.add('gm-mode'); // eigene Farbpalette/Hintergrund für den SL-Bereich, siehe style.css
     document.querySelector('.app-container').style.display = 'none';
     document.getElementById('gm-dashboard').style.display = 'flex';
     document.getElementById('gm-room-code').innerText = roomCode;
@@ -389,6 +390,7 @@ function exitGmMode() {
     if (peer) peer.destroy();
     peer = null;
     isGmMode = false;
+    document.body.classList.remove('gm-mode');
     clientConnections = {};
     connectedPlayersData = {};
     clearMultiplayerSession();

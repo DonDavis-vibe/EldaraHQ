@@ -1,30 +1,27 @@
 // How to be a Hero - Rasterinventar (Eldara-Hausregel)
 //
-// Bildet das offizielle Eldara-Inventarsystem ab (Regelwerk RW 4.1, Kapitel
-// "Inventar & Rucksack", S. 25f. - siehe hausregeln/quellen/rw41.txt):
+// Bildet das Eldara-Inventarsystem ab (Stand zwischenstand.docx, SL-Über-
+// arbeitung 2026-09, Kapitel "Inventar & Rucksack"):
 //
-//   Gürtel        6 Plätze (2 Waffen + 4 Sachen laut Regelwerk - hier als ein
-//                 gemeinsamer 6er-Block, siehe Einschränkung unten)
-//   Gürtelbeutel  2 Plätze (große Items, Ersatzwaffen, Proviant)
+//   Gürtel        5 Plätze für normale Sachen + 2 eigene Waffen-Plätze (siehe
+//                 unten - Waffen belegen dort immer nur 1 Platz, egal welche
+//                 Größe sie sonst hätte)
 //   Rucksack      12 Plätze (Standard), -1 bei mittlerer, -2 bei schwerer Rüstung
 //   Zusatztasche  optional, bis zu 3 gleichzeitig: klein = +3 Plätze/-3 Handeln,
 //                 groß = +5 Plätze/-5 Handeln, solange getragen
 //
-// Gegenstände belegen laut Größentabelle (S. 26) 0,5 / 1 / 2 / 3 Plätze - hier
+// Gegenstände belegen laut Größentabelle 0,5 / 1 / 2 / 3 Plätze - hier
 // aufgerundet auf 1 / 1 / 2 / 3 Raster-Zellen (0,5-Gegenstände wie Dolche
 // müssten sich eigentlich zu zweit einen Platz teilen; das ist NICHT
 // nachgebaut, siehe Einschränkungen unten).
 //
 // EINSCHRÄNKUNGEN gegenüber dem Regelwerk (bewusst, nicht vergessen):
-// - Die "2 Waffen"-Sonderplätze am Gürtel/Rucksack sind nicht als eigene,
-//   waffen-exklusive Zone nachgebaut - die 6 Gürtel-Plätze sind ein normaler
-//   gemeinsamer Block, eine Waffe belegt dort ganz normal ihre 1-3 Felder
-//   wie jeder andere Gegenstand.
 // - 0,5-Gegenstände (Dolch, Trank, Voodoo-Puppe) belegen hier volle 1 Zelle
 //   statt sich zu zweit einen Platz zu teilen - eine Vereinfachung, kein
 //   Bug. Die "Zwei X = 1 Slot"-Regel ist nicht umgesetzt.
-// - Gürteltaschen (eigene Regelzeile, Text im Rohextrakt nicht eindeutig
-//   auflösbar) sind nicht separat modelliert, nur Zusatztaschen.
+// - Zweihandwaffen sind laut zwischenstand.docx 2,5 Plätze groß - der
+//   Größenkatalog kennt aktuell nur 0,5/1/2/3, das ist NICHT nachgebaut
+//   (siehe hausregeln/OFFENE_FRAGEN.md).
 // - Der Handeln-Malus durch Zusatztaschen wird nur als Hinweis angezeigt,
 //   nicht automatisch in Würfe eingerechnet - dafür das normale
 //   Bonus/Malus-Feld beim Würfeln nutzen.
@@ -48,15 +45,15 @@
 // appData.eldaraZusatztaschen (Array aus 'klein'|'gross', max. 3 Einträge)
 // steuern, welche Zonen mit wie vielen Plätzen existieren.
 //
-// Rüstung (S.27f, siehe IR_RUESTUNG_TEILE): sechs echte Ausrüstungs-Plätze
-// (Helm, 2x Schulter, Brust, 2x Bein), jeder wahlweise mit Leder/Kette/Platte
+// Rüstung (siehe IR_RUESTUNG_TEILE): sechs echte Ausrüstungs-Plätze (Helm,
+// 2x Schulter, Brust, 2x Bein), jeder wahlweise mit Leder/Kette/Platte
 // bestückt - jede Kombination hat laut Tabelle einen eigenen Rüstungswert und
 // Gold-Preis. Die Summe aller getragenen Werte ergibt die Rüstungsstufe
 // (Ungepanzert 0 / Leicht 1-10 / Mittel 11-20 / Schwer 21+), die wie bisher
-// den Rucksack verkleinert (-1 Mittel, -2 Schwer laut S.25f). Die Tabelle mit
-// den zusätzlichen Bewegungs-/Handeln-/Heimlichkeit-Mali pro Stufe (S.27) ist
-// im Quelltext nicht eindeutig lesbar (mehrdeutige Zeilenzuordnung) und wird
-// deshalb NICHT automatisiert - siehe hausregeln/OFFENE_FRAGEN.md.
+// den Rucksack verkleinert (-1 Mittel, -2 Schwer). Die zusätzlichen Bewegungs-/
+// Handeln-/Heimlichkeit-Mali pro Stufe (siehe IR_RUESTUNGSSTUFE_MALI) sind seit
+// zwischenstand.docx eindeutig - als Hinweis angezeigt, aber NICHT automatisch
+// in Würfe eingerechnet (siehe hausregeln/OFFENE_FRAGEN.md Punkt 10).
 
 const IR_GROESSEN_KATALOG = [
     { wert: 0.5, label: 'Klein (0,5)', beispiel: 'Dolch, Trank, Fläschchen' },
@@ -86,6 +83,18 @@ const IR_RUESTUNG_WERTE = {
     bein: { leder: { wert: 2, preis: 75 }, kette: { wert: 4, preis: 200 }, platte: { wert: 6, preis: 400 } }
 };
 const IR_RUESTUNGSSTUFE_LABEL = { ungepanzert: 'Ungepanzert', leicht: 'Leicht', mittel: 'Mittel', schwer: 'Schwer' };
+
+// Bewegungs-/Handeln-/Heimlichkeit-Mali je Rüstungsstufe (zwischenstand.docx,
+// SL-Überarbeitung 2026-09 - ersetzt die älteren, widersprüchlichen RW-4.3-
+// Werte für "Schwer", siehe hausregeln/OFFENE_FRAGEN.md Punkt 10). Rein
+// informativer Hinweis wie beim Zusatztaschen-Malus - wird nicht automatisch
+// in Würfe eingerechnet.
+const IR_RUESTUNGSSTUFE_MALI = {
+    ungepanzert: { bewegung: 0, handeln: 0, heimlichkeit: 0 },
+    leicht: { bewegung: -1, handeln: 0, heimlichkeit: -10 },
+    mittel: { bewegung: -1, handeln: -5, heimlichkeit: -15 },
+    schwer: { bewegung: -2, handeln: -10, heimlichkeit: -15 }
+};
 
 // --- Rüstung (getragene Ausrüstung, S.27f) --------------------------------
 
@@ -164,8 +173,8 @@ function irZonenDefinition(kontext) {
     const stufe = irRuestungsstufe(irRuestungswert(daten));
     const ruestungsMalus = stufe === 'schwer' ? 2 : (stufe === 'mittel' ? 1 : 0);
     const zonen = [
-        { id: 'guertel', titel: 'Gürtel', breite: 6, deaktiviert: 0 },
-        { id: 'guertelbeutel', titel: 'Gürtelbeutel', breite: 2, deaktiviert: 0 },
+        { id: 'guertel', titel: 'Gürtel', breite: 5, deaktiviert: 0 },
+        { id: 'guertel_waffen', titel: 'Gürtel (Waffen)', breite: 2, deaktiviert: 0, nurWaffen: true },
         { id: 'rucksack', titel: 'Rucksack', breite: 12, deaktiviert: ruestungsMalus }
     ];
     (daten.eldaraZusatztaschen || []).forEach((art, i) => {
@@ -187,6 +196,34 @@ function irAlleSlots(kontext) {
 function irZoneUndIndex(slot) {
     const i = slot.lastIndexOf('_');
     return { zoneId: slot.slice(0, i), index: parseInt(slot.slice(i + 1), 10) };
+}
+
+function irZoneVonSlot(slot, kontext) {
+    const { zoneId } = irZoneUndIndex(slot);
+    return irZonenDefinition(kontext).find(z => z.id === zoneId) || null;
+}
+
+// Waffen sollen beim automatischen Einsortieren bevorzugt ihre 2 dedizierten
+// Gürtelplätze bekommen (dort kostet die Waffe nur 1 Feld statt ihrer echten
+// Größe) statt zuerst die 5 normalen Gürtelplätze zu belegen. Alle anderen
+// Gegenstände ignorieren die Waffen-Zone ohnehin (irZonePasstFuerItem).
+function irReihenfolgeFuer(item, kontext) {
+    const alle = irAlleSlots(kontext);
+    if (!item || !item.istWaffe) return alle;
+    return alle.slice().sort((a, b) => {
+        const za = irZoneVonSlot(a, kontext), zb = irZoneVonSlot(b, kontext);
+        return (za && za.nurWaffen ? 0 : 1) - (zb && zb.nurWaffen ? 0 : 1);
+    });
+}
+
+// Die beiden Gürtel-Waffenplätze (S.25f) sind waffen-exklusiv, dafür kostet
+// dort jede Waffe immer nur 1 Platz, unabhängig von ihrer sonstigen Größe.
+function irZonePasstFuerItem(zone, item) {
+    return !(zone && zone.nurWaffen) || !!(item && item.istWaffe);
+}
+
+function irGroesseInZone(item, zone) {
+    return (zone && zone.nurWaffen) ? 1 : irSlotKosten(item);
 }
 
 // --- Reine Platzierungs-Logik ---
@@ -250,10 +287,16 @@ function irMitItem(raster, itemId, slot, groesse, kontext) {
 
 // Erster freie Platz (beliebige Startposition innerhalb einer Zone, solange
 // genug zusammenhängende Zellen frei sind - anders als bei einem starren
-// Paar-Raster gibt es hier keine festen Anker-Positionen).
-function irErstesFreies(raster, groesse, kontext, reihenfolge) {
+// Paar-Raster gibt es hier keine festen Anker-Positionen). `item` entscheidet
+// per Zone über die effektive Größe und ob die Zone überhaupt erlaubt ist
+// (siehe irZonePasstFuerItem/irGroesseInZone - die Gürtel-Waffenplätze sind
+// waffen-exklusiv und kosten dort immer nur 1 Platz).
+function irErstesFreies(raster, item, kontext, reihenfolge) {
     const liste = reihenfolge || irAlleSlots(kontext);
     for (const slot of liste) {
+        const zone = irZoneVonSlot(slot, kontext);
+        if (!irZonePasstFuerItem(zone, item)) continue;
+        const groesse = irGroesseInZone(item, zone);
         const zellen = irZellenFuer(slot, groesse, kontext);
         if (zellen.length < groesse) continue;
         if (zellen.every(z => raster[z] == null)) return zellen[0];
@@ -264,7 +307,9 @@ function irErstesFreies(raster, groesse, kontext, reihenfolge) {
 function irVerschieben(raster, itemsById, itemId, targetSlot, kontext) {
     const item = itemsById[itemId];
     if (!item) return { ok: false, grund: 'unbekannt' };
-    const groesse = irSlotKosten(item);
+    const zielZone = irZoneVonSlot(targetSlot, kontext);
+    if (!irZonePasstFuerItem(zielZone, item)) return { ok: false, grund: 'nurWaffen' };
+    const groesse = irGroesseInZone(item, zielZone);
     const zielZellen = irZellenFuer(targetSlot, groesse, kontext);
     if (zielZellen.length < groesse) return { ok: false, grund: 'passtNicht' };
 
@@ -278,7 +323,8 @@ function irVerschieben(raster, itemsById, itemId, targetSlot, kontext) {
     if (groesse === 1 && blocker.size === 1) {
         const andereId = [...blocker][0];
         const andere = itemsById[andereId];
-        if (andere && irSlotKosten(andere) === 1 && vonAnker) {
+        const vonZone = vonAnker ? irZoneVonSlot(vonAnker, kontext) : null;
+        if (andere && irSlotKosten(andere) === 1 && vonAnker && irZonePasstFuerItem(vonZone, andere)) {
             let next = irOhneItem(raster, itemId);
             next = irOhneItem(next, andereId);
             next = irMitItem(next, itemId, targetSlot, 1, kontext);
@@ -296,10 +342,10 @@ function irAutoPlatzieren(itemId) {
     if (vorhanden) return vorhanden;
     const item = irItemsById()[itemId];
     if (!item) return null;
-    const groesse = irSlotKosten(item);
-    const slot = irErstesFreies(raster, groesse);
+    const slot = irErstesFreies(raster, item, undefined, irReihenfolgeFuer(item));
     if (!slot) return null;
-    appData.inventarRaster = irMitItem(raster, itemId, slot, groesse);
+    const zone = irZoneVonSlot(slot);
+    appData.inventarRaster = irMitItem(raster, itemId, slot, irGroesseInZone(item, zone));
     return slot;
 }
 
@@ -317,7 +363,7 @@ function irWaffenNachRasterMigrieren() {
     const bleibtKlassisch = [];
     appData.weapons.forEach(w => {
         const groesse = 2; // Standardannahme (Säbel/Muskete) - vom Spieler an der Karte änderbar
-        if (!irHatPlatzFuer(groesse)) { bleibtKlassisch.push(w); return; }
+        if (!irHatPlatzFuer(groesse, true)) { bleibtKlassisch.push(w); return; }
         if (!appData.inventory) appData.inventory = [];
         const item = {
             id: 'inv_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
@@ -354,10 +400,12 @@ function irWaffenAusRasterMigrieren() {
     });
 }
 
-// Für das Schiffs-Inventar (schiffsinventar.js): passt ein Gegenstand dieser
-// Katalog-Größe noch ins EIGENE Raster?
-function irHatPlatzFuer(groesseRoh) {
-    return irErstesFreies(irRasterDaten(), irSlotKostenVon(groesseRoh)) !== null;
+// Für das Schiffs-Inventar (schiffsinventar.js) und neue Items: passt ein
+// Gegenstand dieser Katalog-Größe noch ins EIGENE Raster? `istWaffe` öffnet
+// zusätzlich die beiden waffen-exklusiven Gürtelplätze (dort immer 1 Platz).
+function irHatPlatzFuer(groesseRoh, istWaffe) {
+    const pseudoItem = { irGroesse: groesseRoh, istWaffe: !!istWaffe };
+    return irErstesFreies(irRasterDaten(), pseudoItem, undefined, irReihenfolgeFuer(pseudoItem)) !== null;
 }
 
 // --- Zusatztaschen -------------------------------------------------------------
@@ -389,9 +437,9 @@ function irItemHinzufuegen() {
     const name = (nameEl ? nameEl.value : '').trim();
     if (!name) { if (nameEl) nameEl.focus(); return; }
     const groesse = groesseEl ? parseFloat(groesseEl.value) || 1 : 1;
-    if (!irHatPlatzFuer(groesse)) { irStatus(`Kein Platz mehr für einen Gegenstand dieser Größe (${groesse}).`, true); return; }
-    if (!appData.inventory) appData.inventory = [];
     const istWaffe = !!(istWaffeEl && istWaffeEl.checked);
+    if (!irHatPlatzFuer(groesse, istWaffe)) { irStatus(`Kein Platz mehr für einen Gegenstand dieser Größe (${groesse}).`, true); return; }
+    if (!appData.inventory) appData.inventory = [];
 
     const item = {
         id: 'inv_' + Date.now(),
@@ -478,10 +526,11 @@ function irGroesseAendern(itemId, neueGroesse) {
     const neueKosten = irSlotKostenVon(neueGroesse);
     if (neueKosten === alteKosten) { item.irGroesse = neueGroesse; saveData(); return; }
     const rasterOhne = irOhneItem(irRasterDaten(), itemId);
-    const slot = irErstesFreies(rasterOhne, neueKosten);
+    const probeItem = Object.assign({}, item, { irGroesse: neueGroesse });
+    const slot = irErstesFreies(rasterOhne, probeItem, undefined, irReihenfolgeFuer(probeItem));
     if (!slot) { irStatus('Kein Platz für diese Größe frei.', true); return; }
     item.irGroesse = neueGroesse;
-    appData.inventarRaster = irMitItem(rasterOhne, itemId, slot, neueKosten);
+    appData.inventarRaster = irMitItem(rasterOhne, itemId, slot, irGroesseInZone(item, irZoneVonSlot(slot)));
     saveData();
     renderInventarRaster();
 }
@@ -558,7 +607,10 @@ function irDragPointerEnde(e) {
 function irDrop(itemId, targetSlot) {
     const res = irVerschieben(irRasterDaten(), irItemsById(), itemId, targetSlot);
     if (!res.ok) {
-        irStatus(res.grund === 'zuGross' || res.grund === 'passtNicht' ? 'Braucht mehr zusammenhängende freie Felder.' : 'Feld ist belegt.', true);
+        const text = res.grund === 'nurWaffen' ? 'Diese Gürtelplätze sind nur für Waffen.'
+            : (res.grund === 'zuGross' || res.grund === 'passtNicht') ? 'Braucht mehr zusammenhängende freie Felder.'
+            : 'Feld ist belegt.';
+        irStatus(text, true);
         return;
     }
     appData.inventarRaster = res.raster;
@@ -612,7 +664,7 @@ function irZoneHtml(zone, raster, items) {
         const belegung = raster[slot];
         if (belegung && belegung.cont) continue;
         const item = belegung ? items[belegung.itemId] : null;
-        const groesse = item ? irSlotKosten(item) : 1;
+        const groesse = item ? irGroesseInZone(item, zone) : 1;
         zellenHtml.push(irSlotHtml(slot, item, groesse));
         if (item && groesse > 1) i += groesse - 1;
     }
@@ -640,7 +692,7 @@ function renderInventarRaster() {
     const handelnMalus = taschen.reduce((sum, art) => sum + (IR_ZUSATZTASCHE_DATEN[art] || IR_ZUSATZTASCHE_DATEN.klein).malus, 0);
 
     box.innerHTML = `
-        <p class="ir-hint">Eldara-Regelwerk (S.25f.): Gürtel, Gürtelbeutel, Rucksack und optionale Zusatztaschen - jede Zone hat feste Plätze, Gegenstände belegen 1-3 Zellen je nach Größe. <i class="fa-solid fa-circle-question help-icon" onclick="showHelp('inventarraster')" title="Hilfe zum Rasterinventar"></i></p>
+        <p class="ir-hint">Eldara-Regelwerk: Gürtel (5 Plätze + 2 eigene Waffenplätze), Rucksack und optionale Zusatztaschen - jede Zone hat feste Plätze, Gegenstände belegen 1-3 Zellen je nach Größe; die beiden Gürtel-Waffenplätze nehmen nur Waffen und kosten dort immer 1 Zelle. <i class="fa-solid fa-circle-question help-icon" onclick="showHelp('inventarraster')" title="Hilfe zum Rasterinventar"></i></p>
         <div class="ir-einstellungen">
             <div class="ir-einstellung ir-ruestung-block">
                 <div class="ir-ruestung-titel">Rüstung <span class="ir-zone-malus">${ruestungswert} Rüstungswert - ${IR_RUESTUNGSSTUFE_LABEL[ruestungsstufe]}${ruestungspreis ? ` (Warenwert ${ruestungspreis}G)` : ''}</span></div>
@@ -661,7 +713,8 @@ function renderInventarRaster() {
                         </label>`;
                     }).join('')}
                 </div>
-                <p class="ir-hint">Rucksack-Malus: ${ruestungsstufe === 'schwer' ? '-2 Plätze' : ruestungsstufe === 'mittel' ? '-1 Platz' : 'keiner'} durch diese Stufe. <i class="fa-solid fa-circle-question help-icon" onclick="showHelp('inventarraster')" title="Weitere Mali laut Regelwerk"></i></p>
+                <p class="ir-hint">Rucksack-Malus: ${ruestungsstufe === 'schwer' ? '-2 Plätze' : ruestungsstufe === 'mittel' ? '-1 Platz' : 'keiner'} durch diese Stufe.</p>
+                <p class="ir-hint">Weitere Mali durch diese Stufe: ${(() => { const m = IR_RUESTUNGSSTUFE_MALI[ruestungsstufe]; return (m.bewegung || m.handeln || m.heimlichkeit) ? `Bewegung ${m.bewegung}m, Handeln ${m.handeln || 0}, Heimlichkeit ${m.heimlichkeit}` : 'keine'; })()} - nicht automatisch verrechnet, bitte selbst beim Würfeln eintragen. <i class="fa-solid fa-circle-question help-icon" onclick="showHelp('inventarraster')" title="Hilfe zum Rasterinventar"></i></p>
             </div>
             <div class="ir-einstellung">
                 Zusatztaschen (${taschen.length}/${IR_ZUSATZTASCHE_MAX})

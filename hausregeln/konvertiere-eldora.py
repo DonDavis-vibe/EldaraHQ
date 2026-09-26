@@ -134,52 +134,84 @@ TALENTBAUM_REGELN = {
     'freischaltung': {'modus': 'vorRang', 'benoetigt': 2},
 }
 
-# Die 20 "Besonderen Eigenschaften" (RW 4.1 S.18f) - existieren in keiner
-# Rohdatei der Gruppe, von Hand aus rw41.txt transkribiert (siehe dort
-# Zeile ~800-900). `wirkungen`: eine Wirkung je Mal, das die Eigenschaft
-# gewählt werden kann (das Regelwerk zeigt das als "10/15/20%" o.ä. - jede
-# Zahl ein Pick, mit einem eigenen Rangpunkt bezahlt). Wird auch vom
-# Zufallsgenerator (randomizer/konvertiere-randomizer.py) genutzt, der diese
-# Liste aus der generierten eldora-arrrrr.js ausliest statt sie zu duplizieren.
+# Die 22 "Besonderen Eigenschaften" (Stand zwischenstand.docx, SL-Überarbeitung
+# 2026-09) - existieren in keiner Rohdatei der Gruppe, von Hand aus dem Dokument
+# transkribiert. `wirkungen`: eine Wirkung je Mal, das die Eigenschaft gewählt
+# werden kann (das Regelwerk zeigt das als "10/15/20%" o.ä. - jede Zahl ein
+# Pick, mit einem eigenen Rangpunkt bezahlt). Wird auch vom Zufallsgenerator
+# (randomizer/konvertiere-randomizer.py) genutzt, der diese Liste aus der
+# generierten eldora-arrrrr.js ausliest statt sie zu duplizieren.
+#
+# Ersetzt die alte Tabelle aus RW 4.1 S.18f (20 Eigenschaften) - der SL hat mit
+# der Überarbeitung Ränge, Werte und teils die Wirkung selbst verschoben (z.B.
+# "Guter Esser"/"Ruhiger Schlaf"/"Koordination" entfallen, dafür "Adrenalin",
+# "Guter Patient", "Hartnäckig", "Unsterblich", "Meister Magus" neu; "Krieger"
+# entfällt, "Kämpfer" ist eine eigene neue Eigenschaft auf Rang 1).
 EIGENSCHAFTEN = [
+    {'name': 'Adrenalin', 'rang': 1, 'wirkungen': [
+        'Sobald du im Kampf erstmals unter 50% LP fällst, erhältst du 10 Lebenspunkte Heilung',
+        'Sobald du im Kampf erstmals unter 50% LP fällst, erhältst du 20 Lebenspunkte Heilung',
+        'Sobald du im Kampf erstmals unter 50% LP fällst, erhältst du 30 Lebenspunkte Heilung']},
     {'name': 'Fluchtreflex', 'rang': 1, 'wirkungen': [
         '10% Chance, Fernkampfangriffen auszuweichen (nur, wenn du dich diese Runde bewegt hast)',
         '15% Chance, Fernkampfangriffen auszuweichen (nur, wenn du dich diese Runde bewegt hast)',
         '20% Chance, Fernkampfangriffen auszuweichen (nur, wenn du dich diese Runde bewegt hast)']},
-    {'name': 'Guter Esser', 'rang': 1, 'wirkungen': ['Du erhältst 2 Würfel pro Nacht für Essen']},
-    {'name': 'Koordination', 'rang': 1, 'wirkungen': [
-        'In Monsterform +1m Bewegung', 'In Monsterform +2m Bewegung', 'In Monsterform +3m Bewegung']},
+    {'name': 'Guter Patient', 'rang': 1, 'wirkungen': [
+        'Du erhältst für Heilung durch Schlaf und Nahrung je 1 Regenerationswürfel extra',
+        'Zusätzlich erhältst du +1W10 LP, wenn du durch eine Fähigkeit geheilt wirst']},
+    {'name': 'Instinktive Parade', 'rang': 1, 'wirkungen': ['+1 Parade pro Runde', '+2 Paraden pro Runde']},
+    {'name': 'Kämpfer', 'rang': 1, 'wirkungen': ['+1 Initiative', '+2 Initiative', '+3 Initiative']},
     {'name': 'Langes Leben', 'rang': 1, 'wirkungen': [
-        '+20 HP', '+40 HP', '+60 HP', '+80 HP', '+100 HP']},
-    {'name': 'Ruhiger Schlaf', 'rang': 1, 'wirkungen': ['Du erhältst 2 Würfel pro Nacht fürs Schlafen']},
+        '+25 HP', '+50 HP', '+75 HP', '+100 HP']},
     {'name': 'Taktiker', 'rang': 1, 'wirkungen': [
-        'Initiative +1 / +1m Bewegung / zusätzlich 1W10 Schaden in deiner ersten Kampfrunde']},
+        'Permanent +1m Bewegung',
+        'Zusätzlich +2W10 Schaden in der ersten Kampfrunde',
+        'Der zusätzliche Schaden erhöht sich auf +4W10']},
     {'name': 'Athlet', 'rang': 2, 'wirkungen': [
-        'Rüstungsmalus wird um 1 reduziert', 'Rüstungsmalus wird um 2 reduziert', 'Rüstungsmalus wird um 3 reduziert']},
+        'Rüstungsmalus wird um 1 Malus deiner Wahl reduziert',
+        'Rüstungsmalus wird um 2 Mali deiner Wahl reduziert',
+        'Rüstungsmalus wird um 3 Mali deiner Wahl reduziert']},
     {'name': 'Gesegneter Heiler', 'rang': 2, 'wirkungen': [
         'Alle Heilungszauber heilen zusätzlich +1W10', 'Alle Heilungszauber heilen zusätzlich +2W10', 'Alle Heilungszauber heilen zusätzlich +3W10']},
-    {'name': 'Instinktive Parade', 'rang': 2, 'wirkungen': ['+1 Parade pro Runde', '+2 Paraden pro Runde']},
-    {'name': 'Krieger', 'rang': 2, 'wirkungen': ['+1 Attacke pro Angriffsaktion (Aktion A)']},
+    {'name': 'Hartnäckig', 'rang': 2, 'wirkungen': [
+        '1-mal pro Kampf darfst du einen misslungenen Wurf zur Abwehr eines Angriffs oder Effekts wiederholen',
+        '2-mal pro Kampf darfst du einen misslungenen Wurf zur Abwehr eines Angriffs oder Effekts wiederholen',
+        '3-mal pro Kampf darfst du einen misslungenen Wurf zur Abwehr eines Angriffs oder Effekts wiederholen']},
+    {'name': 'Ledrige Haut', 'rang': 2, 'wirkungen': [
+        'Nachdem deine Blutungen abgehandelt wurden, schließt sich automatisch 1 Blutung',
+        'Nachdem deine Blutungen abgehandelt wurden, schließen sich automatisch 2 Blutungen']},
     {'name': 'Stahlmagen', 'rang': 2, 'wirkungen': [
-        'Erhaltenes Gift wird um 1 Stufe reduziert', 'Erhaltenes Gift wird um 2 Stufen reduziert', 'Erhaltenes Gift wird um 3 Stufen reduziert']},
+        'Am Ende deiner Runde wird deine Giftstufe um 1 gesenkt',
+        'Am Ende deiner Runde wird deine Giftstufe um 2 gesenkt',
+        'Am Ende deiner Runde wird deine Giftstufe um 3 gesenkt']},
+    {'name': 'Unbrennbar', 'rang': 2, 'wirkungen': ['Jede Runde verlierst du automatisch 1 Feuermarke']},
+    {'name': 'Held', 'rang': 3, 'wirkungen': [
+        'Deine Standard-Nahkampfangriffe verursachen +1W10 Schaden',
+        'Zusätzlich erhältst du pro Runde einen weiteren Standard-Nahkampfangriff']},
     {'name': 'Kampfsanitäter', 'rang': 3, 'wirkungen': [
-        '1-mal im Kampf Heilzauber als Extra-Aktion', '2-mal im Kampf Heilzauber als Extra-Aktion', '3-mal im Kampf Heilzauber als Extra-Aktion']},
+        '1-mal im Kampf kannst du eine Heilfähigkeit als Extra-Aktion nutzen',
+        '2-mal im Kampf kannst du eine Heilfähigkeit als Extra-Aktion nutzen',
+        '3-mal im Kampf kannst du eine Heilfähigkeit als Extra-Aktion nutzen']},
     {'name': 'Magier', 'rang': 3, 'wirkungen': [
         'Reichweite deiner Fähigkeiten +1m, Wirkungsradius +0m', 'Reichweite +3m, Wirkungsradius +1m', 'Reichweite +5m, Wirkungsradius +2m']},
     {'name': 'Perfekter Konter', 'rang': 3, 'wirkungen': [
-        'Immer wenn du einen Angriff kritisch parierst, darfst du zurückschlagen (Standardangriff)']},
+        'Immer wenn du einen Angriff parierst, darfst du mit einer Standard-Nahkampfattacke zurückschlagen']},
     {'name': 'Schildbrecher', 'rang': 3, 'wirkungen': [
-        'Deine normalen Nahkampfangriffe ignorieren 5 Rüstung', 'ignorieren 7 Rüstung', 'ignorieren 10 Rüstung']},
-    {'name': 'Unbrennbar', 'rang': 3, 'wirkungen': ['Jede Runde verlierst du automatisch 1 Feuermarke']},
+        'Deine normalen Standard-Nahkampfangriffe ignorieren 5 Rüstung', 'ignorieren 10 Rüstung', 'ignorieren 15 Rüstung']},
     {'name': 'Damage Dealer', 'rang': 4, 'wirkungen': [
         'Alle deine aktiven Fähigkeiten verursachen +1W10 Schaden', '+2W10 Schaden', '+3W10 Schaden']},
-    {'name': 'Held', 'rang': 4, 'wirkungen': ['+1 Attacke pro Angriffsaktion (Aktion A)']},
-    {'name': 'Ledrige Haut', 'rang': 4, 'wirkungen': [
-        'Nachdem deine Blutungen abgehandelt wurden, schließt sich eine Wunde automatisch']},
     {'name': 'Tödliche Präsenz', 'rang': 4, 'wirkungen': [
-        'Kritische Treffer verursachen +1W10 zusätzlichen Schaden; Krit-Chance +10%',
-        '+2W10 zusätzlichen Schaden; Krit-Chance +15%',
-        '+3W10 zusätzlichen Schaden; Krit-Chance +20%']},
+        'Kritische Treffer verursachen +1W10 zusätzlichen Schaden; Krit-Chance +5%',
+        '+2W10 zusätzlichen Schaden; Krit-Chance +10%',
+        '+3W10 zusätzlichen Schaden; Krit-Chance +15%']},
+    {'name': 'Unsterblich', 'rang': 4, 'wirkungen': [
+        'Einmal pro Tag: Wenn du im Kampf auf 0 LP oder weniger fallen würdest, werden deine LP stattdessen auf 1 gesetzt',
+        'Einmal pro Tag: Wenn du im Kampf auf 0 LP oder weniger fallen würdest, werden deine LP stattdessen auf 50 gesetzt',
+        'Einmal pro Tag: Wenn du im Kampf auf 0 LP oder weniger fallen würdest, werden deine LP stattdessen auf 100 gesetzt']},
+    {'name': 'Meister Magus', 'rang': 4, 'wirkungen': [
+        'Einmal pro Kampf darfst du eine bereits verbrauchte Fähigkeit bis Rang #2 erneut verfügbar machen',
+        'Einmal pro Kampf darfst du zwei bereits verbrauchte Fähigkeiten bis Rang #2 erneut verfügbar machen',
+        'Einmal pro Kampf darfst du zwei bereits verbrauchte Fähigkeiten bis Rang #3 erneut verfügbar machen']},
 ]
 
 # Die feste Basis-Talentliste je Kategorie (RW 4.3 S.8-11, "Talentgruppen &

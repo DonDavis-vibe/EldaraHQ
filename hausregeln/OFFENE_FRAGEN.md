@@ -143,11 +143,11 @@ Eigenschaft, kein Satz unabhängiger Einzel-Picks.
 
 **Umgesetzt (unverändert, schon vorher richtig):** Jede Zahl ist ein
 eigener, sequenzieller Pick derselben Eigenschaft (z.B. "Langes Leben"
-fünfmal wählbar, jedes Mal +1 Rangpunkt, nächste Zahl in der Reihe - nicht
-überspringbar). Bei Eigenschaften mit nur einem Wert (z.B. "Krieger": „+1
-Attacke pro Angriffsaktion") ist entsprechend nur ein Pick möglich. Das
-entspricht genau der SL-Antwort, `talentbaum.js` (`tbEigenschaftWaehlen`)
-bleibt wie es ist.
+viermal wählbar, jedes Mal +1 Rangpunkt, nächste Zahl in der Reihe - nicht
+überspringbar). Bei Eigenschaften mit nur einem Wert (z.B. "Unbrennbar":
+„Jede Runde verlierst du automatisch 1 Feuermarke") ist entsprechend nur ein
+Pick möglich. Das entspricht genau der SL-Antwort, `talentbaum.js`
+(`tbEigenschaftWaehlen`) bleibt wie es ist.
 
 ---
 
@@ -222,12 +222,38 @@ automatisch zurückgesetzt.
 
 ---
 
-## 9. Rüstungsstufen-Mali (Bewegung/Handeln/Heimlichkeit) — ERLEDIGT (RW 4.3, Tabellen-Extraktion war das Problem, nicht das Regelwerk)
+## 9. Rüstungsstufen-Mali (Bewegung/Handeln/Heimlichkeit) — ERLEDIGT UND UMGESETZT (zwischenstand.docx hat Vorrang)
 
-Die alte RW-4.1-Extraktion (`rw41.txt`) hatte die Tabelle durch PDF→Text
-zerrissen und eine Zeile war nicht sicher zuzuordnen - siehe Zitat unten.
-RW 4.3 (S.27) lässt sich dagegen sauber und eindeutig lesen:
+Drei Fassungen dieser Tabelle sind mittlerweile aufgetaucht und haben sich
+teils widersprochen - siehe Historie unten. **Vorrang-Regel vom SL
+(2026-09-26): was im `zwischenstand.docx` steht, ersetzt die älteren
+Regelwerks-Infos, soweit dort eindeutig genug formuliert.** Für diese Tabelle
+ist das der Fall - `zwischenstand.docx` (Kapitel "Ausrüstung") nennt:
 
+```
+Stufe    Bewegung   Handeln   Heimlichkeit
+Leicht   -1m        –         -10
+Mittel   -1m        -5        -15
+Schwer   -2m        -10       -15
+```
+
+(Ungepanzert: keine Mali. Gilt für getragene Rüstung, nicht für
+Schiffspanzerung.)
+
+Das weicht bei "Schwer" von der älteren RW-4.3-Lesart ab (dort -7 Handeln /
+-20 Heimlichkeit statt -10 / -15) - laut Vorrang-Regel gelten jetzt die Werte
+aus `zwischenstand.docx`.
+
+**Umgesetzt:** `IR_RUESTUNGSSTUFE_MALI` in `inventarraster.js` - als Hinweis
+unter den Rüstungsteilen angezeigt (genau wie der bestehende
+Rucksack-Platz-Malus und der Zusatztaschen-Handeln-Malus), NICHT automatisch
+in Würfe eingerechnet - dafür bleibt kein eigener Bogen-Wert "Bewegung"
+nötig, nur eine Info-Zeile.
+
+<details>
+<summary>Ältere Fassungen, nur zur Historie</summary>
+
+RW 4.3 (S.27):
 ```
 Status         Rüstungswert   Bewegung   Handeln   Heimlichkeit
 Ungepanzert    0              –          –         –
@@ -236,23 +262,8 @@ Mittel         11–20          -1m        -5        -15
 Schwer         21+            -2m        -7        -20
 ```
 
-(gilt laut RW 4.3 nur für **getragene** Rüstung, Art 3 - nicht für
-Schiffspanzerung.)
-
-**Noch nicht umgesetzt:** Das Tool bildet aktuell nur den Rucksack-Platz-Malus
-ab (-1 Mittel/-2 Schwer, separates Inventar-Kapitel S.25f.) - diese Bewegungs-
-/Handeln-/Heimlichkeit-Mali fehlen noch, weil Bewegung und Heimlichkeit im
-Tool aktuell gar keine eigenen Bogen-Werte sind (Heimlich ist nur ein Talent
-unter Handeln, kein separater Meter-Wert wie beim Rüstungsmalus nötig).
-
-**Frage/Ansage an den SL:** Die Werte sind jetzt klar - sag Bescheid, ob ihr
-diese Mali am Tisch tatsächlich nutzt, dann bauen wir sie nach (braucht
-vermutlich einen neuen Bogen-Wert "Bewegung" plus einen Abzug auf Heimlich je
-nach angelegter Rüstung).
-
-<details>
-<summary>Alte RW-4.1-Extraktion, nur zur Historie</summary>
-
+Alte RW-4.1-Extraktion (`rw41.txt`, durch PDF→Text zerrissen, eine Zeile
+nicht sicher zuzuordnen):
 ```
 Status         Rüstungswert  Bewegung  Handeln  Heimlichkeit
 Ungepanzert    0             -1m       –        -10
@@ -262,6 +273,67 @@ Mittel         11–20
 Schwer         21+
 ```
 </details>
+
+---
+
+## 10. zwischenstand.docx (SL-Überarbeitung 2026-09): Besondere Eigenschaften komplett ersetzt — UMGESETZT
+
+Der SL hat mit `zwischenstand.docx` eine neue Fassung der 22 „Besonderen
+Eigenschaften" geliefert, die die alte RW-4.1/4.3-Tabelle (20 Einträge)
+ersetzt - nicht nur neue Werte, auch andere Ränge und teils andere Wirkungen
+(z.B. „Guter Esser"/„Ruhiger Schlaf"/„Koordination" entfallen, dafür
+„Adrenalin", „Guter Patient", „Hartnäckig", „Unsterblich", „Meister Magus"
+neu; „Instinktive Parade" und „Unbrennbar"/„Ledrige Haut" wechseln den Rang).
+
+**Umgesetzt:** `EIGENSCHAFTEN` in `konvertiere-eldora.py` komplett aus dem
+Dokument neu geschrieben, `eldora-arrrrr.js` neu generiert.
+
+**Vorrang-Regel vom SL (2026-09-26):** was im `zwischenstand.docx` steht, wird
+neue Regel und ersetzt ältere Regelwerks-Infos, soweit dort eindeutig genug
+formuliert. Damit sind zwei der vier ursprünglich offenen Punkte geklärt:
+
+1. „Krieger" (RW, Rang 2: „+1 Attacke pro Angriffsaktion") kommt in
+   `zwischenstand.docx` nicht mehr vor. **Geklärt per Vorrang-Regel:** die
+   neue Eigenschaften-Tabelle ist eine vollständige Ersatz-Liste, „Krieger"
+   ist damit ersatzlos gestrichen (die neue Eigenschaft „Kämpfer" auf Rang 1
+   ist trotz ähnlichem Namen keine Umbenennung, sondern ein eigener Effekt -
+   Initiative statt Extra-Attacke). Keine weitere Aktion nötig.
+2. „Schwer": Handeln/Heimlichkeit-Mali - **geklärt per Vorrang-Regel, siehe
+   Frage 9 oben:** `zwischenstand.docx` (-10/-15) gilt, RW 4.3 (-7/-20) ist
+   überholt. Umgesetzt.
+
+**Weiterhin offen, weil `zwischenstand.docx` dazu keine eindeutige Aussage
+trifft (die Vorrang-Regel greift nur, wo dort tatsächlich etwas steht):**
+
+3. Zweihandwaffen sind laut `zwischenstand.docx` 2,5 Felder groß - der
+   Größenkatalog im Rasterinventar kennt aktuell nur 0,5/1/2/3
+   (`inventarraster.js`, `IR_GROESSEN_KATALOG`), noch nicht ergänzt. Kein
+   Widerspruch zu einer älteren Regel, nur eine fehlende Katalog-Stufe.
+4. Der 0-HP-Rettungswurf in `zwischenstand.docx` nennt weder die
+   Eskalations-Erschwernis (+10 pro weiterem Versuch am Tag) noch einen Stun
+   bei Erfolg - beides macht der Code aktuell (`kampf.js`,
+   `kampfRettungswurfWuerfeln`). Da `zwischenstand.docx` dazu schweigt statt
+   etwas anderes zu sagen, bleibt die bestehende Mechanik nach der
+   Vorrang-Regel vorerst unangetastet (Schweigen ersetzt keine bestehende
+   Regel) - trotzdem zur Sicherheit beim SL nachfragen, ob das bewusst
+   vereinfacht wurde.
+
+---
+
+## 11. zwischenstand.docx: Gürtel-Struktur geändert — UMGESETZT
+
+Bisher: Gürtel = 6 gemeinsame Plätze + eigene Zone „Gürtelbeutel" (2 Plätze).
+`zwischenstand.docx` beschreibt stattdessen: Gürtel = 5 Plätze für normale
+Sachen **plus 2 eigene, waffen-exklusive Plätze** („2 Waffen, egal welche
+Größe") - keine Gürtelbeutel-Zone mehr.
+
+**Umgesetzt:** `inventarraster.js` - Zone `guertelbeutel` entfernt, `guertel`
+auf 5 Plätze reduziert, neue Zone `guertel_waffen` (2 Plätze, `nurWaffen:
+true`) ergänzt; Waffen kosten dort immer 1 Platz unabhängig von `irGroesse`
+(`irGroesseInZone`/`irZonePasstFuerItem`). Bereits im Raster liegende Items
+aus der alten Gürtelbeutel-Zone werden beim nächsten Render automatisch neu
+einsortiert (kein Datenverlust, gleicher Mechanismus wie beim Entfernen einer
+Zusatztasche).
 
 ---
 

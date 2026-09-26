@@ -239,7 +239,12 @@ function schiffSpielerHatPlatz(spielerDaten, groesse) {
     if (typeof irErstesFreies !== 'function') return true;
     const raster = (spielerDaten && spielerDaten.inventarRaster && typeof spielerDaten.inventarRaster === 'object')
         ? spielerDaten.inventarRaster : {};
-    return irErstesFreies(raster, schiffSlotKosten(groesse), spielerDaten) !== null;
+    // Ship-Items sind nie als Waffe markiert (siehe Eintrag-Shape oben) - die
+    // beiden waffen-exklusiven Gürtelplätze (inventarraster.js) kommen für sie
+    // also nie in Frage, wie es sein soll.
+    const pseudoItem = { irGroesse: groesse, istWaffe: false };
+    const reihenfolge = typeof irReihenfolgeFuer === 'function' ? irReihenfolgeFuer(pseudoItem, spielerDaten) : undefined;
+    return irErstesFreies(raster, pseudoItem, spielerDaten, reihenfolge) !== null;
 }
 
 // Anfragen der Spieler (aus handleIncomingData in multiplayer.js)
