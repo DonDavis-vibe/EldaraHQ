@@ -433,8 +433,11 @@ function handleIncomingData(peerId, payload) {
         if (payload.bigNumber !== undefined && payload.bigNumber !== null) {
             updateGmPlayerBigDiceResult(payload.bigNumber, payload.subtitle, charName);
             // Team-Würfel (teamwuerfel.js): nur echte Würfe (bigNumber gesetzt)
-            // gehen an die Gruppe weiter, keine allgemeinen Logbuch-Einträge.
-            if (typeof teamwuerfelVerteilen === 'function') teamwuerfelVerteilen(charName, payload);
+            // gehen an die Gruppe weiter, keine allgemeinen Logbuch-Einträge -
+            // und nur, wenn der Spieler das nicht per Toggle auf "nur SL"
+            // gestellt hat (mitGruppeTeilen === false). Der SL sieht den Wurf
+            // hier oben (addGmLogEntry) trotzdem immer.
+            if (payload.mitGruppeTeilen !== false && typeof teamwuerfelVerteilen === 'function') teamwuerfelVerteilen(charName, payload);
         }
 
         // Trigger Effects based on log content
@@ -1169,7 +1172,11 @@ function sendMultiplayerLog(message, emoji = "🎲", bigNumber = null, subtitle 
         message: message,
         emoji: emoji,
         bigNumber: bigNumber,
-        subtitle: subtitle
+        subtitle: subtitle,
+        // Steuert nur, ob der SL diesen Wurf an die restliche Gruppe
+        // weitergibt (Team-Würfel, siehe teamwuerfel.js) - der SL selbst
+        // sieht ihn über sein Live-Log so oder so.
+        mitGruppeTeilen: typeof teamwuerfelTeiltMitGruppe === 'function' ? teamwuerfelTeiltMitGruppe() : true
     });
 }
 

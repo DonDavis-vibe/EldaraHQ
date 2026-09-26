@@ -803,7 +803,7 @@ function irSlotHtml(slot, item, breite) {
                 <i class="fa-solid fa-grip-vertical ir-drag-griff ${gesperrt ? 'ir-drag-griff-gesperrt' : ''}" data-irgriff="${escapeHtml(item.id)}" title="${gesperrt ? 'Im Kampf-Modus gesperrt' : 'Ziehen zum Umsortieren'}"></i>
                 ${item.istWaffe ? '<i class="fa-solid fa-khanda ir-waffe-icon" title="Waffe"></i>' : ''}
                 ${ausruestungInfo ? '<i class="fa-solid fa-shield-halved ir-waffe-icon" title="Ausrüstung"></i>' : ''}
-                <input type="text" class="ir-name" value="${escapeHtml(item.name)}" data-irname="${escapeHtml(item.id)}" placeholder="Name …">
+                <input type="text" class="ir-name" value="${escapeHtml(item.name)}" data-irname="${escapeHtml(item.id)}" placeholder="Name …" title="${escapeHtml(item.name)}">
             </div>
             ${waffenZeile}
             ${ausruestungZeile}

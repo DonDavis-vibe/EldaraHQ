@@ -309,6 +309,16 @@ function eingriffEmpfangen(payload) {
         appData.hausregeln.wesenWert = Math.max(0, Math.min(99, vorher + betrag));
         log(`Monsterpunkte ${betrag >= 0 ? '+' : ''}${betrag} (jetzt ${appData.hausregeln.wesenWert}) (vom Spielleiter)`, betrag >= 0 ? 'activity-good' : 'activity-bad', '<i class="fa-solid fa-dragon"></i>');
         if (typeof renderTalentbaum === 'function') renderTalentbaum();
+        // Zusätzlich zum Logbuch-Eintrag ein unübersehbares Popup (analog
+        // Tischmitte-Freigabe/Kein-Platz-Hinweis): der Talentbaum-Tab wird
+        // deutlich seltener angeschaut als Inventar/Status, ein still
+        // erhöhter Wesenswert würde sonst leicht tage-/sitzungslang
+        // unbemerkt bleiben, obwohl schon Punkte zum Verteilen da wären.
+        // Bei "verdeckt" bewusst kein Popup, wie beim Logbuch auch.
+        if (!still && betrag > 0) {
+            alert(`Der Spielleiter hat dir ${betrag} Monsterpunkt${betrag === 1 ? '' : 'e'} gegeben (jetzt ${appData.hausregeln.wesenWert} insgesamt)!\n\nSchau im Talentbaum unter deinem Wesen-Ast nach, um sie zu verteilen.`);
+            if (typeof mobilenavSpringenZu === 'function') mobilenavSpringenZu('talentbaum-section');
+        }
     } else if (payload.aktion === 'sonderAst' && payload.ast) {
         // Seltene Ausnahme (RW 4.3 S.15): SL schaltet einen NSC-/Monster-Ast
         // als zusätzliche Wesen-Option frei (siehe talentbaum.js).
