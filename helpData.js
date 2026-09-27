@@ -52,6 +52,7 @@ const helpData = {
                  "<p>Es laufen nur echte Würfe rein (Würfel-Tool, Skill- und Attributproben) - allgemeine Logbuch-Einträge wie Items oder HP-Änderungen tauchen hier nicht auf, das würde nur unnötig Rauschen. Die Farbe je Spieler entspricht der im Spielleiter-Dashboard.</p>" +
                  "<p>Der <b>letzte Wurf</b> bleibt immer sichtbar, auch wenn die Liste eingeklappt ist. Über den Haken <i>Eigene Würfe mit der ganzen Gruppe teilen</i> stellst du ein, ob deine eigenen Würfe hier bei allen landen (Standard) oder nur beim Spielleiter - der sieht sie in seinem eigenen Live-Log so oder so.</p>" +
                  "<p>Über <i>Sound abspielen, wenn ein Mitspieler würfelt</i> (standardmäßig aus) bekommst du zusätzlich akustisch mit, wenn am Tisch gewürfelt wird - praktisch, wenn du gerade woanders im Tool bist. Für die eigenen Würfe gibt's keinen doppelten Sound, den hörst du ja schon direkt beim Würfeln.</p>" +
+                 "<p>Über <i>Würfe als Popup anzeigen</i> (standardmäßig aus) poppt jeder Mitspieler-Wurf zusätzlich kurz oben auf dem Bildschirm auf und verschwindet nach ein paar Sekunden von selbst (oder durch Antippen) - blockiert nichts, praktisch also auch bei vielen Würfen hintereinander im Kampf.</p>" +
                  "<p><i>Reiner Live-Feed - nichts davon wird gespeichert. Wer neu beitritt, sieht nur Würfe ab dem eigenen Beitritt.</i></p>",
 
     tischmitte: "<h3>Tischmitte</h3>" +

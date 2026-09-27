@@ -28,7 +28,12 @@
 // Rein ein Live-Feed, nichts davon wird gespeichert - ein neu beitretender
 // Spieler sieht nur Würfe ab dem Moment seines Beitritts (wie das Logbuch
 // des SL vor dem ersten Beitritt auch leer ist). Der letzte Wurf bleibt
-// zusätzlich in einer eigenen Box auch bei eingeklapptem Feed sichtbar.
+// zusätzlich in einer eigenen Box auch bei eingeklapptem Feed sichtbar. Ein
+// dritter, ebenfalls unabhängiger Toggle (appData.teamwuerfelPopup, Standard
+// AUS) zeigt jeden eintreffenden Mitspieler-Wurf zusätzlich als kurzes,
+// selbst verschwindendes Popup oben auf dem Bildschirm (wie das Kampf-Start/
+// Ende-Popup, siehe kampf.js kampfPopupZeigen) - für alle, die auch ohne das
+// Panel offen zu haben sofort merken, wenn wer würfelt.
 
 const TEAMWUERFEL_MAX = 20;
 let teamwuerfelEintraege = [];
@@ -60,11 +65,13 @@ function teamwuerfelVerteilen(charName, payload) {
 function teamwuerfelEmpfangen(payload) {
     teamwuerfelEintraege.unshift(payload);
     if (teamwuerfelEintraege.length > TEAMWUERFEL_MAX) teamwuerfelEintraege.length = TEAMWUERFEL_MAX;
-    // Sound nur für ECHTE Mitspieler-Würfe, nicht für den eigenen (bekommt
-    // man ja schon per eigenem Würfel-Tool mit - ein zweiter Sound für den
-    // eigenen, hier nur reflektierten Wurf wäre doppelt/nervig).
+    // Sound/Popup nur für ECHTE Mitspieler-Würfe, nicht für den eigenen
+    // (bekommt man ja schon per eigenem Würfel-Tool mit - beides ein zweites
+    // Mal für den eigenen, hier nur reflektierten Wurf wäre doppelt/nervig).
     const ich = typeof appData !== 'undefined' ? [appData.vorname, appData.name].filter(Boolean).join(' ') : '';
-    if (teamwuerfelSoundAn() && payload.name !== ich && typeof AudioController !== 'undefined') AudioController.play('hit');
+    const fremderWurf = payload.name !== ich;
+    if (teamwuerfelSoundAn() && fremderWurf && typeof AudioController !== 'undefined') AudioController.play('hit');
+    if (teamwuerfelPopupAn() && fremderWurf) teamwuerfelPopupZeigen(payload);
     renderTeamwuerfel();
 }
 
@@ -112,6 +119,45 @@ function teamwuerfelSoundUmschalten(an) {
     if (typeof appData === 'undefined') return;
     appData.teamwuerfelSound = !!an;
     if (typeof saveData === 'function') saveData();
+}
+
+// Kurzes, selbst verschwindendes Popup bei Mitspieler-Würfen - bewusst
+// OPT-IN (Standard aus), wie Sound. Bewusst ein nicht-blockierendes Toast
+// (auto-hide, klickbar zum Wegwischen) statt alert(): Würfe können in einem
+// Kampf mehrfach pro Minute reinkommen, ein blockierender Dialog pro Wurf
+// wäre schnell nur noch nervig (anders als die seltenen Tischmitte-/
+// Monsterpunkte-Popups, die bewusst alert() nutzen).
+function teamwuerfelPopupAn() {
+    return typeof appData !== 'undefined' && !!appData.teamwuerfelPopup;
+}
+
+function teamwuerfelPopupUmschalten(an) {
+    if (typeof appData === 'undefined') return;
+    appData.teamwuerfelPopup = !!an;
+    if (typeof saveData === 'function') saveData();
+}
+
+let teamwuerfelPopupTimer = null;
+
+function teamwuerfelPopupZeigen(eintrag) {
+    let el = document.getElementById('tw-popup');
+    if (!el) {
+        el = document.createElement('div');
+        el.id = 'tw-popup';
+        el.className = 'tw-popup';
+        el.onclick = () => el.classList.remove('tw-popup-sichtbar');
+        document.body.appendChild(el);
+    }
+    el.style.setProperty('--tw-farbe', eintrag.farbe || '#9ca3af');
+    el.innerHTML = `<i class="fa-solid fa-dice"></i>
+        <div><strong>${escapeHtml(eintrag.name || 'Unbekannt')}</strong><br>${eintrag.emoji ? escapeHtml(eintrag.emoji) + ' ' : ''}${escapeHtml(eintrag.message || '')}</div>`;
+    // Neu anstoßen statt nur die Klasse zu behalten, falls kurz hintereinander
+    // mehrere Würfe reinkommen (Reflow erzwingt die CSS-Transition erneut).
+    el.classList.remove('tw-popup-sichtbar');
+    void el.offsetWidth;
+    el.classList.add('tw-popup-sichtbar');
+    clearTimeout(teamwuerfelPopupTimer);
+    teamwuerfelPopupTimer = setTimeout(() => el.classList.remove('tw-popup-sichtbar'), 4000);
 }
 
 function renderTeamwuerfel() {
@@ -164,6 +210,10 @@ function renderTeamwuerfel() {
             <label class="tw-teilen-toggle" onclick="event.stopPropagation()">
                 <input type="checkbox" ${teamwuerfelSoundAn() ? 'checked' : ''} onchange="teamwuerfelSoundUmschalten(this.checked)">
                 <span>Sound abspielen, wenn ein Mitspieler würfelt</span>
+            </label>
+            <label class="tw-teilen-toggle" onclick="event.stopPropagation()">
+                <input type="checkbox" ${teamwuerfelPopupAn() ? 'checked' : ''} onchange="teamwuerfelPopupUmschalten(this.checked)">
+                <span>Würfe als Popup anzeigen</span>
             </label>
             <ul class="tw-liste">${zeilen || '<li class="x-leer">Noch keine Würfe in der Runde.</li>'}</ul>
         </details>`;
