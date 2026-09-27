@@ -92,8 +92,15 @@ function tischmitteKatalogAuswaehlen(wert) {
     const t = tischmitteKatalogTabellen();
     const eintrag = t && t[gruppenKey] && t[gruppenKey].eintraege[parseInt(indexStr, 10)];
     if (!gruppe || !eintrag) return;
+    // Bei magischen Gegenständen mit einer Waffen-Kategorie (Säbel, Dolch,
+    // ...) die Gruppen-Vorgabe (immer "gegenstand") übersteuern - IR_KATALOG_
+    // KATEGORIE_WAFFE kommt aus inventarraster.js, beide Kataloge nutzen
+    // dieselbe RW4.3-Kategorienliste, keine eigene Kopie nötig.
+    const kategorie = gruppenKey === 'gegenstaende_magisch' ? (eintrag.neben || '') : '';
+    const istWaffenKategorie = kategorie && typeof IR_KATALOG_KATEGORIE_WAFFE !== 'undefined' && IR_KATALOG_KATEGORIE_WAFFE.has(kategorie);
+    const art = istWaffenKategorie ? 'waffe' : gruppe.art;
     const artEl = document.getElementById('tm-neu-art');
-    if (artEl) artEl.value = gruppe.art;
+    if (artEl) artEl.value = art;
     // Formular neu aufbauen: bei Waffen erscheint z.B. das Schaden- statt das
     // Mengenfeld (siehe art-Fallunterscheidung oben) - die Werte selbst
     // müssen danach in die frisch erzeugten Felder, siehe unten.
@@ -102,10 +109,17 @@ function tischmitteKatalogAuswaehlen(wert) {
     const descEl = document.getElementById('tm-neu-desc');
     const schadenEl = document.getElementById('tm-neu-schaden');
     if (nameEl) nameEl.value = eintrag.haupt || '';
-    if (gruppe.art === 'waffe') {
-        if (schadenEl) schadenEl.value = eintrag.neben || '';
+    if (art === 'waffe') {
+        // waffen_shop: "neben" ist selbst schon der Schaden. gegenstaende_
+        // magisch: "wirkung" ist bei Waffen-Kategorien der Schaden, "neben"
+        // wäre hier nur die Kategorie (uninteressant fürs Schaden-Feld).
+        if (schadenEl) schadenEl.value = (gruppenKey === 'gegenstaende_magisch' ? eintrag.wirkung : eintrag.neben) || '';
+        if (descEl) descEl.value = eintrag.beschreibung || '';
     } else if (descEl) {
-        descEl.value = eintrag.neben || '';
+        const beschreibungsTeile = [];
+        if (eintrag.wirkung) beschreibungsTeile.push(eintrag.wirkung);
+        if (eintrag.beschreibung) beschreibungsTeile.push(eintrag.beschreibung);
+        descEl.value = beschreibungsTeile.join(' – ') || eintrag.neben || '';
     }
     if (nameEl) nameEl.focus();
 }

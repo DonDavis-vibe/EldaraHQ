@@ -117,6 +117,7 @@ function renderAll() {
 
     renderWeapons();
     renderStatuses();
+    if (typeof renderAktuelleWerte === 'function') renderAktuelleWerte();
     renderActivityLog();
     // Mein Logbuch (spielerlog.js) - eigenes Tagebuch des Spielers
     if (typeof renderSpielerlog === 'function') renderSpielerlog();

@@ -32,7 +32,20 @@ def liste(eintraege):
         if isinstance(e, str):
             out.append({'haupt': e})
         elif isinstance(e, dict):
-            if 'name' in e and 'beschreibung' in e:
+            if 'name' in e and 'kategorie' in e and ('wirkung' in e or 'beschreibung' in e):
+                # Magische Gegenstände (gegenstaende_magisch): neben bleibt
+                # bewusst die Kategorie (steuert z.B. die automatische
+                # Ausrüstungsplatz-Zuordnung im Item-Katalog, siehe
+                # IR_KATALOG_KATEGORIE_SLOT in inventarraster.js/tischmitte.js)
+                # - wirkung/beschreibung reisen zusätzlich mit, für den
+                # vollen Regelwerk-Text statt nur der Kategorie als "neben".
+                eintrag = {'haupt': e['name'], 'neben': e['kategorie']}
+                if e.get('wirkung'):
+                    eintrag['wirkung'] = e['wirkung']
+                if e.get('beschreibung'):
+                    eintrag['beschreibung'] = e['beschreibung']
+                out.append(eintrag)
+            elif 'name' in e and 'beschreibung' in e:
                 out.append({'haupt': e['name'], 'neben': e['beschreibung']})
             elif 'name' in e and 'kategorie' in e:
                 out.append({'haupt': e['name'], 'neben': e['kategorie']})

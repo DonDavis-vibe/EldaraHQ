@@ -187,10 +187,19 @@ function irKatalogAuswaehlen(wert) {
         if (istWaffeEl) { istWaffeEl.checked = true; istWaffeEl.dispatchEvent(new Event('change')); }
         if (schadenEl) schadenEl.value = eintrag.neben || '';
     } else if (gruppenKey === 'gegenstaende_magisch') {
+        // wirkung/beschreibung kommen aus dem Regelwerk (RW4.3, siehe
+        // randomizer/quellen/eldora_de.json) - bei Waffen-Kategorien ist
+        // "wirkung" der Schaden (z.B. "5w10"), der gehört ins Schaden-Feld
+        // statt in die Beschreibung, dort steht dann nur noch der Fließtext.
         const kategorie = eintrag.neben || '';
-        if (descEl) descEl.value = kategorie;
-        if (IR_KATALOG_KATEGORIE_WAFFE.has(kategorie)) {
+        const istWaffenKategorie = IR_KATALOG_KATEGORIE_WAFFE.has(kategorie);
+        const beschreibungsTeile = [];
+        if (eintrag.wirkung && !istWaffenKategorie) beschreibungsTeile.push(eintrag.wirkung);
+        if (eintrag.beschreibung) beschreibungsTeile.push(eintrag.beschreibung);
+        if (descEl) descEl.value = beschreibungsTeile.join(' – ') || kategorie;
+        if (istWaffenKategorie) {
             if (istWaffeEl) { istWaffeEl.checked = true; istWaffeEl.dispatchEvent(new Event('change')); }
+            if (schadenEl) schadenEl.value = eintrag.wirkung || '';
         } else if (IR_KATALOG_KATEGORIE_SLOT[kategorie] && ausrEl) {
             ausrEl.value = IR_KATALOG_KATEGORIE_SLOT[kategorie];
             ausrEl.dispatchEvent(new Event('change'));

@@ -289,6 +289,25 @@
 
             </div>
             </details>
+
+            <!-- Aktuelle Werte: freie Tag-Liste für Sachen, die sich durch Items/
+                 Ausrüstung/Zauber gerade ändern (Waffenschaden, Bewegung, Rüstung,
+                 Fertigkeiten, Attributwerte) - der Spieler trägt das selbst ein und
+                 hält es aktuell, statt es sich jedes Mal neu zusammenzurechnen.
+                 Gleiche Optik wie Status-Effekte, siehe aktuelleWerte.js. -->
+            <details class="x-details" id="aktuelle-werte-details">
+                <summary class="tb-kopf"><h2 class="cat-title" style="margin:0"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-gauge-high category-icon-fa"></i> Aktuelle Werte <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('aktuelleWerte')" title="Hilfe zu Aktuelle Werte"></i></h2></summary>
+                <div class="status-tags" id="aktuelle-werte-container" style="justify-content: flex-start; margin-bottom: 0.5rem;">
+                    <!-- Populated by JS -->
+                </div>
+                <div class="add-status-row" style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                    <input type="text" id="new-aktueller-wert-name" placeholder="Bezeichnung (z.B. Waffenschaden Entermesser)" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: white; padding: 0.2rem 0.5rem; outline: none; font-size: 0.85rem; width: 220px;" onkeydown="if(event.key==='Enter') document.getElementById('new-aktueller-wert-val').focus()">
+                    <input type="text" id="new-aktueller-wert-val" placeholder="Wert (z.B. 1w6+2)" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: white; padding: 0.2rem 0.5rem; outline: none; font-size: 0.85rem; width: 130px;" onkeydown="if(event.key==='Enter') addAktuellerWert()">
+                    <button onclick="addAktuellerWert()" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; color: white; cursor: pointer; padding: 0.2rem 0.5rem; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'"><i class="fa-solid fa-plus"></i> Hinzufügen</button>
+                </div>
+                <p class="ir-hint">Frei für alles, was sich gerade durch Ausrüstung/Zauber/Effekte ändert - z.B. Waffenschaden, Bewegung, Rüstung, Fertigkeiten oder Attributwerte. Einmal eintragen, bei Änderungen einfach den Wert anpassen (Klick auf die Zahl im Tag).</p>
+            </details>
+
             <!-- Talentbaum (nur sichtbar, wenn ein Regelpaket mit Talentbaum aktiv ist - talentbaum.js) -->
             <div id="talentbaum-section" class="talentbaum-section" style="display: none;"></div>
 
@@ -493,6 +512,7 @@
     <script src="audio.js"></script>
     <script src="multiplayer.js"></script>
     <script src="app.js"></script>
+    <script src="aktuelleWerte.js"></script>
     <script src="hausregeln.js"></script>
     <script src="talentbaum.js"></script>
     <script src="tischmitte.js"></script>
