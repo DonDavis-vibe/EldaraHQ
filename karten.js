@@ -516,6 +516,15 @@ function karteNscBilderAnVerbindung(conn) {
 // (dieselbe Nachricht, andere Figuren-ID-Namensräume, siehe seekampf.js).
 function karteAnfrageVerarbeiten(peerId, payload) {
     if (!payload || typeof payload !== 'object') return false;
+    // Spieler-Knopf "Karte aktualisieren" (karteAktualisierenAnfordern) - schickt
+    // ihm den aktuellen Stand (samt NSC-Porträts) exakt so nach, wie ein frisch
+    // beitretender Spieler ihn bekäme (siehe karteAnVerbindung), ohne dass er
+    // dafür die ganze Seite neu laden muss.
+    if (payload.type === 'karteRefreshAnfrage') {
+        const conn = typeof clientConnections !== 'undefined' ? clientConnections[peerId] : null;
+        if (conn) karteAnVerbindung(conn);
+        return true;
+    }
     if (payload.type !== 'karteZugVorschlag') return false;
     if (!karteMap || payload.karteId !== karteAktivId) return false;
     const eigeneId = 'spieler:' + peerId;
@@ -523,6 +532,27 @@ function karteAnfrageVerarbeiten(peerId, payload) {
     karteMap.addFigur({ id: eigeneId, geplantX: payload.x, geplantY: payload.y });
     renderKarteGm();
     return true;
+}
+
+// --- Spieler: Karte manuell aktualisieren ------------------------------------
+//
+// Fängt genau den Fall ab, den man bisher nur mit einem kompletten Seiten-
+// Reload lösen konnte: die eigene Karte wirkt "hängen geblieben" (z.B. nach
+// einem kurzen Verbindungsaussetzer). Fragt beim SL exakt denselben Stand an,
+// den ein frisch beitretender Spieler bekäme - ohne Reload, ohne die eigene
+// Sitzung sonst anzufassen.
+function karteAktualisierenAnfordern(knopf) {
+    if (typeof hostConnection === 'undefined' || !hostConnection || !hostConnection.open) return;
+    try { hostConnection.send({ type: 'karteRefreshAnfrage' }); } catch (e) { /* weg */ }
+    // Kurzes Feedback direkt am Knopf (dreht sich einmal), statt eine eigene
+    // Hinweis-Zeile fürs Panel zu bauen - reicht für "ja, Anfrage ist raus".
+    if (knopf) {
+        const icon = knopf.querySelector('i');
+        if (icon) {
+            icon.classList.add('fa-spin');
+            setTimeout(() => icon.classList.remove('fa-spin'), 800);
+        }
+    }
 }
 
 // --- GM-Oberfläche --------------------------------------------------------------
@@ -756,8 +786,10 @@ function karteVollbildWerkzeugleisteHtml(rolle) {
         <span class="sk-kt-trenner"></span>
         <button class="tool-btn" data-ktvwerkzeug="nebel-auf"><i class="fa-solid fa-cloud"></i> Nebel aufdecken</button>
         <button class="tool-btn" data-ktvwerkzeug="nebel-zu"><i class="fa-solid fa-cloud-sun"></i> Nebel abdecken</button>`;
+    const nurSpieler = `
+        <button class="tool-btn" onclick="karteAktualisierenAnfordern(this)" title="Aktuellen Stand vom Spielleiter neu abrufen, falls die Karte hängen geblieben wirkt"><i class="fa-solid fa-rotate"></i> Aktualisieren</button>`;
     const mapVar = rolle === 'gm' ? 'karteMap' : 'karteSpielerMap';
-    return gemeinsam + (rolle === 'gm' ? nurGm : '') +
+    return gemeinsam + (rolle === 'gm' ? nurGm : nurSpieler) +
         `<span class="sk-kt-trenner"></span>
         <button class="tool-btn" onclick="${mapVar} && ${mapVar}.einpassen()"><i class="fa-solid fa-expand"></i> Einpassen</button>
         <button class="tool-btn karte-vollbild-schliessen" onclick="karteVollbildSchliessen()"><i class="fa-solid fa-xmark"></i> Schließen (Esc)</button>`;
@@ -895,6 +927,7 @@ function renderKarteSpieler() {
                     <button class="tool-btn" data-ktspielerwerkzeug="zeigen"><i class="fa-solid fa-arrow-pointer"></i> Zeigen</button>
                     <button class="tool-btn" data-ktspielerwerkzeug="messen"><i class="fa-solid fa-ruler"></i> Messen</button>
                     <button class="tool-btn" onclick="karteVollbildOeffnen('spieler')" title="Karte großformatig anzeigen"><i class="fa-solid fa-up-right-and-down-left-from-center"></i> Vollbild</button>
+                    <button class="tool-btn" onclick="karteAktualisierenAnfordern(this)" title="Aktuellen Stand vom Spielleiter neu abrufen, falls die Karte hängen geblieben wirkt - ohne die Seite neu zu laden"><i class="fa-solid fa-rotate"></i> Aktualisieren</button>
                 </div>
                 <div id="kt-spieler-canvas-heim"><canvas id="kt-spieler-canvas" class="sk-canvas"></canvas></div>
                 <p class="ir-hint">Dein Zug erscheint beim Spielleiter erst als Vorschlag, den er bestätigt oder verwirft - außer er hat freie Bewegung erlaubt.</p>
