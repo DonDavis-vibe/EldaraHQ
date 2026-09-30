@@ -416,6 +416,8 @@ function handleIncomingData(peerId, payload) {
     if (typeof skAnfrageVerarbeiten === 'function' && skAnfrageVerarbeiten(peerId, payload)) return;
     // Karte (karten.js): Zugvorschlag für die eigene Spieler-Figur
     if (typeof karteAnfrageVerarbeiten === 'function' && karteAnfrageVerarbeiten(peerId, payload)) return;
+    // Runenmagie (runenmagie.js): Schmiede-Roulette-Ergebnis wartet auf SL-Bestätigung
+    if (typeof runenAnfrageVerarbeiten === 'function' && runenAnfrageVerarbeiten(peerId, payload)) return;
     if (payload.type === 'state') {
         const neuerSpieler = !connectedPlayersData[peerId];
         connectedPlayersData[peerId] = payload.data;
@@ -1041,6 +1043,8 @@ function joinMultiplayerSession(codeArg) {
                 // erledigt in seekampf.js
             } else if (payload && typeof karteNachrichtVerarbeiten === 'function' && karteNachrichtVerarbeiten(payload)) {
                 // erledigt in karten.js
+            } else if (payload && typeof runenNachrichtVerarbeiten === 'function' && runenNachrichtVerarbeiten(payload)) {
+                // erledigt in runenmagie.js
             } else if (payload && typeof kampfNachrichtVerarbeiten === 'function' && kampfNachrichtVerarbeiten(payload)) {
                 // erledigt in kampf.js
             } else if (payload && payload.type === 'customSound') {

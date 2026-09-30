@@ -337,6 +337,31 @@ Zusatztasche).
 
 ---
 
+## 12. RW 5.1: Heimlich-Hauptbaum in „defensiv"/„offensiv" gesplittet — UMGESETZT
+
+Der RW-5.1-Anhang (S.43 „Heimlichkeit defensiv", S.45 „Heimlichkeit
+offensiv") listet zwei eigenständige 14-Skill-Bäume statt des bisherigen
+einen gemeinsamen „Heimlich"-Hauptbaums - abweichend von RW 4.3, das nur
+einen Baum kannte (siehe Frage 1 oben, war Teil der ursprünglich offenen
+Baum-Talent-Zuordnung).
+
+**SL bestätigt (2026-09-30):** echter Split, keine bloße Seiten-Gliederung im
+PDF. Spieler mit bereits investierten Punkten im alten „Heimlich" verteilen
+ihre Punkte neu auf die beiden neuen Bäume.
+
+**Umgesetzt:** `hausregeln/konvertiere-eldora.py` - `HAUPTBAEUME` ersetzt
+„Heimlich" durch „Heimlichkeit defensiv"/„Heimlichkeit offensiv", beide in
+`BAUM_TALENT` weiterhin auf das eine Basis-Talent „Heimlich" gemappt (RW 5.1
+führt dafür kein neues Basis-Talent ein). Die `AST_SCHREIBWEISE_RW43`-
+Normalisierung „Heimlichkeit"→„Heimlich" ist entfallen. In
+`eldora-arrrrr.roh.json` sind die alten 14 Skills unter dem Ast
+„Heimlichkeit" (eine RW5.1-inkonsistente Mischung aus beiden Konzepten)
+durch die zwei neuen, aus dem Anhang transkribierten 14-Skill-Sets ersetzt.
+`eldora-arrrrr.js` neu generiert, live getestet: beide Bäume erscheinen im
+Hauptbaum-Dropdown, rendern ihre jeweils korrekten Skills.
+
+---
+
 *Nach der Klärung: Antworten in dieses Dokument eintragen oder mir schicken,
 dann ziehe ich `hausregeln/konvertiere-eldora.py` und `talentbaum.js`
 entsprechend nach.*

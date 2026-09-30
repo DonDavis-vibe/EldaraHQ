@@ -279,7 +279,8 @@ hausregelPaketRegistrieren({
    "Voodoo Ritualklinge",
    "Voodoo Fluchspucker",
    "Einschüchtern",
-   "Heimlich",
+   "Heimlichkeit defensiv",
+   "Heimlichkeit offensiv",
    "Medizin",
    "Motivieren"
   ],
@@ -292,7 +293,8 @@ hausregelPaketRegistrieren({
    "Voodoo Ritualklinge": "Voodoo",
    "Voodoo Fluchspucker": "Voodoo",
    "Einschüchtern": "Einschüchtern",
-   "Heimlich": "Heimlich",
+   "Heimlichkeit defensiv": "Heimlich",
+   "Heimlichkeit offensiv": "Heimlich",
    "Medizin": "Medizin",
    "Motivieren": "Motivieren"
   },
@@ -307,28 +309,42 @@ hausregelPaketRegistrieren({
    "Seher der Tiefsee",
    "Sturmwüter",
    "Tiefseepirat",
-   "Wellenringer"
+   "Wellenringer",
+   "Mensch"
   ],
   "weitereAeste": [
    "Abgrund Jäger",
    "Blutmagier",
    "Brandstifter der See",
    "Divinus Chimäre",
+   "Drache",
+   "Druide",
+   "Dämon",
    "Echsenmensch",
    "Eismeister der See",
+   "Elben",
+   "Engel",
    "Geist",
+   "Gott/ Halbgott",
    "Guhl",
-   "Magie",
+   "Hexe / Hexer",
+   "Naga",
    "OrcraLord",
+   "Priester / Mönch",
+   "Rattenmensch",
    "Schattenskellet",
    "Seelenrufer",
    "Sirene",
+   "Spinnenmensch",
    "Steintroll",
    "Sturmrufer",
+   "Tiermensch",
    "Traumaturge",
+   "Vampir",
    "Wertitan",
-   "Willenskraft",
-   "Zombie"
+   "Werwolf",
+   "Zombie",
+   "Zwerg"
   ],
   "skills": [
    {
@@ -652,37 +668,6 @@ hausregelPaketRegistrieren({
     ]
    },
    {
-    "name": "Klon",
-    "ast": "Magie",
-    "art": "aktiv",
-    "schadenTyp": "physisch",
-    "rang": 3,
-    "info": "Effekt: Erschafft 1/2/2 Klone für 2/2/3 Runden mit 50/75/100% deiner Lebenspunkte (LP). Klone machen 4/5/6W10 Schaden und können keine Skills nutzen.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "1 Ziel (SE)",
-      "schaden": "4W10",
-      "schadenArt": "Klon-Schaden",
-      "effekt": "1 Klon für 2 Runden. Klon hat 50% LP. Kann keine Skills nutzen"
-     },
-     {
-      "level": 2,
-      "reichweite": "1 Ziel (SE)",
-      "schaden": "5W10",
-      "schadenArt": "Klon-Schaden",
-      "effekt": "2 Klone für 2 Runden. Klone haben 75% LP. Können keine Skills nutzen"
-     },
-     {
-      "level": 3,
-      "reichweite": "1 Ziel (SE)",
-      "schaden": "6W10",
-      "schadenArt": "Klon-Schaden",
-      "effekt": "2 Klone für 3 Runden. Klone haben 100% LP. Können keine Skills nutzen"
-     }
-    ]
-   },
-   {
     "name": "Lichtgeschwindigkeit",
     "ast": "Agilität",
     "art": "aktiv",
@@ -704,31 +689,6 @@ hausregelPaketRegistrieren({
       "level": 3,
       "reichweite": "Selbst",
       "effekt": "Erlaubt das Aneinanderreihen von 4 Fähigkeiten auf Stufe 3"
-     }
-    ]
-   },
-   {
-    "name": "Zweite Dimension",
-    "ast": "Willenskraft",
-    "art": "passiv",
-    "schadenTyp": "keiner",
-    "rang": 4,
-    "info": "Effekt: Gewährt dauerhaft +10/15/20 magische Rüstung (RÜ).",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "Selbst",
-      "effekt": "+10 magische Rüstung (RÜ)"
-     },
-     {
-      "level": 2,
-      "reichweite": "Selbst",
-      "effekt": "+15 magische Rüstung (RÜ)"
-     },
-     {
-      "level": 3,
-      "reichweite": "Selbst",
-      "effekt": "+20 magische Rüstung (RÜ)"
      }
     ]
    },
@@ -1512,389 +1472,6 @@ hausregelPaketRegistrieren({
       "schaden": "plus 4W10",
       "schadenArt": "physisch",
       "effekt": "Erhöht permanent den Fernkampfschaden"
-     }
-    ]
-   },
-   {
-    "name": "Berauben",
-    "ast": "Heimlich",
-    "art": "aktiv",
-    "schadenTyp": "physisch",
-    "rang": 1,
-    "info": "Schaden physisch plus 1 oder 2 oder 3W10 im Nahkampf. Hat 5 oder 10 oder 15 rüstungsbrechend. Gewährt plus 2 oder 4 oder 6W10 Gold bei einer Verwundung.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "Nahkampf",
-      "schaden": "1W10",
-      "schadenArt": "physisch",
-      "effekt": "5 rüstungsbrechend und plus 2W10 Gold bei Verwundung"
-     },
-     {
-      "level": 2,
-      "reichweite": "Nahkampf",
-      "schaden": "2W10",
-      "schadenArt": "physisch",
-      "effekt": "10 rüstungsbrechend und plus 4W10 Gold bei Verwundung"
-     },
-     {
-      "level": 3,
-      "reichweite": "Nahkampf",
-      "schaden": "3W10",
-      "schadenArt": "physisch",
-      "effekt": "15 rüstungsbrechend und plus 6W10 Gold bei Verwundung"
-     }
-    ]
-   },
-   {
-    "name": "Flinke Füße",
-    "ast": "Heimlich",
-    "art": "passiv",
-    "schadenTyp": "keiner",
-    "rang": 1,
-    "info": "Deine Bewegung erhöht sich permanent um plus 1 oder 2 oder 3 Meter Bewegungsweite.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "selbst",
-      "effekt": "plus 1 Meter Bewegungsweite permanent"
-     },
-     {
-      "level": 2,
-      "reichweite": "selbst",
-      "effekt": "plus 2 Meter Bewegungsweite permanent"
-     },
-     {
-      "level": 3,
-      "reichweite": "selbst",
-      "effekt": "plus 3 Meter Bewegungsweite permanent"
-     }
-    ]
-   },
-   {
-    "name": "Giftmischer",
-    "ast": "Heimlich",
-    "art": "extra",
-    "schadenTyp": "magisch",
-    "rang": 1,
-    "info": "Macht Schaden magisch auf ein einzelnes Ziel. Die nächsten 1 oder 2 or 3 Nahkampfangriffe und Fernkampfangriffe verursachen für 1 oder 2 oder 3 Runden Gift mit Giftstufe 1 oder 2 oder 3.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "einzelnes Ziel",
-      "schadenArt": "magisch",
-      "effekt": "1 Angriff verursacht Giftstufe 1 für 1 Runde"
-     },
-     {
-      "level": 2,
-      "reichweite": "einzelnes Ziel",
-      "schadenArt": "magisch",
-      "effekt": "2 Angriffe verursachen Giftstufe 2 für 2 Runden"
-     },
-     {
-      "level": 3,
-      "reichweite": "einzelnes Ziel",
-      "schadenArt": "magisch",
-      "effekt": "3 Angriffe verursachen Giftstufe 3 für 3 Runden"
-     }
-    ]
-   },
-   {
-    "name": "Schlitzer",
-    "ast": "Heimlich",
-    "art": "aktiv",
-    "schadenTyp": "physisch",
-    "rang": 1,
-    "info": "Schaden physisch im Nahkampf. Fügt einem Gegner Nahkampfschaden und plus 1 oder 2 oder 3 Blutungen zu.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "Nahkampf",
-      "schaden": "wie Waffe",
-      "schadenArt": "physisch",
-      "effekt": "Verursacht plus 1 Blutung"
-     },
-     {
-      "level": 2,
-      "reichweite": "Nahkampf",
-      "schaden": "wie Waffe",
-      "schadenArt": "physisch",
-      "effekt": "Verursacht plus 2 Blutungen"
-     },
-     {
-      "level": 3,
-      "reichweite": "Nahkampf",
-      "schaden": "wie Waffe",
-      "schadenArt": "physisch",
-      "effekt": "Verursacht plus 3 Blutungen"
-     }
-    ]
-   },
-   {
-    "name": "Ich bin dann mal weg",
-    "ast": "Heimlich",
-    "art": "aktiv",
-    "schadenTyp": "keiner",
-    "rang": 1,
-    "info": "Du wirst für 1 oder 2 oder 3 Runden unsichtbar. Bricht bei Schaden, Angriff oder Aktion ab.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "selbst",
-      "effekt": "Wirst für 1 Runde unsichtbar. Bricht bei Schaden, Angriff oder Aktion ab"
-     },
-     {
-      "level": 2,
-      "reichweite": "selbst",
-      "effekt": "Wirst für 2 Runden unsichtbar. Bricht bei Schaden, Angriff oder Aktion ab"
-     },
-     {
-      "level": 3,
-      "reichweite": "selbst",
-      "effekt": "Wirst für 3 Runden unsichtbar. Bricht bei Schaden, Angriff oder Aktion ab"
-     }
-    ]
-   },
-   {
-    "name": "Trugbild",
-    "ast": "Heimlich",
-    "art": "aktiv",
-    "schadenTyp": "keiner",
-    "rang": 2,
-    "info": "Du wirst unsichtbar für 1 oder 1 oder 2 Runden und lässt ein Spiegelbild an deiner Position, das deine Feinde zu 30 oder 60 oder 90 Prozent für eine Runde angreifen. Wenn du angreifst oder ähnliches tust wirst du sichtbar.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "einzelnes Ziel",
-      "effekt": "1 Runde unsichtbar. Spiegelbild wird zu 30 Prozent für eine Runde angegriffen"
-     },
-     {
-      "level": 2,
-      "reichweite": "einzelnes Ziel",
-      "effekt": "1 Runde unsichtbar. Spiegelbild wird zu 60 Prozent für eine Runde angegriffen"
-     },
-     {
-      "level": 3,
-      "reichweite": "einzelnes Ziel",
-      "effekt": "2 Runden unsichtbar. Spiegelbild wird zu 90 Prozent für eine Runde angegriffen"
-     }
-    ]
-   },
-   {
-    "name": "Dunkle Rüstung",
-    "ast": "Heimlich",
-    "art": "extra",
-    "schadenTyp": "keiner",
-    "rang": 2,
-    "info": "Du hast für 1 oder 2 oder 3 Runden lang eine magische Rüstung von plus 10 oder 15 oder 20 auf ein einzelnes Ziel. Du bist um 10 oder 20 oder 30 weniger gut zu erkennen.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "einzelnes Ziel",
-      "effekt": "Hält 1 Runde. plus 10 Rüstung und du bist um 10 weniger gut zu erkennen"
-     },
-     {
-      "level": 2,
-      "reichweite": "einzelnes Ziel",
-      "effekt": "Hält 2 Runden. plus 15 Rüstung und du bist um 20 weniger gut zu erkennen"
-     },
-     {
-      "level": 3,
-      "reichweite": "einzelnes Ziel",
-      "effekt": "Hält 3 Runden. plus 20 Rüstung und du bist um 30 weniger gut zu erkennen"
-     }
-    ]
-   },
-   {
-    "name": "Ablenken",
-    "ast": "Heimlich",
-    "art": "aktiv",
-    "schadenTyp": "keiner",
-    "rang": 2,
-    "info": "Gegner im Umkreis laufen zu 30 oder 60 oder 90 Prozent für 1 oder 1 oder 2 Runden auf dich zu und greifen an. Gewährt plus 10 oder 15 oder 20 magische Rüstung für diese Zeit.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "3 Meter Umkreis",
-      "effekt": "Zu 30 Prozent laufen Gegner für 1 Runde auf dich zu. plus 10 magische Rüstung"
-     },
-     {
-      "level": 2,
-      "reichweite": "7 Meter Umkreis",
-      "effekt": "Zu 60 Prozent laufen Gegner für 1 Runde auf dich zu. plus 15 magische Rüstung"
-     },
-     {
-      "level": 3,
-      "reichweite": "10 Meter Umkreis",
-      "effekt": "Zu 90 Prozent laufen Gegner für 2 Runden auf dich zu. plus 20 magische Rüstung"
-     }
-    ]
-   },
-   {
-    "name": "Ruckzuckhieb",
-    "ast": "Heimlich",
-    "art": "aktiv",
-    "schadenTyp": "physisch",
-    "rang": 2,
-    "info": "Schaden physisch plus 3 oder 4 oder 5W10. Du springst auf eine Distanz von 2 oder 4 oder 6 Meter zum Gegner, fügst Schaden zu und kannst dann zurückspringen.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "2 Meter",
-      "schaden": "3W10",
-      "schadenArt": "physisch",
-      "effekt": "Springt zum Gegner und erlaubt anschließenden Rücksprung"
-     },
-     {
-      "level": 2,
-      "reichweite": "4 Meter",
-      "schaden": "4W10",
-      "schadenArt": "physisch",
-      "effekt": "Springt zum Gegner und erlaubt anschließenden Rücksprung"
-     },
-     {
-      "level": 3,
-      "reichweite": "6 Meter",
-      "schaden": "5W10",
-      "schadenArt": "physisch",
-      "effekt": "Springt zum Gegner und erlaubt anschließenden Rücksprung"
-     }
-    ]
-   },
-   {
-    "name": "Angriff aus dem Dunkeln",
-    "ast": "Heimlich",
-    "art": "aktiv",
-    "schadenTyp": "physisch",
-    "rang": 3,
-    "info": "Schaden physisch plus 3 oder 4 oder 5W10 im Nahkampf oder Fernkampf. Verursacht plus 1 oder 1 oder 2 Blutungen. Nur nutzbar wenn du versteckt bist. Du bleibst zu 25 oder 50 oder 75 Prozent unentdeckt.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "Nahkampf und Fernkampf",
-      "schaden": "3W10",
-      "schadenArt": "physisch",
-      "effekt": "plus 1 Blutung. Du bleibst zu 25 Prozent unentdeckt"
-     },
-     {
-      "level": 2,
-      "reichweite": "Nahkampf und Fernkampf",
-      "schaden": "4W10",
-      "schadenArt": "physisch",
-      "effekt": "plus 1 Blutung. Du bleibst zu 50 Prozent unentdeckt"
-     },
-     {
-      "level": 3,
-      "reichweite": "Nahkampf und Fernkampf",
-      "schaden": "5W10",
-      "schadenArt": "physisch",
-      "effekt": "plus 2 Blutungen. Du bleibst zu 75 Prozent unentdeckt"
-     }
-    ]
-   },
-   {
-    "name": "Meuchelmörder",
-    "ast": "Heimlich",
-    "art": "extra",
-    "schadenTyp": "magisch",
-    "rang": 3,
-    "info": "Schaden magisch plus 2 oder 3 oder 4W10 im Nahkampf oder Fernkampf. Verursacht Giftstufe 2 oder 3 oder 4 für 1 oder 2 oder 3 Runden. Die Giftstufe ist eine Stufe höher, wenn das Ziel blutet.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "Nahkampf und Fernkampf",
-      "schaden": "2W10",
-      "schadenArt": "magisch",
-      "effekt": "Giftstufe 2 für 1 Runde. Eine Giftstufe höher wenn das Ziel blutet"
-     },
-     {
-      "level": 2,
-      "reichweite": "Nahkampf und Fernkampf",
-      "schaden": "3W10",
-      "schadenArt": "magisch",
-      "effekt": "Giftstufe 3 für 2 Runden. Eine Giftstufe höher wenn das Ziel blutet"
-     },
-     {
-      "level": 3,
-      "reichweite": "Nahkampf und Fernkampf",
-      "schaden": "4W10",
-      "schadenArt": "magisch",
-      "effekt": "Giftstufe 4 für 3 Runden. Eine Giftstufe höher wenn das Ziel blutet"
-     }
-    ]
-   },
-   {
-    "name": "Schattenschritt",
-    "ast": "Heimlich",
-    "art": "aktiv",
-    "schadenTyp": "keiner",
-    "rang": 3,
-    "info": "Du löst dich in Rauch auf und materialisierst dich wieder auf eine Distanz von 5 oder 10 oder 20 Meter. Du bleibst zu 25 oder 50 oder 75 Prozent heimlich unentdeckt.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "5 Meter",
-      "effekt": "Du bleibst zu 25 Prozent heimlich unentdeckt"
-     },
-     {
-      "level": 2,
-      "reichweite": "10 Meter",
-      "effekt": "Du bleibst zu 50 Prozent heimlich unentdeckt"
-     },
-     {
-      "level": 3,
-      "reichweite": "20 Meter",
-      "effekt": "Du bleibst zu 75 Prozent heimlich unentdeckt"
-     }
-    ]
-   },
-   {
-    "name": "Seelenpakt",
-    "ast": "Heimlich",
-    "art": "extra",
-    "schadenTyp": "keiner",
-    "rang": 4,
-    "info": "Kostet sofort 50 Prozent deiner Lebenspunkte auf ein einzelnes Ziel. Deine Fähigkeiten machen für 1 oder 2 oder 3 Runden den doppelten Effekt bei Schaden, Heilung, Blutung, Gift und Feuermarker.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "einzelnes Ziel",
-      "effekt": "Verliere 50 Prozent Lebenspunkte. Doppelter Effekt für 1 Runde"
-     },
-     {
-      "level": 2,
-      "reichweite": "einzelnes Ziel",
-      "effekt": "Verliere 50 Prozent Lebenspunkte. Doppelter Effekt für 2 Runden"
-     },
-     {
-      "level": 3,
-      "reichweite": "einzelnes Ziel",
-      "effekt": "Verliere 50 Prozent Lebenspunkte. Doppelter Effekt für 3 Runden"
-     }
-    ]
-   },
-   {
-    "name": "Zweite Dimension",
-    "ast": "Heimlich",
-    "art": "passiv",
-    "schadenTyp": "keiner",
-    "rang": 4,
-    "info": "Gewährt dauerhaft plus 10 oder 15 oder 20 magische Rüstung.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "selbst",
-      "effekt": "plus 10 magische Rüstung"
-     },
-     {
-      "level": 2,
-      "reichweite": "selbst",
-      "effekt": "plus 15 magische Rüstung"
-     },
-     {
-      "level": 3,
-      "reichweite": "selbst",
-      "effekt": "plus 20 magische Rüstung"
      }
     ]
    },
@@ -16811,6 +16388,8411 @@ hausregelPaketRegistrieren({
       "effekt": "15 rüstungsbrechend. minus 5 Nahkampf pro Folgeantriff. Bei Ende: 1W4 Runden Schlaf. plus 1W4 Schaden wenn das Ziel blutet"
      }
     ]
+   },
+   {
+    "name": "Befreiender Schlag",
+    "ast": "Mensch",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 1,
+    "info": "Mache Schaden und entferne 1/2/3 Debuffs. +1W10 Schaden pro entfernten Debuff.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "2W10",
+      "schadenArt": "physisch",
+      "effekt": "-1 Debuff, +1W10 pro entferntem Debuff"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "3W10",
+      "schadenArt": "physisch",
+      "effekt": "-2 Debuffs, +1W10 pro entferntem Debuff"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "4W10",
+      "schadenArt": "physisch",
+      "effekt": "-3 Debuffs, +1W10 pro entferntem Debuff"
+     }
+    ]
+   },
+   {
+    "name": "Fliegender Bulle",
+    "ast": "Mensch",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Dein Schlafwurf wird für den Angreifer erschwert; du erhältst zusätzlich Willenskraft.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "Schlafwurf gegen dich um 10% erschwert, +Willenskraft"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "Schlafwurf gegen dich um 20% erschwert, +Willenskraft"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "Schlafwurf gegen dich um 30% erschwert, +Willenskraft"
+     }
+    ]
+   },
+   {
+    "name": "Flinke Füße",
+    "ast": "Mensch",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Deine Bewegung erhöht sich permanent.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "movement"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "movement"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "movement"
+     }
+    ]
+   },
+   {
+    "name": "Raus da!",
+    "ast": "Mensch",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Bewege sofort einen Verbündeten, ohne dass er eigene Bewegung verbraucht.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "effekt": "+2m Bewegung für den Verbündeten, kostenlos"
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "effekt": "+4m Bewegung für den Verbündeten, kostenlos"
+     },
+     {
+      "level": 3,
+      "reichweite": "15m",
+      "effekt": "+6m Bewegung für den Verbündeten, kostenlos"
+     }
+    ]
+   },
+   {
+    "name": "Verarzten",
+    "ast": "Mensch",
+    "art": "aktiv",
+    "schadenTyp": "heilung",
+    "rang": 1,
+    "info": "Heilt Ziel, entfernt alle Blutungen und Feuermarker.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf / Selbst",
+      "schaden": "HL 3W10",
+      "schadenArt": "heilung",
+      "effekt": "Entfernt alle Blutungen und Feuermarker"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf / Selbst",
+      "schaden": "HL 4W10",
+      "schadenArt": "heilung",
+      "effekt": "Entfernt alle Blutungen und Feuermarker"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf / Selbst",
+      "schaden": "HL 5W10",
+      "schadenArt": "heilung",
+      "effekt": "Entfernt alle Blutungen und Feuermarker"
+     }
+    ]
+   },
+   {
+    "name": "Ansporn",
+    "ast": "Mensch",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Alle Verbündeten im Umkreis bekommen für 1/2/3 Runden einen Bonus auf Handeln und Bewegung (nicht stapelbar).",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m Umkreis",
+      "effekt": "+10 Handeln, +1m Bewegung, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m Umkreis",
+      "effekt": "+15 Handeln, +2m Bewegung, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "6m Umkreis",
+      "effekt": "+20 Handeln, +3m Bewegung, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Dazwischenwerfen",
+    "ast": "Mensch",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Wird ein Verbündeter getroffen, bewegst du dich zu ihm und erleidest den Treffer an seiner Stelle.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "effekt": "Treffer übernehmen"
+     },
+     {
+      "level": 2,
+      "reichweite": "5m",
+      "effekt": "Treffer übernehmen"
+     },
+     {
+      "level": 3,
+      "reichweite": "7m",
+      "effekt": "Treffer übernehmen"
+     }
+    ]
+   },
+   {
+    "name": "Eiserner Wille",
+    "ast": "Mensch",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Für 1/2/3 Runden Bonus auf Widerstandswürfe gegen Stun und Schlaf.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Selbst",
+      "effekt": "+10 Widerstand, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "Selbst",
+      "effekt": "+20 Widerstand, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "Selbst",
+      "effekt": "+30 Widerstand, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Entwaffnen",
+    "ast": "Mensch",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Führe einen Nahkampfangriff mit Malus aus. Bei Verwundung lässt das Ziel einen Gegenstand oder eine Waffe deiner Wahl fallen.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "NK -15",
+      "schadenArt": "physisch",
+      "effekt": "Gegenstand fliegt 1W4m"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "NK -10",
+      "schadenArt": "physisch",
+      "effekt": "Gegenstand fliegt 1W4m"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "NK -5",
+      "schadenArt": "physisch",
+      "effekt": "Gegenstand fliegt 2W4m"
+     }
+    ]
+   },
+   {
+    "name": "Befehl des Kapitäns",
+    "ast": "Mensch",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 3,
+    "info": "2/3/4 Verbündete dürfen sofort eine A- oder B-Aktion durchführen.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "effekt": "2 Verbündete erhalten Sofortaktion"
+     },
+     {
+      "level": 2,
+      "reichweite": "7m",
+      "effekt": "3 Verbündete erhalten Sofortaktion"
+     },
+     {
+      "level": 3,
+      "reichweite": "10m",
+      "effekt": "4 Verbündete erhalten Sofortaktion"
+     }
+    ]
+   },
+   {
+    "name": "Ersthelfer",
+    "ast": "Mensch",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 3,
+    "info": "1/2/3× pro Kampf: Fällt ein Verbündeter in Reichweite auf 10 LP oder weniger, darfst du sofort eine Heilfähigkeit auf ihn einsetzen, obwohl nicht deine Runde ist.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "effekt": "1× pro Kampf, Heilungsreaktion"
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "effekt": "2× pro Kampf, Heilungsreaktion"
+     },
+     {
+      "level": 3,
+      "reichweite": "10m",
+      "effekt": "3× pro Kampf, Heilungsreaktion"
+     }
+    ]
+   },
+   {
+    "name": "Los Jetzt!",
+    "ast": "Mensch",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 4,
+    "info": "1/1/2 Verbündete dürfen sich sofort bewegen und anschließend einen Standardangriff durchführen.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "effekt": "1 Verbündeter: +2m Sofortbewegung + Angriff"
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "effekt": "1 Verbündeter: +4m Sofortbewegung + Angriff"
+     },
+     {
+      "level": 3,
+      "reichweite": "15m",
+      "effekt": "2 Verbündete: +6m Sofortbewegung + Angriff"
+     }
+    ]
+   },
+   {
+    "name": "Beifall",
+    "ast": "Mensch",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 4,
+    "info": "Alle Freunde im Umkreis dürfen versuchen jeden Nahkampfangriff zu parieren und machen nach erfolgreicher Parade Konterschaden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m Umkreis",
+      "schaden": "2W10",
+      "schadenArt": "physisch",
+      "effekt": "1 Runde Konterschlag bei erfolgreicher Parade"
+     },
+     {
+      "level": 2,
+      "reichweite": "7m Umkreis",
+      "schaden": "3W10",
+      "schadenArt": "physisch",
+      "effekt": "2 Runden Konterschlag bei erfolgreicher Parade"
+     },
+     {
+      "level": 3,
+      "reichweite": "10m Umkreis",
+      "schaden": "4W10",
+      "schadenArt": "physisch",
+      "effekt": "3 Runden Konterschlag bei erfolgreicher Parade"
+     }
+    ]
+   },
+   {
+    "name": "Heute stirbt keiner!",
+    "ast": "Mensch",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 4,
+    "info": "Für 1/2/3 Runden kann kein Verbündeter unter 1 LP fallen.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "effekt": "Todesverweigerung, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "effekt": "Todesverweigerung, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "15m",
+      "effekt": "Todesverweigerung, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Feuerfaust",
+    "ast": "Dämon",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 1,
+    "info": "Ziele neben (links und rechts) und hinter deinem Ziel erhalten Schaden und Feuermarker.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "NK +1W10",
+      "schadenArt": "physisch",
+      "effekt": "+1 Feuermarker"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "NK +2W10",
+      "schadenArt": "physisch",
+      "effekt": "+1 Feuermarker"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "NK +3W10",
+      "schadenArt": "physisch",
+      "effekt": "+1 Feuermarker"
+     }
+    ]
+   },
+   {
+    "name": "Monster Lord",
+    "ast": "Dämon",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "In Monsterform zusätzliche Lebenspunkte.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +50 LP"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +75 LP"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +100 LP"
+     }
+    ]
+   },
+   {
+    "name": "Pure Muskeln +",
+    "ast": "Dämon",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "In Monsterform zusätzliche Stärke.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +15 Stärke"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +30 Stärke"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +50 Stärke"
+     }
+    ]
+   },
+   {
+    "name": "Schrecken der Meere",
+    "ast": "Dämon",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Nach misslungenem Willenskraftwurf fliehen 1/2/3 Gegner für 1/1/2 Runden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "effekt": "WW -5, 1/2/3 Gegner fliehen 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m",
+      "effekt": "WW -10, 1/2/3 Gegner fliehen 1 Runde"
+     },
+     {
+      "level": 3,
+      "reichweite": "6m",
+      "effekt": "WW -15, 1/2/3 Gegner fliehen 2 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Wilde Wut",
+    "ast": "Dämon",
+    "art": "extra",
+    "schadenTyp": "physisch",
+    "rang": 1,
+    "info": "Für 1/2/3 Runden mehr Nahkampfschaden, dafür Malus auf Nahkampf.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "+2W10",
+      "schadenArt": "physisch",
+      "effekt": "0 RB, -15 Nahkampf, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "+3W10",
+      "schadenArt": "physisch",
+      "effekt": "5 RB, -10 Nahkampf, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "+4W10",
+      "schadenArt": "physisch",
+      "effekt": "10 RB, -5 Nahkampf, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Brandverstärker",
+    "ast": "Dämon",
+    "art": "passiv",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Nahkampf-/Fernkampfangriffe verursachen Zusatzschaden pro Feuermarker des Ziels (max. 5).",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+1W4 pro FM",
+      "schadenArt": "physisch",
+      "effekt": "max. 5 Feuermarker"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+2W4 pro FM",
+      "schadenArt": "physisch",
+      "effekt": "max. 5 Feuermarker"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+3W4 pro FM",
+      "schadenArt": "physisch",
+      "effekt": "max. 5 Feuermarker"
+     }
+    ]
+   },
+   {
+    "name": "Dunkle Rüstung",
+    "ast": "Dämon",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Für 1/2/3 Runden zusätzliche Rüstung und Heimlichkeits-Bonus.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "+10 Rüstung, +5 Heimlichkeit, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "+15 Rüstung, +10 Heimlichkeit, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "+20 Rüstung, +10 Heimlichkeit, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Eiserner Wille",
+    "ast": "Dämon",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Für 1/2/3 Runden Bonus auf Widerstandswürfe gegen Stun und Schlaf.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "+10 Widerstand, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "+20 Widerstand, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "+30 Widerstand, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Spalter",
+    "ast": "Dämon",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "1/2/3 Gegner in einer Linie (max. 5m) erhalten rüstungsbrechenden Nahkampfschaden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf bis 5m",
+      "schaden": "NK",
+      "schadenArt": "physisch",
+      "effekt": "5 RB"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf bis 5m",
+      "schaden": "NK",
+      "schadenArt": "physisch",
+      "effekt": "10 RB"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf bis 5m",
+      "schaden": "NK",
+      "schadenArt": "physisch",
+      "effekt": "15 RB"
+     }
+    ]
+   },
+   {
+    "name": "Brennender Kreis",
+    "ast": "Dämon",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 3,
+    "info": "Im Umkreis bekommen alle Personen Feuerschaden und Feuermarker.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "1m Umkreis",
+      "schaden": "4W10",
+      "schadenArt": "magisch",
+      "effekt": "+1 Feuermarker"
+     },
+     {
+      "level": 2,
+      "reichweite": "2m Umkreis",
+      "schaden": "5W10",
+      "schadenArt": "magisch",
+      "effekt": "+2 Feuermarker"
+     },
+     {
+      "level": 3,
+      "reichweite": "3m Umkreis",
+      "schaden": "6W10",
+      "schadenArt": "magisch",
+      "effekt": "+3 Feuermarker"
+     }
+    ]
+   },
+   {
+    "name": "Entfacher",
+    "ast": "Dämon",
+    "art": "extra",
+    "schadenTyp": "physisch",
+    "rang": 3,
+    "info": "In den nächsten Runden verursachen deine Angriffe Feuermarker; fängt ein Ziel dadurch an zu brennen, erhält es sofort Zusatzschaden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+2",
+      "schadenArt": "physisch",
+      "effekt": "3 Runden Feuermarker-Angriffe, +2 Fm sofort, bei Entzündung 2W10"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+3",
+      "schadenArt": "physisch",
+      "effekt": "4 Runden Feuermarker-Angriffe, +2 Fm sofort, bei Entzündung 3W10"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+4",
+      "schadenArt": "physisch",
+      "effekt": "5 Runden Feuermarker-Angriffe, +1 Fm sofort, bei Entzündung 4W10"
+     }
+    ]
+   },
+   {
+    "name": "Klingen-/Klauensturm",
+    "ast": "Dämon",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 3,
+    "info": "Trifft alle angrenzenden Felder.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+2",
+      "schadenArt": "physisch",
+      "effekt": "10 RB, 1 Feld"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+3",
+      "schadenArt": "physisch",
+      "effekt": "15 RB, 1 Feld"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+4",
+      "schadenArt": "physisch",
+      "effekt": "20 RB, 2 Felder"
+     }
+    ]
+   },
+   {
+    "name": "Inferno",
+    "ast": "Dämon",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 4,
+    "info": "1/2/3× pro Kampf machst du deinem Ziel Schaden und es erhält Feuermarker. Danach 3 Runden Cooldown.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "10m",
+      "schaden": "6W10",
+      "schadenArt": "magisch",
+      "effekt": "+2 Fm, 3 Runden Cooldown"
+     },
+     {
+      "level": 2,
+      "reichweite": "15m",
+      "schaden": "7W10",
+      "schadenArt": "magisch",
+      "effekt": "+2 Fm, 3 Runden Cooldown"
+     },
+     {
+      "level": 3,
+      "reichweite": "20m",
+      "schaden": "8W10",
+      "schadenArt": "magisch",
+      "effekt": "+2 Fm, 3 Runden Cooldown"
+     }
+    ]
+   },
+   {
+    "name": "Seelenpakt",
+    "ast": "Dämon",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 4,
+    "info": "Du verlierst sofort 50% deiner Lebenspunkte. Deine Fähigkeiten machen für 1/2/3 Runden doppelt so viel Schaden, Heilung, Blutung, Gift und Feuermarker.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "1 Runde doppelter Effekt, -50% LP"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "2 Runden doppelter Effekt, -50% LP"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "3 Runden doppelter Effekt, -50% LP"
+     }
+    ]
+   },
+   {
+    "name": "Biss",
+    "ast": "Drache",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 1,
+    "info": "Du beißt ein angrenzendes Ziel.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "Stärke +2W10",
+      "schadenArt": "physisch",
+      "effekt": "0 RB, 1 Blutung"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "Stärke +3W10",
+      "schadenArt": "physisch",
+      "effekt": "5 RB, 1 Blutung"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "Stärke +4W10",
+      "schadenArt": "physisch",
+      "effekt": "10 RB, 2 Blutungen"
+     }
+    ]
+   },
+   {
+    "name": "Feuerfaust",
+    "ast": "Drache",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 1,
+    "info": "Ziele neben (links und rechts) und hinter deinem Ziel erhalten Schaden und Feuermarker.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "NK +1W10",
+      "schadenArt": "physisch",
+      "effekt": "+1 Feuermarker"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "NK +2W10",
+      "schadenArt": "physisch",
+      "effekt": "+1 Feuermarker"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "NK +3W10",
+      "schadenArt": "physisch",
+      "effekt": "+1 Feuermarker"
+     }
+    ]
+   },
+   {
+    "name": "Göttliche Flügel",
+    "ast": "Drache",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Du kannst für 1/2/3 Runden fliegen.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "Fliegen, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "Fliegen, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "Fliegen, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Monster Gott",
+    "ast": "Drache",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "In Monsterform zusätzliche Lebenspunkte.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +50 LP"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +100 LP"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +150 LP"
+     }
+    ]
+   },
+   {
+    "name": "Pure Muskeln +",
+    "ast": "Drache",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "In Monsterform zusätzliche Stärke.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +15 Stärke"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +30 Stärke"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +50 Stärke"
+     }
+    ]
+   },
+   {
+    "name": "Feuerball",
+    "ast": "Drache",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 2,
+    "info": "1/2/3× pro Kampf. Ziel erhält Feuermarker. Danach 1 Runde Cooldown.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "schaden": "4W10",
+      "schadenArt": "magisch",
+      "effekt": "+1 Fm, 1 Runde Cooldown"
+     },
+     {
+      "level": 2,
+      "reichweite": "7m",
+      "schaden": "5W10",
+      "schadenArt": "magisch",
+      "effekt": "+1 Fm, 1 Runde Cooldown"
+     },
+     {
+      "level": 3,
+      "reichweite": "10m",
+      "schaden": "6W10",
+      "schadenArt": "magisch",
+      "effekt": "+2 Fm, 1 Runde Cooldown"
+     }
+    ]
+   },
+   {
+    "name": "Gieriger Biss",
+    "ast": "Drache",
+    "art": "extra",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Nur nutzbar unter 50% LP. Du erhältst den verursachten Schaden als Heilung.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "3W10",
+      "schadenArt": "physisch",
+      "effekt": "0 RB, Schaden = Heilung"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "4W10",
+      "schadenArt": "physisch",
+      "effekt": "5 RB, Schaden = Heilung"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "5W10",
+      "schadenArt": "physisch",
+      "effekt": "10 RB, Schaden = Heilung"
+     }
+    ]
+   },
+   {
+    "name": "Körper aus Titan",
+    "ast": "Drache",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Erhöht deine Rüstung.",
+    "stufen": [
+     {
+      "level": 1,
+      "effekt": "+10 Rüstung"
+     },
+     {
+      "level": 2,
+      "effekt": "+15 Rüstung"
+     },
+     {
+      "level": 3,
+      "effekt": "+20 Rüstung"
+     }
+    ]
+   },
+   {
+    "name": "Sprungangriff",
+    "ast": "Drache",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Springe auf dein Ziel, angrenzende Ziele erhalten halben Schaden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "schaden": "3W10",
+      "schadenArt": "physisch",
+      "effekt": "1m Radius"
+     },
+     {
+      "level": 2,
+      "reichweite": "5m",
+      "schaden": "4W10",
+      "schadenArt": "physisch",
+      "effekt": "2m Radius"
+     },
+     {
+      "level": 3,
+      "reichweite": "7m",
+      "schaden": "5W10",
+      "schadenArt": "physisch",
+      "effekt": "2m Radius"
+     }
+    ]
+   },
+   {
+    "name": "Brennender Kreis",
+    "ast": "Drache",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 3,
+    "info": "Im Umkreis bekommen alle Personen Feuerschaden und Feuermarker.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "1m Umkreis",
+      "schaden": "4W10",
+      "schadenArt": "magisch",
+      "effekt": "+1 Feuermarker"
+     },
+     {
+      "level": 2,
+      "reichweite": "2m Umkreis",
+      "schaden": "5W10",
+      "schadenArt": "magisch",
+      "effekt": "+2 Feuermarker"
+     },
+     {
+      "level": 3,
+      "reichweite": "3m Umkreis",
+      "schaden": "6W10",
+      "schadenArt": "magisch",
+      "effekt": "+3 Feuermarker"
+     }
+    ]
+   },
+   {
+    "name": "Klingen-/Klauensturm",
+    "ast": "Drache",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 3,
+    "info": "Trifft alle angrenzenden Felder.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+2",
+      "schadenArt": "physisch",
+      "effekt": "10 RB, 1 Feld"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+3",
+      "schadenArt": "physisch",
+      "effekt": "15 RB, 1 Feld"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+4",
+      "schadenArt": "physisch",
+      "effekt": "20 RB, 2 Felder"
+     }
+    ]
+   },
+   {
+    "name": "Kometeneinschlag",
+    "ast": "Drache",
+    "art": "passiv",
+    "schadenTyp": "physisch",
+    "rang": 3,
+    "info": "Stärkerer Nahkampfschaden mit Durchschlag.",
+    "stufen": [
+     {
+      "level": 1,
+      "effekt": "+1W10, 0 RB"
+     },
+     {
+      "level": 2,
+      "effekt": "+2W10, 5 RB"
+     },
+     {
+      "level": 3,
+      "effekt": "+3W10, 10 RB"
+     }
+    ]
+   },
+   {
+    "name": "Inferno",
+    "ast": "Drache",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 4,
+    "info": "1/2/3× pro Kampf machst du deinem Ziel Schaden und es erhält Feuermarker. Danach 3 Runden Cooldown.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "10m",
+      "schaden": "6W10",
+      "schadenArt": "magisch",
+      "effekt": "+2 Fm, 3 Runden Cooldown"
+     },
+     {
+      "level": 2,
+      "reichweite": "15m",
+      "schaden": "7W10",
+      "schadenArt": "magisch",
+      "effekt": "+2 Fm, 3 Runden Cooldown"
+     },
+     {
+      "level": 3,
+      "reichweite": "20m",
+      "schaden": "8W10",
+      "schadenArt": "magisch",
+      "effekt": "+2 Fm, 3 Runden Cooldown"
+     }
+    ]
+   },
+   {
+    "name": "Verschlingen",
+    "ast": "Drache",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 4,
+    "info": "Chance dass Ziel für 1W4 Runden verschlungen wird und Gift+Blutungen erhält; misslingt es, erleidet der Anwender Schaden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "effekt": "20% Chance, Gift Stufe 4, +3 Blutungen; sonst 4W10 Schaden für Anwender"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "effekt": "40% Chance, Gift Stufe 5, +4 Blutungen; sonst 4W10 Schaden für Anwender"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "effekt": "60% Chance, Gift Stufe 6, +5 Blutungen; sonst 4W10 Schaden für Anwender"
+     }
+    ]
+   },
+   {
+    "name": "Arkaner Sturm",
+    "ast": "Divinus Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 4,
+    "info": "1× pro Kampf kannst du einen Arkanen Sturm zaubern. Personen im Sturm verlieren für ihre nächste Runde zu einer Chance eine Aktion ihrer Wahl (A oder B).",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "6m",
+      "schaden": "5W10",
+      "schadenArt": "magisch",
+      "effekt": "2x2m Radius, 20% Chance"
+     },
+     {
+      "level": 2,
+      "reichweite": "9m",
+      "schaden": "6W10",
+      "schadenArt": "magisch",
+      "effekt": "3x3m Radius, 40% Chance"
+     },
+     {
+      "level": 3,
+      "reichweite": "12m",
+      "schaden": "7W10",
+      "schadenArt": "magisch",
+      "effekt": "3x3m Radius, 60% Chance"
+     }
+    ],
+    "morphForm": "Arkane Chimäre"
+   },
+   {
+    "name": "Sturmfokus",
+    "ast": "Divinus Chimäre",
+    "art": "extra",
+    "schadenTyp": "magisch",
+    "rang": 4,
+    "info": "Für mehrere Runden machst du zusätzlichen Blitzschaden pro Rüstungsklasse des Ziels; ist das Ziel gestunnt, zusätzlicher Schaden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "schaden": "+2W10",
+      "schadenArt": "magisch",
+      "effekt": "2 Runden, +1W8 pro RÜ-Klasse, +2W10 bei Stun"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "schaden": "+3W10",
+      "schadenArt": "magisch",
+      "effekt": "3 Runden, +2W8 pro RÜ-Klasse, +2W10 bei Stun"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "schaden": "+4W10",
+      "schadenArt": "magisch",
+      "effekt": "4 Runden, +3W8 pro RÜ-Klasse, +2W10 bei Stun"
+     }
+    ],
+    "morphForm": "Elektro Chimäre"
+   },
+   {
+    "name": "Inferno",
+    "ast": "Divinus Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 4,
+    "info": "1/2/3× pro Kampf machst du deinem Ziel Schaden und es erhält Feuermarker. Danach 3 Runden Cooldown.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "10m",
+      "schaden": "6W10",
+      "schadenArt": "magisch",
+      "effekt": "+2 Fm, 3 Runden Cooldown"
+     },
+     {
+      "level": 2,
+      "reichweite": "15m",
+      "schaden": "7W10",
+      "schadenArt": "magisch",
+      "effekt": "+2 Fm, 3 Runden Cooldown"
+     },
+     {
+      "level": 3,
+      "reichweite": "20m",
+      "schaden": "8W10",
+      "schadenArt": "magisch",
+      "effekt": "+2 Fm, 3 Runden Cooldown"
+     }
+    ],
+    "morphForm": "Feuer Chimäre"
+   },
+   {
+    "name": "Stoppuhr/Eissphäre",
+    "ast": "Divinus Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 4,
+    "info": "Alles im Radius ist für 1/1/2 Runden in Raum und Zeit eingefroren. Eingefrorene Ziele können weder handeln noch bewegt, angegriffen oder von Fähigkeiten betroffen werden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "effekt": "2x2m Radius, 1 Runde eingefroren"
+     },
+     {
+      "level": 2,
+      "reichweite": "7m",
+      "effekt": "3x3m Radius, 1 Runde eingefroren"
+     },
+     {
+      "level": 3,
+      "reichweite": "10m",
+      "effekt": "3x3m Radius, 2 Runden eingefroren"
+     }
+    ],
+    "morphForm": "Frost Chimäre"
+   },
+   {
+    "name": "Fauler Atem",
+    "ast": "Divinus Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 4,
+    "info": "Alle im Umkreis werden vergiftet, brennen und fangen an zu bluten.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "1m Umkreis",
+      "schaden": "GS 3",
+      "schadenArt": "magisch",
+      "effekt": "+2 Fm, +1 Blutung"
+     },
+     {
+      "level": 2,
+      "reichweite": "2m Umkreis",
+      "schaden": "GS 4",
+      "schadenArt": "magisch",
+      "effekt": "+3 Fm, +2 Blutungen"
+     },
+     {
+      "level": 3,
+      "reichweite": "3m Umkreis",
+      "schaden": "GS 5",
+      "schadenArt": "magisch",
+      "effekt": "+4 Fm, +3 Blutungen"
+     }
+    ],
+    "morphForm": "Gift Chimäre"
+   },
+   {
+    "name": "Kettenblitz der Heilung",
+    "ast": "Divinus Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "heilung",
+    "rang": 4,
+    "info": "Kettenheilung für mehrere Ziele in Abstand zueinander, kein Hin-und-Her (Pingpong-Effekt).",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m Abstand",
+      "schaden": "HL 6W10",
+      "schadenArt": "heilung",
+      "effekt": "3 Ziele"
+     },
+     {
+      "level": 2,
+      "reichweite": "3m Abstand",
+      "schaden": "HL 7W10",
+      "schadenArt": "heilung",
+      "effekt": "4 Ziele"
+     },
+     {
+      "level": 3,
+      "reichweite": "4m Abstand",
+      "schaden": "HL 8W10",
+      "schadenArt": "heilung",
+      "effekt": "5 Ziele"
+     }
+    ],
+    "morphForm": "Heilige Chimäre"
+   },
+   {
+    "name": "Skelett-Magier",
+    "ast": "Divinus Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 4,
+    "info": "Beschwört für mehrere Runden einen Skelettmagier mit eigenen LP, Monsterwert und den Fähigkeiten Funke/Feuerball/Feuersturm.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "effekt": "2 Runden, LP 10, Monsterwert 40"
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "effekt": "3 Runden, LP 20, Monsterwert 50"
+     },
+     {
+      "level": 3,
+      "reichweite": "15m",
+      "effekt": "4 Runden, LP 30, Monsterwert 60"
+     }
+    ],
+    "morphForm": "Skelett Chimäre"
+   },
+   {
+    "name": "Waldgedicht",
+    "ast": "Divinus Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 4,
+    "info": "Alle Feinde im Umkreis werden vergiftet und erleiden Blutungen.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m Umkreis",
+      "schaden": "GS 4",
+      "schadenArt": "magisch",
+      "effekt": "+2 Blutungen"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m Umkreis",
+      "schaden": "GS 5",
+      "schadenArt": "magisch",
+      "effekt": "+3 Blutungen"
+     },
+     {
+      "level": 3,
+      "reichweite": "6m Umkreis",
+      "schaden": "GS 6",
+      "schadenArt": "magisch",
+      "effekt": "+4 Blutungen"
+     }
+    ],
+    "morphForm": "Wald Chimäre"
+   },
+   {
+    "name": "Welle",
+    "ast": "Divinus Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 4,
+    "info": "1/1/2-mal pro Kampf. Eine breite Welle trifft die ersten Gegner, die mitgerissen werden (Stärkewurf). Danach 3 Runden Cooldown.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "schaden": "6W10",
+      "schadenArt": "physisch",
+      "effekt": "2m breit, 1W4 Meter mitgerissen"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m",
+      "schaden": "7W10",
+      "schadenArt": "physisch",
+      "effekt": "3m breit, 2W4 Meter mitgerissen"
+     },
+     {
+      "level": 3,
+      "reichweite": "6m",
+      "schaden": "8W10",
+      "schadenArt": "physisch",
+      "effekt": "4m breit, 3W4 Meter mitgerissen"
+     }
+    ],
+    "morphForm": "Wasser Chimäre"
+   },
+   {
+    "name": "Dornenhaut",
+    "ast": "Druide",
+    "art": "extra",
+    "schadenTyp": "physisch",
+    "rang": 1,
+    "info": "Rüstungsbonus; Nahkampfangreifer erleiden automatisch Schaden. Alternativ als Aktiv-Fähigkeit auf einen Verbündeten wirkbar.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m / SE",
+      "schaden": "+5 RÜ",
+      "schadenArt": "physisch",
+      "effekt": "1 Runde, 1W10 Gegenschaden"
+     },
+     {
+      "level": 2,
+      "reichweite": "7m / SE",
+      "schaden": "+5 RÜ",
+      "schadenArt": "physisch",
+      "effekt": "2 Runden, 2W10 Gegenschaden"
+     },
+     {
+      "level": 3,
+      "reichweite": "10m / SE",
+      "schaden": "+10 RÜ",
+      "schadenArt": "physisch",
+      "effekt": "3 Runden, 3W10 Gegenschaden"
+     }
+    ]
+   },
+   {
+    "name": "Frosthauch",
+    "ast": "Druide",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 1,
+    "info": "Ziel verliert Bewegung für seine nächste Runde.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "schaden": "2W10",
+      "schadenArt": "magisch",
+      "effekt": "-2m Bewegung"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m",
+      "schaden": "3W10",
+      "schadenArt": "magisch",
+      "effekt": "-4m Bewegung"
+     },
+     {
+      "level": 3,
+      "reichweite": "6m",
+      "schaden": "4W10",
+      "schadenArt": "magisch",
+      "effekt": "-6m Bewegung"
+     }
+    ]
+   },
+   {
+    "name": "Heilendes Blut",
+    "ast": "Druide",
+    "art": "aktiv",
+    "schadenTyp": "heilung",
+    "rang": 1,
+    "info": "Du fügst dir Schaden zu und heilst ein Ziel.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "schaden": "HL 4W10",
+      "schadenArt": "heilung",
+      "effekt": "1W6 Selbstschaden"
+     },
+     {
+      "level": 2,
+      "reichweite": "5m",
+      "schaden": "HL 5W10",
+      "schadenArt": "heilung",
+      "effekt": "1W6 Selbstschaden"
+     },
+     {
+      "level": 3,
+      "reichweite": "7m",
+      "schaden": "HL 6W10",
+      "schadenArt": "heilung",
+      "effekt": "1W6 Selbstschaden"
+     }
+    ]
+   },
+   {
+    "name": "Regeneration",
+    "ast": "Druide",
+    "art": "extra",
+    "schadenTyp": "heilung",
+    "rang": 1,
+    "info": "Zu Beginn deiner nächsten Runden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "schaden": "HL 2W10",
+      "schadenArt": "heilung",
+      "effekt": "2 Runden"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "schaden": "HL 3W10",
+      "schadenArt": "heilung",
+      "effekt": "3 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "schaden": "HL 4W10",
+      "schadenArt": "heilung",
+      "effekt": "4 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Seelenreinigung",
+    "ast": "Druide",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Entfernt bei allen Verbündeten im Umkreis jeweils Stufen der Debuffs (Gift, Feuermarker, Blutung).",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "1m",
+      "effekt": "-1 Stufe"
+     },
+     {
+      "level": 2,
+      "reichweite": "3m",
+      "effekt": "-2 Stufen"
+     },
+     {
+      "level": 3,
+      "reichweite": "5m",
+      "effekt": "-3 Stufen"
+     }
+    ]
+   },
+   {
+    "name": "Aura der Rast",
+    "ast": "Druide",
+    "art": "aktiv",
+    "schadenTyp": "heilung",
+    "rang": 2,
+    "info": "Heilst du jeden Freund, der seine Runde in deiner Aura startet, für mehrere Runden. Zusätzlich darf er ein Debuff seiner Wahl reduzieren.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m / SE",
+      "schaden": "HL +2W10",
+      "schadenArt": "heilung",
+      "effekt": "2 Runden, -1 Debuff-Level"
+     },
+     {
+      "level": 2,
+      "reichweite": "3m / SE",
+      "schaden": "HL +3W10",
+      "schadenArt": "heilung",
+      "effekt": "3 Runden, -2 Debuff-Level"
+     },
+     {
+      "level": 3,
+      "reichweite": "4m / SE",
+      "schaden": "HL +4W10",
+      "schadenArt": "heilung",
+      "effekt": "4 Runden, -3 Debuff-Level"
+     }
+    ]
+   },
+   {
+    "name": "Elementargeist: Kleiner Teufel/Wurzelknirps/Eispanter",
+    "ast": "Druide",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Beschwört einen von drei wählbaren Elementargeistern mit eigenen LP/NK-Wert und Element-Zusatzeffekt.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Selbst",
+      "schaden": "2W10",
+      "schadenArt": "physisch",
+      "effekt": "LP 30, NK 30, 1 Element, 2 Runden"
+     },
+     {
+      "level": 2,
+      "reichweite": "Selbst",
+      "schaden": "3W10",
+      "schadenArt": "physisch",
+      "effekt": "LP 60, NK 40, 1 Element, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "Selbst",
+      "schaden": "4W10",
+      "schadenArt": "physisch",
+      "effekt": "LP 90, NK 50, 2 Elemente, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Naturfluch",
+    "ast": "Druide",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Wenn du Nahkampfschaden bekommst, ist der Angreifer zu einer Chance vergiftet.",
+    "stufen": [
+     {
+      "level": 1,
+      "effekt": "Gift Stufe 1, 20% Chance"
+     },
+     {
+      "level": 2,
+      "effekt": "Gift Stufe 2, 40% Chance"
+     },
+     {
+      "level": 3,
+      "effekt": "Gift Stufe 3, 60% Chance"
+     }
+    ]
+   },
+   {
+    "name": "Wurzelwucher",
+    "ast": "Druide",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 2,
+    "info": "Ziel muss einen Stärkewurf bestehen, um sich zu befreien.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "schaden": "GS 1",
+      "schadenArt": "magisch",
+      "effekt": "1 Blutung, SW -5"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m",
+      "schaden": "GS 2",
+      "schadenArt": "magisch",
+      "effekt": "1 Blutung, SW -10"
+     },
+     {
+      "level": 3,
+      "reichweite": "6m",
+      "schaden": "GS 3",
+      "schadenArt": "magisch",
+      "effekt": "2 Blutungen, SW -15"
+     }
+    ]
+   },
+   {
+    "name": "Giftwolke",
+    "ast": "Druide",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 3,
+    "info": "Alle in der Wolke werden vergiftet und erleiden Wahrnehmungsmalus.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "schaden": "GS 4",
+      "schadenArt": "magisch",
+      "effekt": "2x2m Wolke, -10 Wahrnehmung"
+     },
+     {
+      "level": 2,
+      "reichweite": "7m",
+      "schaden": "GS 5",
+      "schadenArt": "magisch",
+      "effekt": "2x2m Wolke, -10 Wahrnehmung"
+     },
+     {
+      "level": 3,
+      "reichweite": "10m",
+      "schaden": "GS 6",
+      "schadenArt": "magisch",
+      "effekt": "3x3m Wolke, -10 Wahrnehmung"
+     }
+    ]
+   },
+   {
+    "name": "Unantastbar",
+    "ast": "Druide",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 3,
+    "info": "Ein Verbündeter wird bis zum Beginn deiner nächsten Runde immun gegen Schaden und Debuffs, kann währenddessen aber selbst weder angreifen noch Fähigkeiten einsetzen.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "effekt": "Schutz, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "5m",
+      "effekt": "Schutz, 1 Runde"
+     },
+     {
+      "level": 3,
+      "reichweite": "7m",
+      "effekt": "Schutz, 1 Runde"
+     }
+    ]
+   },
+   {
+    "name": "Wucherfaust",
+    "ast": "Druide",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 3,
+    "info": "Triffst du deinen Gegner, kann er sich für Runden nicht von dir wegbewegen (SW -15 zum Befreien).",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "SS +1W10",
+      "schadenArt": "physisch",
+      "effekt": "1 Blutung, 1 Runde festgesetzt"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "SS +2W10",
+      "schadenArt": "physisch",
+      "effekt": "2 Blutungen, 1 Runde festgesetzt"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "SS +3W10",
+      "schadenArt": "physisch",
+      "effekt": "3 Blutungen, 2 Runden festgesetzt"
+     }
+    ]
+   },
+   {
+    "name": "Strahl der Gebete",
+    "ast": "Druide",
+    "art": "aktiv",
+    "schadenTyp": "heilung",
+    "rang": 4,
+    "info": "Ein langer Strahl heilt alle Ziele und entfernt Debuffs.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "4m",
+      "schaden": "HL 5W10",
+      "schadenArt": "heilung",
+      "effekt": "-1 Debuff"
+     },
+     {
+      "level": 2,
+      "reichweite": "8m",
+      "schaden": "HL 6W10",
+      "schadenArt": "heilung",
+      "effekt": "-2 Debuffs"
+     },
+     {
+      "level": 3,
+      "reichweite": "12m",
+      "schaden": "HL 7W10",
+      "schadenArt": "heilung",
+      "effekt": "-3 Debuffs"
+     }
+    ]
+   },
+   {
+    "name": "Waldgedicht",
+    "ast": "Druide",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 4,
+    "info": "Alle Feinde im Umkreis werden vergiftet und erleiden Blutungen.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "schaden": "GS 4",
+      "schadenArt": "magisch",
+      "effekt": "2 Blutungen"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m",
+      "schaden": "GS 5",
+      "schadenArt": "magisch",
+      "effekt": "3 Blutungen"
+     },
+     {
+      "level": 3,
+      "reichweite": "6m",
+      "schaden": "GS 6",
+      "schadenArt": "magisch",
+      "effekt": "4 Blutungen"
+     }
+    ]
+   },
+   {
+    "name": "Angelegter Schuss",
+    "ast": "Elben",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 1,
+    "info": "Du musst zusätzlich deine komplette Bewegung opfern.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Fernkampf",
+      "schaden": "FK +2W10",
+      "schadenArt": "physisch",
+      "effekt": "+10 FK, +1 Blutung"
+     },
+     {
+      "level": 2,
+      "reichweite": "Fernkampf",
+      "schaden": "FK +3W10",
+      "schadenArt": "physisch",
+      "effekt": "+10 FK, +1 Blutung"
+     },
+     {
+      "level": 3,
+      "reichweite": "Fernkampf",
+      "schaden": "FK +4W10",
+      "schadenArt": "physisch",
+      "effekt": "+10 FK, +2 Blutungen"
+     }
+    ]
+   },
+   {
+    "name": "Doppelhieb",
+    "ast": "Elben",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Du kannst pro Kampf einen Nahkampfangriff als Extra-Aktion machen. Danach 1 Runde Cooldown.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "effekt": "1 extra Angriff pro Kampf"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "effekt": "2 extra Angriffe pro Kampf"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "effekt": "3 extra Angriffe pro Kampf"
+     }
+    ]
+   },
+   {
+    "name": "Fliegender Bulle",
+    "ast": "Elben",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Dein Schlafwurf wird für den Angreifer erschwert; du erhältst zusätzlich Willenskraft.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "Schlafwurf 10% erschwert"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "Schlafwurf 20% erschwert"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "Schlafwurf 30% erschwert"
+     }
+    ]
+   },
+   {
+    "name": "Flinke Füße",
+    "ast": "Elben",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Deine Bewegung erhöht sich permanent.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "+1m Bewegung"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "+2m Bewegung"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "+3m Bewegung"
+     }
+    ]
+   },
+   {
+    "name": "Sniper",
+    "ast": "Elben",
+    "art": "passiv",
+    "schadenTyp": "physisch",
+    "rang": 1,
+    "info": "Der Schaden und die Reichweite deiner Fernkampfangriffe verbessern sich.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "FK x1.5",
+      "schaden": "FK +0W10",
+      "schadenArt": "physisch"
+     },
+     {
+      "level": 2,
+      "reichweite": "FK x2",
+      "schaden": "FK +1W10",
+      "schadenArt": "physisch"
+     },
+     {
+      "level": 3,
+      "reichweite": "FK x3",
+      "schaden": "FK +2W10",
+      "schadenArt": "physisch"
+     }
+    ]
+   },
+   {
+    "name": "Blattschuss",
+    "ast": "Elben",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Führe einen Fernkampfangriff mit Malus aus. Bei Verwundung lässt das Ziel einen Gegenstand oder eine Waffe fallen.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Fernkampf",
+      "schaden": "FK -15",
+      "schadenArt": "physisch",
+      "effekt": "Gegenstand fliegt 1W4m"
+     },
+     {
+      "level": 2,
+      "reichweite": "Fernkampf",
+      "schaden": "FK -10",
+      "schadenArt": "physisch",
+      "effekt": "Gegenstand fliegt 2W4m"
+     },
+     {
+      "level": 3,
+      "reichweite": "Fernkampf",
+      "schaden": "FK -5",
+      "schadenArt": "physisch",
+      "effekt": "Gegenstand fliegt 3W4m"
+     }
+    ]
+   },
+   {
+    "name": "Doppelte Klingen/Der Weg der zwei Fäuste",
+    "ast": "Elben",
+    "art": "passiv",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Greife während deiner Aktion A auch mit deiner Off-Hand Klinge an (keine Fähigkeiten).",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "effekt": "2-mal pro Kampf, -10 NK"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "effekt": "3-mal pro Kampf, -5 NK"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "effekt": "4-mal pro Kampf, +0 NK"
+     }
+    ]
+   },
+   {
+    "name": "Eiserner Wille",
+    "ast": "Elben",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Für Runden Bonus auf Widerstandswürfe gegen Stun und Schlaf.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "+10 Widerstand, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "+20 Widerstand, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "+30 Widerstand, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Wache!",
+    "ast": "Elben",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Angriffe auf Gegner, die deine Kampfreichweite betreten, verlassen oder durchqueren (Gelegenheitsangriffe).",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf/Fernkampf",
+      "effekt": "2 Gelegenheitsangriffe pro Kampf"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf/Fernkampf",
+      "effekt": "3 Gelegenheitsangriffe pro Kampf"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf/Fernkampf",
+      "effekt": "4 Gelegenheitsangriffe pro Kampf"
+     }
+    ]
+   },
+   {
+    "name": "Klon",
+    "ast": "Elben",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 3,
+    "info": "Erschafft Klone mit einem Teil deiner Lebenspunkte für mehrere Runden. Klone machen Schaden und können keine Skills nutzen.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Selbst (SE)",
+      "schaden": "4W10",
+      "schadenArt": "physisch",
+      "effekt": "1 Klon, 2 Runden, 50% LP"
+     },
+     {
+      "level": 2,
+      "reichweite": "Selbst (SE)",
+      "schaden": "5W10",
+      "schadenArt": "physisch",
+      "effekt": "2 Klone, 2 Runden, 75% LP"
+     },
+     {
+      "level": 3,
+      "reichweite": "Selbst (SE)",
+      "schaden": "6W10",
+      "schadenArt": "physisch",
+      "effekt": "2 Klone, 3 Runden, 100% LP"
+     }
+    ]
+   },
+   {
+    "name": "Rikoschettenschuss",
+    "ast": "Elben",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 3,
+    "info": "Dein Schuss trifft zusätzliche Ziele im Umkreis.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Fernkampf",
+      "schaden": "FK",
+      "schadenArt": "physisch",
+      "effekt": "1 Zusatzziel im 2m-Umkreis"
+     },
+     {
+      "level": 2,
+      "reichweite": "Fernkampf",
+      "schaden": "FK",
+      "schadenArt": "physisch",
+      "effekt": "2 Zusatzziele im 2m-Umkreis"
+     },
+     {
+      "level": 3,
+      "reichweite": "Fernkampf",
+      "schaden": "FK",
+      "schadenArt": "physisch",
+      "effekt": "3 Zusatzziele im 2m-Umkreis"
+     }
+    ]
+   },
+   {
+    "name": "Schattenschritt",
+    "ast": "Elben",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 3,
+    "info": "Du löst dich in Rauch auf und materialisierst dich wieder. Eventuell bleibst du unentdeckt.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "effekt": "25% heimlich"
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "effekt": "50% heimlich"
+     },
+     {
+      "level": 3,
+      "reichweite": "20m",
+      "effekt": "75% heimlich"
+     }
+    ]
+   },
+   {
+    "name": "Federschritt",
+    "ast": "Elben",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 4,
+    "info": "Du greifst mehrere Gegner nacheinander an und teleportierst dich jeweils zu ihnen.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "schaden": "+5W10",
+      "schadenArt": "physisch",
+      "effekt": "3 Gegner, bis zu 5m Teleport"
+     },
+     {
+      "level": 2,
+      "reichweite": "5m",
+      "schaden": "+6W10",
+      "schadenArt": "physisch",
+      "effekt": "4 Gegner, bis zu 5m Teleport"
+     },
+     {
+      "level": 3,
+      "reichweite": "7m",
+      "schaden": "+7W10",
+      "schadenArt": "physisch",
+      "effekt": "5 Gegner, bis zu 5m Teleport"
+     }
+    ]
+   },
+   {
+    "name": "Lichtgeschwindigkeit",
+    "ast": "Elben",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 4,
+    "info": "Du kannst mehrere deiner Fähigkeiten hintereinander einsetzen (gleiche Stufe wie Lichtgeschwindigkeit).",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "2 Fähigkeiten hintereinander"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "3 Fähigkeiten hintereinander"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "4 Fähigkeiten hintereinander"
+     }
+    ]
+   },
+   {
+    "name": "Befreiender Schlag",
+    "ast": "Engel",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 1,
+    "info": "Mache Schaden und entferne Debuffs. +1W10 Schaden pro entferntem Debuff.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "2W10",
+      "schadenArt": "physisch",
+      "effekt": "-1 Debuff"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "3W10",
+      "schadenArt": "physisch",
+      "effekt": "-2 Debuffs"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "4W10",
+      "schadenArt": "physisch",
+      "effekt": "-3 Debuffs"
+     }
+    ]
+   },
+   {
+    "name": "Beruhigende Aura",
+    "ast": "Engel",
+    "art": "aktiv",
+    "schadenTyp": "heilung",
+    "rang": 1,
+    "info": "Verbündete heilen Lebenspunkte und können Debuffs entfernen.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m Umkreis",
+      "schaden": "HL 1W10",
+      "schadenArt": "heilung",
+      "effekt": "-1 Debuff"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m Umkreis",
+      "schaden": "HL 2W10",
+      "schadenArt": "heilung",
+      "effekt": "-1 Debuff"
+     },
+     {
+      "level": 3,
+      "reichweite": "6m Umkreis",
+      "schaden": "HL 3W10",
+      "schadenArt": "heilung",
+      "effekt": "-2 Debuffs"
+     }
+    ]
+   },
+   {
+    "name": "Doppelhieb",
+    "ast": "Engel",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Du kannst pro Kampf einen Nahkampfangriff als Extra-Aktion machen. Danach 1 Runde Cooldown.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "effekt": "1 extra Angriff pro Kampf"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "effekt": "2 extra Angriffe pro Kampf"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "effekt": "3 extra Angriffe pro Kampf"
+     }
+    ]
+   },
+   {
+    "name": "Göttliche Flügel",
+    "ast": "Engel",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Du kannst fliegen.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "1 Runde fliegen"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "2 Runden fliegen"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "3 Runden fliegen"
+     }
+    ]
+   },
+   {
+    "name": "Magischer Schild",
+    "ast": "Engel",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Rüstungsbonus für mehrere Runden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "+3 Rüstung, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "+5 Rüstung, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "+10 Rüstung, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Eiserner Wille",
+    "ast": "Engel",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Für Runden Bonus auf Widerstandswürfe gegen Stun und Schlaf.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "+10 Widerstand, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "+20 Widerstand, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "+30 Widerstand, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Kriegsschrei",
+    "ast": "Engel",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Alle Verbündeten im Umkreis erhalten Rüstung und mehr Schaden mit Standard-Nahkampfangriffen (nicht stapelbar).",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "1m Umkreis",
+      "schaden": "NK+1W10",
+      "schadenArt": "physisch",
+      "effekt": "+5 RÜ, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "3m Umkreis",
+      "schaden": "NK+1W10",
+      "schadenArt": "physisch",
+      "effekt": "+5 RÜ, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "5m Umkreis",
+      "schaden": "NK+2W10",
+      "schadenArt": "physisch",
+      "effekt": "+10 RÜ, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Spalter",
+    "ast": "Engel",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "1/2/3 Gegner in einer Linie (max. 5m) erhalten rüstungsbrechenden Nahkampfschaden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf bis 5m",
+      "schaden": "NK",
+      "schadenArt": "physisch",
+      "effekt": "5 RB"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf bis 5m",
+      "schaden": "NK",
+      "schadenArt": "physisch",
+      "effekt": "10 RB"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf bis 5m",
+      "schaden": "NK",
+      "schadenArt": "physisch",
+      "effekt": "15 RB"
+     }
+    ]
+   },
+   {
+    "name": "Wache!",
+    "ast": "Engel",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Angriffe auf Gegner, die deine Kampfreichweite betreten, verlassen oder durchqueren (Gelegenheitsangriffe).",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf/Fernkampf",
+      "effekt": "2 Gelegenheitsangriffe pro Kampf"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf/Fernkampf",
+      "effekt": "3 Gelegenheitsangriffe pro Kampf"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf/Fernkampf",
+      "effekt": "4 Gelegenheitsangriffe pro Kampf"
+     }
+    ]
+   },
+   {
+    "name": "Befehl des Kapitäns",
+    "ast": "Engel",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 3,
+    "info": "2/3/4 Verbündete dürfen sofort eine A- oder B-Aktion durchführen.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "effekt": "2 Verbündete"
+     },
+     {
+      "level": 2,
+      "reichweite": "7m",
+      "effekt": "3 Verbündete"
+     },
+     {
+      "level": 3,
+      "reichweite": "10m",
+      "effekt": "4 Verbündete"
+     }
+    ]
+   },
+   {
+    "name": "Göttlicher Schild",
+    "ast": "Engel",
+    "art": "aktiv",
+    "schadenTyp": "heilung",
+    "rang": 3,
+    "info": "Heilt und rüstet Ziele für mehrere Runden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "schaden": "HL 4W10",
+      "schadenArt": "heilung",
+      "effekt": "1 Ziel, +5 RÜ, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "5m",
+      "schaden": "HL 5W10",
+      "schadenArt": "heilung",
+      "effekt": "2 Ziele, +10 RÜ, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "7m",
+      "schaden": "HL 6W10",
+      "schadenArt": "heilung",
+      "effekt": "3 Ziele, +15 RÜ, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Mehrfachschlag",
+    "ast": "Engel",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 3,
+    "info": "Nur auf ein Ziel, rüstungsbrechend.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "2 Angriffe",
+      "schadenArt": "physisch",
+      "effekt": "10 RB"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "3 Angriffe",
+      "schadenArt": "physisch",
+      "effekt": "15 RB"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "4 Angriffe",
+      "schadenArt": "physisch",
+      "effekt": "20 RB"
+     }
+    ]
+   },
+   {
+    "name": "Beifall",
+    "ast": "Engel",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 4,
+    "info": "Alle Freunde im Umkreis dürfen versuchen jeden Nahkampfangriff zu parieren und machen nach erfolgreicher Parade Konterschaden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m Umkreis",
+      "schaden": "2W10",
+      "schadenArt": "physisch",
+      "effekt": "1 Runde Konterschlag"
+     },
+     {
+      "level": 2,
+      "reichweite": "7m Umkreis",
+      "schaden": "3W10",
+      "schadenArt": "physisch",
+      "effekt": "2 Runden Konterschlag"
+     },
+     {
+      "level": 3,
+      "reichweite": "10m Umkreis",
+      "schaden": "4W10",
+      "schadenArt": "physisch",
+      "effekt": "3 Runden Konterschlag"
+     }
+    ]
+   },
+   {
+    "name": "Heute stirbt keiner!",
+    "ast": "Engel",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 4,
+    "info": "Für Runden kann kein Verbündeter unter 1 LP fallen.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "effekt": "1 Runde Todesverweigerung"
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "effekt": "2 Runden Todesverweigerung"
+     },
+     {
+      "level": 3,
+      "reichweite": "15m",
+      "effekt": "3 Runden Todesverweigerung"
+     }
+    ]
+   },
+   {
+    "name": "Beruhigende Aura",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "heilung",
+    "rang": 1,
+    "info": "Verbündete heilen Lebenspunkte und können Debuffs entfernen.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m Umkreis",
+      "schaden": "HL 1W10",
+      "schadenArt": "heilung",
+      "effekt": "-1 Debuff"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m Umkreis",
+      "schaden": "HL 2W10",
+      "schadenArt": "heilung",
+      "effekt": "-1 Debuff"
+     },
+     {
+      "level": 3,
+      "reichweite": "6m Umkreis",
+      "schaden": "HL 3W10",
+      "schadenArt": "heilung",
+      "effekt": "-2 Debuffs"
+     }
+    ]
+   },
+   {
+    "name": "Donnerwelle",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 1,
+    "info": "Bei Verwundung verliert das Ziel für 3 Runden einen Teil seiner Bewegung.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "schaden": "2W10",
+      "schadenArt": "magisch",
+      "effekt": "15% Chance, -1m"
+     },
+     {
+      "level": 2,
+      "reichweite": "7m",
+      "schaden": "3W10",
+      "schadenArt": "magisch",
+      "effekt": "20% Chance, -2m"
+     },
+     {
+      "level": 3,
+      "reichweite": "10m",
+      "schaden": "4W10",
+      "schadenArt": "magisch",
+      "effekt": "25% Chance, -3m"
+     }
+    ]
+   },
+   {
+    "name": "Dornenhaut",
+    "ast": "Gott/ Halbgott",
+    "art": "extra",
+    "schadenTyp": "physisch",
+    "rang": 1,
+    "info": "Rüstungsbonus; Nahkampfangreifer erleiden automatisch Schaden. Alternativ als Aktiv-Fähigkeit auf einen Verbündeten wirkbar.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m / SE",
+      "schaden": "+5 RÜ",
+      "schadenArt": "physisch",
+      "effekt": "1 Runde, 1W10 Gegenschaden"
+     },
+     {
+      "level": 2,
+      "reichweite": "7m / SE",
+      "schaden": "+5 RÜ",
+      "schadenArt": "physisch",
+      "effekt": "2 Runden, 2W10 Gegenschaden"
+     },
+     {
+      "level": 3,
+      "reichweite": "10m / SE",
+      "schaden": "+10 RÜ",
+      "schadenArt": "physisch",
+      "effekt": "3 Runden, 3W10 Gegenschaden"
+     }
+    ]
+   },
+   {
+    "name": "Feuerfaust",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 1,
+    "info": "Ziele neben (links und rechts) und hinter deinem Ziel erhalten Schaden und Feuermarker.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "NK +1W10",
+      "schadenArt": "physisch",
+      "effekt": "+1 Feuermarker"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "NK +2W10",
+      "schadenArt": "physisch",
+      "effekt": "+1 Feuermarker"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "NK +3W10",
+      "schadenArt": "physisch",
+      "effekt": "+1 Feuermarker"
+     }
+    ]
+   },
+   {
+    "name": "Flamme",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 1,
+    "info": "1/2/3-mal pro Kampf kannst du eine kleine Flamme auf deine Gegner werfen. Danach 1 Runde Cooldown.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "schaden": "2W10",
+      "schadenArt": "magisch",
+      "effekt": "+1 Fm, 1× pro Kampf"
+     },
+     {
+      "level": 2,
+      "reichweite": "5m",
+      "schaden": "3W10",
+      "schadenArt": "magisch",
+      "effekt": "+1 Fm, 2× pro Kampf"
+     },
+     {
+      "level": 3,
+      "reichweite": "7m",
+      "schaden": "4W10",
+      "schadenArt": "magisch",
+      "effekt": "+1 Fm, 3× pro Kampf"
+     }
+    ]
+   },
+   {
+    "name": "Fluch",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 1,
+    "info": "Du selbst bekommst Schaden, Ziele bekommen Schaden und schlafen ein.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "schaden": "3W10",
+      "schadenArt": "magisch",
+      "effekt": "3W10 Selbstschaden, 1 Ziel, 20% Schlaf 1W4 Runden"
+     },
+     {
+      "level": 2,
+      "reichweite": "7m",
+      "schaden": "4W10",
+      "schadenArt": "magisch",
+      "effekt": "2W10 Selbstschaden, 1 Ziel, 40% Schlaf 1W4 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "10m",
+      "schaden": "5W10",
+      "schadenArt": "magisch",
+      "effekt": "1W10 Selbstschaden, 2 Ziele, 60% Schlaf 1W4 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Frosthauch",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 1,
+    "info": "Ziel verliert Bewegung für seine nächste Runde.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "schaden": "2W10",
+      "schadenArt": "magisch",
+      "effekt": "-2m Bewegung"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m",
+      "schaden": "3W10",
+      "schadenArt": "magisch",
+      "effekt": "-4m Bewegung"
+     },
+     {
+      "level": 3,
+      "reichweite": "6m",
+      "schaden": "4W10",
+      "schadenArt": "magisch",
+      "effekt": "-6m Bewegung"
+     }
+    ]
+   },
+   {
+    "name": "Göttliche Flügel",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Du kannst fliegen.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "1 Runde fliegen"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "2 Runden fliegen"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "3 Runden fliegen"
+     }
+    ]
+   },
+   {
+    "name": "Heilende Hand",
+    "ast": "Gott/ Halbgott",
+    "art": "extra",
+    "schadenTyp": "heilung",
+    "rang": 1,
+    "info": "Du heilst einen Verbündeten.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "HL 2W10",
+      "schadenArt": "heilung"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "HL 3W10",
+      "schadenArt": "heilung"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "HL 4W10",
+      "schadenArt": "heilung"
+     }
+    ]
+   },
+   {
+    "name": "Knochengriff",
+    "ast": "Gott/ Halbgott",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Ein Ziel erhält für Runden Bewegungs- und Handeln-Malus.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "10m",
+      "effekt": "-2m BW, -10 Handeln, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "effekt": "-3m BW, -10 Handeln, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "10m",
+      "effekt": "-4m BW, -10 Handeln, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Magischer Schild",
+    "ast": "Gott/ Halbgott",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Rüstungsbonus für mehrere Runden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "+3 Rüstung, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "+5 Rüstung, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "+10 Rüstung, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Monster Gott",
+    "ast": "Gott/ Halbgott",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "In Monsterform zusätzliche Lebenspunkte.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +50 LP"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +100 LP"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +150 LP"
+     }
+    ]
+   },
+   {
+    "name": "Monster Lord",
+    "ast": "Gott/ Halbgott",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "In Monsterform zusätzliche Lebenspunkte.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +50 LP"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +75 LP"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +100 LP"
+     }
+    ]
+   },
+   {
+    "name": "Pure Muskeln +",
+    "ast": "Gott/ Halbgott",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "In Monsterform zusätzliche Stärke.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +15 Stärke"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +30 Stärke"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +50 Stärke"
+     }
+    ]
+   },
+   {
+    "name": "Schrecken der Meere",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Nach misslungenem Willenskraftwurf fliehen Gegner.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "effekt": "WW -5, 1 Gegner flieht 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m",
+      "effekt": "WW -10, 2 Gegner fliehen 1 Runde"
+     },
+     {
+      "level": 3,
+      "reichweite": "6m",
+      "effekt": "WW -15, 3 Gegner fliehen 2 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Stromstoß",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 1,
+    "info": "Pro Rüstungsklasse des Gegners zusätzlicher Schaden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "schaden": "2W10",
+      "schadenArt": "magisch",
+      "effekt": "+1W10 pro RÜ-Klasse"
+     },
+     {
+      "level": 2,
+      "reichweite": "2m",
+      "schaden": "3W10",
+      "schadenArt": "magisch",
+      "effekt": "+1W10 pro RÜ-Klasse"
+     },
+     {
+      "level": 3,
+      "reichweite": "2m",
+      "schaden": "4W10",
+      "schadenArt": "magisch",
+      "effekt": "+1W10 pro RÜ-Klasse"
+     }
+    ]
+   },
+   {
+    "name": "Wasserpeitsche",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 1,
+    "info": "Ziel wird herangezogen oder weggeschleudert bei misslungener Stärkeprobe.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "schaden": "2W10",
+      "schadenArt": "magisch",
+      "effekt": "SW -10"
+     },
+     {
+      "level": 2,
+      "reichweite": "5m",
+      "schaden": "3W10",
+      "schadenArt": "magisch",
+      "effekt": "SW -15"
+     },
+     {
+      "level": 3,
+      "reichweite": "7m",
+      "schaden": "4W10",
+      "schadenArt": "magisch",
+      "effekt": "SW -20"
+     }
+    ]
+   },
+   {
+    "name": "Aquaknarre",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 2,
+    "info": "1/2/3-mal pro Kampf kannst du einen Wasserstrahl schießen. Löscht alle Feuermarker bei dir und dem Ziel. Danach 1 Runde Cooldown.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "schaden": "4W10",
+      "schadenArt": "magisch",
+      "effekt": "SW -5, sonst 1W4 weggespült"
+     },
+     {
+      "level": 2,
+      "reichweite": "6m",
+      "schaden": "5W10",
+      "schadenArt": "magisch",
+      "effekt": "SW -10, sonst 1W4 weggespült"
+     },
+     {
+      "level": 3,
+      "reichweite": "9m",
+      "schaden": "6W10",
+      "schadenArt": "magisch",
+      "effekt": "SW -15, sonst 1W4 weggespült"
+     }
+    ]
+   },
+   {
+    "name": "Dunkle Rüstung",
+    "ast": "Gott/ Halbgott",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Für Runden Rüstung und Heimlichkeits-Bonus.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "+10 RÜ, +5 Heimlichkeit, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "+15 RÜ, +10 Heimlichkeit, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "+20 RÜ, +10 Heimlichkeit, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Eiserner Wille",
+    "ast": "Gott/ Halbgott",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Für Runden Bonus auf Widerstandswürfe gegen Stun und Schlaf.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "+10 Widerstand, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "+20 Widerstand, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "+30 Widerstand, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Elementargeist: Kleiner Teufel/Wurzelknirps/Eispanter",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Beschwört einen von drei wählbaren Elementargeistern mit eigenen LP/NK-Wert und Element-Zusatzeffekt.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Selbst",
+      "schaden": "2W10",
+      "schadenArt": "physisch",
+      "effekt": "LP 30, NK 30, 1 Element, 2 Runden"
+     },
+     {
+      "level": 2,
+      "reichweite": "Selbst",
+      "schaden": "3W10",
+      "schadenArt": "physisch",
+      "effekt": "LP 60, NK 40, 1 Element, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "Selbst",
+      "schaden": "4W10",
+      "schadenArt": "physisch",
+      "effekt": "LP 90, NK 50, 2 Elemente, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Feuerball",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 2,
+    "info": "1/2/3× pro Kampf. Ziel erhält Feuermarker. Danach 1 Runde Cooldown.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "schaden": "4W10",
+      "schadenArt": "magisch",
+      "effekt": "+1 Fm, 1 Runde Cooldown"
+     },
+     {
+      "level": 2,
+      "reichweite": "7m",
+      "schaden": "5W10",
+      "schadenArt": "magisch",
+      "effekt": "+1 Fm, 1 Runde Cooldown"
+     },
+     {
+      "level": 3,
+      "reichweite": "10m",
+      "schaden": "6W10",
+      "schadenArt": "magisch",
+      "effekt": "+2 Fm, 1 Runde Cooldown"
+     }
+    ]
+   },
+   {
+    "name": "Heilendes Wort",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "heilung",
+    "rang": 2,
+    "info": "Heile Ziele in Reichweite.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "schaden": "HL 4W10",
+      "schadenArt": "heilung",
+      "effekt": "1 Ziel"
+     },
+     {
+      "level": 2,
+      "reichweite": "5m",
+      "schaden": "HL 5W10",
+      "schadenArt": "heilung",
+      "effekt": "2 Ziele"
+     },
+     {
+      "level": 3,
+      "reichweite": "7m",
+      "schaden": "HL 6W10",
+      "schadenArt": "heilung",
+      "effekt": "3 Ziele"
+     }
+    ]
+   },
+   {
+    "name": "Kettenblitz",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 2,
+    "info": "Trifft mehrere Gegner jeweils im Umkreis.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "schaden": "3W10",
+      "schadenArt": "magisch",
+      "effekt": "2 Gegner, 3m Umkreis"
+     },
+     {
+      "level": 2,
+      "reichweite": "3m",
+      "schaden": "4W10",
+      "schadenArt": "magisch",
+      "effekt": "3 Gegner, 3m Umkreis"
+     },
+     {
+      "level": 3,
+      "reichweite": "3m",
+      "schaden": "5W10",
+      "schadenArt": "magisch",
+      "effekt": "4 Gegner, 3m Umkreis"
+     }
+    ]
+   },
+   {
+    "name": "Kriegsschrei",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Alle Verbündeten im Umkreis erhalten Rüstung und mehr Schaden mit Standard-Nahkampfangriffen (nicht stapelbar).",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "1m Umkreis",
+      "schaden": "NK+1W10",
+      "schadenArt": "physisch",
+      "effekt": "+5 RÜ, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "3m Umkreis",
+      "schaden": "NK+1W10",
+      "schadenArt": "physisch",
+      "effekt": "+5 RÜ, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "5m Umkreis",
+      "schaden": "NK+2W10",
+      "schadenArt": "physisch",
+      "effekt": "+10 RÜ, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Lebensentzug",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 2,
+    "info": "Mache Schaden auf Ziele. Du wirst um 50% des Schadens geheilt.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "schaden": "4W10",
+      "schadenArt": "magisch",
+      "effekt": "1 Ziel"
+     },
+     {
+      "level": 2,
+      "reichweite": "5m",
+      "schaden": "5W10",
+      "schadenArt": "magisch",
+      "effekt": "1 Ziel"
+     },
+     {
+      "level": 3,
+      "reichweite": "10m",
+      "schaden": "6W10",
+      "schadenArt": "magisch",
+      "effekt": "2 Ziele"
+     }
+    ]
+   },
+   {
+    "name": "Naturfluch",
+    "ast": "Gott/ Halbgott",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Wenn du Nahkampfschaden bekommst, ist der Angreifer zu einer Chance vergiftet.",
+    "stufen": [
+     {
+      "level": 1,
+      "effekt": "Gift Stufe 1, 20% Chance"
+     },
+     {
+      "level": 2,
+      "effekt": "Gift Stufe 2, 40% Chance"
+     },
+     {
+      "level": 3,
+      "effekt": "Gift Stufe 3, 60% Chance"
+     }
+    ]
+   },
+   {
+    "name": "Wurzelwucher",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 2,
+    "info": "Ziel muss einen Stärkewurf bestehen, um sich zu befreien.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "schaden": "GS 1",
+      "schadenArt": "magisch",
+      "effekt": "1 Blutung, SW -5"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m",
+      "schaden": "GS 2",
+      "schadenArt": "magisch",
+      "effekt": "1 Blutung, SW -10"
+     },
+     {
+      "level": 3,
+      "reichweite": "6m",
+      "schaden": "GS 3",
+      "schadenArt": "magisch",
+      "effekt": "2 Blutungen, SW -15"
+     }
+    ]
+   },
+   {
+    "name": "Brennender Kreis",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 3,
+    "info": "Im Umkreis bekommen alle Personen Feuerschaden und Feuermarker.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "1m Umkreis",
+      "schaden": "4W10",
+      "schadenArt": "magisch",
+      "effekt": "+1 Feuermarker"
+     },
+     {
+      "level": 2,
+      "reichweite": "2m Umkreis",
+      "schaden": "5W10",
+      "schadenArt": "magisch",
+      "effekt": "+2 Feuermarker"
+     },
+     {
+      "level": 3,
+      "reichweite": "3m Umkreis",
+      "schaden": "6W10",
+      "schadenArt": "magisch",
+      "effekt": "+3 Feuermarker"
+     }
+    ]
+   },
+   {
+    "name": "Göttlicher Schild",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "heilung",
+    "rang": 3,
+    "info": "Heilt und rüstet Ziele für mehrere Runden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "schaden": "HL 4W10",
+      "schadenArt": "heilung",
+      "effekt": "1 Ziel, +5 RÜ, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "5m",
+      "schaden": "HL 5W10",
+      "schadenArt": "heilung",
+      "effekt": "2 Ziele, +10 RÜ, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "7m",
+      "schaden": "HL 6W10",
+      "schadenArt": "heilung",
+      "effekt": "3 Ziele, +15 RÜ, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Knochenspeer",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 3,
+    "info": "1/1/2-mal pro Kampf. Du schleuderst einen Knochenspeer, der Ziele in einer Linie aufspießt. Danach 2 Runden Cooldown.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "schaden": "4W10",
+      "schadenArt": "physisch",
+      "effekt": "2 Ziele, 5 RB"
+     },
+     {
+      "level": 2,
+      "reichweite": "7m",
+      "schaden": "5W10",
+      "schadenArt": "physisch",
+      "effekt": "3 Ziele, 10 RB"
+     },
+     {
+      "level": 3,
+      "reichweite": "10m",
+      "schaden": "6W10",
+      "schadenArt": "physisch",
+      "effekt": "4 Ziele, 15 RB"
+     }
+    ]
+   },
+   {
+    "name": "Kometeneinschlag",
+    "ast": "Gott/ Halbgott",
+    "art": "passiv",
+    "schadenTyp": "physisch",
+    "rang": 3,
+    "info": "Stärkerer Nahkampfschaden mit Durchschlag.",
+    "stufen": [
+     {
+      "level": 1,
+      "effekt": "+1W10, 0 RB"
+     },
+     {
+      "level": 2,
+      "effekt": "+2W10, 5 RB"
+     },
+     {
+      "level": 3,
+      "effekt": "+3W10, 10 RB"
+     }
+    ]
+   },
+   {
+    "name": "Mehrfachschlag",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 3,
+    "info": "Nur auf ein Ziel, rüstungsbrechend.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "2 Angriffe",
+      "schadenArt": "physisch",
+      "effekt": "10 RB"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "3 Angriffe",
+      "schadenArt": "physisch",
+      "effekt": "15 RB"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "4 Angriffe",
+      "schadenArt": "physisch",
+      "effekt": "20 RB"
+     }
+    ]
+   },
+   {
+    "name": "Mentale Welle",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 3,
+    "info": "Alle im Radius außer dir haben einen Malus auf alle Proben.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "schaden": "2W10",
+      "schadenArt": "magisch",
+      "effekt": "-5 auf Proben"
+     },
+     {
+      "level": 2,
+      "reichweite": "3m",
+      "schaden": "3W10",
+      "schadenArt": "magisch",
+      "effekt": "-10 auf Proben"
+     },
+     {
+      "level": 3,
+      "reichweite": "4m",
+      "schaden": "4W10",
+      "schadenArt": "magisch",
+      "effekt": "-15 auf Proben"
+     }
+    ]
+   },
+   {
+    "name": "Wasserschild",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 3,
+    "info": "Ziele erhalten Rüstung, alle Feuermarker erlöschen. Immun gegen weitere Feuermarker solange der Schild aktiv ist.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "effekt": "1 Ziel, +10 RÜ, 3 Runden"
+     },
+     {
+      "level": 2,
+      "reichweite": "6m",
+      "effekt": "1 Ziel, +20 RÜ, 4 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "9m",
+      "effekt": "2 Ziele, +30 RÜ, 5 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Wucherfaust",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 3,
+    "info": "Triffst du deinen Gegner, kann er sich für Runden nicht von dir wegbewegen (SW -15 zum Befreien).",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "SS +1W10",
+      "schadenArt": "physisch",
+      "effekt": "1 Blutung, 1 Runde festgesetzt"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "SS +2W10",
+      "schadenArt": "physisch",
+      "effekt": "2 Blutungen, 1 Runde festgesetzt"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "SS +3W10",
+      "schadenArt": "physisch",
+      "effekt": "3 Blutungen, 2 Runden festgesetzt"
+     }
+    ]
+   },
+   {
+    "name": "Zorn der Wolken",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 3,
+    "info": "Blitz springt auf Ziele im Umkreis über.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "schaden": "5W10",
+      "schadenArt": "magisch",
+      "effekt": "1 Ziel, 20% Stun"
+     },
+     {
+      "level": 2,
+      "reichweite": "5m",
+      "schaden": "6W10",
+      "schadenArt": "magisch",
+      "effekt": "2 Ziele, 40% Stun"
+     },
+     {
+      "level": 3,
+      "reichweite": "7m",
+      "schaden": "7W10",
+      "schadenArt": "magisch",
+      "effekt": "3 Ziele, 60% Stun"
+     }
+    ]
+   },
+   {
+    "name": "Zurückspulen",
+    "ast": "Gott/ Halbgott",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 3,
+    "info": "Wenn das Ziel nach Runden noch lebt, springt es an seinen Ursprungsort zurück und verliert weitere Debuffs bzw. wird geheilt.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m / SE",
+      "effekt": "1 Runde: Ziel springt zurück, verliert Standort-Debuffs"
+     },
+     {
+      "level": 2,
+      "reichweite": "5m / SE",
+      "effekt": "2 Runden: zusätzlich werden erhaltene Debuffs gelöscht"
+     },
+     {
+      "level": 3,
+      "reichweite": "7m / SE",
+      "effekt": "3 Runden: zusätzlich +5W10 Heilung"
+     }
+    ]
+   },
+   {
+    "name": "Auflösung",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 4,
+    "info": "Löst Fähigkeiten auf: Buffs, Debuffs, Beschwörungen, magische Zonen, Schilde, Mauern usw. Bereits vollständig abgehandelte Effekte nicht.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "effekt": "1 Fähigkeit"
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "effekt": "2 Fähigkeiten"
+     },
+     {
+      "level": 3,
+      "reichweite": "15m",
+      "effekt": "3 Fähigkeiten"
+     }
+    ]
+   },
+   {
+    "name": "Gedankenkontrolle",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 4,
+    "info": "Sonst wird das Ziel für 2 Runden von dir kontrolliert.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "effekt": "1 Gegner, WW -5"
+     },
+     {
+      "level": 2,
+      "reichweite": "5m",
+      "effekt": "1 Gegner, WW -10"
+     },
+     {
+      "level": 3,
+      "reichweite": "7m",
+      "effekt": "2 Gegner, WW -15"
+     }
+    ]
+   },
+   {
+    "name": "Heute stirbt keiner!",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 4,
+    "info": "Für Runden kann kein Verbündeter unter 1 LP fallen.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "effekt": "1 Runde Todesverweigerung"
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "effekt": "2 Runden Todesverweigerung"
+     },
+     {
+      "level": 3,
+      "reichweite": "15m",
+      "effekt": "3 Runden Todesverweigerung"
+     }
+    ]
+   },
+   {
+    "name": "Hinrichtung",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 4,
+    "info": "Nur auf verletzte Ziele. Stirbt das Ziel, war die Hinrichtung keine Aktion.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "7W10",
+      "schadenArt": "physisch"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "8W10",
+      "schadenArt": "physisch"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "9W10",
+      "schadenArt": "physisch"
+     }
+    ]
+   },
+   {
+    "name": "Inferno",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 4,
+    "info": "1/2/3× pro Kampf machst du deinem Ziel Schaden und es erhält Feuermarker. Danach 3 Runden Cooldown.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "10m",
+      "schaden": "6W10",
+      "schadenArt": "magisch",
+      "effekt": "+2 Fm, 3 Runden Cooldown"
+     },
+     {
+      "level": 2,
+      "reichweite": "15m",
+      "schaden": "7W10",
+      "schadenArt": "magisch",
+      "effekt": "+2 Fm, 3 Runden Cooldown"
+     },
+     {
+      "level": 3,
+      "reichweite": "20m",
+      "schaden": "8W10",
+      "schadenArt": "magisch",
+      "effekt": "+2 Fm, 3 Runden Cooldown"
+     }
+    ]
+   },
+   {
+    "name": "Neues Leben",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "heilung",
+    "rang": 4,
+    "info": "1× pro Tag. Belebt nach Runden tot mit ein paar Lebenspunkten wieder. Oder heilt einfach nur.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "HL 8W10",
+      "schadenArt": "heilung",
+      "effekt": "Wiederbelebung nach 1 Runde tot"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "HL 9W10",
+      "schadenArt": "heilung",
+      "effekt": "Wiederbelebung nach 1 Runde tot"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "HL 10W10",
+      "schadenArt": "heilung",
+      "effekt": "Wiederbelebung nach 2 Runden tot"
+     }
+    ]
+   },
+   {
+    "name": "Schwarze Kugel",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 4,
+    "info": "Verursacht Selbstschaden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "schaden": "10W10",
+      "schadenArt": "magisch",
+      "effekt": "1W20 Selbstschaden"
+     },
+     {
+      "level": 2,
+      "reichweite": "6m",
+      "schaden": "11W10",
+      "schadenArt": "magisch",
+      "effekt": "1W12 Selbstschaden"
+     },
+     {
+      "level": 3,
+      "reichweite": "9m",
+      "schaden": "12W10",
+      "schadenArt": "magisch",
+      "effekt": "1W10 Selbstschaden"
+     }
+    ]
+   },
+   {
+    "name": "Sturmfokus",
+    "ast": "Gott/ Halbgott",
+    "art": "extra",
+    "schadenTyp": "magisch",
+    "rang": 4,
+    "info": "Für mehrere Runden machst du zusätzlichen Blitzschaden pro Rüstungsklasse des Ziels; ist das Ziel gestunnt, zusätzlicher Schaden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "schaden": "+2W10",
+      "schadenArt": "magisch",
+      "effekt": "2 Runden, +1W8 pro RÜ-Klasse, +2W10 bei Stun"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "schaden": "+3W10",
+      "schadenArt": "magisch",
+      "effekt": "3 Runden, +2W8 pro RÜ-Klasse, +2W10 bei Stun"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "schaden": "+4W10",
+      "schadenArt": "magisch",
+      "effekt": "4 Runden, +3W8 pro RÜ-Klasse, +2W10 bei Stun"
+     }
+    ]
+   },
+   {
+    "name": "Waldgedicht",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 4,
+    "info": "Alle Feinde im Umkreis werden vergiftet und erleiden Blutungen.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "schaden": "GS 4",
+      "schadenArt": "magisch",
+      "effekt": "2 Blutungen"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m",
+      "schaden": "GS 5",
+      "schadenArt": "magisch",
+      "effekt": "3 Blutungen"
+     },
+     {
+      "level": 3,
+      "reichweite": "6m",
+      "schaden": "GS 6",
+      "schadenArt": "magisch",
+      "effekt": "4 Blutungen"
+     }
+    ]
+   },
+   {
+    "name": "Welle",
+    "ast": "Gott/ Halbgott",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 4,
+    "info": "1/1/2-mal pro Kampf. Eine breite Welle trifft die ersten Gegner, die mitgerissen werden (Stärkewurf). Danach 3 Runden Cooldown.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "schaden": "6W10",
+      "schadenArt": "physisch",
+      "effekt": "2m breit, 1W4 Meter mitgerissen"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m",
+      "schaden": "7W10",
+      "schadenArt": "physisch",
+      "effekt": "3m breit, 2W4 Meter mitgerissen"
+     },
+     {
+      "level": 3,
+      "reichweite": "6m",
+      "schaden": "8W10",
+      "schadenArt": "physisch",
+      "effekt": "4m breit, 3W4 Meter mitgerissen"
+     }
+    ]
+   },
+   {
+    "name": "Klingen-/Klauensturm",
+    "ast": "Guhl",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 3,
+    "info": "Trifft alle angrenzenden Felder.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+2",
+      "schadenArt": "physisch",
+      "effekt": "10 RB, 1 Feld"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+3",
+      "schadenArt": "physisch",
+      "effekt": "15 RB, 1 Feld"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+4",
+      "schadenArt": "physisch",
+      "effekt": "20 RB, 2 Felder"
+     }
+    ]
+   },
+   {
+    "name": "Meuchelmörder",
+    "ast": "Guhl",
+    "art": "extra",
+    "schadenTyp": "magisch",
+    "rang": 3,
+    "info": "Hält Runden. Eine Giftstufe höher, wenn das Ziel blutet.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+2W10",
+      "schadenArt": "magisch",
+      "effekt": "GS 2, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+3W10",
+      "schadenArt": "magisch",
+      "effekt": "GS 3, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+4W10",
+      "schadenArt": "magisch",
+      "effekt": "GS 4, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Blutexpansion",
+    "ast": "Guhl",
+    "art": "extra",
+    "schadenTyp": "physisch",
+    "rang": 4,
+    "info": "Du fügst dir selbst Schaden zu und sofort (ohne Wurf) eine Blutung.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "6W10",
+      "schadenArt": "physisch",
+      "effekt": "2W10 Selbstschaden, +2 Blutungen"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "7W10",
+      "schadenArt": "physisch",
+      "effekt": "1W10 Selbstschaden, +3 Blutungen"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "8W10",
+      "schadenArt": "physisch",
+      "effekt": "1W10 Selbstschaden, +4 Blutungen"
+     }
+    ]
+   },
+   {
+    "name": "Fauler Atem",
+    "ast": "Guhl",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 4,
+    "info": "Alle im Umkreis werden vergiftet, brennen und fangen an zu bluten.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "1m Umkreis",
+      "schaden": "GS 3",
+      "schadenArt": "magisch",
+      "effekt": "+2 Fm, +1 Blutung"
+     },
+     {
+      "level": 2,
+      "reichweite": "2m Umkreis",
+      "schaden": "GS 4",
+      "schadenArt": "magisch",
+      "effekt": "+3 Fm, +2 Blutungen"
+     },
+     {
+      "level": 3,
+      "reichweite": "3m Umkreis",
+      "schaden": "GS 5",
+      "schadenArt": "magisch",
+      "effekt": "+4 Fm, +3 Blutungen"
+     }
+    ]
+   },
+   {
+    "name": "Dornenhaut",
+    "ast": "Hexe / Hexer",
+    "art": "extra",
+    "schadenTyp": "physisch",
+    "rang": 1,
+    "info": "Rüstungsbonus; Nahkampfangreifer erleiden automatisch Schaden. Alternativ als Aktiv-Fähigkeit auf einen Verbündeten wirkbar.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m / SE",
+      "schaden": "+5 RÜ",
+      "schadenArt": "physisch",
+      "effekt": "1 Runde, 1W10 Gegenschaden"
+     },
+     {
+      "level": 2,
+      "reichweite": "7m / SE",
+      "schaden": "+5 RÜ",
+      "schadenArt": "physisch",
+      "effekt": "2 Runden, 2W10 Gegenschaden"
+     },
+     {
+      "level": 3,
+      "reichweite": "10m / SE",
+      "schaden": "+10 RÜ",
+      "schadenArt": "physisch",
+      "effekt": "3 Runden, 3W10 Gegenschaden"
+     }
+    ]
+   },
+   {
+    "name": "Fluch",
+    "ast": "Hexe / Hexer",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 1,
+    "info": "Du selbst bekommst Schaden, Ziele bekommen Schaden und schlafen ein.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "schaden": "3W10",
+      "schadenArt": "magisch",
+      "effekt": "3W10 Selbstschaden, 1 Ziel, 20% Schlaf 1W4 Runden"
+     },
+     {
+      "level": 2,
+      "reichweite": "7m",
+      "schaden": "4W10",
+      "schadenArt": "magisch",
+      "effekt": "2W10 Selbstschaden, 1 Ziel, 40% Schlaf 1W4 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "10m",
+      "schaden": "5W10",
+      "schadenArt": "magisch",
+      "effekt": "1W10 Selbstschaden, 2 Ziele, 60% Schlaf 1W4 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Knochengriff",
+    "ast": "Hexe / Hexer",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Ein Ziel erhält für Runden Bewegungs- und Handeln-Malus.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "10m",
+      "effekt": "-2m BW, -10 Handeln, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "effekt": "-3m BW, -10 Handeln, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "10m",
+      "effekt": "-4m BW, -10 Handeln, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Schlaflied",
+    "ast": "Hexe / Hexer",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 1,
+    "info": "Für 1W4 Runden schlafen alle im Umkreis zu einer Chance ein.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "schaden": "GS 10%",
+      "schadenArt": "magisch"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m",
+      "schaden": "GS 20%",
+      "schadenArt": "magisch"
+     },
+     {
+      "level": 3,
+      "reichweite": "5m",
+      "schaden": "GS 30%",
+      "schadenArt": "magisch"
+     }
+    ]
+   },
+   {
+    "name": "Schrecken der Meere",
+    "ast": "Hexe / Hexer",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Nach misslungenem Willenskraftwurf fliehen Gegner.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "effekt": "WW -5, 1 Gegner flieht 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m",
+      "effekt": "WW -10, 2 Gegner fliehen 1 Runde"
+     },
+     {
+      "level": 3,
+      "reichweite": "6m",
+      "effekt": "WW -15, 3 Gegner fliehen 2 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Flüstern der Schatten",
+    "ast": "Hexe / Hexer",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 2,
+    "info": "Chance, dass dein Ziel für 1W4 Runde schläft.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "effekt": "70% Chance"
+     },
+     {
+      "level": 2,
+      "reichweite": "6m",
+      "effekt": "80% Chance"
+     },
+     {
+      "level": 3,
+      "reichweite": "9m",
+      "effekt": "90% Chance"
+     }
+    ]
+   },
+   {
+    "name": "Lebensentzug",
+    "ast": "Hexe / Hexer",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 2,
+    "info": "Mache Schaden auf Ziele. Du wirst um 50% des Schadens geheilt.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "schaden": "4W10",
+      "schadenArt": "magisch",
+      "effekt": "1 Ziel"
+     },
+     {
+      "level": 2,
+      "reichweite": "5m",
+      "schaden": "5W10",
+      "schadenArt": "magisch",
+      "effekt": "1 Ziel"
+     },
+     {
+      "level": 3,
+      "reichweite": "10m",
+      "schaden": "6W10",
+      "schadenArt": "magisch",
+      "effekt": "2 Ziele"
+     }
+    ]
+   },
+   {
+    "name": "Naturfluch",
+    "ast": "Hexe / Hexer",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Wenn du Nahkampfschaden bekommst, ist der Angreifer zu einer Chance vergiftet.",
+    "stufen": [
+     {
+      "level": 1,
+      "effekt": "Gift Stufe 1, 20% Chance"
+     },
+     {
+      "level": 2,
+      "effekt": "Gift Stufe 2, 40% Chance"
+     },
+     {
+      "level": 3,
+      "effekt": "Gift Stufe 3, 60% Chance"
+     }
+    ]
+   },
+   {
+    "name": "Traumherrscher",
+    "ast": "Hexe / Hexer",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Erhöht die Chance, dass ein Gegner einschläft, jeweils pro aktivem Debuff (Blutung, Gift, Feuermarker).",
+    "stufen": [
+     {
+      "level": 1,
+      "effekt": "+5% Schlafchance pro Debuff"
+     },
+     {
+      "level": 2,
+      "effekt": "+10% Schlafchance pro Debuff"
+     },
+     {
+      "level": 3,
+      "effekt": "+15% Schlafchance pro Debuff"
+     }
+    ]
+   },
+   {
+    "name": "Auflösung",
+    "ast": "Hexe / Hexer",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 4,
+    "info": "Löst Fähigkeiten auf: Buffs, Debuffs, Beschwörungen, magische Zonen, Schilde, Mauern usw. Bereits vollständig abgehandelte Effekte nicht.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "effekt": "1 Fähigkeit"
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "effekt": "2 Fähigkeiten"
+     },
+     {
+      "level": 3,
+      "reichweite": "15m",
+      "effekt": "3 Fähigkeiten"
+     }
+    ]
+   },
+   {
+    "name": "Fluch der Schwächung",
+    "ast": "Hexe / Hexer",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 3,
+    "info": "Ziele in Reichweite machen für Runden weniger Standard-Angriffsschaden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "effekt": "1 Ziel, -40% Schaden, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m",
+      "effekt": "2 Ziele, -50% Schaden, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "6m",
+      "effekt": "3 Ziele, -60% Schaden, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Gedankenkontrolle",
+    "ast": "Hexe / Hexer",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 4,
+    "info": "Sonst wird das Ziel für 2 Runden von dir kontrolliert.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "effekt": "1 Gegner, WW -5"
+     },
+     {
+      "level": 2,
+      "reichweite": "5m",
+      "effekt": "1 Gegner, WW -10"
+     },
+     {
+      "level": 3,
+      "reichweite": "7m",
+      "effekt": "2 Gegner, WW -15"
+     }
+    ]
+   },
+   {
+    "name": "Mentale Welle",
+    "ast": "Hexe / Hexer",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 3,
+    "info": "Alle im Radius außer dir haben einen Malus auf alle Proben.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "schaden": "2W10",
+      "schadenArt": "magisch",
+      "effekt": "-5 auf Proben"
+     },
+     {
+      "level": 2,
+      "reichweite": "3m",
+      "schaden": "3W10",
+      "schadenArt": "magisch",
+      "effekt": "-10 auf Proben"
+     },
+     {
+      "level": 3,
+      "reichweite": "4m",
+      "schaden": "4W10",
+      "schadenArt": "magisch",
+      "effekt": "-15 auf Proben"
+     }
+    ]
+   },
+   {
+    "name": "Verfluchter Kreis",
+    "ast": "Hexe / Hexer",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 3,
+    "info": "Zone mit Probenmalus für mehrere Runden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "schaden": "+1W10",
+      "schadenArt": "magisch",
+      "effekt": "2x2m Zone, -5 auf Proben, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "6m",
+      "schaden": "+1W10",
+      "schadenArt": "magisch",
+      "effekt": "2x2m Zone, -10 auf Proben, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "9m",
+      "schaden": "+2W10",
+      "schadenArt": "magisch",
+      "effekt": "3x3m Zone, -15 auf Proben, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Biss",
+    "ast": "Naga",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 1,
+    "info": "Du beißt ein angrenzendes Ziel.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "Stärke +2W10",
+      "schadenArt": "physisch",
+      "effekt": "0 RB, 1 Blutung"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "Stärke +3W10",
+      "schadenArt": "physisch",
+      "effekt": "5 RB, 1 Blutung"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "Stärke +4W10",
+      "schadenArt": "physisch",
+      "effekt": "10 RB, 2 Blutungen"
+     }
+    ]
+   },
+   {
+    "name": "Giftmischer",
+    "ast": "Naga",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Deine Nahkampf- und Fernkampfangriffe verursachen Gift.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "Gift Stufe 1, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "Gift Stufe 2, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "Gift Stufe 3, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Regeneration",
+    "ast": "Naga",
+    "art": "extra",
+    "schadenTyp": "heilung",
+    "rang": 1,
+    "info": "Zu Beginn deiner nächsten Runden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "schaden": "HL 2W10",
+      "schadenArt": "heilung",
+      "effekt": "2 Runden"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "schaden": "HL 3W10",
+      "schadenArt": "heilung",
+      "effekt": "3 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "schaden": "HL 4W10",
+      "schadenArt": "heilung",
+      "effekt": "4 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Schlitzer",
+    "ast": "Naga",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 1,
+    "info": "Fügt einem Gegner Nahkampfschaden und Blutungen zu.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "NK",
+      "schadenArt": "physisch",
+      "effekt": "+1 Blutung"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "NK",
+      "schadenArt": "physisch",
+      "effekt": "+2 Blutungen"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "NK",
+      "schadenArt": "physisch",
+      "effekt": "+3 Blutungen"
+     }
+    ]
+   },
+   {
+    "name": "Schrecken der Meere",
+    "ast": "Naga",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Nach misslungenem Willenskraftwurf fliehen Gegner.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "effekt": "WW -5, 1 Gegner flieht 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m",
+      "effekt": "WW -10, 2 Gegner fliehen 1 Runde"
+     },
+     {
+      "level": 3,
+      "reichweite": "6m",
+      "effekt": "WW -15, 3 Gegner fliehen 2 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Gieriger Biss",
+    "ast": "Naga",
+    "art": "extra",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Nur nutzbar unter 50% LP. Du erhältst den verursachten Schaden als Heilung.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "3W10",
+      "schadenArt": "physisch",
+      "effekt": "0 RB, Schaden = Heilung"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "4W10",
+      "schadenArt": "physisch",
+      "effekt": "5 RB, Schaden = Heilung"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "5W10",
+      "schadenArt": "physisch",
+      "effekt": "10 RB, Schaden = Heilung"
+     }
+    ]
+   },
+   {
+    "name": "Giftsymbiose",
+    "ast": "Naga",
+    "art": "passiv",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Zusatzschaden pro Gift-Stufe (max. 5).",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+1W4 pro GS",
+      "schadenArt": "physisch",
+      "effekt": "max. 5"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+2W4 pro GS",
+      "schadenArt": "physisch",
+      "effekt": "max. 5"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+3W4 pro GS",
+      "schadenArt": "physisch",
+      "effekt": "max. 5"
+     }
+    ]
+   },
+   {
+    "name": "Naturfluch",
+    "ast": "Naga",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Wenn du Nahkampfschaden bekommst, ist der Angreifer zu einer Chance vergiftet.",
+    "stufen": [
+     {
+      "level": 1,
+      "effekt": "Gift Stufe 1, 20% Chance"
+     },
+     {
+      "level": 2,
+      "effekt": "Gift Stufe 2, 40% Chance"
+     },
+     {
+      "level": 3,
+      "effekt": "Gift Stufe 3, 60% Chance"
+     }
+    ]
+   },
+   {
+    "name": "Wurzelwucher",
+    "ast": "Naga",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 2,
+    "info": "Ziel muss einen Stärkewurf bestehen, um sich zu befreien.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "schaden": "GS 1",
+      "schadenArt": "magisch",
+      "effekt": "1 Blutung, SW -5"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m",
+      "schaden": "GS 2",
+      "schadenArt": "magisch",
+      "effekt": "1 Blutung, SW -10"
+     },
+     {
+      "level": 3,
+      "reichweite": "6m",
+      "schaden": "GS 3",
+      "schadenArt": "magisch",
+      "effekt": "2 Blutungen, SW -15"
+     }
+    ]
+   },
+   {
+    "name": "Giftwolke",
+    "ast": "Naga",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 3,
+    "info": "Alle in der Wolke werden vergiftet und erleiden Wahrnehmungsmalus.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "schaden": "GS 4",
+      "schadenArt": "magisch",
+      "effekt": "2x2m Wolke, -10 Wahrnehmung"
+     },
+     {
+      "level": 2,
+      "reichweite": "7m",
+      "schaden": "GS 5",
+      "schadenArt": "magisch",
+      "effekt": "2x2m Wolke, -10 Wahrnehmung"
+     },
+     {
+      "level": 3,
+      "reichweite": "10m",
+      "schaden": "GS 6",
+      "schadenArt": "magisch",
+      "effekt": "3x3m Wolke, -10 Wahrnehmung"
+     }
+    ]
+   },
+   {
+    "name": "Welle der Korrosion",
+    "ast": "Naga",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 3,
+    "info": "Alle im Umkreis werden vergiftet.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m Umkreis",
+      "schaden": "3W10",
+      "schadenArt": "magisch",
+      "effekt": "GS 3"
+     },
+     {
+      "level": 2,
+      "reichweite": "3m Umkreis",
+      "schaden": "4W10",
+      "schadenArt": "magisch",
+      "effekt": "GS 4"
+     },
+     {
+      "level": 3,
+      "reichweite": "4m Umkreis",
+      "schaden": "5W10",
+      "schadenArt": "magisch",
+      "effekt": "GS 5"
+     }
+    ]
+   },
+   {
+    "name": "Wucherfaust",
+    "ast": "Naga",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 3,
+    "info": "Triffst du deinen Gegner, kann er sich für Runden nicht von dir wegbewegen (SW -15 zum Befreien).",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "SS +1W10",
+      "schadenArt": "physisch",
+      "effekt": "1 Blutung, 1 Runde festgesetzt"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "SS +2W10",
+      "schadenArt": "physisch",
+      "effekt": "2 Blutungen, 1 Runde festgesetzt"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "SS +3W10",
+      "schadenArt": "physisch",
+      "effekt": "3 Blutungen, 2 Runden festgesetzt"
+     }
+    ]
+   },
+   {
+    "name": "Verschlingen",
+    "ast": "Naga",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 4,
+    "info": "Chance dass Ziel für 1W4 Runden verschlungen wird und Gift+Blutungen erhält; misslingt es, erleidet der Anwender Schaden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "effekt": "20% Chance, Gift Stufe 4, +3 Blutungen; sonst 4W10 Schaden für Anwender"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "effekt": "40% Chance, Gift Stufe 5, +4 Blutungen; sonst 4W10 Schaden für Anwender"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "effekt": "60% Chance, Gift Stufe 6, +5 Blutungen; sonst 4W10 Schaden für Anwender"
+     }
+    ]
+   },
+   {
+    "name": "Waldgedicht",
+    "ast": "Naga",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 4,
+    "info": "Alle Feinde im Umkreis werden vergiftet und erleiden Blutungen.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "schaden": "GS 4",
+      "schadenArt": "magisch",
+      "effekt": "2 Blutungen"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m",
+      "schaden": "GS 5",
+      "schadenArt": "magisch",
+      "effekt": "3 Blutungen"
+     },
+     {
+      "level": 3,
+      "reichweite": "6m",
+      "schaden": "GS 6",
+      "schadenArt": "magisch",
+      "effekt": "4 Blutungen"
+     }
+    ]
+   },
+   {
+    "name": "Beruhigende Aura",
+    "ast": "Priester / Mönch",
+    "art": "aktiv",
+    "schadenTyp": "heilung",
+    "rang": 1,
+    "info": "Verbündete heilen Lebenspunkte und können Debuffs entfernen.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m Umkreis",
+      "schaden": "HL 1W10",
+      "schadenArt": "heilung",
+      "effekt": "-1 Debuff"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m Umkreis",
+      "schaden": "HL 2W10",
+      "schadenArt": "heilung",
+      "effekt": "-1 Debuff"
+     },
+     {
+      "level": 3,
+      "reichweite": "6m Umkreis",
+      "schaden": "HL 3W10",
+      "schadenArt": "heilung",
+      "effekt": "-2 Debuffs"
+     }
+    ]
+   },
+   {
+    "name": "Heilende Hand",
+    "ast": "Priester / Mönch",
+    "art": "extra",
+    "schadenTyp": "heilung",
+    "rang": 1,
+    "info": "Du heilst einen Verbündeten.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "HL 2W10",
+      "schadenArt": "heilung"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "HL 3W10",
+      "schadenArt": "heilung"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "HL 4W10",
+      "schadenArt": "heilung"
+     }
+    ]
+   },
+   {
+    "name": "Magischer Schild",
+    "ast": "Priester / Mönch",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Rüstungsbonus für mehrere Runden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "+3 Rüstung, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "+5 Rüstung, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "+10 Rüstung, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Raus da!",
+    "ast": "Priester / Mönch",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Bewege sofort einen Verbündeten, ohne dass er eigene Bewegung verbraucht.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "effekt": "+2m Bewegung"
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "effekt": "+4m Bewegung"
+     },
+     {
+      "level": 3,
+      "reichweite": "15m",
+      "effekt": "+6m Bewegung"
+     }
+    ]
+   },
+   {
+    "name": "Seelenreinigung",
+    "ast": "Priester / Mönch",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Entfernt bei allen Verbündeten im Umkreis jeweils Stufen der Debuffs (Gift, Feuermarker, Blutung).",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "1m",
+      "effekt": "-1 Stufe"
+     },
+     {
+      "level": 2,
+      "reichweite": "3m",
+      "effekt": "-2 Stufen"
+     },
+     {
+      "level": 3,
+      "reichweite": "5m",
+      "effekt": "-3 Stufen"
+     }
+    ]
+   },
+   {
+    "name": "Ansporn",
+    "ast": "Priester / Mönch",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Alle Verbündeten im Umkreis bekommen für Runden einen Bonus auf Handeln und Bewegung (nicht stapelbar).",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m Umkreis",
+      "effekt": "+10 Handeln, +1m Bewegung, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m Umkreis",
+      "effekt": "+15 Handeln, +2m Bewegung, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "6m Umkreis",
+      "effekt": "+20 Handeln, +3m Bewegung, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Aura der Rast",
+    "ast": "Priester / Mönch",
+    "art": "aktiv",
+    "schadenTyp": "heilung",
+    "rang": 2,
+    "info": "Heilst du jeden Freund, der seine Runde in deiner Aura startet, für mehrere Runden. Zusätzlich darf er ein Debuff seiner Wahl reduzieren.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m / SE",
+      "schaden": "HL +2W10",
+      "schadenArt": "heilung",
+      "effekt": "2 Runden, -1 Debuff-Level"
+     },
+     {
+      "level": 2,
+      "reichweite": "3m / SE",
+      "schaden": "HL +3W10",
+      "schadenArt": "heilung",
+      "effekt": "3 Runden, -2 Debuff-Level"
+     },
+     {
+      "level": 3,
+      "reichweite": "4m / SE",
+      "schaden": "HL +4W10",
+      "schadenArt": "heilung",
+      "effekt": "4 Runden, -3 Debuff-Level"
+     }
+    ]
+   },
+   {
+    "name": "Buße",
+    "ast": "Priester / Mönch",
+    "art": "aktiv",
+    "schadenTyp": "heilung",
+    "rang": 2,
+    "info": "Geht nur, wenn der Anwender einen Debuff hat. Ziele in Reichweite werden geheilt und verlieren alle Debuffs.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "schaden": "HL 3W10",
+      "schadenArt": "heilung",
+      "effekt": "1 Ziel"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m",
+      "schaden": "HL 4W10",
+      "schadenArt": "heilung",
+      "effekt": "2 Ziele"
+     },
+     {
+      "level": 3,
+      "reichweite": "6m",
+      "schaden": "HL 5W10",
+      "schadenArt": "heilung",
+      "effekt": "3 Ziele"
+     }
+    ]
+   },
+   {
+    "name": "Heilendes Wort",
+    "ast": "Priester / Mönch",
+    "art": "aktiv",
+    "schadenTyp": "heilung",
+    "rang": 2,
+    "info": "Heile Ziele in Reichweite.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "schaden": "HL 4W10",
+      "schadenArt": "heilung",
+      "effekt": "1 Ziel"
+     },
+     {
+      "level": 2,
+      "reichweite": "5m",
+      "schaden": "HL 5W10",
+      "schadenArt": "heilung",
+      "effekt": "2 Ziele"
+     },
+     {
+      "level": 3,
+      "reichweite": "7m",
+      "schaden": "HL 6W10",
+      "schadenArt": "heilung",
+      "effekt": "3 Ziele"
+     }
+    ]
+   },
+   {
+    "name": "Ersthelfer",
+    "ast": "Priester / Mönch",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 3,
+    "info": "1/2/3× pro Kampf: Fällt ein Verbündeter in Reichweite auf 10 LP oder weniger, darfst du sofort eine Heilfähigkeit auf ihn einsetzen, obwohl nicht deine Runde ist.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "effekt": "1× pro Kampf"
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "effekt": "2× pro Kampf"
+     },
+     {
+      "level": 3,
+      "reichweite": "10m",
+      "effekt": "3× pro Kampf"
+     }
+    ]
+   },
+   {
+    "name": "Göttlicher Schild",
+    "ast": "Priester / Mönch",
+    "art": "aktiv",
+    "schadenTyp": "heilung",
+    "rang": 3,
+    "info": "Heilt und rüstet Ziele für mehrere Runden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "schaden": "HL 4W10",
+      "schadenArt": "heilung",
+      "effekt": "1 Ziel, +5 RÜ, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "5m",
+      "schaden": "HL 5W10",
+      "schadenArt": "heilung",
+      "effekt": "2 Ziele, +10 RÜ, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "7m",
+      "schaden": "HL 6W10",
+      "schadenArt": "heilung",
+      "effekt": "3 Ziele, +15 RÜ, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Welle der Heilung",
+    "ast": "Priester / Mönch",
+    "art": "aktiv",
+    "schadenTyp": "heilung",
+    "rang": 3,
+    "info": "Aura heilt jeden Verbündeten im Umkreis.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m Umkreis",
+      "schaden": "HL 4W10",
+      "schadenArt": "heilung"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m Umkreis",
+      "schaden": "HL 5W10",
+      "schadenArt": "heilung"
+     },
+     {
+      "level": 3,
+      "reichweite": "6m Umkreis",
+      "schaden": "HL 6W10",
+      "schadenArt": "heilung"
+     }
+    ]
+   },
+   {
+    "name": "Heute stirbt keiner!",
+    "ast": "Priester / Mönch",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 4,
+    "info": "Für Runden kann kein Verbündeter unter 1 LP fallen.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "effekt": "1 Runde Todesverweigerung"
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "effekt": "2 Runden Todesverweigerung"
+     },
+     {
+      "level": 3,
+      "reichweite": "15m",
+      "effekt": "3 Runden Todesverweigerung"
+     }
+    ]
+   },
+   {
+    "name": "Neues Leben",
+    "ast": "Priester / Mönch",
+    "art": "aktiv",
+    "schadenTyp": "heilung",
+    "rang": 4,
+    "info": "1× pro Tag. Belebt nach Runden tot mit ein paar Lebenspunkten wieder. Oder heilt einfach nur.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "HL 8W10",
+      "schadenArt": "heilung",
+      "effekt": "Wiederbelebung nach 1 Runde tot"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "HL 9W10",
+      "schadenArt": "heilung",
+      "effekt": "Wiederbelebung nach 1 Runde tot"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "HL 10W10",
+      "schadenArt": "heilung",
+      "effekt": "Wiederbelebung nach 2 Runden tot"
+     }
+    ]
+   },
+   {
+    "name": "Berauben",
+    "ast": "Rattenmensch",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 1,
+    "info": "Fügt Nahkampfschaden zu. Bei Verwundung zusätzlich Gold erbeutet.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+1W10",
+      "schadenArt": "physisch",
+      "effekt": "5 RB, +2W10 Gold"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+2W10",
+      "schadenArt": "physisch",
+      "effekt": "10 RB, +4W10 Gold"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+3W10",
+      "schadenArt": "physisch",
+      "effekt": "15 RB, +6W10 Gold"
+     }
+    ]
+   },
+   {
+    "name": "Flinke Füße",
+    "ast": "Rattenmensch",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Deine Bewegung erhöht sich permanent.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "+1m Bewegung"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "+2m Bewegung"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "+3m Bewegung"
+     }
+    ]
+   },
+   {
+    "name": "Giftmischer",
+    "ast": "Rattenmensch",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Deine Nahkampf- und Fernkampfangriffe verursachen Gift.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "Gift Stufe 1, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "Gift Stufe 2, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "Gift Stufe 3, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Ich bin dann mal weg",
+    "ast": "Rattenmensch",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Du wirst unsichtbar. Bricht bei Schaden, Angriff oder Fähigkeit ab.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "1 Runde unsichtbar"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "2 Runden unsichtbar"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "3 Runden unsichtbar"
+     }
+    ]
+   },
+   {
+    "name": "Schlitzer",
+    "ast": "Rattenmensch",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 1,
+    "info": "Fügt einem Gegner Nahkampfschaden und Blutungen zu.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "NK",
+      "schadenArt": "physisch",
+      "effekt": "+1 Blutung"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "NK",
+      "schadenArt": "physisch",
+      "effekt": "+2 Blutungen"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "NK",
+      "schadenArt": "physisch",
+      "effekt": "+3 Blutungen"
+     }
+    ]
+   },
+   {
+    "name": "Bluthund",
+    "ast": "Rattenmensch",
+    "art": "extra",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Nur verletzte Ziele wählbar. Für Runden visierst du ein Ziel an, Malus auf andere Ziele. Falls das Ziel Blutung hat, Zusatzschaden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "schaden": "+5 Angriff / +2W10",
+      "schadenArt": "physisch",
+      "effekt": "1 Runde, -20 auf andere Ziele, +1W10 bei Blutung"
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "schaden": "+10 Angriff / +3W10",
+      "schadenArt": "physisch",
+      "effekt": "2 Runden, -20 auf andere Ziele, +1W10 bei Blutung"
+     },
+     {
+      "level": 3,
+      "reichweite": "15m",
+      "schaden": "+15 Angriff / +4W10",
+      "schadenArt": "physisch",
+      "effekt": "3 Runden, -20 auf andere Ziele, +1W10 bei Blutung"
+     }
+    ]
+   },
+   {
+    "name": "Giftsymbiose",
+    "ast": "Rattenmensch",
+    "art": "passiv",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Zusatzschaden pro Gift-Stufe (max. 5).",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+1W4 pro GS",
+      "schadenArt": "physisch",
+      "effekt": "max. 5"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+2W4 pro GS",
+      "schadenArt": "physisch",
+      "effekt": "max. 5"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+3W4 pro GS",
+      "schadenArt": "physisch",
+      "effekt": "max. 5"
+     }
+    ]
+   },
+   {
+    "name": "Seuchenstoß",
+    "ast": "Rattenmensch",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Hat das Ziel eine Blutung oder einen Feuermarker, erhöht sich das Gift um eine weitere Stufe.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "NK/FK+3W10",
+      "schadenArt": "physisch",
+      "effekt": "GS 2, +1 Stufe bei BL/FM"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "NK/FK+4W10",
+      "schadenArt": "physisch",
+      "effekt": "GS 3, +1 Stufe bei BL/FM"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "NK/FK+5W10",
+      "schadenArt": "physisch",
+      "effekt": "GS 4, +1 Stufe bei BL/FM"
+     }
+    ]
+   },
+   {
+    "name": "Gieriger Biss",
+    "ast": "Rattenmensch",
+    "art": "extra",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Nur nutzbar unter 50% LP. Du erhältst den verursachten Schaden als Heilung.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "3W10",
+      "schadenArt": "physisch",
+      "effekt": "0 RB, Schaden = Heilung"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "4W10",
+      "schadenArt": "physisch",
+      "effekt": "5 RB, Schaden = Heilung"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "5W10",
+      "schadenArt": "physisch",
+      "effekt": "10 RB, Schaden = Heilung"
+     }
+    ]
+   },
+   {
+    "name": "Angriff aus dem Dunkeln",
+    "ast": "Rattenmensch",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 3,
+    "info": "Nur wenn du versteckt bist. Du bleibst zu einer Chance unentdeckt.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+3W10",
+      "schadenArt": "physisch",
+      "effekt": "1 Blutung, 25% unentdeckt"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+4W10",
+      "schadenArt": "physisch",
+      "effekt": "1 Blutung, 50% unentdeckt"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+5W10",
+      "schadenArt": "physisch",
+      "effekt": "2 Blutungen, 75% unentdeckt"
+     }
+    ]
+   },
+   {
+    "name": "Giftwolke",
+    "ast": "Rattenmensch",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 3,
+    "info": "Alle in der Wolke werden vergiftet und erleiden Wahrnehmungsmalus.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "schaden": "GS 4",
+      "schadenArt": "magisch",
+      "effekt": "2x2m Wolke, -10 Wahrnehmung"
+     },
+     {
+      "level": 2,
+      "reichweite": "7m",
+      "schaden": "GS 5",
+      "schadenArt": "magisch",
+      "effekt": "2x2m Wolke, -10 Wahrnehmung"
+     },
+     {
+      "level": 3,
+      "reichweite": "10m",
+      "schaden": "GS 6",
+      "schadenArt": "magisch",
+      "effekt": "3x3m Wolke, -10 Wahrnehmung"
+     }
+    ]
+   },
+   {
+    "name": "Meuchelmörder",
+    "ast": "Rattenmensch",
+    "art": "extra",
+    "schadenTyp": "magisch",
+    "rang": 3,
+    "info": "Hält Runden. Eine Giftstufe höher, wenn das Ziel blutet.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+2W10",
+      "schadenArt": "magisch",
+      "effekt": "GS 2, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+3W10",
+      "schadenArt": "magisch",
+      "effekt": "GS 3, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+4W10",
+      "schadenArt": "magisch",
+      "effekt": "GS 4, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Fauler Atem",
+    "ast": "Rattenmensch",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 4,
+    "info": "Alle im Umkreis werden vergiftet, brennen und fangen an zu bluten.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "1m Umkreis",
+      "schaden": "GS 3",
+      "schadenArt": "magisch",
+      "effekt": "+2 Fm, +1 Blutung"
+     },
+     {
+      "level": 2,
+      "reichweite": "2m Umkreis",
+      "schaden": "GS 4",
+      "schadenArt": "magisch",
+      "effekt": "+3 Fm, +2 Blutungen"
+     },
+     {
+      "level": 3,
+      "reichweite": "3m Umkreis",
+      "schaden": "GS 5",
+      "schadenArt": "magisch",
+      "effekt": "+4 Fm, +3 Blutungen"
+     }
+    ]
+   },
+   {
+    "name": "Hinrichtung",
+    "ast": "Rattenmensch",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 4,
+    "info": "Nur auf verletzte Ziele. Stirbt das Ziel, war die Hinrichtung keine Aktion.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "7W10",
+      "schadenArt": "physisch"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "8W10",
+      "schadenArt": "physisch"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "9W10",
+      "schadenArt": "physisch"
+     }
+    ]
+   },
+   {
+    "name": "Biss",
+    "ast": "Spinnenmensch",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 1,
+    "info": "Du beißt ein angrenzendes Ziel.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "Stärke +2W10",
+      "schadenArt": "physisch",
+      "effekt": "0 RB, 1 Blutung"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "Stärke +3W10",
+      "schadenArt": "physisch",
+      "effekt": "5 RB, 1 Blutung"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "Stärke +4W10",
+      "schadenArt": "physisch",
+      "effekt": "10 RB, 2 Blutungen"
+     }
+    ]
+   },
+   {
+    "name": "Flinke Füße",
+    "ast": "Spinnenmensch",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Deine Bewegung erhöht sich permanent.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "+1m Bewegung"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "+2m Bewegung"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "+3m Bewegung"
+     }
+    ]
+   },
+   {
+    "name": "Giftmischer",
+    "ast": "Spinnenmensch",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Deine Nahkampf- und Fernkampfangriffe verursachen Gift.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "Gift Stufe 1, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "Gift Stufe 2, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "Gift Stufe 3, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Ich bin dann mal weg",
+    "ast": "Spinnenmensch",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Du wirst unsichtbar. Bricht bei Schaden, Angriff oder Fähigkeit ab.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "1 Runde unsichtbar"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "2 Runden unsichtbar"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "3 Runden unsichtbar"
+     }
+    ]
+   },
+   {
+    "name": "Schlitzer",
+    "ast": "Spinnenmensch",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 1,
+    "info": "Fügt einem Gegner Nahkampfschaden und Blutungen zu.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "NK",
+      "schadenArt": "physisch",
+      "effekt": "+1 Blutung"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "NK",
+      "schadenArt": "physisch",
+      "effekt": "+2 Blutungen"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "NK",
+      "schadenArt": "physisch",
+      "effekt": "+3 Blutungen"
+     }
+    ]
+   },
+   {
+    "name": "Giftsymbiose",
+    "ast": "Spinnenmensch",
+    "art": "passiv",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Zusatzschaden pro Gift-Stufe (max. 5).",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+1W4 pro GS",
+      "schadenArt": "physisch",
+      "effekt": "max. 5"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+2W4 pro GS",
+      "schadenArt": "physisch",
+      "effekt": "max. 5"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+3W4 pro GS",
+      "schadenArt": "physisch",
+      "effekt": "max. 5"
+     }
+    ]
+   },
+   {
+    "name": "Naturfluch",
+    "ast": "Spinnenmensch",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Wenn du Nahkampfschaden bekommst, ist der Angreifer zu einer Chance vergiftet.",
+    "stufen": [
+     {
+      "level": 1,
+      "effekt": "Gift Stufe 1, 20% Chance"
+     },
+     {
+      "level": 2,
+      "effekt": "Gift Stufe 2, 40% Chance"
+     },
+     {
+      "level": 3,
+      "effekt": "Gift Stufe 3, 60% Chance"
+     }
+    ]
+   },
+   {
+    "name": "Toxischer Ausbruch",
+    "ast": "Spinnenmensch",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 2,
+    "info": "Du schadest einem Ziel in Reichweite. Hat das Ziel mindestens 1 Blutung, erhält es zusätzlich einen Feuermarker.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "schaden": "3W10",
+      "schadenArt": "magisch",
+      "effekt": "GS 2, +1 Fm bei Blutung"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m",
+      "schaden": "4W10",
+      "schadenArt": "magisch",
+      "effekt": "GS 3, +1 Fm bei Blutung"
+     },
+     {
+      "level": 3,
+      "reichweite": "6m",
+      "schaden": "5W10",
+      "schadenArt": "magisch",
+      "effekt": "GS 4, +1 Fm bei Blutung"
+     }
+    ]
+   },
+   {
+    "name": "Wurzelwucher",
+    "ast": "Spinnenmensch",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 2,
+    "info": "Ziel muss einen Stärkewurf bestehen, um sich zu befreien.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "schaden": "GS 1",
+      "schadenArt": "magisch",
+      "effekt": "1 Blutung, SW -5"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m",
+      "schaden": "GS 2",
+      "schadenArt": "magisch",
+      "effekt": "1 Blutung, SW -10"
+     },
+     {
+      "level": 3,
+      "reichweite": "6m",
+      "schaden": "GS 3",
+      "schadenArt": "magisch",
+      "effekt": "2 Blutungen, SW -15"
+     }
+    ]
+   },
+   {
+    "name": "Giftwolke",
+    "ast": "Spinnenmensch",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 3,
+    "info": "Alle in der Wolke werden vergiftet und erleiden Wahrnehmungsmalus.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "schaden": "GS 4",
+      "schadenArt": "magisch",
+      "effekt": "2x2m Wolke, -10 Wahrnehmung"
+     },
+     {
+      "level": 2,
+      "reichweite": "7m",
+      "schaden": "GS 5",
+      "schadenArt": "magisch",
+      "effekt": "2x2m Wolke, -10 Wahrnehmung"
+     },
+     {
+      "level": 3,
+      "reichweite": "10m",
+      "schaden": "GS 6",
+      "schadenArt": "magisch",
+      "effekt": "3x3m Wolke, -10 Wahrnehmung"
+     }
+    ]
+   },
+   {
+    "name": "Schattenschritt",
+    "ast": "Spinnenmensch",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 3,
+    "info": "Du löst dich in Rauch auf und materialisierst dich wieder. Eventuell bleibst du unentdeckt.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "effekt": "25% heimlich"
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "effekt": "50% heimlich"
+     },
+     {
+      "level": 3,
+      "reichweite": "20m",
+      "effekt": "75% heimlich"
+     }
+    ]
+   },
+   {
+    "name": "Wucherfaust",
+    "ast": "Spinnenmensch",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 3,
+    "info": "Triffst du deinen Gegner, kann er sich für Runden nicht von dir wegbewegen (SW -15 zum Befreien).",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "SS +1W10",
+      "schadenArt": "physisch",
+      "effekt": "1 Blutung, 1 Runde festgesetzt"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "SS +2W10",
+      "schadenArt": "physisch",
+      "effekt": "2 Blutungen, 1 Runde festgesetzt"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "SS +3W10",
+      "schadenArt": "physisch",
+      "effekt": "3 Blutungen, 2 Runden festgesetzt"
+     }
+    ]
+   },
+   {
+    "name": "Fauler Atem",
+    "ast": "Spinnenmensch",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 4,
+    "info": "Alle im Umkreis werden vergiftet, brennen und fangen an zu bluten.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "1m Umkreis",
+      "schaden": "GS 3",
+      "schadenArt": "magisch",
+      "effekt": "+2 Fm, +1 Blutung"
+     },
+     {
+      "level": 2,
+      "reichweite": "2m Umkreis",
+      "schaden": "GS 4",
+      "schadenArt": "magisch",
+      "effekt": "+3 Fm, +2 Blutungen"
+     },
+     {
+      "level": 3,
+      "reichweite": "3m Umkreis",
+      "schaden": "GS 5",
+      "schadenArt": "magisch",
+      "effekt": "+4 Fm, +3 Blutungen"
+     }
+    ]
+   },
+   {
+    "name": "Verschlingen",
+    "ast": "Spinnenmensch",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 4,
+    "info": "Chance dass Ziel für 1W4 Runden verschlungen wird und Gift+Blutungen erhält; misslingt es, erleidet der Anwender Schaden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "effekt": "20% Chance, Gift Stufe 4, +3 Blutungen; sonst 4W10 Schaden für Anwender"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "effekt": "40% Chance, Gift Stufe 5, +4 Blutungen; sonst 4W10 Schaden für Anwender"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "effekt": "60% Chance, Gift Stufe 6, +5 Blutungen; sonst 4W10 Schaden für Anwender"
+     }
+    ]
+   },
+   {
+    "name": "Backpfeifengewitter",
+    "ast": "Tiermensch",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 1,
+    "info": "Trifft mehrere Ziele in einer Reihe.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+2W10",
+      "schadenArt": "physisch",
+      "effekt": "2 Ziele"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+3W10",
+      "schadenArt": "physisch",
+      "effekt": "2 Ziele"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+4W10",
+      "schadenArt": "physisch",
+      "effekt": "3 Ziele"
+     }
+    ]
+   },
+   {
+    "name": "Feuerfaust",
+    "ast": "Tiermensch",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 1,
+    "info": "Ziele neben (links und rechts) und hinter deinem Ziel erhalten Schaden und Feuermarker.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "NK +1W10",
+      "schadenArt": "physisch",
+      "effekt": "+1 Feuermarker"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "NK +2W10",
+      "schadenArt": "physisch",
+      "effekt": "+1 Feuermarker"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "NK +3W10",
+      "schadenArt": "physisch",
+      "effekt": "+1 Feuermarker"
+     }
+    ]
+   },
+   {
+    "name": "Flinke Füße",
+    "ast": "Tiermensch",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Deine Bewegung erhöht sich permanent.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "+1m Bewegung"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "+2m Bewegung"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "+3m Bewegung"
+     }
+    ]
+   },
+   {
+    "name": "Pure Muskeln +",
+    "ast": "Tiermensch",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "In Monsterform zusätzliche Stärke.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +15 Stärke"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +30 Stärke"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +50 Stärke"
+     }
+    ]
+   },
+   {
+    "name": "Regeneration",
+    "ast": "Tiermensch",
+    "art": "extra",
+    "schadenTyp": "heilung",
+    "rang": 1,
+    "info": "Zu Beginn deiner nächsten Runden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "schaden": "HL 2W10",
+      "schadenArt": "heilung",
+      "effekt": "2 Runden"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "schaden": "HL 3W10",
+      "schadenArt": "heilung",
+      "effekt": "3 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "schaden": "HL 4W10",
+      "schadenArt": "heilung",
+      "effekt": "4 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Doppelte Klingen/Der Weg der zwei Fäuste",
+    "ast": "Tiermensch",
+    "art": "passiv",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Greife während deiner Aktion A auch mit deiner Off-Hand Klinge an (keine Fähigkeiten).",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "effekt": "2-mal pro Kampf, -10 NK"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "effekt": "3-mal pro Kampf, -5 NK"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "effekt": "4-mal pro Kampf, +0 NK"
+     }
+    ]
+   },
+   {
+    "name": "Dunkle Rüstung",
+    "ast": "Tiermensch",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Für Runden Rüstung und Heimlichkeits-Bonus.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "+10 RÜ, +5 Heimlichkeit, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "+15 RÜ, +10 Heimlichkeit, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "+20 RÜ, +10 Heimlichkeit, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Eiserner Wille",
+    "ast": "Tiermensch",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Für Runden Bonus auf Widerstandswürfe gegen Stun und Schlaf.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "+10 Widerstand, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "+20 Widerstand, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "+30 Widerstand, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Spalter",
+    "ast": "Tiermensch",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "1/2/3 Gegner in einer Linie (max. 5m) erhalten rüstungsbrechenden Nahkampfschaden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf bis 5m",
+      "schaden": "NK",
+      "schadenArt": "physisch",
+      "effekt": "5 RB"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf bis 5m",
+      "schaden": "NK",
+      "schadenArt": "physisch",
+      "effekt": "10 RB"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf bis 5m",
+      "schaden": "NK",
+      "schadenArt": "physisch",
+      "effekt": "15 RB"
+     }
+    ]
+   },
+   {
+    "name": "Klingen-/Klauensturm",
+    "ast": "Tiermensch",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 3,
+    "info": "Trifft alle angrenzenden Felder.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+2",
+      "schadenArt": "physisch",
+      "effekt": "10 RB, 1 Feld"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+3",
+      "schadenArt": "physisch",
+      "effekt": "15 RB, 1 Feld"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+4",
+      "schadenArt": "physisch",
+      "effekt": "20 RB, 2 Felder"
+     }
+    ]
+   },
+   {
+    "name": "Schneise",
+    "ast": "Tiermensch",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 3,
+    "info": "Du musst eine ganze Runde den Skill aufladen. Dann triffst du alle in einer 5m langen Linie vor dir.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf bis 5m",
+      "schaden": "NK+4W10",
+      "schadenArt": "physisch",
+      "effekt": "10 RB"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf bis 5m",
+      "schaden": "NK+5W10",
+      "schadenArt": "physisch",
+      "effekt": "15 RB"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf bis 5m",
+      "schaden": "NK+6W10",
+      "schadenArt": "physisch",
+      "effekt": "20 RB"
+     }
+    ]
+   },
+   {
+    "name": "Stampfer",
+    "ast": "Tiermensch",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 3,
+    "info": "Alle angrenzenden Gegner werden weggestoßen.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "5W10",
+      "schadenArt": "physisch",
+      "effekt": "5 RB, 1W4m weggestoßen"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "6W10",
+      "schadenArt": "physisch",
+      "effekt": "10 RB, 1W4m weggestoßen"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "7W10",
+      "schadenArt": "physisch",
+      "effekt": "15 RB, 1W4m weggestoßen"
+     }
+    ]
+   },
+   {
+    "name": "Fäuste wie Kutschen",
+    "ast": "Tiermensch",
+    "art": "passiv",
+    "schadenTyp": "physisch",
+    "rang": 4,
+    "info": "Faustangriffe machen auf 2 Feldern zusätzlichen Schaden.",
+    "stufen": [
+     {
+      "level": 1,
+      "effekt": "50% Zusatzschaden, 2 Felder"
+     },
+     {
+      "level": 2,
+      "effekt": "75% Zusatzschaden, 2 Felder"
+     },
+     {
+      "level": 3,
+      "effekt": "100% Zusatzschaden, 2 Felder"
+     }
+    ]
+   },
+   {
+    "name": "Zermalmen",
+    "ast": "Tiermensch",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 4,
+    "info": "Ignoriert jegliche Rüstung.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "NK +5W10",
+      "schadenArt": "physisch",
+      "effekt": "ignoriert Rüstung"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "NK +6W10",
+      "schadenArt": "physisch",
+      "effekt": "ignoriert Rüstung"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "NK +7W10",
+      "schadenArt": "physisch",
+      "effekt": "ignoriert Rüstung"
+     }
+    ]
+   },
+   {
+    "name": "Knochengriff",
+    "ast": "Vampir",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Ein Ziel erhält für Runden Bewegungs- und Handeln-Malus.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "10m",
+      "effekt": "-2m BW, -10 Handeln, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "effekt": "-3m BW, -10 Handeln, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "10m",
+      "effekt": "-4m BW, -10 Handeln, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Monster Lord",
+    "ast": "Vampir",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "In Monsterform zusätzliche Lebenspunkte.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +50 LP"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +75 LP"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +100 LP"
+     }
+    ]
+   },
+   {
+    "name": "Pure Muskeln",
+    "ast": "Vampir",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "In Monsterform zusätzliche Stärke.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +10 Stärke"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +20 Stärke"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +30 Stärke"
+     }
+    ]
+   },
+   {
+    "name": "Schlitzer",
+    "ast": "Vampir",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 1,
+    "info": "Fügt einem Gegner Nahkampfschaden und Blutungen zu.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "NK",
+      "schadenArt": "physisch",
+      "effekt": "+1 Blutung"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "NK",
+      "schadenArt": "physisch",
+      "effekt": "+2 Blutungen"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "NK",
+      "schadenArt": "physisch",
+      "effekt": "+3 Blutungen"
+     }
+    ]
+   },
+   {
+    "name": "Seelenhunger",
+    "ast": "Vampir",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Wenn du keine vollen LP hast, verlierst du am Ende deiner Runde Lebenspunkte.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "effekt": "10% Lebensraub, -2W8 LP"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "effekt": "20% Lebensraub, -2W6 LP"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "effekt": "30% Lebensraub, -2W4 LP"
+     }
+    ]
+   },
+   {
+    "name": "Blutdurst",
+    "ast": "Vampir",
+    "art": "passiv",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Zusatzschaden pro Blutmarker, den das Ziel hat.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+1W4 pro BL",
+      "schadenArt": "physisch"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+2W4 pro BL",
+      "schadenArt": "physisch"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+3W4 pro BL",
+      "schadenArt": "physisch"
+     }
+    ]
+   },
+   {
+    "name": "Gieriger Biss",
+    "ast": "Vampir",
+    "art": "extra",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Nur nutzbar unter 50% LP. Du erhältst den verursachten Schaden als Heilung.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "3W10",
+      "schadenArt": "physisch",
+      "effekt": "0 RB, Schaden = Heilung"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "4W10",
+      "schadenArt": "physisch",
+      "effekt": "5 RB, Schaden = Heilung"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "5W10",
+      "schadenArt": "physisch",
+      "effekt": "10 RB, Schaden = Heilung"
+     }
+    ]
+   },
+   {
+    "name": "Guhl Diener",
+    "ast": "Vampir",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Beschwört Ghule mit eigenen LP, Nahkampfwert und Gift.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "schaden": "2W10",
+      "schadenArt": "physisch",
+      "effekt": "1 Ghul, LP 30, NK 30, Gift Stufe 2, 2 Runden"
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "schaden": "3W10",
+      "schadenArt": "physisch",
+      "effekt": "1 Ghul, LP 60, NK 40, Gift Stufe 3, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "15m",
+      "schaden": "4W10",
+      "schadenArt": "physisch",
+      "effekt": "2 Ghule, LP 90, NK 50, Gift Stufe 4, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Seuchenstoß",
+    "ast": "Vampir",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Hat das Ziel eine Blutung oder einen Feuermarker, erhöht sich das Gift um eine weitere Stufe.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "NK/FK+3W10",
+      "schadenArt": "physisch",
+      "effekt": "GS 2, +1 Stufe bei BL/FM"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "NK/FK+4W10",
+      "schadenArt": "physisch",
+      "effekt": "GS 3, +1 Stufe bei BL/FM"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "NK/FK+5W10",
+      "schadenArt": "physisch",
+      "effekt": "GS 4, +1 Stufe bei BL/FM"
+     }
+    ]
+   },
+   {
+    "name": "Mehrfachschlag",
+    "ast": "Vampir",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 3,
+    "info": "Nur auf ein Ziel, rüstungsbrechend.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "2 Angriffe",
+      "schadenArt": "physisch",
+      "effekt": "10 RB"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "3 Angriffe",
+      "schadenArt": "physisch",
+      "effekt": "15 RB"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "4 Angriffe",
+      "schadenArt": "physisch",
+      "effekt": "20 RB"
+     }
+    ]
+   },
+   {
+    "name": "Nur eine Fleischwunde",
+    "ast": "Vampir",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 3,
+    "info": "Fügt dem Ziel Blutungen zu.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "effekt": "4 Blutungen"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "effekt": "5 Blutungen"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "effekt": "6 Blutungen"
+     }
+    ]
+   },
+   {
+    "name": "Teleport",
+    "ast": "Vampir",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 3,
+    "info": "Teleportiere dich. Auch hin und zurück mit 2 Aufladungen möglich.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "10m",
+      "effekt": "1× pro Kampf"
+     },
+     {
+      "level": 2,
+      "reichweite": "15m",
+      "effekt": "2× pro Kampf"
+     },
+     {
+      "level": 3,
+      "reichweite": "20m",
+      "effekt": "3× pro Kampf"
+     }
+    ]
+   },
+   {
+    "name": "Gedankenkontrolle",
+    "ast": "Vampir",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 4,
+    "info": "Sonst wird das Ziel für 2 Runden von dir kontrolliert.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "effekt": "1 Gegner, WW -5"
+     },
+     {
+      "level": 2,
+      "reichweite": "5m",
+      "effekt": "1 Gegner, WW -10"
+     },
+     {
+      "level": 3,
+      "reichweite": "7m",
+      "effekt": "2 Gegner, WW -15"
+     }
+    ]
+   },
+   {
+    "name": "Zweite Dimension",
+    "ast": "Vampir",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 4,
+    "info": "Du erhältst Rüstung.",
+    "stufen": [
+     {
+      "level": 1,
+      "effekt": "+10 Rüstung"
+     },
+     {
+      "level": 2,
+      "effekt": "+15 Rüstung"
+     },
+     {
+      "level": 3,
+      "effekt": "+20 Rüstung"
+     }
+    ]
+   },
+   {
+    "name": "Biss",
+    "ast": "Werwolf",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 1,
+    "info": "Du beißt ein angrenzendes Ziel.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "Stärke +2W10",
+      "schadenArt": "physisch",
+      "effekt": "0 RB, 1 Blutung"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "Stärke +3W10",
+      "schadenArt": "physisch",
+      "effekt": "5 RB, 1 Blutung"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "Stärke +4W10",
+      "schadenArt": "physisch",
+      "effekt": "10 RB, 2 Blutungen"
+     }
+    ]
+   },
+   {
+    "name": "Blutiger Zorn",
+    "ast": "Werwolf",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Für Runden erhältst du eine zusätzliche Attacke in Aktion A, du erhältst sofort Blutungen.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "1 Runde, +1 Angriff, +2 Blutungen"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "2 Runden, +1 Angriff, +1 Blutung"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "3 Runden, +1 Angriff, +1 Blutung"
+     }
+    ]
+   },
+   {
+    "name": "Pure Muskeln",
+    "ast": "Werwolf",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "In Monsterform zusätzliche Stärke.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +10 Stärke"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +20 Stärke"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +30 Stärke"
+     }
+    ]
+   },
+   {
+    "name": "Schlitzer",
+    "ast": "Werwolf",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 1,
+    "info": "Fügt einem Gegner Nahkampfschaden und Blutungen zu.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+1",
+      "schadenArt": "physisch",
+      "effekt": "+1 Blutung"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+2",
+      "schadenArt": "physisch",
+      "effekt": "+2 Blutungen"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+3",
+      "schadenArt": "physisch",
+      "effekt": "+3 Blutungen"
+     }
+    ]
+   },
+   {
+    "name": "Seelenhunger",
+    "ast": "Werwolf",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Wenn du keine vollen LP hast, verlierst du am Ende deiner Runde Lebenspunkte.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "effekt": "10% Lebensraub, -2W8 LP"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "effekt": "20% Lebensraub, -2W6 LP"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "effekt": "30% Lebensraub, -2W4 LP"
+     }
+    ]
+   },
+   {
+    "name": "Bluthund",
+    "ast": "Werwolf",
+    "art": "extra",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Nur verletzte Ziele wählbar. Für Runden visierst du ein Ziel an, Malus auf andere Ziele. Falls das Ziel Blutung hat, Zusatzschaden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "schaden": "+5 Angriff / +2W10",
+      "schadenArt": "physisch",
+      "effekt": "1 Runde, -20 auf andere Ziele, +1W10 bei Blutung"
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "schaden": "+10 Angriff / +3W10",
+      "schadenArt": "physisch",
+      "effekt": "2 Runden, -20 auf andere Ziele, +1W10 bei Blutung"
+     },
+     {
+      "level": 3,
+      "reichweite": "15m",
+      "schaden": "+15 Angriff / +4W10",
+      "schadenArt": "physisch",
+      "effekt": "3 Runden, -20 auf andere Ziele, +1W10 bei Blutung"
+     }
+    ]
+   },
+   {
+    "name": "Gieriger Biss",
+    "ast": "Werwolf",
+    "art": "extra",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Nur nutzbar unter 50% LP. Du erhältst den verursachten Schaden als Heilung.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "3W10",
+      "schadenArt": "physisch",
+      "effekt": "0 RB, Schaden = Heilung"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "4W10",
+      "schadenArt": "physisch",
+      "effekt": "5 RB, Schaden = Heilung"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "5W10",
+      "schadenArt": "physisch",
+      "effekt": "10 RB, Schaden = Heilung"
+     }
+    ]
+   },
+   {
+    "name": "Körper aus Stahl",
+    "ast": "Werwolf",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Erhöht deine Rüstung.",
+    "stufen": [
+     {
+      "level": 1,
+      "effekt": "+5 Rüstung"
+     },
+     {
+      "level": 2,
+      "effekt": "+10 Rüstung"
+     },
+     {
+      "level": 3,
+      "effekt": "+15 Rüstung"
+     }
+    ]
+   },
+   {
+    "name": "Sprungangriff",
+    "ast": "Werwolf",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Springe auf dein Ziel, angrenzende Ziele erhalten halben Schaden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "schaden": "3W10",
+      "schadenArt": "physisch",
+      "effekt": "1m Radius"
+     },
+     {
+      "level": 2,
+      "reichweite": "5m",
+      "schaden": "4W10",
+      "schadenArt": "physisch",
+      "effekt": "2m Radius"
+     },
+     {
+      "level": 3,
+      "reichweite": "7m",
+      "schaden": "5W10",
+      "schadenArt": "physisch",
+      "effekt": "2m Radius"
+     }
+    ]
+   },
+   {
+    "name": "Klingen-/Klauensturm",
+    "ast": "Werwolf",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 3,
+    "info": "Trifft alle angrenzenden Felder.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+2",
+      "schadenArt": "physisch",
+      "effekt": "10 RB, 1 Feld"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+3",
+      "schadenArt": "physisch",
+      "effekt": "15 RB, 1 Feld"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+4",
+      "schadenArt": "physisch",
+      "effekt": "20 RB, 2 Felder"
+     }
+    ]
+   },
+   {
+    "name": "Risikoschlag",
+    "ast": "Werwolf",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 3,
+    "info": "Risikoreicher Schlag, der Blutung verursacht und die kritische Trefferchance erhöht. Anwender kann mehrere Runden nicht blocken.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+5W10",
+      "schadenArt": "physisch",
+      "effekt": "+1 Blutung, +5% KT, 2 Runden kein Block"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+6W10",
+      "schadenArt": "physisch",
+      "effekt": "+2 Blutungen, +10% KT, 2 Runden kein Block"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+7W10",
+      "schadenArt": "physisch",
+      "effekt": "+3 Blutungen, +15% KT, 1 Runde kein Block"
+     }
+    ]
+   },
+   {
+    "name": "Schädelklirren",
+    "ast": "Werwolf",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 3,
+    "info": "Gegner im Umkreis müssen einen Willenskraftwurf bestehen, sonst haben sie in ihrer nächsten Runde keine extra Aktion und eine Aktion weniger.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m Umkreis",
+      "effekt": "WW -5"
+     },
+     {
+      "level": 2,
+      "reichweite": "3m Umkreis",
+      "effekt": "WW -10"
+     },
+     {
+      "level": 3,
+      "reichweite": "4m Umkreis",
+      "effekt": "WW -15"
+     }
+    ]
+   },
+   {
+    "name": "Hinrichtung",
+    "ast": "Werwolf",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 4,
+    "info": "Nur auf verletzte Ziele. Stirbt das Ziel, war die Hinrichtung keine Aktion.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "7W10",
+      "schadenArt": "physisch"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "8W10",
+      "schadenArt": "physisch"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "9W10",
+      "schadenArt": "physisch"
+     }
+    ]
+   },
+   {
+    "name": "Raserei",
+    "ast": "Werwolf",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 4,
+    "info": "Angriffe bis zum Verfehlen (Malus pro Angriff), danach tiefer Schlaf. Blutet das Ziel, Zusatzschaden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "effekt": "bis zu 4 Angriffe, -5 NK pro Angriff, 5 RB, danach 1W4 Runden tiefer Schlaf, +1W10 bei Blutung"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "effekt": "bis zu 5 Angriffe, -5 NK pro Angriff, 10 RB, danach 1W4 Runden tiefer Schlaf, +1W10 bei Blutung"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "effekt": "bis zu 6 Angriffe, -5 NK pro Angriff, 15 RB, danach 1W4 Runden tiefer Schlaf, +1W10 bei Blutung"
+     }
+    ]
+   },
+   {
+    "name": "Befreiender Schlag",
+    "ast": "Zwerg",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 1,
+    "info": "Mache Schaden und entferne Debuffs. +1W10 Schaden pro entferntem Debuff.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "2W10",
+      "schadenArt": "physisch",
+      "effekt": "-1 Debuff"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "3W10",
+      "schadenArt": "physisch",
+      "effekt": "-2 Debuffs"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "4W10",
+      "schadenArt": "physisch",
+      "effekt": "-3 Debuffs"
+     }
+    ]
+   },
+   {
+    "name": "Doppelhieb",
+    "ast": "Zwerg",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Du kannst pro Kampf einen Nahkampfangriff als Extra-Aktion machen. Danach 1 Runde Cooldown.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "effekt": "1 extra Angriff pro Kampf"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "effekt": "2 extra Angriffe pro Kampf"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "effekt": "3 extra Angriffe pro Kampf"
+     }
+    ]
+   },
+   {
+    "name": "Profi-Boxer",
+    "ast": "Zwerg",
+    "art": "passiv",
+    "schadenTyp": "physisch",
+    "rang": 1,
+    "info": "Deine Faustangriffe machen mehr Schaden.",
+    "stufen": [
+     {
+      "level": 1,
+      "effekt": "+1W10"
+     },
+     {
+      "level": 2,
+      "effekt": "+2W10"
+     },
+     {
+      "level": 3,
+      "effekt": "+3W10"
+     }
+    ]
+   },
+   {
+    "name": "Pure Muskeln +",
+    "ast": "Zwerg",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "In Monsterform zusätzliche Stärke.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +15 Stärke"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +30 Stärke"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "In Monsterform +50 Stärke"
+     }
+    ]
+   },
+   {
+    "name": "Wilde Wut",
+    "ast": "Zwerg",
+    "art": "extra",
+    "schadenTyp": "physisch",
+    "rang": 1,
+    "info": "Für Runden mehr Nahkampfschaden, dafür Malus auf Nahkampf.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "+2W10",
+      "schadenArt": "physisch",
+      "effekt": "0 RB, -15 Nahkampf, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "+3W10",
+      "schadenArt": "physisch",
+      "effekt": "5 RB, -10 Nahkampf, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "+4W10",
+      "schadenArt": "physisch",
+      "effekt": "10 RB, -5 Nahkampf, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Eiserner Wille",
+    "ast": "Zwerg",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Für Runden Bonus auf Widerstandswürfe gegen Stun und Schlaf.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "+10 Widerstand, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "+20 Widerstand, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "+30 Widerstand, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Körper aus Stahl",
+    "ast": "Zwerg",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Erhöht deine Rüstung.",
+    "stufen": [
+     {
+      "level": 1,
+      "effekt": "+5 Rüstung"
+     },
+     {
+      "level": 2,
+      "effekt": "+10 Rüstung"
+     },
+     {
+      "level": 3,
+      "effekt": "+15 Rüstung"
+     }
+    ]
+   },
+   {
+    "name": "Kriegsschrei",
+    "ast": "Zwerg",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Alle Verbündeten im Umkreis erhalten Rüstung und mehr Schaden mit Standard-Nahkampfangriffen (nicht stapelbar).",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "1m Umkreis",
+      "schaden": "NK+1W10",
+      "schadenArt": "physisch",
+      "effekt": "+5 RÜ, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "3m Umkreis",
+      "schaden": "NK+1W10",
+      "schadenArt": "physisch",
+      "effekt": "+5 RÜ, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "5m Umkreis",
+      "schaden": "NK+2W10",
+      "schadenArt": "physisch",
+      "effekt": "+10 RÜ, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Uppercut",
+    "ast": "Zwerg",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Ziel vor dir erleidet Schaden und wird zurückgeschleudert. Angriff ist rüstungsbrechend.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "3W10",
+      "schadenArt": "physisch",
+      "effekt": "5 RB, 1W4m Rückstoß"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "4W10",
+      "schadenArt": "physisch",
+      "effekt": "10 RB, 2W4m Rückstoß"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "5W10",
+      "schadenArt": "physisch",
+      "effekt": "15 RB, 3W4m Rückstoß"
+     }
+    ]
+   },
+   {
+    "name": "Kometeneinschlag",
+    "ast": "Zwerg",
+    "art": "passiv",
+    "schadenTyp": "physisch",
+    "rang": 3,
+    "info": "Stärkerer Nahkampfschaden mit Durchschlag.",
+    "stufen": [
+     {
+      "level": 1,
+      "effekt": "+1W10, 0 RB"
+     },
+     {
+      "level": 2,
+      "effekt": "+2W10, 5 RB"
+     },
+     {
+      "level": 3,
+      "effekt": "+3W10, 10 RB"
+     }
+    ]
+   },
+   {
+    "name": "Mehrfachschlag",
+    "ast": "Zwerg",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 3,
+    "info": "Nur auf ein Ziel, rüstungsbrechend.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "2 Angriffe",
+      "schadenArt": "physisch",
+      "effekt": "10 RB"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "3 Angriffe",
+      "schadenArt": "physisch",
+      "effekt": "15 RB"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "4 Angriffe",
+      "schadenArt": "physisch",
+      "effekt": "20 RB"
+     }
+    ]
+   },
+   {
+    "name": "Panzerbrecher",
+    "ast": "Zwerg",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 3,
+    "info": "Ziel verliert Rüstung für Runden (nicht stapelbar).",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "effekt": "-10 Rüstung, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m",
+      "effekt": "-20 Rüstung, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "6m",
+      "effekt": "-30 Rüstung, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Heute stirbt keiner!",
+    "ast": "Zwerg",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 4,
+    "info": "Für Runden kann kein Verbündeter unter 1 LP fallen.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "effekt": "1 Runde Todesverweigerung"
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "effekt": "2 Runden Todesverweigerung"
+     },
+     {
+      "level": 3,
+      "reichweite": "15m",
+      "effekt": "3 Runden Todesverweigerung"
+     }
+    ]
+   },
+   {
+    "name": "Zermalmen",
+    "ast": "Zwerg",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 4,
+    "info": "Ignoriert jegliche Rüstung.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "NK +5W10",
+      "schadenArt": "physisch",
+      "effekt": "ignoriert Rüstung"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "NK +6W10",
+      "schadenArt": "physisch",
+      "effekt": "ignoriert Rüstung"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "NK +7W10",
+      "schadenArt": "physisch",
+      "effekt": "ignoriert Rüstung"
+     }
+    ]
+   },
+   {
+    "name": "Flinke Füße",
+    "ast": "Heimlichkeit defensiv",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Deine Bewegung erhöht sich permanent.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "+1m Bewegung"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "+2m Bewegung"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "+3m Bewegung"
+     }
+    ]
+   },
+   {
+    "name": "Heilende Hand",
+    "ast": "Heimlichkeit defensiv",
+    "art": "extra",
+    "schadenTyp": "heilung",
+    "rang": 1,
+    "info": "Du heilst einen Verbündeten.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "HL 2W10",
+      "schadenArt": "heilung"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "HL 3W10",
+      "schadenArt": "heilung"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "HL 4W10",
+      "schadenArt": "heilung"
+     }
+    ]
+   },
+   {
+    "name": "Ich bin dann mal weg",
+    "ast": "Heimlichkeit defensiv",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Du wirst unsichtbar. Bricht bei Schaden, Angriff oder Fähigkeit ab.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "1 Runde unsichtbar"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "2 Runden unsichtbar"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "3 Runden unsichtbar"
+     }
+    ]
+   },
+   {
+    "name": "Raus da!",
+    "ast": "Heimlichkeit defensiv",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Bewege sofort einen Verbündeten, ohne dass er eigene Bewegung verbraucht.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "effekt": "+2m Bewegung"
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "effekt": "+4m Bewegung"
+     },
+     {
+      "level": 3,
+      "reichweite": "15m",
+      "effekt": "+6m Bewegung"
+     }
+    ]
+   },
+   {
+    "name": "Verarzten",
+    "ast": "Heimlichkeit defensiv",
+    "art": "aktiv",
+    "schadenTyp": "heilung",
+    "rang": 1,
+    "info": "Heilt Ziel, entfernt alle Blutungen und Feuermarker.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf / Selbst",
+      "schaden": "HL 3W10",
+      "schadenArt": "heilung",
+      "effekt": "Entfernt alle Blutungen und Feuermarker"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf / Selbst",
+      "schaden": "HL 4W10",
+      "schadenArt": "heilung",
+      "effekt": "Entfernt alle Blutungen und Feuermarker"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf / Selbst",
+      "schaden": "HL 5W10",
+      "schadenArt": "heilung",
+      "effekt": "Entfernt alle Blutungen und Feuermarker"
+     }
+    ]
+   },
+   {
+    "name": "Dazwischenwerfen",
+    "ast": "Heimlichkeit defensiv",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Wird ein Verbündeter getroffen, bewegst du dich zu ihm und erleidest den Treffer an seiner Stelle.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "effekt": "Treffer übernehmen"
+     },
+     {
+      "level": 2,
+      "reichweite": "5m",
+      "effekt": "Treffer übernehmen"
+     },
+     {
+      "level": 3,
+      "reichweite": "7m",
+      "effekt": "Treffer übernehmen"
+     }
+    ]
+   },
+   {
+    "name": "Dunkle Rüstung",
+    "ast": "Heimlichkeit defensiv",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Für Runden Rüstung und Heimlichkeits-Bonus.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "+10 RÜ, +5 Heimlichkeit, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "+15 RÜ, +10 Heimlichkeit, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "+20 RÜ, +10 Heimlichkeit, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Lebensband",
+    "ast": "Heimlichkeit defensiv",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Für Runden wird ein Teil des Schadens eines Verbündeten stattdessen dir zugefügt.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "effekt": "25% Umleitung, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "7m",
+      "effekt": "50% Umleitung, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "10m",
+      "effekt": "75% Umleitung, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Trugbild",
+    "ast": "Heimlichkeit defensiv",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Du wirst unsichtbar und lässt ein Spiegelbild zurück, das Feinde zu einer Chance angreifen. Greifst du an, wirst du wieder sichtbar.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "1 Runde unsichtbar, 30% Chance"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "2 Runden unsichtbar, 60% Chance"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "3 Runden unsichtbar, 90% Chance"
+     }
+    ]
+   },
+   {
+    "name": "Ersthelfer",
+    "ast": "Heimlichkeit defensiv",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 3,
+    "info": "1/2/3× pro Kampf: Fällt ein Verbündeter in Reichweite auf 10 LP oder weniger, darfst du sofort eine Heilfähigkeit auf ihn einsetzen, obwohl nicht deine Runde ist.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "effekt": "1× pro Kampf"
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "effekt": "2× pro Kampf"
+     },
+     {
+      "level": 3,
+      "reichweite": "10m",
+      "effekt": "3× pro Kampf"
+     }
+    ]
+   },
+   {
+    "name": "Los Jetzt!",
+    "ast": "Heimlichkeit defensiv",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 3,
+    "info": "1/1/2 Verbündete dürfen sich sofort bewegen und anschließend einen Standardangriff durchführen.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "effekt": "1 Verbündeter: +2m Sofortbewegung + Angriff"
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "effekt": "1 Verbündeter: +4m Sofortbewegung + Angriff"
+     },
+     {
+      "level": 3,
+      "reichweite": "15m",
+      "effekt": "2 Verbündete: +6m Sofortbewegung + Angriff"
+     }
+    ]
+   },
+   {
+    "name": "Schattenschritt",
+    "ast": "Heimlichkeit defensiv",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 3,
+    "info": "Du löst dich in Rauch auf und materialisierst dich wieder. Eventuell bleibst du unentdeckt.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "effekt": "25% heimlich"
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "effekt": "50% heimlich"
+     },
+     {
+      "level": 3,
+      "reichweite": "20m",
+      "effekt": "75% heimlich"
+     }
+    ]
+   },
+   {
+    "name": "Heute stirbt keiner!",
+    "ast": "Heimlichkeit defensiv",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 4,
+    "info": "Für Runden kann kein Verbündeter unter 1 LP fallen.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "effekt": "1 Runde Todesverweigerung"
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "effekt": "2 Runden Todesverweigerung"
+     },
+     {
+      "level": 3,
+      "reichweite": "15m",
+      "effekt": "3 Runden Todesverweigerung"
+     }
+    ]
+   },
+   {
+    "name": "Wurmloch",
+    "ast": "Heimlichkeit defensiv",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 4,
+    "info": "Öffnet ein Wurmloch zwischen deinem Standort und einem Punkt in Entfernung. Du und Verbündete können sich sofort zwischen beiden Enden bewegen. Gegner, die es betreten, werden zufällig weggeteleportiert.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "10m",
+      "effekt": "2 Verbündete, 1× nutzbar, 1 Runde offen, Gegner 1W6 Felder verstreut"
+     },
+     {
+      "level": 2,
+      "reichweite": "15m",
+      "effekt": "3 Verbündete, 2× nutzbar, 2 Runden offen, Gegner 1W6 Felder verstreut"
+     },
+     {
+      "level": 3,
+      "reichweite": "20m",
+      "effekt": "4 Verbündete, 3× nutzbar, 3 Runden offen, Gegner 1W6 Felder verstreut"
+     }
+    ]
+   },
+   {
+    "name": "Berauben",
+    "ast": "Heimlichkeit offensiv",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 1,
+    "info": "Fügt Nahkampfschaden zu. Bei Verwundung zusätzlich Gold erbeutet.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+1W10",
+      "schadenArt": "physisch",
+      "effekt": "5 RB, +2W10 Gold"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+2W10",
+      "schadenArt": "physisch",
+      "effekt": "10 RB, +4W10 Gold"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "NK+3W10",
+      "schadenArt": "physisch",
+      "effekt": "15 RB, +6W10 Gold"
+     }
+    ]
+   },
+   {
+    "name": "Flinke Füße",
+    "ast": "Heimlichkeit offensiv",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Deine Bewegung erhöht sich permanent.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "+1m Bewegung"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "+2m Bewegung"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "+3m Bewegung"
+     }
+    ]
+   },
+   {
+    "name": "Giftmischer",
+    "ast": "Heimlichkeit offensiv",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Deine Nahkampf- und Fernkampfangriffe verursachen Gift.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "Gift Stufe 1, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "Gift Stufe 2, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "Gift Stufe 3, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Ich bin dann mal weg",
+    "ast": "Heimlichkeit offensiv",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Du wirst unsichtbar. Bricht bei Schaden, Angriff oder Fähigkeit ab.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "1 Runde unsichtbar"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "2 Runden unsichtbar"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "3 Runden unsichtbar"
+     }
+    ]
+   },
+   {
+    "name": "Schlitzer",
+    "ast": "Heimlichkeit offensiv",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 1,
+    "info": "Fügt einem Gegner Nahkampfschaden und Blutungen zu.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "NK",
+      "schadenArt": "physisch",
+      "effekt": "+1 Blutung"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "NK",
+      "schadenArt": "physisch",
+      "effekt": "+2 Blutungen"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "NK",
+      "schadenArt": "physisch",
+      "effekt": "+3 Blutungen"
+     }
+    ]
+   },
+   {
+    "name": "Blutdurst",
+    "ast": "Heimlichkeit offensiv",
+    "art": "passiv",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Zusatzschaden pro Blutmarker, den das Ziel hat.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+1W4 pro BL",
+      "schadenArt": "physisch"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+2W4 pro BL",
+      "schadenArt": "physisch"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+3W4 pro BL",
+      "schadenArt": "physisch"
+     }
+    ]
+   },
+   {
+    "name": "Bluthund",
+    "ast": "Heimlichkeit offensiv",
+    "art": "extra",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Nur verletzte Ziele wählbar. Für Runden visierst du ein Ziel an, Malus auf andere Ziele. Falls das Ziel Blutung hat, Zusatzschaden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "schaden": "+5 Angriff / +2W10",
+      "schadenArt": "physisch",
+      "effekt": "1 Runde, -20 auf andere Ziele, +1W10 bei Blutung"
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "schaden": "+10 Angriff / +3W10",
+      "schadenArt": "physisch",
+      "effekt": "2 Runden, -20 auf andere Ziele, +1W10 bei Blutung"
+     },
+     {
+      "level": 3,
+      "reichweite": "15m",
+      "schaden": "+15 Angriff / +4W10",
+      "schadenArt": "physisch",
+      "effekt": "3 Runden, -20 auf andere Ziele, +1W10 bei Blutung"
+     }
+    ]
+   },
+   {
+    "name": "Dunkle Rüstung",
+    "ast": "Heimlichkeit offensiv",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Für Runden Rüstung und Heimlichkeits-Bonus.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "selbst",
+      "effekt": "+10 RÜ, +5 Heimlichkeit, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "selbst",
+      "effekt": "+15 RÜ, +10 Heimlichkeit, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "selbst",
+      "effekt": "+20 RÜ, +10 Heimlichkeit, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Ruckzuckhieb",
+    "ast": "Heimlichkeit offensiv",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 2,
+    "info": "Du springst zum Gegner, fügst Schaden zu und kannst dann zurückspringen.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "schaden": "3W10",
+      "schadenArt": "physisch"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m",
+      "schaden": "4W10",
+      "schadenArt": "physisch"
+     },
+     {
+      "level": 3,
+      "reichweite": "6m",
+      "schaden": "5W10",
+      "schadenArt": "physisch"
+     }
+    ]
+   },
+   {
+    "name": "Angriff aus dem Dunkeln",
+    "ast": "Heimlichkeit offensiv",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 3,
+    "info": "Nur wenn du versteckt bist. Du bleibst zu einer Chance unentdeckt.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+3W10",
+      "schadenArt": "physisch",
+      "effekt": "1 Blutung, 25% unentdeckt"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+4W10",
+      "schadenArt": "physisch",
+      "effekt": "1 Blutung, 50% unentdeckt"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+5W10",
+      "schadenArt": "physisch",
+      "effekt": "2 Blutungen, 75% unentdeckt"
+     }
+    ]
+   },
+   {
+    "name": "Meuchelmörder",
+    "ast": "Heimlichkeit offensiv",
+    "art": "extra",
+    "schadenTyp": "magisch",
+    "rang": 3,
+    "info": "Hält Runden. Eine Giftstufe höher, wenn das Ziel blutet.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+2W10",
+      "schadenArt": "magisch",
+      "effekt": "GS 2, 1 Runde"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+3W10",
+      "schadenArt": "magisch",
+      "effekt": "GS 3, 2 Runden"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf/Fernkampf",
+      "schaden": "+4W10",
+      "schadenArt": "magisch",
+      "effekt": "GS 4, 3 Runden"
+     }
+    ]
+   },
+   {
+    "name": "Schattenschritt",
+    "ast": "Heimlichkeit offensiv",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 3,
+    "info": "Du löst dich in Rauch auf und materialisierst dich wieder. Eventuell bleibst du unentdeckt.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "effekt": "25% heimlich"
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "effekt": "50% heimlich"
+     },
+     {
+      "level": 3,
+      "reichweite": "20m",
+      "effekt": "75% heimlich"
+     }
+    ]
+   },
+   {
+    "name": "Hinrichtung",
+    "ast": "Heimlichkeit offensiv",
+    "art": "aktiv",
+    "schadenTyp": "physisch",
+    "rang": 4,
+    "info": "Nur auf verletzte Ziele. Stirbt das Ziel, war die Hinrichtung keine Aktion.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "Nahkampf",
+      "schaden": "7W10",
+      "schadenArt": "physisch"
+     },
+     {
+      "level": 2,
+      "reichweite": "Nahkampf",
+      "schaden": "8W10",
+      "schadenArt": "physisch"
+     },
+     {
+      "level": 3,
+      "reichweite": "Nahkampf",
+      "schaden": "9W10",
+      "schadenArt": "physisch"
+     }
+    ]
+   },
+   {
+    "name": "Zweite Dimension",
+    "ast": "Heimlichkeit offensiv",
+    "art": "passiv",
+    "schadenTyp": "keiner",
+    "rang": 4,
+    "info": "Du erhältst Rüstung.",
+    "stufen": [
+     {
+      "level": 1,
+      "effekt": "+10 Rüstung"
+     },
+     {
+      "level": 2,
+      "effekt": "+15 Rüstung"
+     },
+     {
+      "level": 3,
+      "effekt": "+20 Rüstung"
+     }
+    ]
    }
   ],
   "eigenschaften": [
@@ -17293,7 +25275,8 @@ hausregelPaketRegistrieren({
     "wert": "plus 1W4 Schaden pro Giftstufe",
     "beschreibung": "Du erleidest plus 1W4 zusätzlichen Schaden durch aktive Giftstufen"
    }
-  ]
+  ],
+  "Mensch": []
  },
  "wuerfelTabellen": {
   "oracle_piraten_events": {

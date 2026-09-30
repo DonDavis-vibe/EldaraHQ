@@ -39,14 +39,23 @@ PAKET_ID = 'eldora-arrrrr'
 PAKET_NAME = 'Eldara – Version Arrrrr'
 
 # Die Rohdatei der Gruppe (roh.json, Export ihres eigenen Prototyps) benennt
-# zwei Äste noch nach alter Schreibweise ("Heimlichkeit", "Voodoo Ritual
-# Klinge" mit Leerzeichen). RW 4.3 S.14 schreibt sie "Heimlich"/"Voodoo
-# Ritualklinge" - laut SL (siehe OFFENE_FRAGEN.md Frage 1) ist das nur eine
-# Schreibweisen-Auffrischung, kein neuer/anderer Ast. Wird hier beim
-# Einlesen normalisiert, damit im Tool überall die aktuelle RW-4.3-Schreibweise
-# steht, ohne die Skill-Zuordnung aus der Rohdatei zu verlieren.
+# einen Ast noch nach alter Schreibweise ("Voodoo Ritual Klinge" mit
+# Leerzeichen). RW 4.3 S.14 schreibt ihn "Voodoo Ritualklinge" - laut SL
+# (siehe OFFENE_FRAGEN.md Frage 1) ist das nur eine Schreibweisen-
+# Auffrischung, kein neuer/anderer Ast. Wird hier beim Einlesen normalisiert,
+# damit im Tool überall die aktuelle Schreibweise steht, ohne die
+# Skill-Zuordnung aus der Rohdatei zu verlieren.
+#
+# "Heimlichkeit" wurde hier BEWUSST NICHT mehr auf "Heimlich" normalisiert:
+# RW 5.1 (Anhang S.43+45) splittet den bisherigen einen Heimlich-Hauptbaum
+# echt in zwei eigene Bäume "Heimlichkeit defensiv"/"Heimlichkeit offensiv"
+# mit je eigenem 14-Skill-Set - vom SL bestätigt (2026-09-30), inklusive
+# "Spieler verteilen ihre Punkte neu". Die alten 14 Skills unter dem
+# rohdaten-Ast "Heimlichkeit" (Mischung aus beiden Konzepten, teils nicht
+# mal RW5.1-konform) sind darum direkt in der Rohdatei durch die zwei neuen,
+# aus dem Anhang transkribierten Ast-Namen ersetzt worden - siehe
+# hausregeln/OFFENE_FRAGEN.md Punkt 5.
 AST_SCHREIBWEISE_RW43 = {
-    'Heimlichkeit': 'Heimlich',
     'Voodoo Ritual Klinge': 'Voodoo Ritualklinge',
 }
 
@@ -55,7 +64,7 @@ AST_SCHREIBWEISE_RW43 = {
 HAUPTBAEUME = [
     'Nahkampf Klingen', 'Nahkampf Fäuste', 'Stärke', 'Fernkampf', 'Agilität',
     'Voodoo Ritualklinge', 'Voodoo Fluchspucker', 'Einschüchtern',
-    'Heimlich', 'Medizin', 'Motivieren',
+    'Heimlichkeit defensiv', 'Heimlichkeit offensiv', 'Medizin', 'Motivieren',
 ]
 
 # Die Rangpunkt-/Skillpunkt-Regeln, jetzt gegen das vollständige Regelwerk
@@ -107,7 +116,11 @@ BAUM_TALENT = {
     'Voodoo Ritualklinge': 'Voodoo',
     'Voodoo Fluchspucker': 'Voodoo',
     'Einschüchtern': 'Einschüchtern',
-    'Heimlich': 'Heimlich',
+    # RW 5.1 (Anhang S.43+45, SL-bestätigt 2026-09-30): "Heimlich" ist echt in
+    # zwei Bäume gesplittet, teilen sich aber weiterhin das eine Basis-Talent
+    # "Heimlich" (S.8ff) - kein neues Basis-Talent dafür im Regelwerk.
+    'Heimlichkeit defensiv': 'Heimlich',
+    'Heimlichkeit offensiv': 'Heimlich',
     'Medizin': 'Medizin',
     'Motivieren': 'Motivieren',
 }

@@ -123,446 +123,775 @@ randomizerPaketRegistrieren({
    "kategorie": "items",
    "eintraege": [
     {
-     "haupt": "Anker der Erinnerung",
-     "neben": "Amulett",
-     "wirkung": "0 Lp -> 1Lp",
-     "beschreibung": "Verhindert einmalig Tod: bei 0 LP wird sie bei 1 LP stehen bleiben, zerfällt danach."
+     "haupt": "Beinkleid des Kraken",
+     "neben": "Beine",
+     "wirkung": "+5 Zähigkeit",
+     "beschreibung": "+10 Schwimmen"
     },
     {
-     "haupt": "Das feurige Auge",
-     "neben": "Amulett",
-     "wirkung": "Feuerschaden +1w4",
-     "beschreibung": "Dein Feuerschaden macht zusätzlich +1w4 Schaden. (nicht bei FM)"
+     "haupt": "Beinschienen des Ankers",
+     "neben": "Beine",
+     "wirkung": "+5 Rüstung",
+     "beschreibung": "Wegstoßen gegen dich -2m"
     },
     {
-     "haupt": "Die silberne Spinne",
-     "neben": "Amulett",
-     "beschreibung": "Heimlich und Lügen +5."
+     "haupt": "Hose des Deckläufers",
+     "neben": "Beine",
+     "wirkung": "+2m Bewegung",
+     "beschreibung": "Auf Schiffen gibt es kein schwieriges Gelände für dich"
     },
     {
-     "haupt": "Geisterperle",
-     "neben": "Amulett",
-     "wirkung": "+2 LP pro Runde",
-     "beschreibung": "Pro Perle bekommst du zu Beginn deiner Runde +2 LP. Alle 5 Runden bekommst du 1w4 Schaden."
+     "haupt": "Hose des Schützen",
+     "neben": "Beine",
+     "wirkung": "+5 Fernkampf",
+     "beschreibung": "Wenn du dich diese Runde nicht bewegt hast, erhält dein nächster Fernkampfangriff +5 RB"
     },
     {
-     "haupt": "Goldene Feder des Schwertmeisters",
-     "neben": "Amulett",
-     "beschreibung": "+1 Initiative."
+     "haupt": "Hosen des Feiglings",
+     "neben": "Beine",
+     "wirkung": "+2m Bewegung",
+     "beschreibung": "Bewegst du dich vom Gegner weg, erhältst du +5 Rüstung"
     },
     {
-     "haupt": "Herz der See",
-     "neben": "Amulett",
-     "wirkung": "-5 Feuerschaden (FM-Schaden -1)",
-     "beschreibung": "Du erhältst weniger Feuerschaden und kannst einmal am Tag 5 Minuten unter Wasser atmen."
-    },
-    {
-     "haupt": "Herz des Kapitäns",
-     "neben": "Amulett",
-     "wirkung": "+10 Motivieren, +5 Willenskraft",
-     "beschreibung": "1x am Tag kann eins deiner Crewmitglieder (5m Umkreis) eine fehlgeschlagene Probe wiederholen."
-    },
-    {
-     "haupt": "Kette des Blutes",
-     "neben": "Amulett",
-     "beschreibung": "Deine Nahkampfangriffe verursachen zu 30% eine Blutung."
-    },
-    {
-     "haupt": "Kreuz von Kalifazius",
-     "neben": "Amulett",
-     "wirkung": "+1w10 Heal",
-     "beschreibung": "Einmal am Tag darfst du eine Heal-Fähigkeit als Extraaktion einsetzen."
-    },
-    {
-     "haupt": "Muschel der Stärke",
-     "neben": "Amulett",
-     "wirkung": "Wasserschaden +1w4",
-     "beschreibung": "Dein Wasserschaden macht zusätzlich +1w4 Schaden."
-    },
-    {
-     "haupt": "Talisman der Stille",
-     "neben": "Amulett",
-     "wirkung": "1x/Tag unsichtbar für Geräusche",
-     "beschreibung": "Schützt vor Entdeckung durch Geräusche."
-    },
-    {
-     "haupt": "Kopf des Navigators",
-     "neben": "Artefakt",
-     "wirkung": "+15 Nautik",
-     "beschreibung": "1x am Tag zeigt er auf die größte magische Quelle in 5 km Umkreis."
-    },
-    {
-     "haupt": "Axt der Blutgezeiten",
-     "neben": "Axt",
-     "wirkung": "5w10 + 2w6",
-     "beschreibung": "Bei kritischem Treffer +2w10 Heal. Muss jede Nacht mit Blut benetzt werden."
+     "haupt": "Rock des Berserkers",
+     "neben": "Beine",
+     "wirkung": "+5 Zähigkeit",
+     "beschreibung": "Für jeden eigenen Debuff +1W4 Nahkampfschaden (max. 5)"
     },
     {
      "haupt": "Flasche mit Blitz",
-     "neben": "Bombe",
-     "wirkung": "5w10 Schaden, 3x3m",
-     "beschreibung": "Bei misslungenem Zähigkeitswurf -> Stun."
+     "neben": "Gegenstand",
+     "wirkung": "5W10 Schaden, 3x3m",
+     "beschreibung": "Bei misslungenem Zähigkeitswurf: Stun"
     },
     {
-     "haupt": "Dolch der Nacht",
-     "neben": "Dolch",
-     "wirkung": "2w10 Schaden",
-     "beschreibung": "Angriff aus dem Dunklen Lvl 1."
+     "haupt": "Geisterperle",
+     "neben": "Gegenstand",
+     "wirkung": "10W10 Heilung",
+     "beschreibung": "10W10 Heilung, wenn du sie isst"
     },
     {
-     "haupt": "Feuernadel",
-     "neben": "Dolch",
-     "wirkung": "3w10 +1FM",
-     "beschreibung": "Funke Lvl 1."
+     "haupt": "Kästchen des Goldes",
+     "neben": "Gegenstand",
+     "beschreibung": "Einmal am Tag sind 1W100 Gold in der Truhe"
     },
     {
-     "haupt": "Bohrhand",
-     "neben": "Faustwaffe",
-     "wirkung": "Stärke +1W10, +1W6 pro Treffer in Folge (max. 5)",
-     "beschreibung": "+5 Rüstungsbrechend pro Runde mit Treffer."
+     "haupt": "Kopf des Navigators",
+     "neben": "Gegenstand",
+     "wirkung": "+15 Nautik",
+     "beschreibung": "1x am Tag zeigt er auf die größte Magische Quelle in 5km Umkreis"
     },
     {
-     "haupt": "Donnerfaust",
-     "neben": "Faustwaffe",
-     "wirkung": "Stärke+1w10",
-     "beschreibung": "10% Stun."
-    },
-    {
-     "haupt": "Dämonenklaue",
-     "neben": "Faustwaffe",
-     "wirkung": "Stärke +2w10 Schaden",
-     "beschreibung": "Ignoriert magische Rüstung (durch Fähigkeiten)."
-    },
-    {
-     "haupt": "Energiefaust",
-     "neben": "Faustwaffe",
-     "wirkung": "Stärke +2w6",
-     "beschreibung": "Nach einem erfolgreichen Nahkampftreffer erhältst du eine Ladung (max. 3 für 5 Runden). Entlade alle Ladungen auf ein Ziel in deiner Nähe (Extraaktion): 2w6/4w6/6w6."
-    },
-    {
-     "haupt": "Flammenkralle",
-     "neben": "Faustwaffe",
-     "wirkung": "Stärkeschaden",
-     "beschreibung": "+1 Feuermarker, +1 Blutung."
-    },
-    {
-     "haupt": "Geisterfaust",
-     "neben": "Faustwaffe",
-     "wirkung": "Stärke +2W10",
-     "beschreibung": "Ignoriert physische Rüstung."
-    },
-    {
-     "haupt": "Glutfäuste",
-     "neben": "Faustwaffe",
-     "wirkung": "Stärke +2, Feuermarker"
-    },
-    {
-     "haupt": "Kettenknöchel",
-     "neben": "Faustwaffe",
-     "wirkung": "Stärke+1W10",
-     "beschreibung": "+10 auf Parade, wenn du sie ausgerüstet hast."
-    },
-    {
-     "haupt": "Lavafaust",
-     "neben": "Faustwaffe",
-     "wirkung": "Stärke+1w10",
-     "beschreibung": "+1 Feuermarke."
-    },
-    {
-     "haupt": "Lotusfaust",
-     "neben": "Faustwaffe",
-     "wirkung": "Stärke +1W10",
-     "beschreibung": "Verursacht dein Treffer Schaden, heilst du 1w10."
-    },
-    {
-     "haupt": "Splitterfaust",
-     "neben": "Faustwaffe",
-     "wirkung": "Stärke +2W10",
-     "beschreibung": "5 rüstungsbrechend."
-    },
-    {
-     "haupt": "Gürtel des Grogkönigs",
-     "neben": "Gürtel",
-     "wirkung": "+5 Zähigkeit, +5 Zechen",
-     "beschreibung": "3 Slots, 2 Waffenslots. Wenn betrunken, dann -10 Wahrnehmung und jeder Schaden, den du machst, +1."
-    },
-    {
-     "haupt": "Knochenarmreif von Raik Silberfang",
-     "neben": "Handschuhe",
-     "wirkung": "+1 auf alle Debuffs",
-     "beschreibung": "Alle Debuffs, die du zufügst, sind +1."
-    },
-    {
-     "haupt": "Meister Eders Handschuhe",
-     "neben": "Handschuhe",
-     "wirkung": "+3 Handeln, +10 Handwerk"
-    },
-    {
-     "haupt": "Stulpen der Ruhe",
-     "neben": "Handschuhe",
-     "wirkung": "+10 Fernkampf, +5 Wahrnehmung",
-     "beschreibung": "Die Reichweite deiner Waffe wird um 2m länger."
+     "haupt": "Unheilige Hand des Priesters",
+     "neben": "Gegenstand",
+     "wirkung": "Fähigkeit der Hand kann wie ein Gegenstand genutzt werden",
+     "beschreibung": "Lvl 1 Atem des Todes, Lvl 1 Heilendes Wort, 5 Ladungen. Aufladen: die Hand muss in die Brust eines frisch Verstorbenen gesteckt werden und entreißt dem Körper das noch warme Herz - dadurch erhält sie 1 Ladung zurück"
     },
     {
      "haupt": "Haken-Arm-Kanone",
-     "neben": "Kanone",
-     "wirkung": "Kanone 5w10, Haken 3w10, NK 3w10",
-     "beschreibung": "20m (3 Kammern), 10m Kette."
+     "neben": "Hände",
+     "wirkung": "Kanone FK 5W10, Haken FK 3W10 +1 Blutung, Nahkampf 4W10",
+     "beschreibung": "15m Reichweite (3 Ladungen), 7m Kette. Kette ein-/ranziehen = A oder B, komplett laden = A und B, Modus wechseln = A oder B"
+    },
+    {
+     "haupt": "Handschuhe des Feldschers",
+     "neben": "Hände",
+     "wirkung": "+10 Medizin",
+     "beschreibung": "+1W6 Heilung durch Fähigkeiten"
+    },
+    {
+     "haupt": "Handschuhe des Giftmischers",
+     "neben": "Hände",
+     "wirkung": "+5 Medizin",
+     "beschreibung": "Verursachst du Gift, bekommt das Ziel bei der Attributprobe -10 Zähigkeit"
+    },
+    {
+     "haupt": "Handschuhe des Kettenbrechers",
+     "neben": "Hände",
+     "wirkung": "+10 Stärke, +10 Blocken",
+     "beschreibung": "1x pro Tag: nachdem du Schaden erhalten hast, darfst du sofort einen Standard-Nahkampfangriff gegen den Angreifer ausführen, sofern er in Reichweite ist"
+    },
+    {
+     "haupt": "Handschuhe des Knochenbrechers",
+     "neben": "Hände",
+     "wirkung": "+5 Stärke, NK+1W10",
+     "beschreibung": "Stärke/Faustwaffen-Angriffe machen +1W10"
+    },
+    {
+     "haupt": "Handschuhe des Revolvermanns",
+     "neben": "Hände",
+     "wirkung": "+5 Fernkampf",
+     "beschreibung": "Nach erfolgreicher Athletikprobe Waffen bereit machen mit nur -1 Aktion"
+    },
+    {
+     "haupt": "Handschuhe des Taschendiebs",
+     "neben": "Hände",
+     "wirkung": "+10 Fingerfertigkeit",
+     "beschreibung": "Gegenstände vom Gürtel können unbemerkt gezogen oder eingesteckt werden"
+    },
+    {
+     "haupt": "Knochenarmreif von Raik Silberfang",
+     "neben": "Hände",
+     "wirkung": "+1 auf alle Debuffs",
+     "beschreibung": "Wenn du Blutung, Feuermarker oder Gift verursachst, erhält das Ziel +1 zusätzlichen Marker/Stufe"
+    },
+    {
+     "haupt": "Meister Eders Handschuhe",
+     "neben": "Hände",
+     "wirkung": "+3 Handeln, +10 Handwerk"
+    },
+    {
+     "haupt": "Panzerhandschuhe des Brechers",
+     "neben": "Hände",
+     "wirkung": "+5 Stärke",
+     "beschreibung": "Deine Nahkampfangriffe erhalten +5 rüstungsbrechend"
+    },
+    {
+     "haupt": "Stulpen der Ruhe",
+     "neben": "Hände",
+     "wirkung": "+10 Fernkampf, +5 Wahrnehmung",
+     "beschreibung": "Die Reichweite deiner Waffe wird um 2m länger"
+    },
+    {
+     "haupt": "Stulpen des Abwehrens",
+     "neben": "Hände",
+     "wirkung": "+5 Blocken",
+     "beschreibung": "Nach erfolgreicher Parade darfst du dich 1m bewegen"
+    },
+    {
+     "haupt": "Wut des Chaos",
+     "neben": "Hände",
+     "wirkung": "+10 Stärke, +10 Nahkampf",
+     "beschreibung": "1x pro Kampf verursacht dein nächster erfolgreicher Nahkampfangriff +5W10 Schaden, +20 rüstungsbrechend und stößt das Ziel 1W6m weg"
+    },
+    {
+     "haupt": "Bulldozers Hut",
+     "neben": "Kopfbedeckung",
+     "wirkung": "+5 Willenskraft",
+     "beschreibung": "20% Chance, dass eine auf dich gerichtete Fähigkeit fehlschlägt"
+    },
+    {
+     "haupt": "Diadem eines Gottes",
+     "neben": "Kopfbedeckung",
+     "wirkung": "+10 Willenskraft, +10 Motivieren",
+     "beschreibung": "1x pro Tag: wenn du auf 0 LP fallen würdest, bleibst du stattdessen bei 1 LP. Alle Verbündeten und du in 10m heilen sofort 5W10 LP"
     },
     {
      "haupt": "Federhut",
      "neben": "Kopfbedeckung",
-     "wirkung": "+10 Überreden, +10 Auftritt",
-     "beschreibung": "-10 Heimlichkeit. 1x am Tag darfst du eine soziale Probe wiederholen."
+     "wirkung": "+5 Überreden, +10 Auftritt",
+     "beschreibung": "-10 Heimlichkeit"
+    },
+    {
+     "haupt": "Hut des Admirals",
+     "neben": "Kopfbedeckung",
+     "wirkung": "+10 Motivieren, +5 Schiffe steuern"
+    },
+    {
+     "haupt": "Hut des Ausgucks",
+     "neben": "Kopfbedeckung",
+     "wirkung": "+5 Willenskraft",
+     "beschreibung": "Schlaf dauert bei dir eine Runde weniger"
     },
     {
      "haupt": "Krone der Dornen",
      "neben": "Kopfbedeckung",
-     "wirkung": "+10 Willenskraft",
-     "beschreibung": "10% (des NK-Schadens) bekommt auch der Angreifer. Bekommst du einen Krit-Treffer, +1 Blutung an den Gegner."
+     "wirkung": "+10 Willenskraft, 10% Schadensreflektor",
+     "beschreibung": "10% des Nahkampfschadens bekommt der Angreifer zurück"
+    },
+    {
+     "haupt": "Maske des Henkers",
+     "neben": "Kopfbedeckung",
+     "wirkung": "+5 Einschüchtern",
+     "beschreibung": "Ziele unter 20% LP erleiden durch dich +1W10 mehr Nahkampf-/Fernkampfschaden"
+    },
+    {
+     "haupt": "Maske des Tiefseetauchers",
+     "neben": "Kopfbedeckung",
+     "wirkung": "+5 Rüstung",
+     "beschreibung": "Du kannst 10 Minuten unter Wasser atmen"
+    },
+    {
+     "haupt": "Maske des Weltenfressers",
+     "neben": "Kopfbedeckung",
+     "wirkung": "+10 Willenskraft, +10 Zähigkeit",
+     "beschreibung": "1x pro Kampf kannst du eine Fähigkeit, die nur dich als Ziel hat, zu 50% vollständig negieren. Gelingt es, heilst du zusätzlich 3W10 LP"
     },
     {
      "haupt": "Sonnenbrille der Macht",
      "neben": "Kopfbedeckung",
      "wirkung": "Kraftlevel ist erkennbar",
-     "beschreibung": "Du siehst das Kraftlevel deines Gegenübers: Menschlich Grün, Übernatürlich lila, Göttlich weiß."
+     "beschreibung": "Du siehst das Kraftlevel deines Gegenübers: Menschlich grün, Übernatürlich lila, Göttlich weiß"
     },
     {
      "haupt": "Voodoo-Maske der Trauer",
      "neben": "Kopfbedeckung",
-     "wirkung": "Voodoo plus 1",
-     "beschreibung": "Alle deine Voodoo-Zauber sind ein Lvl höher. (Handeln -10)"
+     "wirkung": "Voodoo +1",
+     "beschreibung": "Alle deine Voodoo-Zauber sind +1 Level (max. 3), Handeln -15"
     },
     {
-     "haupt": "Belphagors Tuch",
-     "neben": "Mantel",
-     "wirkung": "NK-Angreifer erleiden 1w4 Feuerschaden",
-     "beschreibung": "Lvl 1 unbrennbar."
-    },
-    {
-     "haupt": "Schattenmantel",
-     "neben": "Mantel",
-     "wirkung": "+10 heimlich",
-     "beschreibung": "Wenn du dich in der Runde nicht bewegt hast, verfehlen dich Schüsse zu 10%."
-    },
-    {
-     "haupt": "Umhang der Stürme",
-     "neben": "Mantel",
-     "wirkung": "+5 Schiffe steuern",
-     "beschreibung": "1x am Tag Lvl 1 Dornenrüstung."
-    },
-    {
-     "haupt": "Donnerbüchse",
-     "neben": "Muskete",
-     "wirkung": "5w10",
-     "beschreibung": "20% Stun, 15m Reichweite. (2 Laden)"
-    },
-    {
-     "haupt": "Echomuskete",
-     "neben": "Muskete",
-     "wirkung": "5w10",
-     "beschreibung": "Schießt zu 50% zwei Mal. (2mal Laden)"
-    },
-    {
-     "haupt": "Knochenfinger",
-     "neben": "Muskete",
-     "wirkung": "5w10 +Stufe 1 Gift",
-     "beschreibung": "10m, 2 Schüsse (1 Laden), bei Krit 50% Heal."
-    },
-    {
-     "haupt": "TodesEcho Muskete",
-     "neben": "Muskete",
-     "wirkung": "6w12 15m",
-     "beschreibung": "Stirbt dein Ziel, ist deine Waffe wieder geladen. Ansonsten 4 Aktionen Laden (A/B)."
+     "haupt": "Brust des Leviathans",
+     "neben": "Oberkörper",
+     "wirkung": "+15 Rüstung",
+     "beschreibung": "+1m Bewegung"
     },
     {
      "haupt": "Elegantes Bleihemd",
-     "neben": "Oberteil",
-     "wirkung": "+10 Rüstung, -10 Schwimmen, -10 Heimlich, -10 Voodoo",
-     "beschreibung": "Zu Beginn deiner Runde -1 FM."
+     "neben": "Oberkörper",
+     "wirkung": "+10 Rüstung",
+     "beschreibung": "Zu Beginn deiner Runde -1 Feuermarker"
     },
     {
-     "haupt": "Letzter Atem",
-     "neben": "Pistole",
-     "wirkung": "4w10",
-     "beschreibung": "Wenn Ziel unter 20% LP, dann ist ein Treffer automatisch kritisch."
+     "haupt": "Herzpanzer des Leviathans",
+     "neben": "Oberkörper",
+     "wirkung": "+20 Rüstung, +10 Zähigkeit",
+     "beschreibung": "Zu Beginn deiner Runde heilst du 1W10 LP. Bist du unter 25% LP, werden daraus 3W10 LP"
     },
     {
-     "haupt": "Seelenflüstern",
-     "neben": "Pistole",
-     "wirkung": "4w10",
-     "beschreibung": "+5 Fernkampf. Ziel muss Willenskraft -5 bestehen, sonst zusätzlich 4w6 MS Schaden."
+     "haupt": "Jacke des Klabautermanns",
+     "neben": "Oberkörper",
+     "wirkung": "+5 Handwerk, +10 Gassenwissen"
+    },
+    {
+     "haupt": "Jacke des Schmugglers",
+     "neben": "Oberkörper",
+     "wirkung": "+10 Rüstung",
+     "beschreibung": "2 Inventar-Slots, in denen alles, was reinpasst, sicher versteckt werden kann. Slots zählen wie eine Zusatztasche"
+    },
+    {
+     "haupt": "Panzer der tausend Narben",
+     "neben": "Oberkörper",
+     "wirkung": "+20 Rüstung",
+     "beschreibung": "Für jeden Debuff auf dir erhältst du +1W10 Schaden (max. +5W10). Entfernst du einen Debuff, heilst du 1W10 LP"
+    },
+    {
+     "haupt": "Panzer des Brechers",
+     "neben": "Oberkörper",
+     "wirkung": "+10 Rüstung",
+     "beschreibung": "Wirst du im Nahkampf getroffen, erhält dein Angreifer beim nächsten Blocken gegen dich -10"
+    },
+    {
+     "haupt": "Panzer des Herrschers",
+     "neben": "Oberkörper",
+     "wirkung": "+10 Rüstung",
+     "beschreibung": "Zu Beginn deiner Runde +2W10 Heilung"
+    },
+    {
+     "haupt": "Seidenhemd von Oma",
+     "neben": "Oberkörper",
+     "wirkung": "+5 Soziales",
+     "beschreibung": "Zu Beginn deiner Runde -1 Blutung"
+    },
+    {
+     "haupt": "Wams des Bluttrinkers",
+     "neben": "Oberkörper",
+     "wirkung": "+5 Rüstung",
+     "beschreibung": "Entfernst du bei dir eine Blutung, heilst du pro entfernter Blutung 1W6"
+    },
+    {
+     "haupt": "Wams des Wahnsinnigen",
+     "neben": "Oberkörper",
+     "wirkung": "+5 Zähigkeit",
+     "beschreibung": "Unter 25% LP: +1W10 Schaden, +1W10 Heilung am Ende der Runde"
+    },
+    {
+     "haupt": "Weste des Duellanten",
+     "neben": "Oberkörper",
+     "wirkung": "+5 Blocken",
+     "beschreibung": "Nach erfolgreicher Parade macht dein nächster Nahkampfangriff +1W10"
+    },
+    {
+     "haupt": "Gürtel des Grogkönigs",
+     "neben": "Oberkörper",
+     "wirkung": "+5 Zähigkeit, +5 Zechen",
+     "beschreibung": "Wenn betrunken: -10 auf Soziales, jeder Schaden den du betrunken verursachst +1W4 (Oberkörper oder Beine)"
+    },
+    {
+     "haupt": "Anker der Erinnerung",
+     "neben": "Schmuck",
+     "wirkung": "0 LP → 1 LP",
+     "beschreibung": "Verhindert einmalig Tod: bei 0 LP bleibst du bei 1 LP stehen, zerfällt danach"
+    },
+    {
+     "haupt": "Blutkompass",
+     "neben": "Schmuck",
+     "wirkung": "+5 Wahrnehmung",
+     "beschreibung": "+1W10 Schaden auf blutende Ziele"
+    },
+    {
+     "haupt": "Das feurige Auge",
+     "neben": "Schmuck",
+     "wirkung": "Feuerschaden +1W4",
+     "beschreibung": "Dein Feuerschaden macht zusätzlich +1W4 Schaden (nicht bei Feuermarkern)"
+    },
+    {
+     "haupt": "Die silberne Spinne",
+     "neben": "Schmuck",
+     "beschreibung": "Heimlich und Lügen +5"
     },
     {
      "haupt": "Glücksmünze des Kapitäns",
      "neben": "Schmuck",
-     "wirkung": "Kopf +10, Zahl -10",
-     "beschreibung": "+/-10 auf alle Proben in deiner Runde."
+     "wirkung": "Kopf +10 / Zahl -10",
+     "beschreibung": "Zu Beginn deiner Runde (extra Aktion) +/-10 auf alle Proben in deiner Runde"
+    },
+    {
+     "haupt": "Goldene Feder des Schwertmeisters",
+     "neben": "Schmuck",
+     "wirkung": "+1 Initiative",
+     "beschreibung": "+1W10 Nahkampfschaden"
     },
     {
      "haupt": "Grabnagel des Totensammlers",
      "neben": "Schmuck",
-     "wirkung": "+3w10 Heilung bei einem Kill (bei Untoten 6w10)",
-     "beschreibung": "Du heilst 3w10, wenn du einen Menschen oder menschenähnliches Wesen tötest. Normale Heilzauber und Medizin können dich nur bis 50% deines Lebens heilen und sind darüber hinaus nutzlos."
+     "wirkung": "+2W10",
+     "beschreibung": "Stirbt ein Gegner innerhalb von 5m, erhält der Grabnagel 1 Seele (max. 3, bis Kampfende). Als Extra-Aktion kannst du alle Seelen verbrauchen: pro Seele +2W10 Schaden auf deinen nächsten Angriff"
+    },
+    {
+     "haupt": "Herz der See",
+     "neben": "Schmuck",
+     "wirkung": "-1 Feuermarker",
+     "beschreibung": "Zu Beginn deiner Runde -1 Feuermarker. 10 Minuten Luft anhalten"
+    },
+    {
+     "haupt": "Herz des Kapitäns",
+     "neben": "Schmuck",
+     "wirkung": "+10 Motivieren, +5 Willenskraft",
+     "beschreibung": "1x am Tag kann eines deiner Crewmitglieder (5m Umkreis) eine fehlgeschlagene Probe wiederholen"
     },
     {
      "haupt": "Jadekugel",
      "neben": "Schmuck",
-     "wirkung": "10w10 Heilung",
-     "beschreibung": "5 Stück."
+     "wirkung": "10W10 Heilung",
+     "beschreibung": "5 Stück"
+    },
+    {
+     "haupt": "Kette des Berserkers",
+     "neben": "Schmuck",
+     "wirkung": "+10 Nahkampf",
+     "beschreibung": "Unter 30% LP: -10 Rüstung, +4W10 Nahkampfschaden"
+    },
+    {
+     "haupt": "Kette des Blutes",
+     "neben": "Schmuck",
+     "wirkung": "+1 Blutung",
+     "beschreibung": "Deine Nahkampfangriffe verursachen zu 30% eine zusätzliche Blutung"
     },
     {
      "haupt": "Kette des Kalifazius",
      "neben": "Schmuck",
-     "wirkung": "+5 auf Sozialproben",
-     "beschreibung": "Dämonen spüren deine Anwesenheit, -10 auf Einschüchtern gegen dich. Dämonen müssen eine Probe werfen, ob sie dich angreifen."
+     "wirkung": "+5 auf Sozialproben, +4W10 gegen Dämonen",
+     "beschreibung": "Dämonen spüren deine Anwesenheit. Wollen sie dich angreifen, müssen sie eine Willenskraftprobe bestehen - bei Misserfolg können sie dich diese Runde nicht angreifen"
     },
     {
-     "haupt": "Kästchen des Goldes",
+     "haupt": "Kreuz von Kalifazius",
      "neben": "Schmuck",
-     "beschreibung": "Macht Steine zu Goldmünzen."
+     "wirkung": "+1W10 Heilung",
+     "beschreibung": "Fertigkeiten machen +1W10 Heilung. Einmal am Tag darfst du eine Heilfähigkeit als Extra-Aktion einsetzen"
+    },
+    {
+     "haupt": "Münze des Fährmanns",
+     "neben": "Schmuck",
+     "wirkung": "+5 Willenskraft",
+     "beschreibung": "Stirbt jemand im Umkreis von 5m, kannst du ihn zu 50% wiederbeleben (Münze opfern)"
+    },
+    {
+     "haupt": "Muschel der Stärke",
+     "neben": "Schmuck",
+     "wirkung": "+5 Stärke",
+     "beschreibung": "Dein Wasserschaden macht zusätzlich +1W10 Schaden"
     },
     {
      "haupt": "Ohrring der Tiefe",
      "neben": "Schmuck",
      "wirkung": "Atem unter Wasser",
-     "beschreibung": "Du kannst für 5 Minuten unter Wasser atmen."
+     "beschreibung": "Du kannst für 30 Minuten unter Wasser atmen"
     },
     {
      "haupt": "Ring der schwachen Heilung",
      "neben": "Schmuck",
-     "wirkung": "+1w6 Heilung",
-     "beschreibung": "Hast du letzte Runde keinen Schaden bekommen, bekommst du 1w6 Heilung."
+     "wirkung": "+1W10 Heilung",
+     "beschreibung": "Hast du letzte Runde keinen Schaden bekommen, bekommst du 1W10 Heilung"
     },
     {
      "haupt": "Ring des Feuers",
      "neben": "Schmuck",
      "wirkung": "1x am Tag",
-     "beschreibung": "Feuerball Stufe 1."
+     "beschreibung": "Feuerball Stufe 1"
+    },
+    {
+     "haupt": "Talisman der Stille",
+     "neben": "Schmuck",
+     "wirkung": "1x/Tag unsichtbar für Geräusche",
+     "beschreibung": "Schützt vor Entdeckung durch Geräusche"
     },
     {
      "haupt": "Taschenuhr der Wiederholung",
      "neben": "Schmuck",
-     "wirkung": "Wiederhole EINE Probe",
-     "beschreibung": "Du darfst eine Probe pro Tag wiederholen. Bei Misserfolg -> tiefer Schlaf."
+     "wirkung": "Wiederhole Probe",
+     "beschreibung": "1x pro Tag darfst du eine misslungene Probe wiederholen. Misslingt auch die Wiederholung, schläfst du für 1W4 Runden"
+    },
+    {
+     "haupt": "Totem des Sturmrufers",
+     "neben": "Schmuck",
+     "beschreibung": "1x am Tag Wind für 1W4 Runden verstärken oder abflauen um +/-1 Würfelstufe"
+    },
+    {
+     "haupt": "Beinschiene des Bullen",
+     "neben": "Schuhe",
+     "wirkung": "+1m Bewegung",
+     "beschreibung": "Nach 3m Bewegung +1W10 Nahkampfschaden"
+    },
+    {
+     "haupt": "Bleischuhe",
+     "neben": "Schuhe",
+     "wirkung": "+10 Rüstung, -1m Bewegung"
     },
     {
      "haupt": "Federbein",
      "neben": "Schuhe",
      "wirkung": "Ersetzt 1 Bein",
-     "beschreibung": "Sprungangriff Lvl 1."
+     "beschreibung": "Sprungangriff Level 1"
     },
     {
-     "haupt": "Sieben Meilen Stiefel",
+     "haupt": "Sieben-Meilen-Stiefel",
      "neben": "Schuhe",
-     "wirkung": "+1m Bewegung, +2m Sprungweite"
+     "wirkung": "+1m Bewegung",
+     "beschreibung": "+2m Sprungweite"
     },
     {
      "haupt": "Stiefel der Schattenwelle",
      "neben": "Schuhe",
      "wirkung": "+10 Heimlichkeit",
-     "beschreibung": "+2 Bewegung bei Nacht und bei Regen."
+     "beschreibung": "+2m Bewegung bei Nacht und bei Regen"
+    },
+    {
+     "haupt": "Stiefel des Enterns",
+     "neben": "Schuhe",
+     "wirkung": "+5 Athletik, +10 Entern"
+    },
+    {
+     "haupt": "Stiefel des Fallenden",
+     "neben": "Schuhe",
+     "wirkung": "+5 Athletik",
+     "beschreibung": "Fallschaden wird um 2W10 reduziert"
+    },
+    {
+     "haupt": "Stiefel des Seiltänzers",
+     "neben": "Schuhe",
+     "wirkung": "+10 Athletik",
+     "beschreibung": "Beim Klettern und Balancieren erhältst du zusätzlich +10"
+    },
+    {
+     "haupt": "Stiefel des Sturmreiters",
+     "neben": "Schuhe",
+     "wirkung": "+2m Bewegung, +10 Athletik",
+     "beschreibung": "1x pro Tag bewegst du dich als Extra-Aktion bis zu 10m. Alle Gegner, an denen du dabei vorbeikommst, erleiden 2W10 Schaden und müssen eine Zähigkeitsprobe bestehen oder erhalten Stun"
+    },
+    {
+     "haupt": "Stiefel des Toten Mannes",
+     "neben": "Schuhe",
+     "wirkung": "+5 Willenskraft",
+     "beschreibung": "Schlaf dauert bei dir 1 Runde weniger"
+    },
+    {
+     "haupt": "Stiefel des Weltenwanderers",
+     "neben": "Schuhe",
+     "wirkung": "+2m Bewegung",
+     "beschreibung": "1x pro Kampf darfst du dich als Extra-Aktion bis zu 10m an einen Ort teleportieren, den du sehen kannst"
+    },
+    {
+     "haupt": "Stiefel des Jägers",
+     "neben": "Schuhe",
+     "wirkung": "+1m Bewegung",
+     "beschreibung": "Für jede Blutung machst du 1W6 mehr Nahkampf- oder Fernkampfschaden"
+    },
+    {
+     "haupt": "Belphagors Tuch",
+     "neben": "Schultern",
+     "wirkung": "Nahkampf-Angreifer erleiden 1W4 Feuerschaden",
+     "beschreibung": "Level 1 Unbrennbar"
+    },
+    {
+     "haupt": "Echomuskete",
+     "neben": "Schultern",
+     "wirkung": "5W10",
+     "beschreibung": "Schießt zu 50% zwei Mal (2x Laden)"
+    },
+    {
+     "haupt": "Fell eines Bären",
+     "neben": "Schultern",
+     "wirkung": "+5 Zähigkeit",
+     "beschreibung": "Unter 25% LP: +1W10 Schaden"
+    },
+    {
+     "haupt": "Kettenmantel des Ankers",
+     "neben": "Schultern",
+     "wirkung": "+5 Rüstung",
+     "beschreibung": "Du kannst maximal 1m weggestoßen werden"
+    },
+    {
+     "haupt": "Kriegswams von Brinol",
+     "neben": "Schultern",
+     "wirkung": "+10 Motivieren",
+     "beschreibung": "Verbündete in 5m erhalten +5 Rüstung"
+    },
+    {
+     "haupt": "Mantel des Ertrunkenen",
+     "neben": "Schultern",
+     "wirkung": "+5 Rüstung",
+     "beschreibung": "+10 Schwimmen"
+    },
+    {
+     "haupt": "Mantel des Kugelfängers",
+     "neben": "Schultern",
+     "wirkung": "+5 Rüstung",
+     "beschreibung": "1x pro Kampf kannst du den Schaden eines Fernkampfangriffs ignorieren (kritisch ausgeschlossen)"
+    },
+    {
+     "haupt": "Mantel des Schwertmeisters der Hölle",
+     "neben": "Schultern",
+     "wirkung": "+15 Rüstung, +10 Einschüchtern",
+     "beschreibung": "Stirbt ein Gegner in 5m, darfst du sofort einen Standardangriff gegen ein anderes Ziel ausführen (max. 1x pro Runde)"
+    },
+    {
+     "haupt": "Mantel des Musketiers",
+     "neben": "Schultern",
+     "wirkung": "+5 Fernkampf",
+     "beschreibung": "Hast du dich diese Runde nicht bewegt, +2W8 auf Fernkampfschaden"
+    },
+    {
+     "haupt": "Schattenmantel",
+     "neben": "Schultern",
+     "wirkung": "+10 Heimlichkeit",
+     "beschreibung": "Wenn du dich in dieser Runde bewegt hast, verfehlen dich Fernkampfangriffe zu 30%"
+    },
+    {
+     "haupt": "Sturmkragen",
+     "neben": "Schultern",
+     "wirkung": "+5 Rüstung",
+     "beschreibung": "20% Immunität gegen Stun"
+    },
+    {
+     "haupt": "TodesEcho-Muskete",
+     "neben": "Schultern",
+     "wirkung": "8W12, 15m",
+     "beschreibung": "Stirbt dein Ziel, ist deine Waffe wieder geladen. Ansonsten 3 Aktionen Laden (A/B)"
+    },
+    {
+     "haupt": "Umhang der Stürme",
+     "neben": "Schultern",
+     "wirkung": "+5 Schiffe steuern",
+     "beschreibung": "1x am Tag Level 1 Dornenrüstung"
+    },
+    {
+     "haupt": "Umhang des Feldschers",
+     "neben": "Schultern",
+     "wirkung": "+5 Medizin",
+     "beschreibung": "Heilfähigkeiten im Umkreis von 2m +1W10 Heilung"
+    },
+    {
+     "haupt": "Umhang des Schamanen",
+     "neben": "Schultern",
+     "wirkung": "+5 Voodoo",
+     "beschreibung": "Voodoo-Zauber haben 1m mehr Reichweite"
     },
     {
      "haupt": "Arkaner Bogen",
-     "neben": "Schusswaffe",
-     "wirkung": "4w10+5 15m",
-     "beschreibung": "Du brauchst keine Munition, -10 auf Verstecken/Heimlich. Jeder Schuss hinterlässt für eine Runde einen Lichtstrahl."
+     "neben": "Waffe",
+     "wirkung": "4W10+5, 15m",
+     "beschreibung": "Du brauchst keine Munition, -10 auf Verstecken/Heimlich. Jeder Schuss hinterlässt für eine Runde einen Lichtstrahl"
     },
     {
-     "haupt": "ArmArmBrust",
-     "neben": "Schusswaffe",
-     "wirkung": "3w10",
-     "beschreibung": "5 Bolzen 15m rausholen Extra-Aktion. (1 Laden)"
+     "haupt": "Armbrust der Arkanen",
+     "neben": "Waffe",
+     "wirkung": "3W10",
+     "beschreibung": "5 Bolzen, 15m. Bereitmachen = Extra-Aktion, komplett laden = A und B"
     },
     {
-     "haupt": "Unheilige Hand des Priesters",
-     "neben": "Stab",
-     "wirkung": "Fähigkeit der Hand kann wie ein Gegenstand genutzt werden.",
-     "beschreibung": "Lvl 1 Atem des Todes, Lvl 1 Heilendes Wort. 5 Ladungen, bevor die Hand wieder geladen werden muss."
-    },
-    {
-     "haupt": "Dauerstange",
-     "neben": "Stock",
-     "wirkung": "2w10",
-     "beschreibung": "3m pro Aktion ein- oder ausfahren."
+     "haupt": "Axt der Blutgezeiten",
+     "neben": "Waffe",
+     "wirkung": "5W10+2W6",
+     "beschreibung": "Bei kritischem Treffer +2W10 Heilung. Muss jede Nacht mit Blut benetzt werden"
     },
     {
      "haupt": "Blutdurst",
-     "neben": "Säbel",
-     "wirkung": "5w10",
-     "beschreibung": "+1w6 Schaden pro Nahkampftreffer in Folge (max. 5)."
+     "neben": "Waffe",
+     "wirkung": "5W10",
+     "beschreibung": "+1W6 Schaden pro Nahkampftreffer in Folge (max. 5)"
+    },
+    {
+     "haupt": "Bohrhand",
+     "neben": "Waffe",
+     "wirkung": "Stärke+1W10, +1W6 pro Treffer in Folge (max. 5)",
+     "beschreibung": "+5 rüstungsbrechend pro Runde mit Treffer"
+    },
+    {
+     "haupt": "Dämonenklaue",
+     "neben": "Waffe",
+     "wirkung": "Stärke +2W10, +10 rüstungsbrechend"
+    },
+    {
+     "haupt": "Dauerstange",
+     "neben": "Waffe",
+     "wirkung": "2W10",
+     "beschreibung": "3m pro Aktion ein- oder ausfahren (max. 12m)"
+    },
+    {
+     "haupt": "Dolch der Nacht",
+     "neben": "Waffe",
+     "wirkung": "2W10 Schaden, +1 Giftstufe",
+     "beschreibung": "Angriff aus dem Dunklen Level 1"
+    },
+    {
+     "haupt": "Donnerbüchse",
+     "neben": "Waffe",
+     "wirkung": "5W10",
+     "beschreibung": "20% Stun, 15m Reichweite (2 Ladungen)"
+    },
+    {
+     "haupt": "Donnerfaust",
+     "neben": "Waffe",
+     "wirkung": "Stärke+1W10",
+     "beschreibung": "10% Stun"
+    },
+    {
+     "haupt": "Energiefaust",
+     "neben": "Waffe",
+     "wirkung": "Stärke +2W6",
+     "beschreibung": "Nach erfolgreichem Nahkampftreffer erhältst du eine Ladung (max. 3, hält 5 Runden). Entlade alle Ladungen auf ein Ziel in der Nähe (Extraaktion): 2W6/4W6/6W6"
+    },
+    {
+     "haupt": "Feuernadel",
+     "neben": "Waffe",
+     "wirkung": "3W10 +1 Feuermarker",
+     "beschreibung": "Funke Level 1"
+    },
+    {
+     "haupt": "Flammenkralle",
+     "neben": "Waffe",
+     "wirkung": "Stärkeschaden",
+     "beschreibung": "+1 Feuermarker, +1 Blutung"
+    },
+    {
+     "haupt": "Geisterfaust",
+     "neben": "Waffe",
+     "wirkung": "Stärke +2W10",
+     "beschreibung": "Bei kritischem Treffer wird die Rüstung des Ziels ignoriert"
+    },
+    {
+     "haupt": "Glutfäuste",
+     "neben": "Waffe",
+     "wirkung": "Stärke +1 Feuermarker",
+     "beschreibung": "Zu Beginn deiner Runde -1 Feuermarker"
+    },
+    {
+     "haupt": "Kettenknöchel",
+     "neben": "Waffe",
+     "wirkung": "Stärke+1W10",
+     "beschreibung": "+10 auf Parade, wenn ausgerüstet"
     },
     {
      "haupt": "Klinge der Tiefsee",
-     "neben": "Säbel",
-     "wirkung": "5w10",
-     "beschreibung": "+1w6 +5 Angriff bei Regen oder im/auf dem Wasser."
+     "neben": "Waffe",
+     "wirkung": "5W10",
+     "beschreibung": "+1W6, +5 Angriff bei Regen oder im/auf dem Wasser"
+    },
+    {
+     "haupt": "Knochenfinger",
+     "neben": "Waffe",
+     "wirkung": "5W10 +Stufe 1 Gift",
+     "beschreibung": "10m, 2 Schüsse. Laden = 2 Aktionen. Kritischer Treffer: Heilung in Höhe des Schadens"
+    },
+    {
+     "haupt": "Lavafaust",
+     "neben": "Waffe",
+     "wirkung": "Stärke+1W10",
+     "beschreibung": "+1 Feuermarker"
+    },
+    {
+     "haupt": "Letzter Atem",
+     "neben": "Waffe",
+     "wirkung": "4W10+5",
+     "beschreibung": "Wenn Ziel unter 25% LP, dann +4W10"
+    },
+    {
+     "haupt": "Lotusfaust",
+     "neben": "Waffe",
+     "wirkung": "Stärke +1W10",
+     "beschreibung": "Verursacht dein Treffer Schaden, heilst du 1W10"
     },
     {
      "haupt": "Revolversäbel",
-     "neben": "Säbel",
-     "wirkung": "5w10",
-     "beschreibung": "3 Kammern. Kammer wählen und aktivieren kostet eine Extraaktion."
-    },
-    {
-     "haupt": "Schwert von Astoria",
-     "neben": "Säbel",
-     "wirkung": "3w10",
-     "beschreibung": "Gegner schläft zu 20% ein."
-    },
-    {
-     "haupt": "Spiegelfluch",
-     "neben": "Säbel",
-     "wirkung": "5w10",
-     "beschreibung": "Bei NK-Schaden kannst du einen Debuff deinem Gegner geben (bei Krit einen ganzen Stack). Bei einem Patzer oder einer kritischen Parade bekommst du ein Debuff vom Gegner."
-    },
-    {
-     "haupt": "Sturmschwert",
-     "neben": "Säbel",
-     "wirkung": "5w10",
-     "beschreibung": "Bei einem kritischen Treffer, greife nochmal an."
-    },
-    {
-     "haupt": "Svenssons Silber Sebel",
-     "neben": "Säbel",
-     "wirkung": "5w10",
-     "beschreibung": "Greifst du unmenschliche Wesen an, machst du 2w10 zusätzlichen Schaden."
+     "neben": "Waffe",
+     "wirkung": "5W10",
+     "beschreibung": "3 Kammern. Kammer wählen und aktivieren kostet eine Extraaktion"
     },
     {
      "haupt": "Säbel des Fiebers",
-     "neben": "Säbel",
-     "wirkung": "5w10",
-     "beschreibung": "Permanent Gift Stufe 2."
+     "neben": "Waffe",
+     "wirkung": "5W10",
+     "beschreibung": "Permanent Gift Stufe 2"
+    },
+    {
+     "haupt": "Schwert von Astoria",
+     "neben": "Waffe",
+     "wirkung": "3W10",
+     "beschreibung": "Gegner schläft zu 20% ein"
+    },
+    {
+     "haupt": "Seelenflüstern",
+     "neben": "Waffe",
+     "wirkung": "4W10",
+     "beschreibung": "Ziel muss Willenskraft -5 bestehen, sonst zusätzlich 4W6 Schaden"
+    },
+    {
+     "haupt": "Spiegelfluch",
+     "neben": "Waffe",
+     "wirkung": "5W10",
+     "beschreibung": "Bei einem Nahkampftreffer wählst du +1 Blutung oder +1 Feuermarker. Bei einem Patzer bekommst du selbst +1 Blutung und +1 Feuermarker"
+    },
+    {
+     "haupt": "Splitterfaust",
+     "neben": "Waffe",
+     "wirkung": "Stärke +4W10",
+     "beschreibung": "Pro Nahkampfangriff bekommst du 1W10 Schaden"
+    },
+    {
+     "haupt": "Sturmschwert",
+     "neben": "Waffe",
+     "wirkung": "5W10",
+     "beschreibung": "Bei einem kritischen Treffer darfst du sofort einen weiteren Standard-Nahkampfangriff ausführen"
+    },
+    {
+     "haupt": "Svenssons Silbersäbel",
+     "neben": "Waffe",
+     "wirkung": "5W10",
+     "beschreibung": "Greifst du unmenschliche Wesen an, machst du 2W10 zusätzlichen Schaden"
     },
     {
      "haupt": "Wasserzahn",
-     "neben": "Säbel",
-     "wirkung": "5w10",
-     "beschreibung": "Gegner werden bei einem Treffer 1w4 weg gestoßen."
-    },
-    {
-     "haupt": "Totem des Sturmrufers",
-     "neben": "Talisman",
-     "beschreibung": "1x am Tag Wind für 1w4 Runden verstärken oder abflauen um +/-1 Würfelstufe."
+     "neben": "Waffe",
+     "wirkung": "5W10",
+     "beschreibung": "Gegner werden bei einem Treffer 1W4m weggestoßen"
     },
     {
      "haupt": "Drachentöter",
      "neben": "Zweihandwaffe",
-     "wirkung": "7w10 10RB",
-     "beschreibung": "Greifst du unmenschliches an, machst du +2w10 Schaden, 10 rüstungsbrechend. Min. 70 Stärke."
+     "wirkung": "7W10, 10 rüstungsbrechend",
+     "beschreibung": "Greifst du Unmenschliches an, machst du +2W10 Schaden. Mindestens 70 Stärke erforderlich"
     },
     {
      "haupt": "Flammenberg",
      "neben": "Zweihandwaffe",
-     "wirkung": "5w10 Feuer",
-     "beschreibung": "+2 Feuermarken."
+     "wirkung": "5W10 Feuer",
+     "beschreibung": "+2 Feuermarker"
     },
     {
      "haupt": "Odins Harpune",
      "neben": "Zweihandwaffe",
-     "wirkung": "5w10 als Mensch, 5w12 als Monster",
-     "beschreibung": "Lvl 1 Aquaknarre. Teleport mit Schiff: #1 5, #2 10, #3 15, #4 20, 1w4 Abweichung."
+     "wirkung": "5W10 als Mensch, 5W12 als Monster",
+     "beschreibung": "Level 1 Aquaknarre. Odins Sprung: 1x pro Tag kannst du das Schiff, auf dem du dich befindest, teleportieren. Reichweite nach Wesen-Rang: #1 3 Tage, #2 6 Tage, #3 9 Tage, #4 12 Tage. Das Schiff erscheint 1W4 Tage vom Zielpunkt entfernt"
     }
    ]
   },
@@ -978,7 +1307,8 @@ randomizerPaketRegistrieren({
   "Seher der Tiefsee",
   "Sturmwüter",
   "Tiefseepirat",
-  "Wellenringer"
+  "Wellenringer",
+  "Mensch"
  ],
  "eigenschaften": [
   {

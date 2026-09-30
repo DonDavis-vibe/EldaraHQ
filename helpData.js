@@ -73,6 +73,13 @@ const helpData = {
                      "<p><i>Vereinfacht gegenüber dem Regelwerk: 0,5-Gegenstände (Dolche, Tränke) belegen hier volle 1 Feld statt sich zu zweit einen Platz zu teilen, und Zweihandwaffen (laut Quelle 2,5 Felder) sind wie alle anderen Waffen ab Größe 2 abgebildet - der Größenkatalog kennt aktuell nur 0,5/1/2/3.</i></p>" +
                      "<p>Diese Ansicht ersetzt die normale Inventarliste nur, solange das Regelpaket \"eldora-arrrrr\" aktiv ist - ohne Hausregel bleibt alles wie gewohnt unbegrenzt.</p>",
 
+    runenmagie: "<h3>Schmiede-Roulette (Runenmagie)</h3>" +
+                "<p>Eldara-Hausregel (RW 5.1, \"Runenmagie - Das wiedererweckte Handwerk\"): gewöhnliche Schmiede können Runen in Waffen und Rüstungen schlagen, wissen aber nicht vorher, welche Rune dabei entsteht - das entscheidet der Zufall.</p>" +
+                "<p><b>Ablauf:</b> Über den Hammer-Knopf an einer Waffe oder einem Rüstungsteil legst du fest, wie viele Sockel (1-3, kostet 500/3.000/10.000 Gold) und welche Runenstärke je Sockel (Stufe 1-4, kostet 0/1.000/5.000/15.000 Gold pro Rune) du kaufen willst. Nach dem Bezahlen wird für jeden Sockel 1W6 gewürfelt: 1 Schaden/Rüstung, 2 Lebenspunkte, 3 Skill-Sockel, 4 Statuspunkte, 5 Buff-Sockel, 6 Jackpot (eigene Untertabelle, u.a. Doppelrune oder ein kostenloser Zusatzsockel).</p>" +
+                "<p><b>SL-Bestätigung:</b> Das gewürfelte Ergebnis geht als Anfrage an den Spielleiter und wird erst nach dessen Bestätigung dauerhaft auf das Item angewendet - die Anfrage erscheint oben im GM-Dashboard.</p>" +
+                "<p><b>Einstampfen:</b> Bist du mit einem bereits bestätigten Ergebnis unzufrieden, kannst du den Gegenstand direkt an der Karte einstampfen lassen - Gegenstand und Runen werden zerstört, du bekommst 75% des investierten Goldes zurück.</p>" +
+                "<p><i>Vereinfacht: bei welchem konkreten Skill/Statuswert/Buff der Zufall zuschlägt, legt die Gruppe selbst am Tisch fest - das Tool würfelt nur die Slot-Art und Stufe.</i></p>",
+
     schiff: "<h3>Schiffs-Inventar</h3>" +
             "<p>Eldara-Hausregel: das Schiff als gemeinsame Heimat der Crew. Anders als die Tischmitte ist alles hier <b>immer für alle sichtbar</b> - kein Verstecken, das ist ja euer eigener Besitz.</p>" +
             "<p><b>Lager:</b> Jede Schiffsklasse hat laut Regelwerk (S.32) eine feste Kapazität - Kanonenboot 20, Schoner 50, Brigg 100, Fregatte 150, Kriegsschiff 250. Der SL wählt die Klasse; ist das Lager voll, lässt sich nichts Neues mehr ablegen.</p>" +

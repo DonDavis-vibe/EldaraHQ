@@ -524,6 +524,7 @@
     <script src="quests.js"></script>
     <script src="spielerlog.js"></script>
     <script src="inventarraster.js"></script>
+    <script src="runenmagie.js"></script>
     <script src="schiffsinventar.js"></script>
     <script src="battlemap.js"></script>
     <script src="seekampf-icons.js"></script>
@@ -592,6 +593,14 @@
             <button class="modal-close" onclick="karteGalerieSchliessen()"><i class="fa-solid fa-xmark"></i></button>
             <h3 style="margin-bottom: 0.5rem;"><i class="fa-solid fa-images"></i> Kartenhintergrund wählen</h3>
             <div id="karte-galerie-body"></div>
+        </div>
+    </div>
+
+    <div id="runen-modal-overlay" class="help-modal-overlay" onclick="runenModalSchliessen()">
+        <div class="help-modal-box" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="runenModalSchliessen()"><i class="fa-solid fa-xmark"></i></button>
+            <h3 style="margin-bottom: 0.5rem;"><i class="fa-solid fa-hammer"></i> Schmiede-Roulette</h3>
+            <div id="runen-modal-body"></div>
         </div>
     </div>
 
@@ -808,6 +817,8 @@
 
             </div>
         </div>
+
+        <div id="runen-anfragen-panel" style="display:none; background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.4); border-radius: 10px; padding: 1rem; margin-bottom: 0.5rem;"></div>
 
         <div class="gm-dashboard-grid">
 

@@ -100,34 +100,43 @@ const IR_RUESTUNGSSTUFE_MALI = {
     schwer: { bewegung: -2, handeln: -10, heimlichkeit: -15 }
 };
 
-// --- Katalog aus dem Regelwerk (RW4.3) fürs Item-Formular ------------------
+// --- Katalog aus dem Regelwerk (RW5.1) fürs Item-Formular ------------------
 //
 // Nutzt dieselbe Datenquelle wie Tischmitte/Zufallsgenerator
 // (randomizerPaketeGeladen.eldora.tabellen, siehe randomizer/eldora.js) statt
-// die ~136 Items hier nochmal zu duplizieren. Vor allem für Spieler gedacht,
+// die Items hier nochmal zu duplizieren. Vor allem für Spieler gedacht,
 // die von einem Papierbogen umsteigen und ihr bestehendes Inventar schnell
 // nachbauen wollen - ersetzt die freie Eingabe NICHT, ist nur eine Abkürzung.
 //
 // "Magische Gegenstände" tragen im Katalog ihre Art als Kategorie-Text
-// (z.B. "Schuhe", "Amulett", "Säbel") statt als Slot/Waffen-Flag - hier auf
+// (z.B. "Schuhe", "Schmuck", "Waffe") statt als Slot/Waffen-Flag - hier auf
 // unser Datenmodell übersetzt (irAusruestungsslot bzw. istWaffe), damit z.B.
 // Schuhe wirklich automatisch auf den Füße-Slot vorausgewählt werden und
 // nicht als loses, nirgends anziehbares Item im Rucksack landen.
 let irKatalogGeladen = false;
 
 const IR_KATALOG_KATEGORIE_SLOT = {
+    // RW 5.1 (aktuell, "Besondere und magische Gegenstände" S.37-46)
+    'Beine': 'beine',
+    'Hände': 'haende',
     'Kopfbedeckung': 'kopf',
+    'Oberkörper': 'brust',
+    'Schmuck': 'schmuck',
+    'Schuhe': 'fuesse',
+    'Schultern': 'schulterhals',
+    // RW 4.3 (veraltet, nur zur Sicherheit falls alte Katalog-Referenzen bestehen)
     'Mantel': 'schulterhals',
     'Oberteil': 'brust',
     'Handschuhe': 'haende',
-    'Schuhe': 'fuesse',
     'Amulett': 'schmuck',
-    'Schmuck': 'schmuck',
     'Talisman': 'schmuck'
 };
 const IR_KATALOG_KATEGORIE_WAFFE = new Set([
+    // RW 5.1: einhändige Waffen tragen nur noch die generische Kategorie "Waffe"
+    'Waffe', 'Zweihandwaffe',
+    // RW 4.3 (veraltet, nur zur Sicherheit)
     'Axt', 'Bombe', 'Dolch', 'Faustwaffe', 'Kanone', 'Muskete', 'Pistole',
-    'Schusswaffe', 'Stab', 'Stock', 'Säbel', 'Zweihandwaffe'
+    'Schusswaffe', 'Stab', 'Stock', 'Säbel'
 ]);
 const IR_KATALOG_GRUPPEN = [
     { key: 'waffen_shop', label: 'Waffen' },
@@ -788,6 +797,30 @@ function irDrop(itemId, targetSlot) {
 
 // --- Darstellung ---------------------------------------------------------------
 
+// Zeile für Runenmagie/Schmiede-Roulette (runenmagie.js) - nur für Waffen und
+// Rüstungsteile, siehe runenItemBerechtigt(). Zeigt je nach item.runen.status
+// entweder den "Verzaubern"-Knopf, eine Warte-Anzeige oder die bestätigten
+// Runen-Effekte samt Einstampfen-Knopf.
+function irRunenZeileHtml(item) {
+    const r = item.runen;
+    if (!r) {
+        return `<div class="ir-karte-reihe ir-runen-reihe">
+            <button class="btn-icon-small" onclick="runenModalOeffnen('${escapeHtml(item.id)}')" title="Schmiede-Roulette: Runen einschmieden"><i class="fa-solid fa-hammer"></i> Verzaubern</button>
+        </div>`;
+    }
+    if (r.status === 'wartetAufSl') {
+        return `<div class="ir-karte-reihe ir-runen-reihe ir-runen-wartend"><i class="fa-solid fa-hourglass-half"></i> Roulette-Ergebnis wartet auf SL-Bestätigung …</div>`;
+    }
+    if (r.status === 'bestaetigt') {
+        const effekte = (r.ergebnisse || []).flatMap(s => s.effekte.map(e => e.art));
+        return `<div class="ir-karte-reihe ir-runen-reihe ir-runen-bestaetigt" title="${escapeHtml(effekte.join(' · '))}">
+            <i class="fa-solid fa-gem"></i> ${effekte.length} Rune${effekte.length === 1 ? '' : 'n'}: ${escapeHtml(effekte.join(', '))}
+            <button class="btn-icon-small" onclick="runenEinstampfen('${escapeHtml(item.id)}')" title="Einstampfen (75% Gold zurück)"><i class="fa-solid fa-fire"></i></button>
+        </div>`;
+    }
+    return '';
+}
+
 function irSlotHtml(slot, item, breite) {
     if (!item) {
         return `<div class="ir-slot ir-slot-leer" data-irslot="${slot}"><i class="fa-solid fa-plus ir-slot-leer-icon"></i></div>`;
@@ -805,6 +838,7 @@ function irSlotHtml(slot, item, breite) {
                 <input type="number" class="ir-input ir-schaden-input" value="${Number(item.irRuestungswert) || 0}" placeholder="Rüstungswert" data-irruestungswert="${escapeHtml(item.id)}">
             </div>` : '';
     const gesperrt = irKampfGesperrt();
+    const runenZeile = runenItemBerechtigt(item) ? irRunenZeileHtml(item) : '';
     return `
     <div class="ir-slot ${breite > 1 ? 'ir-slot-breit-' + breite : ''}" data-irslot="${slot}">
         <div class="inv-item card-layout ir-karte ${item.istWaffe ? 'ir-karte-waffe' : ''} ${ausruestungInfo ? 'ir-karte-ausruestung' : ''}" data-iritem="${escapeHtml(item.id)}">
@@ -816,6 +850,7 @@ function irSlotHtml(slot, item, breite) {
             </div>
             ${waffenZeile}
             ${ausruestungZeile}
+            ${runenZeile}
             <div class="ir-karte-reihe">
                 <div class="item-amount-wrapper">
                     <button class="btn-icon-small" data-irminus="${escapeHtml(item.id)}">-</button>
@@ -878,7 +913,8 @@ function renderInventarRaster() {
     const gesperrt = irKampfGesperrt();
     box.innerHTML = `
         ${gesperrt ? '<p class="ir-hint ir-warnung"><i class="fa-solid fa-lock"></i> Kampf-Modus aktiv - Umsortieren ist gerade gesperrt.</p>' : ''}
-        <p class="ir-hint">Eldara-Regelwerk: Gürtel (5 Plätze + 2 eigene Waffenplätze), Rucksack und optionale Zusatztaschen - jede Zone hat feste Plätze, Gegenstände belegen 1-3 Zellen je nach Größe; die beiden Gürtel-Waffenplätze nehmen nur Waffen und kosten dort immer 1 Zelle. Ausrüstung (Kopf/Schulter-Hals/Brust/Hände/Beine/Füße/Schmuck) wird genauso aus dem Inventar auf den passenden Platz gezogen. <i class="fa-solid fa-circle-question help-icon" onclick="showHelp('inventarraster')" title="Hilfe zum Rasterinventar"></i></p>
+        <p class="ir-hint">Eldara-Regelwerk: Gürtel (5 Plätze + 2 eigene Waffenplätze), Rucksack und optionale Zusatztaschen - jede Zone hat feste Plätze, Gegenstände belegen 1-3 Zellen je nach Größe; die beiden Gürtel-Waffenplätze nehmen nur Waffen und kosten dort immer 1 Zelle. Ausrüstung (Kopf/Schulter-Hals/Brust/Hände/Beine/Füße/Schmuck) wird genauso aus dem Inventar auf den passenden Platz gezogen. <i class="fa-solid fa-circle-question help-icon" onclick="showHelp('inventarraster')" title="Hilfe zum Rasterinventar"></i>
+        Waffen und Rüstungsteile lassen sich beim Schmied verzaubern (Schmiede-Roulette) - Knopf direkt an der Item-Karte. <i class="fa-solid fa-circle-question help-icon" onclick="showHelp('runenmagie')" title="Hilfe zum Schmiede-Roulette"></i></p>
         <div class="ir-einstellungen">
             <div class="ir-einstellung ir-ruestung-block">
                 <div class="ir-ruestung-titel">Rüstung <span class="ir-zone-malus">${ruestungswert} Rüstungswert - ${IR_RUESTUNGSSTUFE_LABEL[ruestungsstufe]}</span></div>
