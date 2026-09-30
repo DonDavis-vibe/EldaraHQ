@@ -116,19 +116,30 @@ function karteFigurenPortraitsWiederherstellen() {
     });
 }
 
-// Für jeden verbundenen Spieler eine eigene Figur, sofern noch keine da ist.
+// Für jeden verbundenen Spieler eine eigene Figur, sofern noch keine da ist -
+// und bei bereits vorhandener Figur Name/Farbe live nachziehen (z.B. wenn ein
+// Spieler seinen Charakternamen ändert). Vorher wurden Name/Farbe nur EINMAL
+// bei der Ersterstellung gesetzt und nie wieder aktualisiert, weil eine schon
+// vorhandene Figur die Schleife komplett übersprang - addFigur() kann beides
+// (neu anlegen ODER bestehende Felder per Object.assign aktualisieren), bloß
+// wurde es für existierende Figuren nie erneut aufgerufen. Position/Größe
+// bleiben beim Update bewusst unangetastet (kein Reset auf Spawn-Position).
 function karteSpielerFigurenAbgleichen() {
     if (!karteMap || typeof connectedPlayersData === 'undefined') return;
     Object.keys(connectedPlayersData).forEach(peerId => {
         const id = 'spieler:' + peerId;
-        if (karteMap.figuren.find(f => f.id === id)) return;
         const d = connectedPlayersData[peerId];
         const name = [d.vorname, d.name].filter(Boolean).join(' ') || 'Spieler';
+        const farbe = typeof getColorForPlayer === 'function' ? getColorForPlayer(name) : '#9ca3af';
+        const bestehend = karteMap.figuren.find(f => f.id === id);
+        if (bestehend) {
+            if (bestehend.name !== name || bestehend.farbe !== farbe) {
+                karteMap.addFigur({ id, name, farbe });
+            }
+            return;
+        }
         const pos = karteFreieSpawnPosition();
-        karteMap.addFigur({
-            id, name, x: pos.x, y: pos.y, groesse: 1, besitzer: peerId,
-            farbe: typeof getColorForPlayer === 'function' ? getColorForPlayer(name) : '#9ca3af'
-        });
+        karteMap.addFigur({ id, name, x: pos.x, y: pos.y, groesse: 1, besitzer: peerId, farbe });
     });
     karteFigurenPortraitsWiederherstellen();
     karteNscBilderAnwenden();

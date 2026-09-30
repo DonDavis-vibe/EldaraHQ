@@ -426,6 +426,12 @@ function handleIncomingData(peerId, payload) {
         if (typeof renderSchiffGm === 'function') renderSchiffGm();
         if (neuerSpieler && typeof renderSeekampfGm === 'function') renderSeekampfGm();
         if (neuerSpieler && typeof renderKarteGm === 'function') renderKarteGm();
+        // Name/Farbe der Kartenfigur auch bei schon verbundenen Spielern live
+        // nachziehen (z.B. nach Namensänderung) - unabhängig von neuerSpieler,
+        // sonst bleibt die Kartenfigur bis zum Trennen/Neuverbinden auf dem
+        // Namen vom Verbindungsaufbau stehen. Leichtgewichtig genug (nur ein
+        // Diff-Check + ggf. addFigur) für jeden State-Sync.
+        if (!neuerSpieler && typeof karteSpielerFigurenAbgleichen === 'function') karteSpielerFigurenAbgleichen();
         if (neuerSpieler && typeof renderKampfGm === 'function') renderKampfGm();
         if (typeof gruppeVerteilen === 'function') gruppeVerteilen();
         if (typeof eingriffAktualisieren === 'function') eingriffAktualisieren(peerId);
