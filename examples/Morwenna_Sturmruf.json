@@ -1,0 +1,61 @@
+{
+  "vorname": "Morwenna",
+  "name": "Sturmruf",
+  "geschlecht": "Weiblich",
+  "beruf": "Voodoo-Priesterin",
+  "alter": "41",
+  "statur": "Hager, Tätowierungen von Handgelenk bis Schulter",
+  "hpCurrent": 80,
+  "hpMax": 80,
+  "attr_handeln": 8,
+  "gbp_handeln": 1,
+  "skills_handeln": [
+    {"id": "s_h1", "name": "Zähigkeit", "invested": 30},
+    {"id": "s_h2", "name": "Wahrnehmung", "invested": 25},
+    {"id": "s_h3", "name": "Schwimmen", "invested": 20}
+  ],
+  "attr_wissen": 14,
+  "gbp_wissen": 2,
+  "skills_wissen": [
+    {"id": "s_w1", "name": "Voodoo", "invested": 50},
+    {"id": "s_w2", "name": "Medizin", "invested": 40},
+    {"id": "s_w3", "name": "Nautik", "invested": 25},
+    {"id": "s_w4", "name": "Naturkunde", "invested": 20}
+  ],
+  "attr_soziales": 10,
+  "gbp_soziales": 1,
+  "skills_soziales": [
+    {"id": "s_s1", "name": "Motivieren", "invested": 45},
+    {"id": "s_s2", "name": "Willenskraft", "invested": 30},
+    {"id": "s_s3", "name": "Menschenkenntnis", "invested": 20}
+  ],
+  "inventory": [
+    {"id": "i1", "name": "Ritualdolch", "amount": 1, "description": "Geschnitzter Knochengriff, für Rituale und Notwehr.", "showDesc": false, "irGroesse": 1, "istWaffe": true, "schaden": "1W6+1"},
+    {"id": "i2", "name": "Voodoo-Maske der Trauer", "amount": 1, "description": "Magisch: Voodoo +1 Level (max. 3), Handeln -15.", "showDesc": false, "irGroesse": 1, "irAusruestungsslot": "kopf", "irRuestungswert": 0},
+    {"id": "i3", "name": "Geflickte Robe", "amount": 1, "description": "Leichte Stoffrobe voller Amulette.", "showDesc": false, "irGroesse": 2, "irAusruestungsslot": "brust", "irRuestungswert": 3},
+    {"id": "i4", "name": "Das feurige Auge", "amount": 1, "description": "Magisch: Feuerschaden +1W4 (nicht bei Feuermarkern).", "showDesc": false, "irGroesse": 1, "irAusruestungsslot": "schmuck", "irRuestungswert": 0},
+    {"id": "i5", "name": "Verbandskasten", "amount": 2, "description": "Heilt 2W10 HP", "showDesc": false, "irGroesse": 0.5},
+    {"id": "i6", "name": "Kräuterbeutel", "amount": 1, "description": "Zutaten für Rituale und Heiltränke.", "showDesc": false, "irGroesse": 0.5}
+  ],
+  "weapons": [],
+  "statuses": [],
+  "currency": {"name": "Tchambas", "amount": 250},
+  "layout3Col": false,
+  "notes": "Testcharakter für die 5.1-Testrunde. Voodoo/Heil-Support mit Motivieren als Team-Buff, Seher-der-Tiefsee als Wesen für den Fluch-Skill.",
+  "questlog": [],
+  "hausregeln": {
+    "paket": "eldora-arrrrr",
+    "hauptbaeume": ["Voodoo Fluchspucker", "Medizin", "Motivieren"],
+    "wesen": "Seher der Tiefsee",
+    "wesenWert": 20,
+    "sonderAst": null,
+    "gelernt": {
+      "Voodoo Fluchspucker::Dornenhaut": 1,
+      "Medizin::Verarzten": 1,
+      "Motivieren::Beruhigende Aura": 1,
+      "Seher der Tiefsee::Fluch": 1
+    },
+    "verbraucht": {},
+    "eigenschaften": {}
+  }
+}

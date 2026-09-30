@@ -1,0 +1,61 @@
+{
+  "vorname": "Baltasar",
+  "name": "Knochenhand",
+  "geschlecht": "Männlich",
+  "beruf": "Erster Maat",
+  "alter": "39",
+  "statur": "Massig, breite Schultern, gebrochene Nase",
+  "hpCurrent": 110,
+  "hpMax": 110,
+  "attr_handeln": 16,
+  "gbp_handeln": 2,
+  "skills_handeln": [
+    {"id": "s_h1", "name": "Nahkampf", "invested": 55},
+    {"id": "s_h2", "name": "Stärke", "invested": 50},
+    {"id": "s_h3", "name": "Athletik", "invested": 30},
+    {"id": "s_h4", "name": "Zähigkeit", "invested": 25}
+  ],
+  "attr_wissen": 4,
+  "gbp_wissen": 1,
+  "skills_wissen": [
+    {"id": "s_w1", "name": "Überleben", "invested": 20},
+    {"id": "s_w2", "name": "Gassenwissen", "invested": 15}
+  ],
+  "attr_soziales": 9,
+  "gbp_soziales": 1,
+  "skills_soziales": [
+    {"id": "s_s1", "name": "Motivieren", "invested": 40},
+    {"id": "s_s2", "name": "Einschüchtern", "invested": 35},
+    {"id": "s_s3", "name": "Verhandeln", "invested": 15}
+  ],
+  "inventory": [
+    {"id": "i1", "name": "Kettenknöchel", "amount": 1, "description": "Magisch: +10 auf Parade, wenn ausgerüstet.", "showDesc": false, "irGroesse": 1, "istWaffe": true, "schaden": "Stärke+1W10"},
+    {"id": "i2", "name": "Panzer des Brechers", "amount": 1, "description": "Magisch: Wirst du im Nahkampf getroffen, erhält dein Angreifer beim nächsten Blocken gegen dich -10.", "showDesc": false, "irGroesse": 2, "irAusruestungsslot": "brust", "irRuestungswert": 10},
+    {"id": "i3", "name": "Stiefel mit Eisenspitzen", "amount": 1, "description": "Solide Arbeitsstiefel, verstärkte Sohlen.", "showDesc": false, "irGroesse": 1, "irAusruestungsslot": "fuesse", "irRuestungswert": 4},
+    {"id": "i4", "name": "Verbandskasten", "amount": 2, "description": "Heilt 2W10 HP", "showDesc": false, "irGroesse": 0.5},
+    {"id": "i5", "name": "Enterhaken mit Seil", "amount": 1, "description": "", "showDesc": false, "irGroesse": 1}
+  ],
+  "weapons": [],
+  "statuses": [
+    {"id": "st1", "name": "Alte Kampfnarbe", "value": 5, "type": "malus"}
+  ],
+  "currency": {"name": "Tchambas", "amount": 200},
+  "layout3Col": false,
+  "notes": "Testcharakter für die 5.1-Testrunde. Fäuste-Tank mit Motivieren als Anführer-Stimme an Bord, Dämonenjäger als Wesen.",
+  "questlog": [],
+  "hausregeln": {
+    "paket": "eldora-arrrrr",
+    "hauptbaeume": ["Nahkampf Fäuste", "Stärke", "Motivieren"],
+    "wesen": "Dämonenjäger",
+    "wesenWert": 20,
+    "sonderAst": null,
+    "gelernt": {
+      "Nahkampf Fäuste::Befreiender Schlag": 1,
+      "Stärke::Berserker": 1,
+      "Motivieren::Kopfnuss": 1,
+      "Dämonenjäger::Berserker": 1
+    },
+    "verbraucht": {},
+    "eigenschaften": {}
+  }
+}

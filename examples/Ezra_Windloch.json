@@ -1,0 +1,65 @@
+{
+  "vorname": "Ezra",
+  "name": "Windloch",
+  "geschlecht": "Männlich",
+  "beruf": "Kanonier",
+  "alter": "34",
+  "statur": "Drahtig, Pulverbrand-Narben an den Händen",
+  "hpCurrent": 90,
+  "hpMax": 90,
+  "attr_handeln": 22,
+  "gbp_handeln": 3,
+  "skills_handeln": [
+    {"id": "s_h1", "name": "Fernkampf", "invested": 55},
+    {"id": "s_h2", "name": "Stärke", "invested": 40},
+    {"id": "s_h3", "name": "Heimlich", "invested": 35},
+    {"id": "s_h4", "name": "Athletik", "invested": 30},
+    {"id": "s_h5", "name": "Wahrnehmung", "invested": 25},
+    {"id": "s_h6", "name": "Entern", "invested": 20},
+    {"id": "s_h7", "name": "Schiffe steuern", "invested": 15}
+  ],
+  "attr_wissen": 7,
+  "gbp_wissen": 1,
+  "skills_wissen": [
+    {"id": "s_w1", "name": "Nautik", "invested": 30},
+    {"id": "s_w2", "name": "Technik", "invested": 20},
+    {"id": "s_w3", "name": "Gassenwissen", "invested": 15}
+  ],
+  "attr_soziales": 6,
+  "gbp_soziales": 1,
+  "skills_soziales": [
+    {"id": "s_s1", "name": "Einschüchtern", "invested": 35},
+    {"id": "s_s2", "name": "Verhandeln", "invested": 25}
+  ],
+  "inventory": [
+    {"id": "i1", "name": "Muskete", "amount": 1, "description": "Standardbewaffnung an Bord - laut, ungenau auf Distanz, aber verheerend aus der Nähe.", "showDesc": false, "irGroesse": 3, "istWaffe": true, "schaden": "2W10"},
+    {"id": "i2", "name": "Entermesser", "amount": 1, "description": "Kurze, breite Klinge zum Entern.", "showDesc": false, "irGroesse": 2, "istWaffe": true, "schaden": "1W6"},
+    {"id": "i3", "name": "Lederweste", "amount": 1, "description": "Einfache, aber solide Rüstung.", "showDesc": false, "irGroesse": 2, "irAusruestungsslot": "brust", "irRuestungswert": 8},
+    {"id": "i4", "name": "Stiefel des Enterns", "amount": 1, "description": "Magisch: +5 Athletik, +10 Entern.", "showDesc": false, "irGroesse": 1, "irAusruestungsslot": "fuesse", "irRuestungswert": 2},
+    {"id": "i5", "name": "Verbandskasten", "amount": 2, "description": "Heilt 2W10 HP", "showDesc": false, "irGroesse": 0.5},
+    {"id": "i6", "name": "Fernrohr", "amount": 1, "description": "Klappbares Fernrohr aus Messing.", "showDesc": false, "irGroesse": 0.5},
+    {"id": "i7", "name": "Rum (Flasche)", "amount": 3, "description": "", "showDesc": false, "irGroesse": 0.5}
+  ],
+  "weapons": [],
+  "statuses": [],
+  "currency": {"name": "Tchambas", "amount": 300},
+  "layout3Col": false,
+  "notes": "Testcharakter für die 5.1-Testrunde. Kanonier mit Fernkampf-Fokus, spielt sich solide aus der Distanz mit Entermesser als Rückfalloption.",
+  "questlog": [],
+  "hausregeln": {
+    "paket": "eldora-arrrrr",
+    "hauptbaeume": ["Fernkampf", "Stärke", "Heimlichkeit offensiv"],
+    "wesen": "Mensch",
+    "wesenWert": 20,
+    "sonderAst": null,
+    "gelernt": {
+      "Fernkampf::Angelegter Schuss": 1,
+      "Fernkampf::Sniper": 1,
+      "Stärke::Bodyslam": 1,
+      "Heimlichkeit offensiv::Schlitzer": 1,
+      "Mensch::Verarzten": 1
+    },
+    "verbraucht": {},
+    "eigenschaften": {}
+  }
+}

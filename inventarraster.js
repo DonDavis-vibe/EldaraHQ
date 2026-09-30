@@ -445,12 +445,21 @@ function irVerschieben(raster, itemsById, itemId, targetSlot, kontext) {
         const andereId = [...blocker][0];
         const andere = itemsById[andereId];
         const vonZone = vonAnker ? irZoneVonSlot(vonAnker, kontext) : null;
-        if (andere && irSlotKosten(andere) === 1 && vonAnker && irZonePasstFuerItem(vonZone, andere)) {
-            let next = irOhneItem(raster, itemId);
-            next = irOhneItem(next, andereId);
-            next = irMitItem(next, itemId, targetSlot, 1, kontext);
-            next = irMitItem(next, andereId, vonAnker, 1, kontext);
-            return { ok: true, raster: next };
+        // Wie viele Zellen "andere" tatsächlich braucht, hängt von der ZONE ab, in
+        // der es steht bzw. landen würde - nicht von der rohen Katalog-Größe
+        // (irSlotKosten). Eine Waffe kostet z.B. im Gürtel-Waffenplatz immer nur 1
+        // Zelle, obwohl ihre irGroesse 2 oder 3 sein kann - genau das führte hier
+        // vorher dazu, dass ein Tausch mit einer belegten Waffe im Gürtel nie
+        // klappte, weil geprüft wurde, ob die rohe Größe 1 ist (fast nie der Fall).
+        if (andere && vonAnker && irZonePasstFuerItem(vonZone, andere) && irGroesseInZone(andere, zielZone) === 1) {
+            const andereGroesseAnkommend = irGroesseInZone(andere, vonZone);
+            const andereZielZellen = irZellenFuer(vonAnker, andereGroesseAnkommend, kontext);
+            const ohneBeide = irOhneItem(irOhneItem(raster, itemId), andereId);
+            if (andereZielZellen.length === andereGroesseAnkommend && andereZielZellen.every(z => ohneBeide[z] == null)) {
+                let next = irMitItem(ohneBeide, itemId, targetSlot, 1, kontext);
+                next = irMitItem(next, andereId, vonAnker, andereGroesseAnkommend, kontext);
+                return { ok: true, raster: next };
+            }
         }
     }
     return { ok: false, grund: groesse > 1 ? 'zuGross' : 'belegt' };
