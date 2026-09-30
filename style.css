@@ -2070,6 +2070,12 @@ body.gm-mode .gm-title { color: var(--color-accent); }
 }
 .x-mini:hover { background: rgba(255,255,255,0.15); color: var(--text-primary); }
 .x-mini-danger:hover { color: var(--color-dmg); }
+/* .x-mini ist fest auf 22x22px für Icon-/Einzelzeichen-Inhalt ausgelegt
+   (siehe oben) - für Knöpfe mit echtem Textlabel (z.B. "Zurücksetzen") lief
+   der Text deshalb über die winzige Box hinaus und überlappte Nachbar-
+   Elemente. .x-mini-label behält Farbe/Optik von .x-mini(-danger), ersetzt
+   aber die feste Größe durch Auto-Breite mit Textpolster. */
+.x-mini-label { width: auto; height: auto; padding: 0.3rem 0.55rem; font-size: 0.72rem; white-space: nowrap; }
 
 /* Eingaben in den neuen Abschnitten - wie die Item-Felder */
 .x-input, .x-select {

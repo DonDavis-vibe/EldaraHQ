@@ -145,8 +145,8 @@ function renderAll() {
     if (appData.currency) {
         const cName = document.getElementById('currency-name');
         const cVal = document.getElementById('currency-val');
-        if(cName) { cName.value = appData.currency.name || 'Credits'; autoSizeCurrencyName(cName); }
-        if(cVal) cVal.value = appData.currency.amount || 0;
+        if(cName) { cName.value = appData.currency.name || 'Credits'; autoSizeCurrencyField(cName); }
+        if(cVal) { cVal.value = appData.currency.amount || 0; autoSizeCurrencyField(cVal); }
     }
 
     // Theme
@@ -1656,15 +1656,17 @@ function addCustomStatus() {
     }
 }
 
-function autoSizeCurrencyName(el) {
+function autoSizeCurrencyField(el) {
     if (!el) return;
     // ch-Einheiten orientieren sich an der Breite der Ziffer "0" - bei fetter Proportionalschrift
     // reicht das nicht, echte Buchstaben sind breiter. Deshalb wird die Textbreite exakt per
     // Canvas gemessen (im aktuell auf dem Feld angewendeten Font) und als px-Breite gesetzt.
-    if (!autoSizeCurrencyName._ctx) {
-        autoSizeCurrencyName._ctx = document.createElement('canvas').getContext('2d');
+    // Gilt für Währungsname UND -betrag - ein fest verdrahtetes width:50px am Betragsfeld
+    // schnitt größere Summen (4+ Stellen) bisher einfach ab.
+    if (!autoSizeCurrencyField._ctx) {
+        autoSizeCurrencyField._ctx = document.createElement('canvas').getContext('2d');
     }
-    const ctx = autoSizeCurrencyName._ctx;
+    const ctx = autoSizeCurrencyField._ctx;
     const cs = getComputedStyle(el);
     ctx.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
     const textWidth = ctx.measureText(el.value || ' ').width;

@@ -747,11 +747,11 @@ function renderKampfGm() {
                     <span class="ir-hint" style="margin:0"><i class="fa-solid fa-flag-checkered"></i> Runde <b>${kampf.runde}</b></span>
                     <button class="tool-btn" onclick="kampfRundeWeiter()"><i class="fa-solid fa-forward"></i> Runde weiter</button>
                     <button class="sk-mini-btn" onclick="kampfInitiativeAlleWuerfeln()"><i class="fa-solid fa-dice"></i> Initiative für alle würfeln</button>
-                    <button class="x-mini x-mini-danger" onclick="kampfZuruecksetzen()" title="Runde, Initiative und Zustände zurücksetzen">Zurücksetzen</button>
-                    <button class="x-mini x-mini-danger" onclick="kampfAlleEntfernen()" title="Alle Teilnehmer entfernen">Alle entfernen</button>
+                    <button class="x-mini x-mini-danger x-mini-label" onclick="kampfZuruecksetzen()" title="Runde, Initiative und Zustände zurücksetzen">Zurücksetzen</button>
+                    <button class="x-mini x-mini-danger x-mini-label" onclick="kampfAlleEntfernen()" title="Alle Teilnehmer entfernen">Alle entfernen</button>
                 </div>
                 <div class="sk-aktion-zeile">
-                    <button class="x-mini ${kampf.modusAktiv ? 'x-mini-danger' : ''}" onclick="kampfModusUmschalten()" title="Sperrt/entsperrt bei allen Spielern das Verschieben/Umsortieren im Rasterinventar">
+                    <button class="x-mini x-mini-label ${kampf.modusAktiv ? 'x-mini-danger' : ''}" onclick="kampfModusUmschalten()" title="Sperrt/entsperrt bei allen Spielern das Verschieben/Umsortieren im Rasterinventar">
                         <i class="fa-solid ${kampf.modusAktiv ? 'fa-lock' : 'fa-lock-open'}"></i> ${kampf.modusAktiv ? 'Kampf-Modus AKTIV - Inventar gesperrt' : 'Kampf-Modus starten (sperrt Inventar)'}
                     </button>
                 </div>
