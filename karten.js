@@ -58,6 +58,28 @@ function karteZustandFuerAnwenden(zustand) {
     return Object.assign({}, zustand, { raster: Object.assign({}, KARTE_RASTER_STANDARD, (zustand && zustand.raster) || {}) });
 }
 
+// Rein lokale Spieler-Präferenz (appData.karteRasterAusblenden, Default aus -
+// Raster wie bisher sichtbar): blendet das vom SL eingestellte Raster nur im
+// EIGENEN Browser aus, ohne die geteilte Karte für SL/andere Spieler
+// anzufassen. Deshalb keine Änderung an battlemap.js oder am gesendeten
+// Zustand - nur ein Override kurz vor dem lokalen applyState().
+function karteSpielerZustandFuerAnwenden(zustand) {
+    const z = karteZustandFuerAnwenden(zustand);
+    if (typeof appData !== 'undefined' && appData.karteRasterAusblenden) {
+        z.raster = Object.assign({}, z.raster, { rasterSichtbar: false });
+    }
+    return z;
+}
+
+function karteRasterAusblendenUmschalten() {
+    appData.karteRasterAusblenden = !appData.karteRasterAusblenden;
+    if (typeof saveData === 'function') saveData();
+    if (karteSpielerMap && karteSpielerLetzte && karteSpielerLetzte.zustand) {
+        karteSpielerMap.applyState(karteSpielerZustandFuerAnwenden(karteSpielerLetzte.zustand), karteSpielerLetzte.zustand.bild);
+    }
+    document.querySelectorAll('[data-ktraster-toggle]').forEach(btn => btn.classList.toggle('tool-btn-aktiv', !!appData.karteRasterAusblenden));
+}
+
 // --- Spielleiter --------------------------------------------------------------
 
 let karten = [];              // [{ id, name, kategorie, zustand }]
@@ -798,7 +820,8 @@ function karteVollbildWerkzeugleisteHtml(rolle) {
         <button class="tool-btn" data-ktvwerkzeug="nebel-auf"><i class="fa-solid fa-cloud"></i> Nebel aufdecken</button>
         <button class="tool-btn" data-ktvwerkzeug="nebel-zu"><i class="fa-solid fa-cloud-sun"></i> Nebel abdecken</button>`;
     const nurSpieler = `
-        <button class="tool-btn" onclick="karteAktualisierenAnfordern(this)" title="Aktuellen Stand vom Spielleiter neu abrufen, falls die Karte hängen geblieben wirkt"><i class="fa-solid fa-rotate"></i> Aktualisieren</button>`;
+        <button class="tool-btn" onclick="karteAktualisierenAnfordern(this)" title="Aktuellen Stand vom Spielleiter neu abrufen, falls die Karte hängen geblieben wirkt"><i class="fa-solid fa-rotate"></i> Aktualisieren</button>
+        <button class="tool-btn ${typeof appData !== 'undefined' && appData.karteRasterAusblenden ? 'tool-btn-aktiv' : ''}" data-ktraster-toggle onclick="karteRasterAusblendenUmschalten()" title="Raster nur bei dir aus-/einblenden - wirkt sich nicht auf den SL oder andere Spieler aus"><i class="fa-solid fa-table-cells"></i> Raster</button>`;
     const mapVar = rolle === 'gm' ? 'karteMap' : 'karteSpielerMap';
     return gemeinsam + (rolle === 'gm' ? nurGm : nurSpieler) +
         `<span class="sk-kt-trenner"></span>
@@ -872,7 +895,7 @@ function karteEmpfangen(payload) {
     renderKarteSpieler();
     if (karteSpielerMap && payload.zustand) {
         karteSpielerMap.setBestaetigung(!payload.zuegeFrei);
-        karteSpielerMap.applyState(karteZustandFuerAnwenden(payload.zustand), payload.zustand.bild);
+        karteSpielerMap.applyState(karteSpielerZustandFuerAnwenden(payload.zustand), payload.zustand.bild);
         const meinPeer = typeof peer !== 'undefined' && peer ? peer.id : null;
         const meineFigur = meinPeer && karteSpielerMap.figuren.find(f => f.besitzer === meinPeer);
         const meinBild = typeof appData !== 'undefined' && typeof safeImageSrc === 'function' ? safeImageSrc(appData.portrait) : null;
@@ -939,6 +962,7 @@ function renderKarteSpieler() {
                     <button class="tool-btn" data-ktspielerwerkzeug="messen"><i class="fa-solid fa-ruler"></i> Messen</button>
                     <button class="tool-btn" onclick="karteVollbildOeffnen('spieler')" title="Karte großformatig anzeigen"><i class="fa-solid fa-up-right-and-down-left-from-center"></i> Vollbild</button>
                     <button class="tool-btn" onclick="karteAktualisierenAnfordern(this)" title="Aktuellen Stand vom Spielleiter neu abrufen, falls die Karte hängen geblieben wirkt - ohne die Seite neu zu laden"><i class="fa-solid fa-rotate"></i> Aktualisieren</button>
+                    <button class="tool-btn ${typeof appData !== 'undefined' && appData.karteRasterAusblenden ? 'tool-btn-aktiv' : ''}" data-ktraster-toggle onclick="karteRasterAusblendenUmschalten()" title="Raster nur bei dir aus-/einblenden - wirkt sich nicht auf den SL oder andere Spieler aus"><i class="fa-solid fa-table-cells"></i> Raster</button>
                 </div>
                 <div id="kt-spieler-canvas-heim"><canvas id="kt-spieler-canvas" class="sk-canvas"></canvas></div>
                 <p class="ir-hint">Dein Zug erscheint beim Spielleiter erst als Vorschlag, den er bestätigt oder verwirft - außer er hat freie Bewegung erlaubt.</p>
@@ -966,7 +990,7 @@ function renderKarteSpieler() {
         if (details) details.addEventListener('toggle', () => { karteSpielerOffen = details.open; if (details.open && karteSpielerMap) karteSpielerMap.zeichnen(); });
         if (karteSpielerLetzte.zustand) {
             karteSpielerMap.setBestaetigung(!karteSpielerLetzte.zuegeFrei);
-            karteSpielerMap.applyState(karteZustandFuerAnwenden(karteSpielerLetzte.zustand), karteSpielerLetzte.zustand.bild);
+            karteSpielerMap.applyState(karteSpielerZustandFuerAnwenden(karteSpielerLetzte.zustand), karteSpielerLetzte.zustand.bild);
         }
     }
 
