@@ -1378,12 +1378,23 @@ h2 {
 .ir-karte-reihe .item-amount-wrapper { margin-right: auto; }
 .ir-karte .btn-delete-icon { font-size: 0.85rem; }
 .ir-desc-toggle { font-size: 0.75rem; padding: 0; align-self: flex-start; }
-/* Runenmagie/Schmiede-Roulette (runenmagie.js) - eigene Lila-Akzentfarbe */
+/* Runenmagie/Schmiede-Roulette (runenmagie.js) - eigene Lila-Akzentfarbe.
+   .btn-icon-small ist eigentlich für reine 20x20-Icon-Buttons gedacht - der
+   "Verzaubern"-Knopf hat aber Text dabei, deshalb hier auf Auto-Breite und
+   passendes Padding umgestellt statt der festen Icon-Maße. */
 .ir-runen-reihe { font-size: 0.78rem; gap: 0.4rem; }
-.ir-runen-reihe .btn-icon-small { color: #c084fc; }
+.ir-runen-reihe .btn-icon-small {
+    width: auto; height: auto; padding: 0.25rem 0.5rem; gap: 0.35rem;
+    color: #c084fc; background: rgba(192,132,252,0.12); border: 1px solid rgba(192,132,252,0.35);
+    font-size: 0.78rem;
+}
+.ir-runen-reihe .btn-icon-small:hover { background: rgba(192,132,252,0.22); }
 .ir-runen-wartend { color: #fbbf24; font-style: italic; }
 .ir-runen-bestaetigt { color: #c084fc; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.ir-runen-bestaetigt .btn-icon-small { margin-left: auto; color: var(--color-dmg); flex-shrink: 0; }
+.ir-runen-bestaetigt .btn-icon-small {
+    margin-left: auto; width: 20px; height: 20px; padding: 0; background: transparent; border: none;
+    color: var(--color-dmg); flex-shrink: 0;
+}
 .ir-groesse-select {
     background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 4px;
     color: var(--text-secondary); font-size: 0.65rem; font-weight: 700; padding: 0.1rem 0.2rem; cursor: pointer; flex-shrink: 0; max-width: 46px;

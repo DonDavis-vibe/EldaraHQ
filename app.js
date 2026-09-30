@@ -1,3 +1,11 @@
+// Einzige Quelle für die Versionsanzeige (Footer, Willkommens-Nachricht in
+// willkommen.js). Bei neuen spielerrelevanten Änderungen APP_VERSION erhöhen
+// UND den Änderungstext in willkommen.js (WILLKOMMEN_NEUIGKEITEN) anpassen -
+// die Willkommens-Nachricht erscheint dann automatisch noch einmal, weil sie
+// den zuletzt gesehenen Versionsstand im Browser (localStorage) abgleicht.
+const APP_VERSION = '0.7.1';
+const APP_REGELWERK_VERSION = '5.1';
+
 let saveTimeout;
 let fxEnabled = true;
 let appData = {};

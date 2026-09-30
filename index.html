@@ -512,6 +512,7 @@
     <script src="audio.js"></script>
     <script src="multiplayer.js"></script>
     <script src="app.js"></script>
+    <script src="willkommen.js"></script>
     <script src="aktuelleWerte.js"></script>
     <script src="hausregeln.js"></script>
     <script src="talentbaum.js"></script>
@@ -593,6 +594,13 @@
             <button class="modal-close" onclick="karteGalerieSchliessen()"><i class="fa-solid fa-xmark"></i></button>
             <h3 style="margin-bottom: 0.5rem;"><i class="fa-solid fa-images"></i> Kartenhintergrund wählen</h3>
             <div id="karte-galerie-body"></div>
+        </div>
+    </div>
+
+    <div id="willkommen-modal-overlay" class="help-modal-overlay" onclick="willkommenSchliessen()">
+        <div class="help-modal-box" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="willkommenSchliessen()"><i class="fa-solid fa-xmark"></i></button>
+            <div id="willkommen-modal-body"></div>
         </div>
     </div>
 
@@ -959,6 +967,7 @@
             <div class="footer-col footer-col-brand">
                 <div class="footer-brand"><img src="assets/logo-herohq.svg" alt="" aria-hidden="true" class="footer-brand-icon"> EldaraHQ</div>
                 <p class="footer-tagline">Ein Fan-Werkzeug für "How to be a Hero" – Charakterbogen, Spielleiter-Dashboard und Echtzeit-Multiplayer im Browser. Keine Anmeldung, alles bleibt in deinem Browser.</p>
+                <p class="footer-meta" id="footer-version-line"></p>
                 <p class="footer-meta">Code: MIT · Regeln: CC BY-NC-SA 4.0</p>
             </div>
 
