@@ -357,7 +357,18 @@ function irRasterDaten() {
     // Karteileichen mit ungültigem Slot hier aufräumen (die Items selbst bleiben
     // in appData.inventory und werden beim nächsten Render neu einsortiert).
     const gueltig = new Set(irAlleSlots());
-    Object.keys(appData.inventarRaster).forEach(s => { if (!gueltig.has(s)) delete appData.inventarRaster[s]; });
+    // Genauso Karteileichen mit einer itemId, die es in appData.inventory gar
+    // nicht mehr gibt - passiert z.B. beim Charakter-Import: importData()
+    // ersetzt appData.inventory komplett, lässt appData.inventarRaster aber
+    // unangetastet (die importierte Datei bringt normalerweise kein eigenes
+    // Raster mit). Ohne diese Bereinigung blockieren solche Geister-Einträge
+    // Plätze für die eigentlich vorhandenen Items dauerhaft ("Feld ist belegt"
+    // trotz augenscheinlich freiem Platz).
+    const vorhandeneItems = new Set((appData.inventory || []).map(i => i.id));
+    Object.keys(appData.inventarRaster).forEach(s => {
+        const eintrag = appData.inventarRaster[s];
+        if (!gueltig.has(s) || (eintrag && !vorhandeneItems.has(eintrag.itemId))) delete appData.inventarRaster[s];
+    });
     return appData.inventarRaster;
 }
 
