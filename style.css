@@ -2730,3 +2730,21 @@ body.gm-mode .gm-title { color: var(--color-accent); }
 }
 .nw-relation-item:last-child { border-bottom: none; }
 .speicher-warnung-banner i { margin-right: 0.4rem; }
+
+/* --- SL-Dashboard: Sprungleiste zu den Panels (gmjump.js) ------------------ */
+.gm-jump-bar {
+    display: flex; flex-wrap: wrap; gap: 0.4rem;
+    position: sticky; top: 0; z-index: 30;
+    padding: 0.6rem; margin-bottom: -0.6rem;
+    background: rgba(10, 10, 15, 0.82); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--panel-border); border-radius: 8px;
+}
+.gm-jump-chip {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    padding: 0.35rem 0.65rem; font-size: 0.8rem;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 20px;
+    color: var(--text-secondary); cursor: pointer; white-space: nowrap;
+}
+.gm-jump-chip:hover { background: rgba(255,255,255,0.12); color: var(--text-primary); border-color: var(--color-accent); }
+.gm-jump-chip i { color: var(--color-accent); }
+.gm-jump-highlight { animation: mobilenav-blitz 1.2s ease; border-radius: 12px; }

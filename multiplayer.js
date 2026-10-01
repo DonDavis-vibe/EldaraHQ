@@ -388,6 +388,7 @@ function enterGmMode(roomCode) {
     if (typeof refreshCustomSoundUI === 'function') refreshCustomSoundUI();
     if (typeof mobilenavRender === 'function') mobilenavRender();
     if (typeof mobilestatusRender === 'function') mobilestatusRender();
+    if (typeof gmjumpRender === 'function') gmjumpRender();
 }
 
 function exitGmMode() {

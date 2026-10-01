@@ -546,6 +546,7 @@
     <script src="eingriff.js"></script>
     <script src="randomizer.js"></script>
     <script src="gmlayout.js"></script>
+    <script src="gmjump.js"></script>
     <script src="mobilenav.js"></script>
     <script src="mobilestatus.js"></script>
 <div id="crit-fail-overlay"></div>
@@ -916,6 +917,12 @@
                  vom Umsortieren - gmlayout.js beobachtet nur dessen
                  style.display, um den Slot mit auszublenden. -->
             <div class="gm-panels-spalte" id="gm-panels-spalte">
+
+                <!-- Sprungleiste zu den Panels dieser Spalte (gmjump.js) - bleibt
+                     beim Scrollen oben stehen, bewusst AUSSERHALB jedes
+                     .gm-panel-slot, damit gmlayout.js sie beim Umsortieren der
+                     Panels nicht als Drag-Ziel mit anfasst. -->
+                <div class="gm-jump-bar" id="gm-jump-bar"></div>
 
                 <!-- Player Cards Grid -->
                 <div class="gm-panel-slot" data-panel="spieler">
