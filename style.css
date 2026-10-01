@@ -2492,6 +2492,38 @@ body.gm-mode .gm-title { color: var(--color-accent); }
 /* Modul-Sichtbarkeit (modul.js) - muss IMMER gewinnen, egal was das jeweilige
    Modul selbst gerade an style.display setzt (siehe Kopfkommentar dort). */
 .modul-versteckt { display: none !important; }
+
+/* Erste-Schritte-Tour (tour.js) */
+#tour-overlay {
+    position: fixed; inset: 0; background: rgba(5,8,15,0.78);
+    z-index: 9997; display: none;
+}
+#tour-overlay.active { display: block; }
+.tour-highlight-ziel {
+    position: relative !important; z-index: 9998 !important;
+    box-shadow: 0 0 0 4px var(--color-accent), 0 0 32px 8px rgba(251,191,36,0.55) !important;
+    border-radius: 10px;
+    transition: box-shadow 0.2s;
+}
+.tour-box {
+    position: fixed; z-index: 9999; width: 320px; max-width: calc(100vw - 24px);
+    background: rgba(15, 23, 42, 0.97); border: 1px solid var(--panel-border);
+    border-radius: 12px; padding: 1rem 1.1rem; box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+    color: white;
+}
+.tour-box-zentriert { top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); }
+.tour-box h4 { margin: 0.3rem 0 0.5rem 0; color: var(--color-primary); }
+.tour-box p { margin: 0; font-size: 0.9rem; line-height: 1.5; color: var(--text-light); }
+.tour-box-kopf { display: flex; justify-content: space-between; align-items: center; }
+.tour-schritt-zaehler { font-size: 0.75rem; color: var(--text-secondary); font-family: var(--font-mono); }
+.tour-close { background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 1rem; padding: 0.2rem; }
+.tour-close:hover { color: var(--text-primary); }
+.tour-box-knoepfe { display: flex; justify-content: space-between; align-items: center; margin-top: 0.9rem; gap: 0.5rem; }
+.tour-ueberspringen {
+    display: block; width: 100%; margin-top: 0.5rem; background: none; border: none;
+    color: var(--text-secondary); font-size: 0.75rem; text-decoration: underline; cursor: pointer; text-align: center;
+}
+.tour-ueberspringen:hover { color: var(--text-primary); }
 .sk-canvas {
     width: 100%; height: 420px; display: block; border-radius: 8px;
     border: 1px solid var(--panel-border); background: var(--karte-blatt); touch-action: none; cursor: grab;

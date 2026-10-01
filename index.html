@@ -101,7 +101,7 @@
         <!-- Top Toolbar -->
         <div class="toolbar">
             <div class="points-counter" id="points-counter">
-                Verteilte Punkte: <span id="points-total" class="pts-val">0</span> / <div style="display: inline-flex; align-items: center; background: rgba(0,0,0,0.2); border-radius: 4px; border: 1px solid var(--panel-border);">
+                Verteilte Punkte <i class="fa-solid fa-circle-question help-icon" onclick="showHelp('punkte')" title="Hilfe zu Verteilte Punkte"></i>: <span id="points-total" class="pts-val">0</span> / <div style="display: inline-flex; align-items: center; background: rgba(0,0,0,0.2); border-radius: 4px; border: 1px solid var(--panel-border);">
     <button onclick="let el = document.getElementById('points-max'); el.value = Math.max(0, parseInt(el.value || 0) - 10); updateMaxPoints();" style="background: transparent; border: none; color: var(--text-secondary); cursor: pointer; padding: 0 5px;">-</button>
     <input type="number" id="points-max" class="pts-max-input" value="400" onchange="updateMaxPoints()" style="background: transparent; border: none; color: white; width: 50px; text-align: center; outline: none;">
     <button onclick="let el = document.getElementById('points-max'); el.value = parseInt(el.value || 0) + 10; updateMaxPoints();" style="background: transparent; border: none; color: var(--text-secondary); cursor: pointer; padding: 0 5px;">+</button>
@@ -419,7 +419,7 @@
             
             <!-- Lebenspunkte (HP) -->
             <div class="hp-tracker glass-panel" id="hp-panel">
-                <h2 class="cat-title"><img id="icon-hp" src="assets/icon_hp_pirates.jpg" class="category-icon" alt=""> Lebenspunkte</h2>
+                <h2 class="cat-title"><img id="icon-hp" src="assets/icon_hp_pirates.jpg" class="category-icon" alt=""> Lebenspunkte <i class="fa-solid fa-circle-question help-icon" onclick="showHelp('hp')" title="Hilfe zu Lebenspunkten"></i></h2>
                 <div class="hp-display">
                     <input type="number" id="hp-current" value="100" onchange="updateHp()">
                     <span class="hp-divider">/</span>
@@ -520,6 +520,7 @@
     <script src="multiplayer.js"></script>
     <script src="app.js"></script>
     <script src="willkommen.js"></script>
+    <script src="tour.js"></script>
     <script src="aktuelleWerte.js"></script>
     <script src="hausregeln.js"></script>
     <script src="talentbaum.js"></script>
@@ -611,6 +612,10 @@
             <button class="modal-close" onclick="willkommenSchliessen()"><i class="fa-solid fa-xmark"></i></button>
             <div id="willkommen-modal-body"></div>
         </div>
+    </div>
+
+    <div id="tour-overlay">
+        <div id="tour-box" class="tour-box"></div>
     </div>
 
     <div id="modul-modal-overlay" class="help-modal-overlay" onclick="modulModalSchliessen()">
@@ -1010,6 +1015,7 @@
             <nav class="footer-col" aria-label="Mitmachen">
                 <h4>Mitmachen</h4>
                 <button type="button" class="footer-link footer-link-btn" onclick="showHelp('general')"><i class="fa-solid fa-circle-question"></i> Hilfe &amp; Kurzanleitung</button>
+                <button type="button" class="footer-link footer-link-btn" onclick="tourStarten()"><i class="fa-solid fa-route"></i> Tour starten</button>
                 <a class="footer-link" href="https://discord.gg/mx3cQnGtmq" target="_blank" rel="noopener"><i class="fa-brands fa-discord"></i> Discord <i class="fa-solid fa-arrow-up-right-from-square footer-link-ext"></i></a>
                 <a class="footer-link" href="https://github.com/DonDavis-vibe/EldaraHQ/issues/new" target="_blank" rel="noopener"><i class="fa-solid fa-bug"></i> Fehler melden <i class="fa-solid fa-arrow-up-right-from-square footer-link-ext"></i></a>
                 <a class="footer-link" href="https://ko-fi.com/don_davis" target="_blank" rel="noopener"><i class="fa-solid fa-mug-hot"></i> Unterstützen (Ko-fi) <i class="fa-solid fa-arrow-up-right-from-square footer-link-ext"></i></a>
