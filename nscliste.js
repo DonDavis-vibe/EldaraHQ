@@ -81,6 +81,7 @@ function nscListeHinzufuegen(vorlage) {
     nscListeSichern();
     nscListeOffen = true;
     renderNscListeGm();
+    if (typeof renderNetzwerkGm === 'function') renderNetzwerkGm();
     return eintrag;
 }
 
@@ -89,6 +90,9 @@ function nscListeEntfernen(id) {
     nscListe = nscListe.filter(n => n.id !== id);
     nscListeSichern();
     renderNscListeGm();
+    // Beziehungsnetz (netzwerk.js) hat keine eigene Kopie der NSCs, zeigt sie
+    // live aus nscListe - Relationen zu einem gelöschten NSC räumt es selbst auf.
+    if (typeof netzwerkNscGeloescht === 'function') netzwerkNscGeloescht(id);
 }
 
 function nscListeFeldAendern(id, feld, wert) {
@@ -222,6 +226,7 @@ function nscListeDuplizieren(id) {
     nscListeSichern();
     nscListeOffen = true;
     renderNscListeGm();
+    if (typeof renderNetzwerkGm === 'function') renderNetzwerkGm();
 }
 
 function nscListeManuellHinzufuegen() {

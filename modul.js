@@ -27,6 +27,7 @@ const MODUL_LISTE = [
     { key: 'karte', label: 'Karte', icon: 'fa-map', gmPanel: 'karte', spielerSection: 'karte-section' },
     { key: 'kampf', label: 'Kampf-Tracker', icon: 'fa-hand-fist', gmPanel: 'kampf', spielerSection: 'kampf-section' },
     { key: 'nscliste', label: 'NSC-Liste', icon: 'fa-users', gmPanel: 'nscliste', spielerSection: null },
+    { key: 'netzwerk', label: 'Beziehungsnetz', icon: 'fa-diagram-project', gmPanel: 'netzwerk', spielerSection: null },
     { key: 'randomizer', label: 'Zufallsgenerator', icon: 'fa-dice', gmPanel: 'randomizer', spielerSection: null }
 ];
 

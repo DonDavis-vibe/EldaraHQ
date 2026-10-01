@@ -531,6 +531,7 @@
     <script src="teamwuerfel.js"></script>
     <script src="assets/npc-grafiken/npc-token-bilder.js"></script>
     <script src="nscliste.js"></script>
+    <script src="netzwerk.js"></script>
     <script src="assets/npc-grafiken/battlemaps/battlemap-bilder.js"></script>
     <script src="quests.js"></script>
     <script src="spielerlog.js"></script>
@@ -616,6 +617,14 @@
 
     <div id="tour-overlay">
         <div id="tour-box" class="tour-box"></div>
+    </div>
+
+    <!-- Beziehungsnetz: Knoten bearbeiten/Beziehungen verwalten (netzwerk.js) -->
+    <div id="netzwerk-modal-overlay" class="help-modal-overlay" onclick="netzwerkModalSchliessen()">
+        <div class="help-modal-box" style="width: 420px;" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="netzwerkModalSchliessen()"><i class="fa-solid fa-xmark"></i></button>
+            <div id="netzwerk-modal-body"></div>
+        </div>
     </div>
 
     <div id="modul-modal-overlay" class="help-modal-overlay" onclick="modulModalSchliessen()">
@@ -932,6 +941,12 @@
                 <div class="gm-panel-slot" data-panel="nscliste">
                     <div class="gm-panel-griff" title="Ziehen zum Umsortieren"><i class="fa-solid fa-grip-lines"></i></div>
                     <div id="gm-nscliste" class="gm-nscliste"></div>
+                </div>
+
+                <!-- Beziehungsnetz: Mindmap aus Helden + NSC-Liste (netzwerk.js) -->
+                <div class="gm-panel-slot" data-panel="netzwerk">
+                    <div class="gm-panel-griff" title="Ziehen zum Umsortieren"><i class="fa-solid fa-grip-lines"></i></div>
+                    <div id="gm-netzwerk" class="gm-nscliste"></div>
                 </div>
 
                 <!-- Quest-Logbuch: Quests vor/während der Runde anlegen und gezielt

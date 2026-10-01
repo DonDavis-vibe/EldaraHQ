@@ -157,6 +157,12 @@ const helpData = {
                 "<p>Dein eigenes Tagebuch, zusätzlich zum freien <b>Notizen</b>-Feld: pro Eintrag hältst du fest, welchen <b>NSC</b> du wann getroffen hast und was er dir erzählt bzw. welche Hinweise er gegeben hat. NSC und Zeitpunkt sind optional - manchmal reicht auch einfach nur der Text.</p>" +
                 "<p>Die Einträge gehören ganz dir: sie bleiben in deinem Charakterbogen, gehen nie an den Spielleiter oder andere Spieler raus, und wandern beim <b>Speichern (JSON)</b> mit deinem Charakter mit.</p>",
 
+    netzwerk: "<h3>Beziehungsnetz</h3>" +
+               "<p>Eine frei verschiebbare Mindmap für Beziehungen zwischen den <b>Helden</b> der Gruppe und deinen <b>NSCs</b> (aus der NSC-Liste) - wer hasst wen, wer schuldet wem was, wer ist mit wem verbündet.</p>" +
+               "<p>Helden trägst du hier oben per Namen selbst ein - unabhängig davon, ob sie gerade online verbunden sind, bleiben sie dauerhaft als Knoten erhalten. NSCs kommen automatisch aus deiner NSC-Liste mit, Name/Löschen pflegst du weiterhin dort.</p>" +
+               "<p><b>Klick</b> auf einen Knoten öffnet ihn zum Bearbeiten: neue Beziehung zu einem anderen Knoten anlegen (mit freiem Beziehungstext wie <i>misstraut</i> oder <i>Bruder von</i>), bestehende löschen, bei Helden auch Name ändern/Knoten löschen. <b>Ziehen</b> verschiebt den Knoten, <b>Mausrad</b> zoomt, auf freier Fläche <b>ziehen</b> verschiebt die ganze Ansicht.</p>" +
+               "<p><i>Bleibt wie die NSC-Liste komplett lokal bei dir, geht nie an Spieler raus.</i></p>",
+
     nscliste: "<h3>NSC-Liste</h3>" +
                "<p>Dein Gedächtnis für Nichtspielercharaktere, die im Laufe der Runde auftauchen - bleibt komplett bei dir, geht nie an Spieler raus.</p>" +
                "<p>Über <i>In NSC-Liste übernehmen</i> beim Zufallsgenerator landet ein gewürfelter NSC mit allen Feldern (Name, Ort, Rolle, Haltung, Auffälligkeit, Motivation, Wesen) direkt hier, ohne dass du etwas abtippen musst. Du kannst NSCs aber auch von Hand eintragen - dann reicht ein Name.</p>" +
