@@ -264,8 +264,18 @@ function tischmitteAnfrageVerarbeiten(peerId, payload) {
             hidden: false,
             von: name
         };
-        if (item.art === 'waffe') item.damage = String(roh.damage || '').slice(0, 40);
-        else item.amount = Math.max(1, parseInt(roh.amount) || 1);
+        if (item.art === 'waffe') {
+            item.damage = String(roh.damage || '').slice(0, 40);
+        } else {
+            item.amount = Math.max(1, parseInt(roh.amount) || 1);
+            // Rüstungsteil, das ein Spieler selbst ablegt (siehe tischmitteAblegen) -
+            // nur gegen die bekannten Ausrüstungsplätze validiert, bevor's
+            // weitergereicht wird (roh kommt über die Leitung, kein Vertrauen).
+            if (roh.irAusruestungsslot && typeof IR_AUSRUESTUNG_SLOTS !== 'undefined' && IR_AUSRUESTUNG_SLOTS[roh.irAusruestungsslot]) {
+                item.irAusruestungsslot = roh.irAusruestungsslot;
+                item.irRuestungswert = Math.max(0, parseInt(roh.irRuestungswert) || 0);
+            }
+        }
         tischmitteCommit([item].concat(tischmitte));
         if (typeof addGmLogEntry === 'function') addGmLogEntry(name, `legt ${tischmitteLabel(item)} in die Tischmitte.`, '📥');
         return true;
@@ -415,8 +425,18 @@ function tischmitteGeschenkEmpfangen(item) {
     } else {
         if (!appData.inventory) appData.inventory = [];
         const neuId = 'inv_' + Date.now();
-        appData.inventory.push({ id: neuId, name, amount: Math.max(1, parseInt(item.amount) || 1), description, showDesc: !!description });
-        if (typeof addActivityLog === 'function') addActivityLog(`Erhalten: ${tischmitteLabel(item)} (Tischmitte)`, 'activity-good', '<i class="fa-solid fa-box"></i>');
+        const neuesItem = { id: neuId, name, amount: Math.max(1, parseInt(item.amount) || 1), description, showDesc: !!description };
+        // Rüstungsteil statt nacktem Gegenstand - kommt z.B. vom Zufallsgenerator
+        // (magische Gegenstände, siehe randomizer.js rzWuerfelMagischerGegenstand)
+        // oder von einem anderen Spieler, der sein eigenes Ausrüstungsteil
+        // abgelegt hat (siehe tischmitteAblegen). Validiert gegen die bekannten
+        // Ausrüstungsplätze, bevor's übernommen wird.
+        if (item.irAusruestungsslot && typeof IR_AUSRUESTUNG_SLOTS !== 'undefined' && IR_AUSRUESTUNG_SLOTS[item.irAusruestungsslot]) {
+            neuesItem.irAusruestungsslot = item.irAusruestungsslot;
+            neuesItem.irRuestungswert = Math.max(0, parseInt(item.irRuestungswert) || 0);
+        }
+        appData.inventory.push(neuesItem);
+        if (typeof addActivityLog === 'function') addActivityLog(`Erhalten: ${tischmitteLabel(item)} (Tischmitte)`, 'activity-good', `<i class="fa-solid fa-${neuesItem.irAusruestungsslot ? 'shield-halved' : 'box'}"></i>`);
         if (typeof irAutoPlatzieren === 'function' && !irAutoPlatzieren(neuId) && typeof irKeinPlatzHinweis === 'function') {
             if (typeof saveData === 'function') saveData();
             if (typeof renderAll === 'function') renderAll();
@@ -447,12 +467,26 @@ function tischmitteAblegen() {
         const idx = (appData.inventory || []).findIndex(i => i.id === id);
         if (idx < 0) return;
         const q = appData.inventory[idx];
-        const stapel = Math.max(1, parseInt(q.amount) || 1);
-        const mengeEl = document.getElementById('tm-ablegen-menge');
-        const menge = Math.min(stapel, Math.max(1, parseInt(mengeEl ? mengeEl.value : stapel) || stapel));
-        item = { art, name: q.name, amount: menge, description: q.description || '' };
-        if (menge >= stapel) appData.inventory.splice(idx, 1);
-        else q.amount = stapel - menge;
+        // Unter Eldara leben Waffen UND Rüstung als ganz normale Raster-Items
+        // in appData.inventory (istWaffe/irAusruestungsslot, siehe
+        // inventarraster.js) - ohne diese Felder mit rüberzureichen, kommt
+        // beim Empfänger nur ein nackter "Gegenstand" an, selbst wenn hier
+        // gerade ein Brustpanzer oder Säbel abgelegt wird.
+        if (q.istWaffe) {
+            item = { art: 'waffe', name: q.name, damage: q.schaden || '', description: q.description || '' };
+            appData.inventory.splice(idx, 1);
+        } else {
+            const stapel = Math.max(1, parseInt(q.amount) || 1);
+            const mengeEl = document.getElementById('tm-ablegen-menge');
+            const menge = Math.min(stapel, Math.max(1, parseInt(mengeEl ? mengeEl.value : stapel) || stapel));
+            item = { art, name: q.name, amount: menge, description: q.description || '' };
+            if (q.irAusruestungsslot) {
+                item.irAusruestungsslot = q.irAusruestungsslot;
+                item.irRuestungswert = Number(q.irRuestungswert) || 0;
+            }
+            if (menge >= stapel) appData.inventory.splice(idx, 1);
+            else q.amount = stapel - menge;
+        }
     } else if (art === 'waffe') {
         const idx = (appData.weapons || []).findIndex(w => w.id === id);
         if (idx < 0) return;

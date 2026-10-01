@@ -32,13 +32,25 @@ def liste(eintraege):
         if isinstance(e, str):
             out.append({'haupt': e})
         elif isinstance(e, dict):
-            if 'name' in e and 'kategorie' in e and ('wirkung' in e or 'beschreibung' in e):
-                # Magische Gegenstände (gegenstaende_magisch): neben bleibt
-                # bewusst die Kategorie (steuert z.B. die automatische
-                # Ausrüstungsplatz-Zuordnung im Item-Katalog, siehe
-                # IR_KATALOG_KATEGORIE_SLOT in inventarraster.js/tischmitte.js)
-                # - wirkung/beschreibung reisen zusätzlich mit, für den
-                # vollen Regelwerk-Text statt nur der Kategorie als "neben".
+            if 'name' in e and 'schaden' in e:
+                # Waffen (waffen_shop): neben bleibt der reine Schadenswert
+                # (muss als Dice-Notation für rollWeaponDamage() nutzbar
+                # bleiben, siehe randomizer.js) - ein optionaler Zusatzeffekt/
+                # Reichweite/Ladedauer-Text reist separat als "info" mit,
+                # statt den Schaden zu verwässern.
+                eintrag = {'haupt': e['name'], 'neben': e['schaden']}
+                if e.get('info'):
+                    eintrag['info'] = e['info']
+                out.append(eintrag)
+            elif 'name' in e and 'kategorie' in e and ('wirkung' in e or 'beschreibung' in e):
+                # Besondere/magische Gegenstände (gegenstaende_magisch): neben
+                # bleibt bewusst die Kategorie (Ausrüstungsplatz wie "Beine"
+                # oder "Waffe"/"Zweihandwaffe" - steuert die automatische
+                # Ausrüstungsplatz-/Waffen-Zuordnung, siehe
+                # IR_KATALOG_KATEGORIE_SLOT/_WAFFE in inventarraster.js und
+                # rzWuerfelMagischerGegenstand in randomizer.js) - wirkung/
+                # beschreibung reisen zusätzlich mit, für den vollen
+                # Regelwerk-Text statt nur der Kategorie als "neben".
                 eintrag = {'haupt': e['name'], 'neben': e['kategorie']}
                 if e.get('wirkung'):
                     eintrag['wirkung'] = e['wirkung']
@@ -174,7 +186,12 @@ def bauen():
     eldora_talentbaum = eldora_regelpaket.get('talentbaum', {})
     eldora_tabellen = {
         'orte': tabelle('Insel / Ort', 'orte_items', liste(eldora['orte'])),
-        'gegenstaende_magisch': tabelle('Magischer Gegenstand', 'items', liste(eldora['gegenstaende_magisch'])),
+        # kategorie 'items_magisch' ist bewusst NICHT Teil von RZ_KATEGORIEN
+        # (randomizer.js) - diese Tabelle hat vier Felder statt haupt/neben
+        # (Name/Kategorie/Wirkung/Beschreibung) und braucht die eigene
+        # rzWuerfelMagischerGegenstand()-Logik; über die generische
+        # Tabellen-Liste gewürfelt würde sie wirkung/beschreibung verlieren.
+        'gegenstaende_magisch': tabelle('Besonderer/Magischer Gegenstand', 'items_magisch', liste(eldora['gegenstaende_magisch'])),
         'waffen_shop': tabelle('Waffe (Preisliste)', 'waffen', liste(eldora['waffen_shop'])),
         'herstellbare_gegenstaende': tabelle('Herstellbarer Gegenstand', 'items', liste(eldora['herstellbare_gegenstaende'])),
         'handelswaren': tabelle('Handelsware / Vorrat', 'items', liste(eldora['handelswaren'])),

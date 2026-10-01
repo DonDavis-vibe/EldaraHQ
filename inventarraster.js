@@ -701,6 +701,32 @@ function irBeschreibungToggle(itemId) {
     renderInventarRaster();
 }
 
+// Macht aus einem bestehenden Gegenstand nachträglich eine Waffe oder ein
+// Ausrüstungsteil (oder wieder einen normalen Gegenstand) - bislang ließ sich
+// die Art nur beim Neuanlegen festlegen (irItemHinzufuegen). Feedback aus der
+// Runde: Rüstung, die man aus der Tischmitte/Kiste/Schiff nimmt, kommt dort
+// immer nur als generischer "Gegenstand" an (siehe tischmitteGeschenkEmpfangen)
+// und ließ sich bisher nie in ein echtes Rüstungsteil (z.B. Brust) verwandeln.
+function irArtAendern(itemId, art) {
+    const item = (appData.inventory || []).find(i => i.id === itemId);
+    if (!item) return;
+    if (irKampfGesperrt()) { irStatus('Inventar ist während des Kampfes gesperrt - Art kann nicht geändert werden.', true); return; }
+
+    item.istWaffe = art === 'waffe';
+    item.irAusruestungsslot = IR_AUSRUESTUNG_SLOTS[art] ? art : null;
+    if (!item.irAusruestungsslot) item.irRuestungswert = 0;
+
+    // Platz neu suchen statt die alte Platzierung zu behalten - die könnte für
+    // die neue Art ungültig geworden sein (z.B. ein Gürtel-Waffenplatz für ein
+    // Item, das gerade erst zur Waffe wurde).
+    const rasterOhne = irOhneItem(irRasterDaten(), itemId);
+    const slot = irErstesFreies(rasterOhne, item, undefined, irReihenfolgeFuer(item));
+    appData.inventarRaster = slot ? irMitItem(rasterOhne, itemId, slot, irGroesseInZone(item, irZoneVonSlot(slot))) : rasterOhne;
+    saveData();
+    renderInventarRaster();
+    if (!slot) irStatus(`"${item.name}" wurde umgestellt, passt aber gerade nirgends automatisch rein - zieh es manuell an seinen Platz.`, true);
+}
+
 // Größe umschalten - sucht sofort einen neuen Platz; ohne freien Platz bleibt
 // alles wie es war (der Gegenstand geht nie verloren).
 function irGroesseAendern(itemId, neueGroesse) {
@@ -880,6 +906,11 @@ function irSlotHtml(slot, item, breite) {
                 <select class="ir-groesse-select" data-irgroesse="${escapeHtml(item.id)}" title="Größe laut Regelwerk S.26">
                     ${IR_GROESSEN_KATALOG.map(g => `<option value="${g.wert}" ${Number(item.irGroesse) === g.wert ? 'selected' : ''}>${g.wert}</option>`).join('')}
                 </select>
+                <select class="ir-art-select" data-irart="${escapeHtml(item.id)}" title="Art - macht z.B. aus mitgenommener Beute nachträglich ein echtes Rüstungsteil oder eine Waffe">
+                    <option value="gegenstand" ${!item.istWaffe && !item.irAusruestungsslot ? 'selected' : ''}>Gegenstand</option>
+                    <option value="waffe" ${item.istWaffe ? 'selected' : ''}>Waffe</option>
+                    ${Object.entries(IR_AUSRUESTUNG_SLOTS).map(([key, s]) => `<option value="${key}" ${item.irAusruestungsslot === key ? 'selected' : ''}>${escapeHtml(s.label)}</option>`).join('')}
+                </select>
                 <button class="btn-delete-icon" data-irdel="${escapeHtml(item.id)}"><i class="fa-solid fa-trash"></i></button>
             </div>
             <button class="item-desc-toggle ir-desc-toggle" data-irdesctoggle="${escapeHtml(item.id)}"><i class="fa-solid fa-chevron-${item.showDesc ? 'up' : 'down'}"></i> Details</button>
@@ -1017,6 +1048,7 @@ function renderInventarRaster() {
     box.querySelectorAll('[data-irgriff]').forEach(el => el.addEventListener('pointerdown', (e) => irDragPointerDown(e, el.dataset.irgriff, el.closest('.ir-karte'))));
     box.querySelectorAll('[data-irname]').forEach(el => el.addEventListener('input', () => irNameAendern(el.dataset.irname, el.value)));
     box.querySelectorAll('[data-irgroesse]').forEach(el => el.addEventListener('change', () => irGroesseAendern(el.dataset.irgroesse, parseFloat(el.value) || 1)));
+    box.querySelectorAll('[data-irart]').forEach(el => el.addEventListener('change', () => irArtAendern(el.dataset.irart, el.value)));
     box.querySelectorAll('[data-irdel]').forEach(el => el.addEventListener('click', () => irItemEntfernen(el.dataset.irdel)));
     box.querySelectorAll('[data-irminus]').forEach(el => el.addEventListener('click', () => irMengeAendern(el.dataset.irminus, -1)));
     box.querySelectorAll('[data-irplus]').forEach(el => el.addEventListener('click', () => irMengeAendern(el.dataset.irplus, 1)));

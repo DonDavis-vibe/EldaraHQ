@@ -204,19 +204,63 @@ function rzWuerfelCrewErdig() {
     renderRandomizerGm();
 }
 
+// "Besondere und magische Gegenstände" (RW 5.1 S.37-46): anders als die
+// anderen Loot-Tabellen trägt jeder Eintrag vier Felder (Name, Kategorie,
+// Wirkung, Beschreibung) statt nur haupt/neben - braucht deshalb eine eigene
+// Funktion statt der generischen rzWuerfelTabelle(). "Kategorie" ist bei
+// Rüstungsteilen der Ausrüstungsplatz (z.B. "Beine") und bei Waffen "Waffe"/
+// "Zweihandwaffe" - dieselbe Zuordnung (IR_KATALOG_KATEGORIE_SLOT/_WAFFE)
+// nutzt auch die "Aus Regelwerk wählen"-Auswahl im Rasterinventar
+// (inventarraster.js), damit ein gewürfeltes Rüstungsteil beim Spieler
+// wirklich als Rüstungsteil (z.B. Brust) ankommt statt als nackter
+// "Gegenstand" - Feedback aus der Runde (Discord, JohoSaft 2026-10-01):
+// "die Rüstung, die ich aus der Tischmitte nehme, ist auch ein Gegenstand
+// und nicht ein Rüstungsteil, z.B. Brust".
 function rzWuerfelMagischerGegenstand() {
     const p = randomizerPaketeGeladen.eldora;
-    if (!p) return;
-    const e = rzZufall(p.tabellen.gegenstaende_magisch.eintraege);
+    const t = p && p.tabellen.gegenstaende_magisch;
+    if (!t || !t.eintraege.length) return;
+    const e = rzZufall(t.eintraege);
+    const kategorie = e.neben || '';
+    const istWaffenKategorie = typeof IR_KATALOG_KATEGORIE_WAFFE !== 'undefined' && IR_KATALOG_KATEGORIE_WAFFE.has(kategorie);
+    const ausruestungsslot = (typeof IR_KATALOG_KATEGORIE_SLOT !== 'undefined' && IR_KATALOG_KATEGORIE_SLOT[kategorie]) || null;
+
+    const beschreibungsTeile = [];
+    if (e.wirkung && !istWaffenKategorie) beschreibungsTeile.push(e.wirkung);
+    if (e.beschreibung) beschreibungsTeile.push(e.beschreibung);
+    const beschreibung = beschreibungsTeile.join(' – ') || kategorie;
+
     randomizerErgebnisAktuell = {
-        htmlAusgabe: `<strong>${escapeHtml(e.haupt)}</strong>${e.neben ? ` <span class="rz-neben">(${escapeHtml(e.neben)})</span>` : ''}`,
-        textAusgabe: e.haupt + (e.neben ? ` (${e.neben})` : ''),
-        quelle: 'Magischer Gegenstand (Eldara)',
+        htmlAusgabe: `<strong>${escapeHtml(e.haupt)}</strong> <span class="rz-neben">(${escapeHtml(kategorie)})</span>` +
+            (e.wirkung ? `<br><span class="rz-neben">${escapeHtml(e.wirkung)}</span>` : '') +
+            (e.beschreibung ? `<br>${escapeHtml(e.beschreibung)}` : ''),
+        textAusgabe: [e.haupt + ` (${kategorie})`, e.wirkung, e.beschreibung].filter(Boolean).join(' - '),
+        quelle: 'Besonderer/Magischer Gegenstand (Eldara)',
         tischmitteBereit: true,
-        tischmitteVorlage: { art: 'gegenstand', name: e.haupt, description: e.neben || '' }
+        tischmitteVorlage: istWaffenKategorie
+            ? { art: 'waffe', name: e.haupt, damage: e.wirkung || '', description: e.beschreibung || '' }
+            : Object.assign(
+                { art: 'gegenstand', name: e.haupt, description: beschreibung },
+                ausruestungsslot ? { irAusruestungsslot: ausruestungsslot } : {}
+              )
     };
     randomizerLetzteAktion = rzWuerfelMagischerGegenstand;
     renderRandomizerGm();
+}
+
+// Baut den klein angezeigten Zusatztext zu einem Tabelleneintrag - neben dem
+// Haupt-/Zweitwert (haupt/neben) tragen Waffen seit RW 5.1 noch ein optionales
+// "info"-Feld (Zusatzeffekt/Reichweite/Ladedauer, siehe
+// randomizer/konvertiere-randomizer.py), das NICHT in den reinen Schadenswert
+// (neben) gemischt werden darf - der muss als Dice-Notation für
+// rollWeaponDamage() sauber bleiben.
+function rzEintragHtml(e) {
+    const teile = [e.neben, e.info].filter(Boolean);
+    return `<strong>${escapeHtml(e.haupt)}</strong>${teile.length ? ` <span class="rz-neben">(${escapeHtml(teile.join(' - '))})</span>` : ''}`;
+}
+function rzEintragText(e) {
+    const teile = [e.neben, e.info].filter(Boolean);
+    return e.haupt + (teile.length ? ` (${teile.join(' - ')})` : '');
 }
 
 function rzWuerfelTabelle(paketId, tabelleId) {
@@ -228,13 +272,13 @@ function rzWuerfelTabelle(paketId, tabelleId) {
     // reiner Flavor-Text (Namen, NSC-Bausteine, Gerüchte, ...) nicht.
     const istLoot = RZ_LOOT_KATEGORIEN.includes(t.kategorie);
     randomizerErgebnisAktuell = {
-        htmlAusgabe: `<strong>${escapeHtml(e.haupt)}</strong>${e.neben ? ` <span class="rz-neben">(${escapeHtml(e.neben)})</span>` : ''}`,
-        textAusgabe: e.haupt + (e.neben ? ` (${e.neben})` : ''),
+        htmlAusgabe: rzEintragHtml(e),
+        textAusgabe: rzEintragText(e),
         quelle: t.name,
         attribution: t.attribution,
         tischmitteBereit: istLoot,
         tischmitteVorlage: !istLoot ? undefined : (t.kategorie === 'waffen'
-            ? { art: 'waffe', name: e.haupt, damage: e.neben || '' }
+            ? { art: 'waffe', name: e.haupt, damage: e.neben || '', description: e.info || '' }
             : { art: 'gegenstand', name: e.haupt, description: e.neben || '' })
     };
     randomizerLetzteAktion = () => rzWuerfelTabelle(paketId, tabelleId);

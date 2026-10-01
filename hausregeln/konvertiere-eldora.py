@@ -184,6 +184,10 @@ EIGENSCHAFTEN = [
         'Rüstungsmalus wird um 1 Malus deiner Wahl reduziert',
         'Rüstungsmalus wird um 2 Mali deiner Wahl reduziert',
         'Rüstungsmalus wird um 3 Mali deiner Wahl reduziert']},
+    {'name': 'Berserker', 'rang': 2, 'wirkungen': [
+        'Solange du unter 75% LP bist, verursachst du +1W4 Schaden. Unter 50% LP erhöht sich der Bonus auf +2W4, unter 25% LP auf +3W4',
+        'Solange du unter 75% LP bist, verursachst du +1W6 Schaden. Unter 50% LP erhöht sich der Bonus auf +2W6, unter 25% LP auf +3W6',
+        'Solange du unter 75% LP bist, verursachst du +1W8 Schaden. Unter 50% LP erhöht sich der Bonus auf +2W8, unter 25% LP auf +3W8']},
     {'name': 'Gesegneter Heiler', 'rang': 2, 'wirkungen': [
         'Alle Heilungszauber heilen zusätzlich +1W10', 'Alle Heilungszauber heilen zusätzlich +2W10', 'Alle Heilungszauber heilen zusätzlich +3W10']},
     {'name': 'Hartnäckig', 'rang': 2, 'wirkungen': [

@@ -238,10 +238,20 @@ function runenNachrichtVerarbeiten(payload) {
     if (payload.type === 'runenAbgelehnt') {
         const item = (appData.inventory || []).find(i => i.id === payload.itemId);
         if (item) {
+            // Das beim Würfeln abgebuchte Gold (siehe runenWuerfelnUndAnfragen)
+            // ist bei einer Ablehnung nie beim Schmied verbraucht worden -
+            // ohne Rückerstattung wäre es sonst einfach weg, ohne dass der
+            // Spieler je eine Rune bekommen hätte. Bug-Report aus der Runde.
+            const investiert = (item.runen && parseInt(item.runen.investiert)) || 0;
             item.runen = null;
+            if (investiert > 0) {
+                if (!appData.currency) appData.currency = { name: 'Gold', amount: 0 };
+                appData.currency.amount = (parseInt(appData.currency.amount) || 0) + investiert;
+                if (typeof addActivityLog === 'function') addActivityLog(`+${investiert} ${appData.currency.name} zurückerstattet (Schmiede-Roulette abgelehnt: ${item.name})`, 'activity-good', '<i class="fa-solid fa-coins"></i>');
+            }
             saveData();
             renderInventarRaster();
-            alert(`Der SL hat dein Schmiede-Roulette-Ergebnis für "${item.name}" abgelehnt.`);
+            alert(`Der SL hat dein Schmiede-Roulette-Ergebnis für "${item.name}" abgelehnt.${investiert > 0 ? ` Du bekommst die investierten ${investiert} ${appData.currency.name} zurück.` : ''}`);
         }
         return true;
     }

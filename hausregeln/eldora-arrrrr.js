@@ -2020,7 +2020,7 @@ hausregelPaketRegistrieren({
     "ast": "Motivieren",
     "art": "passiv",
     "schadenTyp": "physisch",
-    "rang": 1,
+    "rang": 2,
     "info": "Schaden physisch im Nahkampf und Fernkampf. Du machst plus 1 oder 2 oder 3W10 zusätzlichen Schaden pro verschiedenen negativen Statuseffekt auf dem Ziel wie Blutung, Giftstufe und Feuermarker.",
     "stufen": [
      {
@@ -2855,7 +2855,7 @@ hausregelPaketRegistrieren({
     "ast": "Nahkampf Klingen",
     "art": "passiv",
     "schadenTyp": "physisch",
-    "rang": 1,
+    "rang": 2,
     "info": "Schaden physisch im Nahkampf und Fernkampf. Du machst plus 1 oder 2 oder 3W10 zusätzlichen Schaden pro verschiedenen negativen Statuseffekt auf dem Ziel wie Blutung, Giftstufe und Feuermarker.",
     "stufen": [
      {
@@ -3182,37 +3182,6 @@ hausregelPaketRegistrieren({
       "schaden": "4W10",
       "schadenArt": "physisch",
       "effekt": "Trifft 3 Ziele in einer Reihe"
-     }
-    ]
-   },
-   {
-    "name": "Berserker",
-    "ast": "Stärke",
-    "art": "extra",
-    "schadenTyp": "physisch",
-    "rang": 1,
-    "info": "Gewährt für eine Dauer von 1 oder 2 oder 3 Runden plus 2 oder 3 oder 4W10 physischen Nahkampfschaden und 0 oder 5 oder 10 rüstungsbrechend. Verringert in dieser Zeit den Nahkampf-Wert um minus 15 oder 10 oder 5.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "Nahkampf",
-      "schaden": "plus 2W10",
-      "schadenArt": "physisch",
-      "effekt": "Hält 1 Runde. 0 rüstungsbrechend und minus 15 Nahkampf"
-     },
-     {
-      "level": 2,
-      "reichweite": "Nahkampf",
-      "schaden": "plus 3W10",
-      "schadenArt": "physisch",
-      "effekt": "Hält 2 Runden. 5 rüstungsbrechend und minus 10 Nahkampf"
-     },
-     {
-      "level": 3,
-      "reichweite": "Nahkampf",
-      "schaden": "plus 4W10",
-      "schadenArt": "physisch",
-      "effekt": "Hält 3 Runden. 10 rüstungsbrechend und minus 5 Nahkampf"
      }
     ]
    },
@@ -4085,7 +4054,7 @@ hausregelPaketRegistrieren({
     "ast": "Voodoo Ritualklinge",
     "art": "passiv",
     "schadenTyp": "physisch",
-    "rang": 1,
+    "rang": 2,
     "info": "Schaden physisch im Nahkampf und Fernkampf. Du machst plus 1 oder 2 oder 3W10 zusätzlichen Schaden pro verschiedenen negativen Statuseffekt auf dem Ziel wie Blutung, Giftstufe und Feuermarker.",
     "stufen": [
      {
@@ -4826,37 +4795,6 @@ hausregelPaketRegistrieren({
     ]
    },
    {
-    "name": "Berserker",
-    "ast": "Dämonenjäger",
-    "art": "extra",
-    "schadenTyp": "physisch",
-    "rang": 1,
-    "info": "Gewährt für eine Dauer von 1 oder 2 oder 3 Runden plus 2 oder 3 oder 4W10 physischen Nahkampfschaden und 0 oder 5 oder 10 rüstungsbrechend. Verringert in dieser Zeit den Nahkampf-Wert um minus 15 oder 10 oder 5.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "Nahkampf",
-      "schaden": "plus 2W10",
-      "schadenArt": "physisch",
-      "effekt": "Hält 1 Runde. 0 rüstungsbrechend und minus 15 Nahkampf"
-     },
-     {
-      "level": 2,
-      "reichweite": "Nahkampf",
-      "schaden": "plus 3W10",
-      "schadenArt": "physisch",
-      "effekt": "Hält 2 Runden. 5 rüstungsbrechend und minus 10 Nahkampf"
-     },
-     {
-      "level": 3,
-      "reichweite": "Nahkampf",
-      "schaden": "plus 4W10",
-      "schadenArt": "physisch",
-      "effekt": "Hält 3 Runden. 10 rüstungsbrechend und minus 5 Nahkampf"
-     }
-    ]
-   },
-   {
     "name": "Flinke Füße",
     "ast": "Dämonenjäger",
     "art": "passiv",
@@ -5308,7 +5246,7 @@ hausregelPaketRegistrieren({
     "ast": "Fluchbrecher",
     "art": "passiv",
     "schadenTyp": "physisch",
-    "rang": 1,
+    "rang": 2,
     "info": "Schaden physisch im Nahkampf und Fernkampf. Du machst plus 1 oder 2 oder 3W10 zusätzlichen Schaden pro verschiedenen negativen Statuseffekt auf dem Ziel wie Blutung, Giftstufe und Feuermarker.",
     "stufen": [
      {
@@ -6497,7 +6435,7 @@ hausregelPaketRegistrieren({
     "ast": "Pestbringer",
     "art": "passiv",
     "schadenTyp": "physisch",
-    "rang": 1,
+    "rang": 2,
     "info": "Schaden physisch im Nahkampf und Fernkampf. Du machst plus 1 oder 2 oder 3W10 zusätzlichen Schaden pro verschiedenen negativen Statuseffekt auf dem Ziel wie Blutung, Giftstufe und Feuermarker.",
     "stufen": [
      {
@@ -10951,7 +10889,7 @@ hausregelPaketRegistrieren({
     "ast": "Echsenmensch",
     "art": "passiv",
     "schadenTyp": "physisch",
-    "rang": 1,
+    "rang": 2,
     "info": "Schaden physisch im Nahkampf und Fernkampf. Du machst plus 1 oder 2 oder 3W10 zusätzlichen Schaden pro verschiedenen negativen Statuseffekt auf dem Ziel wie Blutung, Giftstufe und Feuermarker.",
     "stufen": [
      {
@@ -13251,7 +13189,7 @@ hausregelPaketRegistrieren({
     "ast": "Schattenskellet",
     "art": "passiv",
     "schadenTyp": "physisch",
-    "rang": 1,
+    "rang": 2,
     "info": "Schaden physisch im Nahkampf und Fernkampf. Du machst plus 1 oder 2 oder 3W10 zusätzlichen Schaden pro verschiedenen negativen Statuseffekt auf dem Ziel wie Blutung, Giftstufe und Feuermarker.",
     "stufen": [
      {
@@ -15587,37 +15525,6 @@ hausregelPaketRegistrieren({
       "level": 3,
       "reichweite": "einzelnes Ziel",
       "effekt": "Kostet sofort 50 Prozent eigene Lebenspunkte. Alle Effekte sind für 3 Runden komplett verdoppelt"
-     }
-    ]
-   },
-   {
-    "name": "Berserker",
-    "ast": "Wertitan",
-    "art": "extra",
-    "schadenTyp": "physisch",
-    "rang": 1,
-    "info": "Gewährt dir für eine Dauer von 1 oder 2 oder 3 Runden einen physischen Schadensbonus im Nahkampf von plus 2 oder 3 oder 4W10 und besitzt 0 oder 5 oder 10 rüstungsbrechend. Im Gegenzug erhältst du einen Malus von minus 15 oder 10 oder 5 auf deine Nahkampf-Proben.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "Nahkampf selbst",
-      "schaden": "plus 2W10",
-      "schadenArt": "physisch",
-      "effekt": "Hält 1 Runde. 0 rüstungsbrechend. minus 15 Nahkampf-Malus"
-     },
-     {
-      "level": 2,
-      "reichweite": "Nahkampf selbst",
-      "schaden": "plus 3W10",
-      "schadenArt": "physisch",
-      "effekt": "Hält 2 Runden. 5 rüstungsbrechend. minus 10 Nahkampf-Malus"
-     },
-     {
-      "level": 3,
-      "reichweite": "Nahkampf selbst",
-      "schaden": "plus 4W10",
-      "schadenArt": "physisch",
-      "effekt": "Hält 3 Runden. 10 rüstungsbrechend. minus 5 Nahkampf-Malus"
      }
     ]
    },
@@ -24865,6 +24772,15 @@ hausregelPaketRegistrieren({
      "Rüstungsmalus wird um 1 Malus deiner Wahl reduziert",
      "Rüstungsmalus wird um 2 Mali deiner Wahl reduziert",
      "Rüstungsmalus wird um 3 Mali deiner Wahl reduziert"
+    ]
+   },
+   {
+    "name": "Berserker",
+    "rang": 2,
+    "wirkungen": [
+     "Solange du unter 75% LP bist, verursachst du +1W4 Schaden. Unter 50% LP erhöht sich der Bonus auf +2W4, unter 25% LP auf +3W4",
+     "Solange du unter 75% LP bist, verursachst du +1W6 Schaden. Unter 50% LP erhöht sich der Bonus auf +2W6, unter 25% LP auf +3W6",
+     "Solange du unter 75% LP bist, verursachst du +1W8 Schaden. Unter 50% LP erhöht sich der Bonus auf +2W8, unter 25% LP auf +3W8"
     ]
    },
    {

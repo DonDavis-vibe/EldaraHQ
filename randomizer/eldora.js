@@ -119,8 +119,8 @@ randomizerPaketRegistrieren({
    ]
   },
   "gegenstaende_magisch": {
-   "name": "Magischer Gegenstand",
-   "kategorie": "items",
+   "name": "Besonderer/Magischer Gegenstand",
+   "kategorie": "items_magisch",
    "eintraege": [
     {
      "haupt": "Beinkleid des Kraken",
@@ -900,60 +900,83 @@ randomizerPaketRegistrieren({
    "kategorie": "waffen",
    "eintraege": [
     {
-     "haupt": "Axt",
-     "neben": "5W10"
-    },
-    {
-     "haupt": "Bogen",
-     "neben": "4W10"
-    },
-    {
-     "haupt": "Bombe",
-     "neben": "10W10"
+     "haupt": "Faust / Stärke",
+     "neben": "1w10 pro 15 Stärke",
+     "info": "Bei einem kritischen Treffer ist das Ziel zu 15% gestunnt."
     },
     {
      "haupt": "Degen",
-     "neben": "3W10+10"
-    },
-    {
-     "haupt": "Kanone (gegen Menschen)",
-     "neben": "12W10"
-    },
-    {
-     "haupt": "Kriegshammer/Streitkolben",
-     "neben": "Stärke + 2W10"
-    },
-    {
-     "haupt": "Machete",
-     "neben": "4W10+10"
-    },
-    {
-     "haupt": "Messer/Dolch",
-     "neben": "2W10"
-    },
-    {
-     "haupt": "Muskete",
-     "neben": "7W10"
-    },
-    {
-     "haupt": "Pistole",
-     "neben": "5W10"
+     "neben": "3w10+10",
+     "info": "+15 auf Blocken"
     },
     {
      "haupt": "Säbel",
-     "neben": "5W10"
+     "neben": "5w10",
+     "info": "Bei einem kritischen Treffer +3 Blutung"
     },
     {
-     "haupt": "Schrotflinte",
-     "neben": "5W10 +2BL"
+     "haupt": "Machete",
+     "neben": "4w10+10",
+     "info": "+5 rüstungsbrechend"
+    },
+    {
+     "haupt": "Axt",
+     "neben": "5w10",
+     "info": "+1w4 Schaden pro 10 unter dem Nahkampfwurf"
+    },
+    {
+     "haupt": "Kriegshammer/Streitkolben (Zweihandwaffe)",
+     "neben": "Stärkeschaden +3w10",
+     "info": "Bei einem kritischen Treffer 3w10 Schaden an angrenzende Felder des Ziels (außer dir)"
+    },
+    {
+     "haupt": "Messer/Dolch",
+     "neben": "2w10+GS1",
+     "info": "Bei einem kritischen Treffer GS 4"
     },
     {
      "haupt": "Stock",
-     "neben": "1W10+5"
+     "neben": "1w10+5",
+     "info": "+5 auf Blocken, +5 Rüstung"
+    },
+    {
+     "haupt": "Improvisierte Waffe",
+     "neben": "1w10"
+    },
+    {
+     "haupt": "Muskete",
+     "neben": "7w10",
+     "info": "Reichweite 20m, Ladedauer 3 Aktionen (A/B)"
+    },
+    {
+     "haupt": "Pistole",
+     "neben": "5w10",
+     "info": "Reichweite 10m, Ladedauer 2 Aktionen (A/B)"
+    },
+    {
+     "haupt": "Bogen",
+     "neben": "4w10",
+     "info": "Reichweite 15m, Ladedauer 1 Aktion (A/B)"
+    },
+    {
+     "haupt": "Schrotflinte",
+     "neben": "5w10 +2 Blutung",
+     "info": "Reichweite 5m, 2 Ladungen, 3 Aktionen zum kompletten Laden (A/B)"
+    },
+    {
+     "haupt": "Kanone",
+     "neben": "Vs Schiff 10w10, Vs Mensch 12w10",
+     "info": "Reichweite 300m, Ladedauer 4 Aktionen (A/B)"
     },
     {
      "haupt": "Wurfwaffe",
-     "neben": "3W10"
+     "neben": "3w10",
+     "info": "Reichweite 10m, 0 Aktionen (A/B)"
+    },
+    {
+     "haupt": "Bombe",
+     "neben": "10w10",
+     "info": "Fläche 3x3m"
     }
    ]
   },
@@ -963,155 +986,163 @@ randomizerPaketRegistrieren({
    "eintraege": [
     {
      "haupt": "Einfaches Gift",
-     "neben": "Gift Stufe 2, hält 3 Angriffe"
+     "neben": "Gift Stufe 2, hält 3 Angriffe (200 Gold, -5 auf die Probe, Voodoo zum Herstellen)"
     },
     {
      "haupt": "Starkes Gift",
-     "neben": "Gift Stufe 3, hält 3 Angriffe"
+     "neben": "Gift Stufe 3, hält 3 Angriffe (500 Gold, -10 auf die Probe, Voodoo zum Herstellen)"
     },
     {
      "haupt": "Todesgift",
-     "neben": "Gift Stufe 4, plus Blutung 1"
+     "neben": "Gift Stufe 4, plus Blutung 1, hält 3 Angriffe (800 Gold, -20 auf die Probe, Voodoo zum Herstellen)"
     },
     {
      "haupt": "Neurogift",
-     "neben": "Gift Stufe 5 + Schlaf 1W4 Runden"
-    },
-    {
-     "haupt": "Knallgranate",
-     "neben": "Alle Gegner im 3x3m: -10 auf Skills für 2 Runden"
-    },
-    {
-     "haupt": "Rauchgranate",
-     "neben": "Nebel (6x6m), Sicht 0, Heimlich +30"
-    },
-    {
-     "haupt": "Molotow/Feuerbombe",
-     "neben": "Fläche 3x3m, 3W10 Schaden + Feuermarker"
-    },
-    {
-     "haupt": "Sprengsatz",
-     "neben": "Fläche 3x3m, 4W10 Schaden + Rüstungsdurchbruch +5"
-    },
-    {
-     "haupt": "Höllenfass",
-     "neben": "Fläche 6x6m, 6W10 Schaden, Feuermarker, Blutung, zerstört Umgebung"
-    },
-    {
-     "haupt": "Nagelbombe",
-     "neben": "Fläche 3x3m, 2W10 Schaden + 2 Blutungen"
-    },
-    {
-     "haupt": "Säuregranate",
-     "neben": "Fläche 3x3m, 2W10 Schaden + Gift-Stufe 3"
-    },
-    {
-     "haupt": "Schallbombe",
-     "neben": "3x3m Zone 1 Runde stumm - keine Zauber möglich"
-    },
-    {
-     "haupt": "Nagelfalle",
-     "neben": "Bei Betreten: 3W10 Schaden, Bewegung -2 für 1 Runde, +1 Blutung"
-    },
-    {
-     "haupt": "Tarngitter",
-     "neben": "Bereich 6x6m: +20 auf Heimlich, Sicht blockiert"
-    },
-    {
-     "haupt": "Wurfnetz",
-     "neben": "Gegner gefangen: Handeln -20, Bewegung 0, bis freigekämpft (Stärkewurf -20)"
-    },
-    {
-     "haupt": "Schockstab",
-     "neben": "Nahkampfwaffe, Treffer: +1W10 Blitz + 50% Chance Gegner betäubt"
-    },
-    {
-     "haupt": "Magnetfalle",
-     "neben": "Ziel kann 2 Runden keine Metallwaffen benutzen"
-    },
-    {
-     "haupt": "Schallgenerator",
-     "neben": "-10 auf alle Aktionen im 6x6m Bereich für 1W3 Runden"
+     "neben": "Gift Stufe 5 + Schlaf 1W4 (1000 Gold, -40 auf die Probe, Voodoo zum Herstellen)"
     },
     {
      "haupt": "Brandöl",
-     "neben": "Waffen erzeugen Feuermarker, hält 3 Runden"
+     "neben": "Waffen erzeugen Feuermarker, hält 3 Runden (100 Gold, -10 auf die Probe, Technik/Handwerk/Chemie zum Herstellen)"
     },
     {
      "haupt": "Haftöl",
-     "neben": "2x2m Ziel kriegt Bewegung -2 für 2 Runden"
+     "neben": "2x2m Ziel kriegt Bewegung -2 für 2 Runden (75 Gold, -15 auf die Probe, Technik/Handwerk/Chemie zum Herstellen)"
     },
     {
      "haupt": "Säureöl",
-     "neben": "Rüstungsdurchbruch +20"
+     "neben": "Dauerhaft -15 Rüstung (200 Gold, -20 auf die Probe, Technik/Chemie zum Herstellen)"
     },
     {
      "haupt": "Frostöl",
-     "neben": "-1 Bewegung, -2W10 Schaden bei Angriffen vom Eingefrorenen, für 3 Runden"
+     "neben": "-3 Bewegung für 2 Runden (300 Gold, -15 auf die Probe, Chemie zum Herstellen)"
+    },
+    {
+     "haupt": "Schlafgas",
+     "neben": "3x3m Gaswolke für 2 Runden. Zu Rundenbeginn: Zähigkeit -10, sonst 1W4 Runden Schlaf. (400 Gold, -20 auf die Probe, Chemie/Voodoo zum Herstellen)"
+    },
+    {
+     "haupt": "Aufputschmittel",
+     "neben": "Entfernt sofort Schlaf oder tiefen Schlaf. Danach für 2 Runden +10 Zähigkeit und +1m (150 Gold, -15 auf die Probe, Chemie/Medizin zum Herstellen)"
     },
     {
      "haupt": "Kleine Heilsalbe",
-     "neben": "Sofort +2W10 HP"
+     "neben": "Sofort +4W10 HP (100 Gold, -10 auf die Probe, Medizin zum Herstellen)"
     },
     {
      "haupt": "Mittlere Heilsalbe",
-     "neben": "Sofort +4W10 HP"
+     "neben": "Sofort +6W10 HP (200 Gold, -20 auf die Probe, Medizin zum Herstellen)"
     },
     {
      "haupt": "Große Heilsalbe",
-     "neben": "Sofort +6W10 HP"
+     "neben": "Sofort +8W10 HP (400 Gold, -30 auf die Probe, Medizin zum Herstellen)"
     },
     {
      "haupt": "Gegengift",
-     "neben": "Entfernt Gift komplett, egal welche Stufe"
+     "neben": "Entfernt Gift komplett, egal welche Stufe (150 Gold, -15 auf die Probe, Medizin zum Herstellen)"
     },
     {
      "haupt": "Blutstillende Paste",
-     "neben": "Stoppt Blutung vollständig"
+     "neben": "Stoppt Blutung vollständig (200 Gold, -15 auf die Probe, Medizin/Voodoo zum Herstellen)"
     },
     {
      "haupt": "Regenerationstrank",
-     "neben": "3 Runden lang +2W10 HP zu Beginn der Runde"
+     "neben": "3 Runden lang +2W10 HP zu Beginn der Runde (150 Gold, -25 auf die Probe, Medizin/Voodoo zum Herstellen)"
     },
     {
      "haupt": "Notfall-Elixier",
-     "neben": "HP kann in den nächsten 3 Runden einmal nicht unter 0 fallen, sondern stoppt bei 1"
+     "neben": "HP kann in den nächsten 5 Runden einmal nicht unter null fallen, sondern stoppt bei 1 (1000 Gold, -40 auf die Probe, Medizin/Voodoo zum Herstellen)"
     },
     {
      "haupt": "Geschwindigkeitstrank",
-     "neben": "Für 3 Runden +2 Bewegung"
+     "neben": "Für 3 Runden +2 Bewegung (100 Gold, -15 auf die Probe, Voodoo/Chemie zum Herstellen)"
     },
     {
      "haupt": "Unsichtbarkeitstrank",
-     "neben": "Unsichtbarkeit und Heimlich +30 für 3 Runden, danach sichtbar"
+     "neben": "Unsichtbarkeit und Heimlich +30 für 3 Runden, danach sichtbar (500 Gold, -20 auf die Probe, Voodoo zum Herstellen)"
     },
     {
      "haupt": "Eisenhaut",
-     "neben": "+5 Rüstung für 5 Runden"
+     "neben": "+5 Rüstung für 5 Runden (200 Gold, -20 auf die Probe, Medizin/Technik/Chemie zum Herstellen)"
     },
     {
      "haupt": "Schildtrank",
-     "neben": "+20 Rüstung für 2 Runden"
+     "neben": "+20 Rüstung für 3 Runden (500 Gold, -20 auf die Probe, Medizin/Chemie zum Herstellen)"
     },
     {
      "haupt": "Stärketrank",
-     "neben": "+25 Stärke für 3 Runden"
+     "neben": "+25 Stärke für 3 Runden (300 Gold, -20 auf die Probe, Medizin/Chemie zum Herstellen)"
     },
     {
-     "haupt": "LifeSteal-Trank",
-     "neben": "50% Lifesteal für 3 Runden"
+     "haupt": "Life-Steal-Trank",
+     "neben": "50% Lifesteal für 3 Runden (400 Gold, -20 auf die Probe, Voodoo zum Herstellen)"
     },
     {
      "haupt": "Langsames Gegengift",
-     "neben": "6 Runden lang sinkt zu Rundenbeginn die Gift-Stufe um 1"
+     "neben": "6 Runden lang sinkt zu Rundenbeginn deine GS um 1 (50 Gold, -15 auf die Probe, Medizin/Chemie/Voodoo zum Herstellen)"
     },
     {
      "haupt": "Konzentrationstrank",
-     "neben": "+10 auf alle Fertigkeiten für 3 Runden"
+     "neben": "+10 auf alle Fertigkeiten für 3 Runden (200 Gold, -15 auf die Probe, Voodoo/Medizin/Chemie zum Herstellen)"
     },
     {
      "haupt": "Kampfdroge",
-     "neben": "+2W10 Schaden für 3 Runden, danach -10 auf alle Würfe für 2 Runden"
+     "neben": "+2W10 Schaden für 3 Runden, danach -10 auf alle Würfe für 2 Runden (275 Gold, -20 auf die Probe, Chemie zum Herstellen)"
+    },
+    {
+     "haupt": "Knallgranate",
+     "neben": "Alle Gegner im 3x3m: -10 auf Fertigkeitenproben für 2 Runden (600 Gold, -20 auf die Probe, Technik/Handwerk/Chemie zum Herstellen)"
+    },
+    {
+     "haupt": "Rauchgranate",
+     "neben": "Nebel (6x6m), Sicht 0, +30 Heimlichkeit (100 Gold, -10 auf die Probe, Technik/Handwerk/Chemie zum Herstellen)"
+    },
+    {
+     "haupt": "Molotow / Feuerbombe",
+     "neben": "Fläche 3x3m, 3W10 Schaden + Feuermarker (200 Gold, -10 auf die Probe, Technik/Handwerk/Chemie zum Herstellen)"
+    },
+    {
+     "haupt": "Sprengsatz",
+     "neben": "Fläche 3x3m, 4W10 Schaden + 5 rüstungsbrechend (400 Gold, -20 auf die Probe, Technik/Chemie zum Herstellen)"
+    },
+    {
+     "haupt": "Höllenfass",
+     "neben": "Fläche 5x5m, 6W10 Schaden, +2 Feuermarker, +1 Blutung, zerstört Umgebung (1000 Gold, -40 auf die Probe, Technik/Chemie zum Herstellen)"
+    },
+    {
+     "haupt": "Nagelbombe",
+     "neben": "Fläche 3x3m, 2W10 Schaden + 2 Blutungen (150 Gold, -15 auf die Probe, Technik/Chemie zum Herstellen)"
+    },
+    {
+     "haupt": "Säuregranate",
+     "neben": "Fläche 3x3m, 2W10 Schaden + Gift-Stufe 3 (300 Gold, -20 auf die Probe, Technik/Chemie/Voodoo zum Herstellen)"
+    },
+    {
+     "haupt": "Schallbombe",
+     "neben": "3x3m Zone wird 2 Runden lang stumm - keine Fähigkeiten in der Zone möglich (1500 Gold, -25 auf die Probe, Technik zum Herstellen)"
+    },
+    {
+     "haupt": "Nagelfalle",
+     "neben": "Gegner tritt drauf: 3W10 Schaden + Bewegung -2 für 1 Runde + 1 Blutung (200 Gold, -10 auf die Probe, Handwerk zum Herstellen)"
+    },
+    {
+     "haupt": "Tarngitter",
+     "neben": "Bereich (6x6m): +20 auf Heimlich, Sicht blockiert (400 Gold, -10 auf die Probe, Handwerk zum Herstellen)"
+    },
+    {
+     "haupt": "Wurfnetz",
+     "neben": "Gegner gefangen: Handeln -20, Bewegung 0, bis freigekämpft (Stärkewurf -20) (500 Gold, -20 auf die Probe, Handwerk zum Herstellen)"
+    },
+    {
+     "haupt": "Schockstab",
+     "neben": "Nahkampfwaffe, Treffer: +1W10 Schaden + 50% Chance, Gegner für eine Runde zu stunnen (900 Gold, -40 auf die Probe, Technik zum Herstellen)"
+    },
+    {
+     "haupt": "Magnetfalle",
+     "neben": "Metallwaffen nutzlos: Ziel kann 2 Runden keine Metallwaffen benutzen (700 Gold, -20 auf die Probe, Technik zum Herstellen)"
+    },
+    {
+     "haupt": "Schallgenerator",
+     "neben": "-10 auf alle Würfe/Proben im 5x5 Bereich für 2 Runden (1000 Gold, -20 auf die Probe, Technik zum Herstellen)"
     }
    ]
   },
@@ -1380,6 +1411,15 @@ randomizerPaketRegistrieren({
     "Rüstungsmalus wird um 1 Malus deiner Wahl reduziert",
     "Rüstungsmalus wird um 2 Mali deiner Wahl reduziert",
     "Rüstungsmalus wird um 3 Mali deiner Wahl reduziert"
+   ]
+  },
+  {
+   "name": "Berserker",
+   "rang": 2,
+   "wirkungen": [
+    "Solange du unter 75% LP bist, verursachst du +1W4 Schaden. Unter 50% LP erhöht sich der Bonus auf +2W4, unter 25% LP auf +3W4",
+    "Solange du unter 75% LP bist, verursachst du +1W6 Schaden. Unter 50% LP erhöht sich der Bonus auf +2W6, unter 25% LP auf +3W6",
+    "Solange du unter 75% LP bist, verursachst du +1W8 Schaden. Unter 50% LP erhöht sich der Bonus auf +2W8, unter 25% LP auf +3W8"
    ]
   },
   {

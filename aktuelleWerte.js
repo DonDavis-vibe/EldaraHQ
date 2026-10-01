@@ -18,7 +18,7 @@ function renderAktuelleWerte() {
 
     appData.aktuelleWerte.forEach(eintrag => {
         const badge = document.createElement('span');
-        badge.className = 'status-badge neutral';
+        badge.className = 'status-badge neutral av-badge';
         badge.style.display = 'inline-flex';
         badge.style.alignItems = 'center';
         badge.style.cursor = 'default';
@@ -31,7 +31,8 @@ function renderAktuelleWerte() {
         const valInput = document.createElement('input');
         valInput.type = 'text';
         valInput.value = eintrag.wert || '';
-        valInput.style = 'background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; color: inherit; width: 70px; font-family: inherit; font-size: inherit; outline: none; text-align: center; margin-left: 4px; padding: 0 2px;';
+        valInput.className = 'av-wert-input';
+        valInput.style = 'background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; color: inherit; width: 90px; font-family: inherit; font-size: inherit; outline: none; text-align: center; margin-left: 4px; padding: 0.15rem 0.3rem;';
         valInput.onchange = (e) => {
             eintrag.wert = e.target.value;
             saveData();
