@@ -11,12 +11,12 @@ const WILLKOMMEN_STORAGE_KEY = 'eldaraWillkommenVersion';
 // anhängen (sonst wird die Liste mit der Zeit zu lang für eine Willkommens-
 // Nachricht).
 const WILLKOMMEN_NEUIGKEITEN = [
-    'Regelwerk auf <b>RW 5.1</b> aktualisiert',
-    'Neues wählbares Wesen: <b>Mensch</b>',
-    'Neu: <b>Schmiede-Roulette</b> - Waffen/Rüstung verzaubern (Hammer-Knopf am Item)',
-    '<b>Heimlich</b> ist jetzt in „defensiv" und „offensiv" gesplittet',
-    'Magische-Gegenstände-Katalog aktualisiert (130 Items)',
-    '14 neue Monster-Talentbäume für SL-Sonderfreigaben',
+    'Neu: <b>Söldner-Pool</b> - SL kann rekrutierbare Zweitcharaktere vorbereiten',
+    'Neues Feld <b>„Gehört zu"</b> am Charakterbogen für Söldner/Mietlinge',
+    'SL kann Module jetzt einzeln für sich und/oder die Spieler <b>ein-/ausblenden</b> (Übersicht-Knopf im Dashboard)',
+    'Spielernamen auf der Karte aktualisieren sich jetzt live bei Namensänderung',
+    'Spieler können das Kartenraster nur bei sich ausblenden',
+    'Diverse Lesbarkeits- und Inventar-Bugfixes (Beträge, Kampf-Panel, Gürtel-Waffenplatz)',
 ];
 
 function willkommenPruefen() {

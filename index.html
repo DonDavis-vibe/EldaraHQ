@@ -169,6 +169,10 @@
                         <label>Statur</label>
                         <input type="text" id="statur" value="Sportlich" data-field="statur">
                     </div>
+                    <div class="input-group" style="flex: 1 1 140px;">
+                        <label style="font-size: 0.9rem;">Gehört zu <i class="fa-solid fa-circle-question help-icon" onclick="showHelp('gehoertZu')" title="Hilfe zu Söldnern/Mietlingen"></i></label>
+                        <input type="text" id="gehoert-zu" value="" data-field="gehoertZu" placeholder="z.B. Söldner von Tai Ming">
+                    </div>
                     <div class="status-section" style="grid-column: 1 / -1; margin-top: 1rem;">
                         <label style="font-size: 0.9rem; display: block; margin-bottom: 0.5rem; color: var(--text-light); font-weight: 500;">Status-Effekte <i class="fa-solid fa-circle-question help-icon" onclick="showHelp('status')" title="Hilfe zu Status-Effekten"></i></label>
                         <div class="status-tags" id="status-container" style="justify-content: flex-start; margin-bottom: 0.5rem;">
@@ -366,6 +370,9 @@
             <!-- Tischmitte: geteilte Loot-Ablage, nur als verbundener Spieler sichtbar (tischmitte.js) -->
             <div id="tischmitte-section" class="tischmitte-section" style="display: none;"></div>
 
+            <!-- Söldner-Pool: vom SL vorbereitete, rekrutierbare Zweitcharaktere (soeldner.js) -->
+            <div id="soeldner-section" class="tischmitte-section" style="display: none;"></div>
+
             <!-- Quest-Logbuch: erscheint erst, sobald der SL mindestens eine Quest
                  geteilt hat - bleibt bis dahin komplett unsichtbar (quests.js) -->
             <div id="quest-section" class="quest-section" style="display: none;"></div>
@@ -517,6 +524,8 @@
     <script src="hausregeln.js"></script>
     <script src="talentbaum.js"></script>
     <script src="tischmitte.js"></script>
+    <script src="soeldner.js"></script>
+    <script src="modul.js"></script>
     <script src="gruppe.js"></script>
     <script src="teamwuerfel.js"></script>
     <script src="assets/npc-grafiken/npc-token-bilder.js"></script>
@@ -601,6 +610,13 @@
         <div class="help-modal-box" onclick="event.stopPropagation()">
             <button class="modal-close" onclick="willkommenSchliessen()"><i class="fa-solid fa-xmark"></i></button>
             <div id="willkommen-modal-body"></div>
+        </div>
+    </div>
+
+    <div id="modul-modal-overlay" class="help-modal-overlay" onclick="modulModalSchliessen()">
+        <div class="help-modal-box" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="modulModalSchliessen()"><i class="fa-solid fa-xmark"></i></button>
+            <div id="modul-modal-body"></div>
         </div>
     </div>
 
@@ -721,6 +737,13 @@
                     <span class="gm-group-label"><i class="fa-solid fa-grip-lines"></i> Layout</span>
                     <button class="gm-btn" onclick="gmPanelReihenfolgeZuruecksetzen()" title="Panels wieder in die Standard-Reihenfolge bringen"><i class="fa-solid fa-rotate-left"></i> Reihenfolge zurücksetzen</button>
                     <i class="fa-solid fa-circle-question help-icon" onclick="event.stopPropagation(); showHelp('gmLayout')" title="Hilfe zum Umsortieren der Panels"></i>
+                </div>
+
+                <!-- Gruppe: Modul-Sichtbarkeit (modul.js) -->
+                <div class="gm-group">
+                    <span class="gm-group-label"><i class="fa-solid fa-table-cells-large"></i> Übersicht</span>
+                    <button class="gm-btn" onclick="modulModalOeffnen()" title="Module einzeln für dich und/oder die Spieler aus-/einblenden"><i class="fa-solid fa-eye-slash"></i> Module ein-/ausblenden</button>
+                    <i class="fa-solid fa-circle-question help-icon" onclick="event.stopPropagation(); showHelp('modul')" title="Hilfe zur Modul-Sichtbarkeit"></i>
                 </div>
 
                 <!-- Gruppe: SL-Sitzung sichern/laden (multiplayer.js) - Karten, Seekampf,
@@ -947,6 +970,12 @@
                 <div class="gm-panel-slot" data-panel="tischmitte">
                     <div class="gm-panel-griff" title="Ziehen zum Umsortieren"><i class="fa-solid fa-grip-lines"></i></div>
                     <div id="gm-tischmitte" class="gm-tischmitte"></div>
+                </div>
+
+                <!-- Söldner-Pool: vorbereitete Zweitcharaktere zur Rekrutierung (soeldner.js) -->
+                <div class="gm-panel-slot" data-panel="soeldner">
+                    <div class="gm-panel-griff" title="Ziehen zum Umsortieren"><i class="fa-solid fa-grip-lines"></i></div>
+                    <div id="gm-soeldner" class="gm-tischmitte"></div>
                 </div>
 
                 <!-- General GM Notes -->

@@ -2489,6 +2489,9 @@ body.gm-mode .gm-title { color: var(--color-accent); }
 .sk-karten-werkzeuge { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.8rem 0; }
 .sk-karten-werkzeuge .tool-btn { font-size: 0.78rem; padding: 0.35rem 0.7rem; }
 .tool-btn-aktiv { border-color: var(--color-accent) !important; color: var(--text-primary) !important; }
+/* Modul-Sichtbarkeit (modul.js) - muss IMMER gewinnen, egal was das jeweilige
+   Modul selbst gerade an style.display setzt (siehe Kopfkommentar dort). */
+.modul-versteckt { display: none !important; }
 .sk-canvas {
     width: 100%; height: 420px; display: block; border-radius: 8px;
     border: 1px solid var(--panel-border); background: var(--karte-blatt); touch-action: none; cursor: grab;

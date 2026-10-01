@@ -3,7 +3,7 @@
 // UND den Änderungstext in willkommen.js (WILLKOMMEN_NEUIGKEITEN) anpassen -
 // die Willkommens-Nachricht erscheint dann automatisch noch einmal, weil sie
 // den zuletzt gesehenen Versionsstand im Browser (localStorage) abgleicht.
-const APP_VERSION = '0.7.1';
+const APP_VERSION = '0.8.0';
 const APP_REGELWERK_VERSION = '5.1';
 
 let saveTimeout;
@@ -134,6 +134,8 @@ function renderAll() {
     updateHeaderBanner();
     // Tischmitte (tischmitte.js) - nur als verbundener Spieler; Inventar-Auswahl fürs Ablegen aktuell halten
     if (typeof renderTischmitteSpieler === 'function') renderTischmitteSpieler();
+    // Söldner-Pool (soeldner.js) - nur verbunden und nur, wenn der SL etwas freigegeben hat
+    if (typeof renderSoeldnerSpieler === 'function') renderSoeldnerSpieler();
     // Schiffs-Inventar (schiffsinventar.js) - nur bei aktivem Eldara-Regelpaket
     if (typeof renderSchiffSpieler === 'function') renderSchiffSpieler();
     // Seekampf-Karte (seekampf.js) - nur bei aktivem Eldara-Regelpaket

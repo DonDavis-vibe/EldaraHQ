@@ -278,6 +278,8 @@ function hostMultiplayerSession(preferredCodeArg) {
             if (typeof skAnVerbindung === 'function') skAnVerbindung(conn);
             if (typeof karteAnVerbindung === 'function') karteAnVerbindung(conn);
             if (typeof kampfAnVerbindung === 'function') kampfAnVerbindung(conn);
+            if (typeof soeldnerAnVerbindung === 'function') soeldnerAnVerbindung(conn);
+            if (typeof modulAnVerbindung === 'function') modulAnVerbindung(conn);
         };
         if (conn.open) begruessen();
         else conn.on('open', begruessen);
@@ -418,6 +420,8 @@ function handleIncomingData(peerId, payload) {
     if (typeof karteAnfrageVerarbeiten === 'function' && karteAnfrageVerarbeiten(peerId, payload)) return;
     // Runenmagie (runenmagie.js): Schmiede-Roulette-Ergebnis wartet auf SL-Bestätigung
     if (typeof runenAnfrageVerarbeiten === 'function' && runenAnfrageVerarbeiten(peerId, payload)) return;
+    // Söldner-Pool (soeldner.js): Spieler will einen vorbereiteten Söldner rekrutieren
+    if (typeof soeldnerAnfrageVerarbeiten === 'function' && soeldnerAnfrageVerarbeiten(peerId, payload)) return;
     if (payload.type === 'state') {
         const neuerSpieler = !connectedPlayersData[peerId];
         connectedPlayersData[peerId] = payload.data;
@@ -672,6 +676,7 @@ function renderGmDashboard() {
         const beruf = pData.beruf || '';
         const alter = pData.alter || '';
         const statur = pData.statur || '';
+        const gehoertZu = pData.gehoertZu || '';
         
         // Color picker dots
         let colorDotsHtml = GM_PLAYER_COLORS.map(c => {
@@ -687,6 +692,7 @@ function renderGmDashboard() {
                         <span>${charNameHtml}</span>
                         <span style="font-size: 0.9rem; color: #fbbf24;"><i class="fa-solid fa-lightbulb"></i> GBP: ${(parseInt(pData.gbp_handeln) || 0) + (parseInt(pData.gbp_wissen) || 0) + (parseInt(pData.gbp_soziales) || 0)}</span>
                     </div>
+                    ${gehoertZu ? `<div style="margin-top: 0.2rem;"><span style="display:inline-flex; align-items:center; gap:0.3rem; font-size: 0.75rem; font-weight: 600; color: #c084fc; background: rgba(192,132,252,0.12); border: 1px solid rgba(192,132,252,0.35); padding: 0.1rem 0.5rem; border-radius: 10px;"><i class="fa-solid fa-link"></i> ${escapeHtml(gehoertZu)}</span></div>` : ''}
                     <div style="font-size: 0.75rem; opacity: 0.6; margin-top: 0.1rem;">
                         ${[beruf, alter ? alter + ' J.' : '', statur].filter(x => x).map(escapeHtml).join(' • ')}
                     </div>
@@ -999,6 +1005,7 @@ function joinMultiplayerSession(codeArg) {
             // Send initial state
             sendMultiplayerState();
             if (typeof tischmitteBeitritt === 'function') tischmitteBeitritt();
+            if (typeof soeldnerBeitritt === 'function') soeldnerBeitritt();
             if (typeof renderGruppe === 'function') renderGruppe();
             if (typeof teamwuerfelBeitritt === 'function') teamwuerfelBeitritt();
             if (typeof questeBeitritt === 'function') questeBeitritt();
@@ -1011,6 +1018,7 @@ function joinMultiplayerSession(codeArg) {
             hostConnection = null;
             clearMultiplayerSession();
             if (typeof tischmitteGetrennt === 'function') tischmitteGetrennt();
+            if (typeof soeldnerGetrennt === 'function') soeldnerGetrennt();
             if (typeof gruppeGetrennt === 'function') gruppeGetrennt();
             if (typeof teamwuerfelGetrennt === 'function') teamwuerfelGetrennt();
             if (typeof questeGetrennt === 'function') questeGetrennt();
@@ -1051,6 +1059,10 @@ function joinMultiplayerSession(codeArg) {
                 // erledigt in karten.js
             } else if (payload && typeof runenNachrichtVerarbeiten === 'function' && runenNachrichtVerarbeiten(payload)) {
                 // erledigt in runenmagie.js
+            } else if (payload && typeof soeldnerNachrichtVerarbeiten === 'function' && soeldnerNachrichtVerarbeiten(payload)) {
+                // erledigt in soeldner.js
+            } else if (payload && typeof modulNachrichtVerarbeiten === 'function' && modulNachrichtVerarbeiten(payload)) {
+                // erledigt in modul.js
             } else if (payload && typeof kampfNachrichtVerarbeiten === 'function' && kampfNachrichtVerarbeiten(payload)) {
                 // erledigt in kampf.js
             } else if (payload && payload.type === 'customSound') {
