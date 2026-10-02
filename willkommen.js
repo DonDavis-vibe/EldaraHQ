@@ -11,14 +11,12 @@ const WILLKOMMEN_STORAGE_KEY = 'eldaraWillkommenVersion';
 // anhängen (sonst wird die Liste mit der Zeit zu lang für eine Willkommens-
 // Nachricht).
 const WILLKOMMEN_NEUIGKEITEN = [
-    'Neu: <b>Beziehungsnetz</b> - SL-Mindmap für Beziehungen zwischen Helden und NSCs',
-    'Neu: <b>Erste-Schritte-Tour</b> für neue Spieler, plus Sprungleiste im SL-Dashboard',
-    'Rüstung aus Tischmitte/Kiste kommt jetzt korrekt als <b>Rüstungsteil</b> an, nicht mehr als nackter Gegenstand',
-    'Loot-Tabellen im Zufallsgenerator auf <b>Regelwerk 5.1</b> aktualisiert (Waffen, Herstellbares, Handelswaren)',
-    'Talentbaum-Korrekturen: „Verstärker der Leiden" (Rang 2), „Berserker" (jetzt Besondere Eigenschaft)',
-    'Schmiede-Roulette: Gold wird zurückerstattet, wenn der SL ein Ergebnis ablehnt',
-    'Gelernte Fähigkeiten einzeln ausklappbar, Item-Beschreibungen direkt sichtbar statt hinter "Details"',
-    'Diverse Lesbarkeits-Fixes (Aktuelle Werte, Kiste-Meldungen bei voller Kiste)',
+    '<b>Talentbaum und Besondere Eigenschaften auf Regelwerk 5.1 aktualisiert</b> - viele Skills sind neu, umbenannt oder in anderen Bäumen (z.B. Wilde Wut statt Berserker-Skill, „Agilität" heißt jetzt „Athletik")',
+    '<b>Wichtig:</b> Bisher vergebene Skills und Besondere Eigenschaften werden einmalig zurückgesetzt - bitte neu vergeben. Deine Punkte bleiben, ein Hinweis im Talentbaum zeigt, was du vorher hattest',
+    'Neu: <b>Mein Beziehungsnetz</b> - eigene Mindmap, verknüpft mit deinem Logbuch',
+    'Rüstung aus Tischmitte/Kiste kommt jetzt als Rüstungsteil an; Loot-Tabellen im Zufallsgenerator auf 5.1',
+    'Gelernte Fähigkeiten einzeln ausklappbar, Item-Beschreibungen direkt sichtbar',
+    'Schmiede-Roulette: Gold-Rückerstattung bei Ablehnung; klare Meldung bei voller Kiste',
 ];
 
 function willkommenPruefen() {

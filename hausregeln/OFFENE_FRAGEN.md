@@ -365,3 +365,24 @@ Hauptbaum-Dropdown, rendern ihre jeweils korrekten Skills.
 *Nach der Klärung: Antworten in dieses Dokument eintragen oder mir schicken,
 dann ziehe ich `hausregeln/konvertiere-eldora.py` und `talentbaum.js`
 entsprechend nach.*
+
+
+## 2026-10-02: Talentbaum + Besondere Eigenschaften komplett gegen RW 5.1 abgeglichen
+
+Die Skilltabellen kommen jetzt per `hausregeln/extrahiere-anhang51.py` direkt
+aus `Regelwerk 5.1 Anhang.pdf` (851 Skills, 65 Äste; vorher RW 4.3 mit nur
+punktuellen Korrekturen). Die 23 Besonderen Eigenschaften wurden gegen
+`rw51.txt` geprüft (Fluchtreflex und Magier korrigiert). Äste umbenannt:
+Agilität -> Athletik, Voodoo Fluchspucker -> Voodoo Flucherspucker (Schreibweise
+laut Anhang), OrcraLord -> OrcaLord, Schattenskellet -> Schattenskelett.
+
+**SL-Entscheidung:** Kein automatisches Umsetzen alter Skills auf neue. Charaktere
+mit altem Datenstand (`TALENTBAUM_STAND` in `konvertiere-eldora.py`) bekommen ihre
+vergebenen Skills und Besonderen Eigenschaften beim ersten Laden einmalig
+zurückgesetzt (Skill-/Rangpunkte bleiben, sie leiten sich aus den Talentwerten
+ab) und müssen sie neu vergeben; ein Hinweis im Talentbaum-Panel listet, was
+vorher vergeben war. Die Baumwahl bleibt (Umbenennungen werden mitgezogen).
+Bei künftigen inhaltlichen Neu-Extraktionen `TALENTBAUM_STAND` erhöhen.
+
+Offen: Der Schadenstyp (physisch/magisch/heilung) steht im Anhang nicht und wird
+vom gleichnamigen alten Skill übernommen bzw. grob geraten (nur Tooltip).

@@ -193,7 +193,7 @@ Only the character's *choices* within that package (`hausregeln` above, e.g. cho
     "weitereAeste": ["Zombie"],
     "skills": [
       {
-        "name": "Bodyslam", "ast": "Agilität", "art": "aktiv", "schadenTyp": "physisch", "rang": 1,
+        "name": "Bodyslam", "ast": "Athletik", "art": "aktiv", "schadenTyp": "physisch", "rang": 1,
         "info": "Schaden: Nahkampf + 2/3/4w10 an 2/2/3 Zielen in einer Reihe",
         "stufen": [
           { "level": 1, "reichweite": "Nahkampf", "schaden": "2W10", "schadenArt": "Nahkampf", "effekt": "Trifft 2 Ziele in einer Reihe" },

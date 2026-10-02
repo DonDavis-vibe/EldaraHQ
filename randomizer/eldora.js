@@ -1356,8 +1356,8 @@ randomizerPaketRegistrieren({
    "rang": 1,
    "wirkungen": [
     "10% Chance, Fernkampfangriffen auszuweichen (nur, wenn du dich diese Runde bewegt hast)",
-    "15% Chance, Fernkampfangriffen auszuweichen (nur, wenn du dich diese Runde bewegt hast)",
-    "20% Chance, Fernkampfangriffen auszuweichen (nur, wenn du dich diese Runde bewegt hast)"
+    "20% Chance, Fernkampfangriffen auszuweichen (nur, wenn du dich diese Runde bewegt hast)",
+    "30% Chance, Fernkampfangriffen auszuweichen (nur, wenn du dich diese Runde bewegt hast)"
    ]
   },
   {
@@ -1487,7 +1487,7 @@ randomizerPaketRegistrieren({
    "wirkungen": [
     "Reichweite deiner Fähigkeiten +1m, Wirkungsradius +0m",
     "Reichweite +3m, Wirkungsradius +1m",
-    "Reichweite +5m, Wirkungsradius +2m"
+    "Reichweite +5m, Wirkungsradius +1m"
    ]
   },
   {

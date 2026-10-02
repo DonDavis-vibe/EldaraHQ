@@ -391,6 +391,64 @@ function tbArtBadge(skill) {
     return `<span class="tb-art tb-art-${art}" title="${art}"><i class="fa-solid ${icon}"></i></span>`;
 }
 
+// Datenstand-Prüfung (siehe TALENTBAUM_STAND in hausregeln/konvertiere-eldora.py):
+// Charaktere, die unter einer älteren Skill-/Eigenschaftsliste gespeichert
+// wurden, haben Schlüssel ("Ast::Name"), die es in der neuen Liste teils nicht
+// mehr oder an anderer Stelle gibt. Statt zu raten, welcher alte Skill zu
+// welchem neuen gehört (SL-Entscheidung), werden Skills und Besondere
+// Eigenschaften einmalig zurückgesetzt und der Spieler vergibt sie neu - die
+// Punkte selbst (Skill-/Rangpunkte) leiten sich aus den Talentwerten ab und
+// bleiben komplett erhalten. Was vorher vergeben war, merkt sich ein Hinweis
+// im Panel (h.zurueckgesetzt), damit niemand aus dem Gedächtnis arbeiten muss.
+// Reine Umbenennungen von Hauptbäumen (Agilität -> Athletik, Fluchspucker ->
+// Flucherspucker) werden dabei direkt mitgezogen, die Baumwahl bleibt also.
+const TB_ASTE_UMBENANNT = { 'Agilität': 'Athletik', 'Voodoo Fluchspucker': 'Voodoo Flucherspucker' };
+
+function tbStandPruefen(h, regeln) {
+    const stand = regeln.talentbaumStand || '';
+    if (!stand || h.talentbaumStand === stand) return;
+
+    h.hauptbaeume = h.hauptbaeume.map(a => TB_ASTE_UMBENANNT[a] || a);
+    h.hauptbaeume = h.hauptbaeume.map(a => (a && (regeln.hauptbaeume || []).includes(a)) ? a : null);
+
+    const gelernt = Object.keys(h.gelernt).filter(k => (parseInt(h.gelernt[k]) || 0) > 0)
+        .map(k => { const [ast, ...rest] = k.split('::'); return { ast, name: rest.join('::'), level: parseInt(h.gelernt[k]) }; });
+    const eigenschaften = Object.keys(h.eigenschaften).filter(k => (parseInt(h.eigenschaften[k]) || 0) > 0)
+        .map(k => ({ name: k, stufe: parseInt(h.eigenschaften[k]) }));
+
+    if (gelernt.length || eigenschaften.length) {
+        h.zurueckgesetzt = { gelernt, eigenschaften };
+        h.gelernt = {};
+        h.verbraucht = {};
+        h.eigenschaften = {};
+        tbPanelOffen = true;
+        setTimeout(() => alert('Der Talentbaum wurde auf Regelwerk 5.1 aktualisiert. Deine bisher vergebenen Skills und Besonderen Eigenschaften wurden einmalig zurückgesetzt - bitte vergib sie neu (Details im Talentbaum-Panel). Deine Punkte sind alle noch da.'), 300);
+    }
+    h.talentbaumStand = stand;
+    if (typeof saveData === 'function') saveData();
+}
+
+function tbResetHinweisSchliessen() {
+    const h = tbDaten();
+    delete h.zurueckgesetzt;
+    if (typeof saveData === 'function') saveData();
+    renderTalentbaum();
+}
+
+function tbResetHinweisHtml(h) {
+    const rz = h.zurueckgesetzt;
+    if (!rz) return '';
+    const skills = (rz.gelernt || []).map(g => `${escapeHtml(g.name)} Lvl ${g.level} <span class="tb-dim">(${escapeHtml(g.ast)})</span>`);
+    const eig = (rz.eigenschaften || []).map(e => `${escapeHtml(e.name)} Stufe ${e.stufe}`);
+    return `<div class="tb-reset-hinweis">
+        <strong><i class="fa-solid fa-triangle-exclamation"></i> Auf Regelwerk 5.1 aktualisiert - bitte neu vergeben</strong>
+        <p>Die Skill- und Eigenschaftslisten haben sich geändert. Was du bisher vergeben hattest, wurde einmalig zurückgesetzt. Deine Skill- und Rangpunkte sind unverändert da.</p>
+        ${skills.length ? `<div class="tb-dim"><b>Skills vorher:</b> ${skills.join(' · ')}</div>` : ''}
+        ${eig.length ? `<div class="tb-dim"><b>Eigenschaften vorher:</b> ${eig.join(' · ')}</div>` : ''}
+        <button class="tool-btn" onclick="tbResetHinweisSchliessen()"><i class="fa-solid fa-check"></i> Verstanden, Hinweis ausblenden</button>
+    </div>`;
+}
+
 function renderTalentbaum() {
     const section = document.getElementById('talentbaum-section');
     if (!section || typeof appData === 'undefined') return;
@@ -418,6 +476,7 @@ function renderTalentbaum() {
     section.style.display = '';
     const h = tbDaten();
     h.paket = paket.id;
+    tbStandPruefen(h, regeln);
     // kostenStaffel/skillpunktSchwellen liegen unter paket.punkte, nicht im
     // talentbaum-Block selbst - hier einmal kurzschließen, damit die
     // Ast-Ökonomie-Funktionen nicht jedes Mal durchs Paket wandern müssen.
@@ -596,6 +655,7 @@ function renderTalentbaum() {
                     <span class="tb-pill ${gesamt.rpFrei < 0 ? 'tb-ueber' : ''}" title="Rangpunkte: 1 je Rangaufstieg in einem deiner drei Hauptbäume. Bezahlt AUSSCHLIESSLICH Besondere Eigenschaften - Skills lernst du rein mit Skillpunkten."><i class="fa-solid fa-ranking-star"></i> RP ${gesamt.rpFrei} / ${gesamt.rangpunkte}</span>
                 </div>
             </summary>
+            ${tbResetHinweisHtml(h)}
             <p class="hr-hint">Skillpunkte entstehen getrennt je Ast, kein gemeinsamer Topf.</p>
             <div class="tb-auswahl">${hauptSelects.join('')}${wesenSelect}</div>
             ${wesenHtml}

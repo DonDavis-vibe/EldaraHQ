@@ -2787,3 +2787,8 @@ body.gm-mode .gm-title { color: var(--color-accent); }
 
 /* Zoom-Knöpfe im Spieler-Beziehungsnetz (spielernetz.js) - Handy hat kein Mausrad */
 .sn-zoom { position: absolute; right: 0.5rem; bottom: 0.5rem; display: flex; flex-direction: column; gap: 0.3rem; z-index: 5; }
+
+/* Talentbaum: Hinweis nach Regelwerk-Update (talentbaum.js, tbStandPruefen) */
+.tb-reset-hinweis { margin: 0.6rem 0; padding: 0.7rem 0.9rem; border: 1px solid #fbbf24; background: rgba(251,191,36,0.1); border-radius: 8px; font-size: 0.85rem; display: flex; flex-direction: column; gap: 0.4rem; }
+.tb-reset-hinweis p { margin: 0; }
+.tb-reset-hinweis .tool-btn { align-self: flex-start; }

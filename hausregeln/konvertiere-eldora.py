@@ -62,8 +62,8 @@ AST_SCHREIBWEISE_RW43 = {
 # Welche Äste des Talentbaums Spieler als Hauptbaum wählen dürfen (nach obiger
 # Normalisierung, also in RW-4.3-Schreibweise).
 HAUPTBAEUME = [
-    'Nahkampf Klingen', 'Nahkampf Fäuste', 'Stärke', 'Fernkampf', 'Agilität',
-    'Voodoo Ritualklinge', 'Voodoo Fluchspucker', 'Einschüchtern',
+    'Nahkampf Klingen', 'Nahkampf Fäuste', 'Stärke', 'Fernkampf', 'Athletik',
+    'Voodoo Ritualklinge', 'Voodoo Flucherspucker', 'Einschüchtern',
     'Heimlichkeit defensiv', 'Heimlichkeit offensiv', 'Medizin', 'Motivieren',
 ]
 
@@ -112,9 +112,9 @@ BAUM_TALENT = {
     'Nahkampf Fäuste': 'Nahkampf',
     'Stärke': 'Stärke',
     'Fernkampf': 'Fernkampf',
-    'Agilität': 'Athletik',
+    'Athletik': 'Athletik',
     'Voodoo Ritualklinge': 'Voodoo',
-    'Voodoo Fluchspucker': 'Voodoo',
+    'Voodoo Flucherspucker': 'Voodoo',
     'Einschüchtern': 'Einschüchtern',
     # RW 5.1 (Anhang S.43+45, SL-bestätigt 2026-09-30): "Heimlich" ist echt in
     # zwei Bäume gesplittet, teilen sich aber weiterhin das eine Basis-Talent
@@ -125,7 +125,15 @@ BAUM_TALENT = {
     'Motivieren': 'Motivieren',
 }
 
+# Datenstand des Talentbaums (Skilllisten + Besondere Eigenschaften). Ändert
+# sich der Wert, setzt talentbaum.js bei Charakteren mit altem Stand die
+# vergebenen Skills/Eigenschaften einmalig zurück (siehe tbStandPruefen) -
+# die Skill-Schlüssel "Ast::Name" passen sonst nicht mehr zur neuen Liste.
+# Bei jeder inhaltlichen Neu-Extraktion (z.B. neue Regelwerk-Version) erhöhen.
+TALENTBAUM_STAND = '5.1-2026-10-02'
+
 TALENTBAUM_REGELN = {
+    'talentbaumStand': TALENTBAUM_STAND,
     'anzahlHauptbaeume': 3,
     'anzahlWesen': 1,
     'maxLevel': 3,
@@ -147,7 +155,7 @@ TALENTBAUM_REGELN = {
     'freischaltung': {'modus': 'vorRang', 'benoetigt': 2},
 }
 
-# Die 22 "Besonderen Eigenschaften" (Stand zwischenstand.docx, SL-Überarbeitung
+# Die 23 "Besonderen Eigenschaften" (RW 5.1 S.20f, Stand 2026-10-02 gegen rw51.txt geprüft; vorher zwischenstand.docx, SL-Überarbeitung
 # 2026-09) - existieren in keiner Rohdatei der Gruppe, von Hand aus dem Dokument
 # transkribiert. `wirkungen`: eine Wirkung je Mal, das die Eigenschaft gewählt
 # werden kann (das Regelwerk zeigt das als "10/15/20%" o.ä. - jede Zahl ein
@@ -167,8 +175,8 @@ EIGENSCHAFTEN = [
         'Sobald du im Kampf erstmals unter 50% LP fällst, erhältst du 30 Lebenspunkte Heilung']},
     {'name': 'Fluchtreflex', 'rang': 1, 'wirkungen': [
         '10% Chance, Fernkampfangriffen auszuweichen (nur, wenn du dich diese Runde bewegt hast)',
-        '15% Chance, Fernkampfangriffen auszuweichen (nur, wenn du dich diese Runde bewegt hast)',
-        '20% Chance, Fernkampfangriffen auszuweichen (nur, wenn du dich diese Runde bewegt hast)']},
+        '20% Chance, Fernkampfangriffen auszuweichen (nur, wenn du dich diese Runde bewegt hast)',
+        '30% Chance, Fernkampfangriffen auszuweichen (nur, wenn du dich diese Runde bewegt hast)']},
     {'name': 'Guter Patient', 'rang': 1, 'wirkungen': [
         'Du erhältst für Heilung durch Schlaf und Nahrung je 1 Regenerationswürfel extra',
         'Zusätzlich erhältst du +1W10 LP, wenn du durch eine Fähigkeit geheilt wirst']},
@@ -210,7 +218,7 @@ EIGENSCHAFTEN = [
         '2-mal im Kampf kannst du eine Heilfähigkeit als Extra-Aktion nutzen',
         '3-mal im Kampf kannst du eine Heilfähigkeit als Extra-Aktion nutzen']},
     {'name': 'Magier', 'rang': 3, 'wirkungen': [
-        'Reichweite deiner Fähigkeiten +1m, Wirkungsradius +0m', 'Reichweite +3m, Wirkungsradius +1m', 'Reichweite +5m, Wirkungsradius +2m']},
+        'Reichweite deiner Fähigkeiten +1m, Wirkungsradius +0m', 'Reichweite +3m, Wirkungsradius +1m', 'Reichweite +5m, Wirkungsradius +1m']},
     {'name': 'Perfekter Konter', 'rang': 3, 'wirkungen': [
         'Immer wenn du einen Angriff parierst, darfst du mit einer Standard-Nahkampfattacke zurückschlagen']},
     {'name': 'Schildbrecher', 'rang': 3, 'wirkungen': [
@@ -472,7 +480,7 @@ def konvertiere():
         # Gemischte Herkunft: Talentbaum/Wesen kommen weiter aus der
         # Rohdatei der Gruppe (roh['meta']['lastSave']), Talente/Punkte
         # wurden gerade gegen RW 4.3 (Stand 2026-07-22) geprüft/korrigiert.
-        'version': '2026-07-22 (RW 4.3, Talentbaum-Daten von %s)' % (roh.get('meta', {}).get('lastSave') or 'unbekannt'),
+        'version': '2026-10-02 (Talentbaum + Besondere Eigenschaften: RW 5.1 Anhang; Talente/Punkte: RW 4.3)',
         'system': roh.get('meta', {}).get('system') or '',
         'beschreibung': (
             'Piraten-Hausregeln einer HTBAH-Runde: feste Talentliste, progressive '
