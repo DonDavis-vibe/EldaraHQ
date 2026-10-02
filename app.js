@@ -129,6 +129,8 @@ function renderAll() {
     renderActivityLog();
     // Mein Logbuch (spielerlog.js) - eigenes Tagebuch des Spielers
     if (typeof renderSpielerlog === 'function') renderSpielerlog();
+    // Mein Beziehungsnetz (spielernetz.js) - mit dem Logbuch verknüpft
+    if (typeof renderSpielernetz === 'function') renderSpielernetz();
     // Hausregel-Erweiterung (talentbaum.js) - zeigt sich nur mit aktivem Regelpaket
     if (typeof renderTalentbaum === 'function') renderTalentbaum();
     updateHeaderBanner();

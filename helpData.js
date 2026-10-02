@@ -153,6 +153,11 @@ const helpData = {
             "<p><b>Für Spieler:</b> Das Quest-Logbuch taucht bei dir erst auf, sobald der Spielleiter mindestens eine Quest mit der Gruppe geteilt hat - vorher siehst du nichts davon. Du siehst nur Namen, Beschreibung sowie die Hinweise und Ziele, die freigegeben wurden.</p>" +
             "<p><i>Wie die Tischmitte bleibt dein Quest-Logbuch als Spielleiter in deinem Browser gespeichert, auch über einen Reload hinweg.</i></p>",
 
+    spielernetz: "<h3>Mein Beziehungsnetz</h3>" +
+                 "<p>Deine eigene Mindmap: wer kennt wen, wer mag wen nicht. Du bist der Knoten in der Mitte, weitere NSCs trägst du per Namen ein (oder übernimmst sie mit <b>Aus Logbuch</b> automatisch aus deinem Logbuch).</p>" +
+                 "<p><b>Antippen</b> eines Knotens öffnet ihn: Beziehung zu einem anderen Knoten anlegen (mit freiem Text wie <i>misstraut</i> oder <i>Bruder von</i>), bestehende löschen, Namen ändern. Zu jeder Beziehung kannst du optional einen <b>Logbuch-Eintrag als Beleg</b> verknüpfen - außerdem zeigt jeder NSC-Knoten automatisch alle Logbuch-Einträge, deren NSC-Feld genauso heißt.</p>" +
+                 "<p><b>Ziehen</b> verschiebt Knoten bzw. die ganze Ansicht (am Handy mit dem Finger), die Knöpfe unten rechts zoomen, am PC geht auch Strg + Mausrad. Bleibt wie das Logbuch bei dir und wandert mit <b>Speichern (JSON)</b> mit.</p>",
+
     spielerlog: "<h3>Mein Logbuch</h3>" +
                 "<p>Dein eigenes Tagebuch, zusätzlich zum freien <b>Notizen</b>-Feld: pro Eintrag hältst du fest, welchen <b>NSC</b> du wann getroffen hast und was er dir erzählt bzw. welche Hinweise er gegeben hat. NSC und Zeitpunkt sind optional - manchmal reicht auch einfach nur der Text.</p>" +
                 "<p>Die Einträge gehören ganz dir: sie bleiben in deinem Charakterbogen, gehen nie an den Spielleiter oder andere Spieler raus, und wandern beim <b>Speichern (JSON)</b> mit deinem Charakter mit.</p>",

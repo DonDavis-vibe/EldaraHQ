@@ -381,6 +381,9 @@
                  rein lokal, geht nie an den SL raus (spielerlog.js) -->
             <div id="spielerlog-section" class="spielerlog-section" style="display: none;"></div>
 
+            <!-- Mein Beziehungsnetz: eigene Mindmap, mit dem Logbuch verknüpft (spielernetz.js) -->
+            <div id="spielernetz-section" class="spielerlog-section" style="display: none;"></div>
+
             <!-- Schiffs-Inventar: nur bei aktivem Eldara-Regelpaket (schiffsinventar.js) -->
             <div id="schiff-section" class="schiff-section" style="display: none;"></div>
 
@@ -535,6 +538,7 @@
     <script src="assets/npc-grafiken/battlemaps/battlemap-bilder.js"></script>
     <script src="quests.js"></script>
     <script src="spielerlog.js"></script>
+    <script src="spielernetz.js"></script>
     <script src="inventarraster.js"></script>
     <script src="runenmagie.js"></script>
     <script src="schiffsinventar.js"></script>
@@ -618,6 +622,14 @@
 
     <div id="tour-overlay">
         <div id="tour-box" class="tour-box"></div>
+    </div>
+
+    <!-- Mein Beziehungsnetz (Spieler): Knoten bearbeiten (spielernetz.js) -->
+    <div id="spielernetz-modal-overlay" class="help-modal-overlay" onclick="snModalSchliessen()">
+        <div class="help-modal-box" style="width: 420px;" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="snModalSchliessen()"><i class="fa-solid fa-xmark"></i></button>
+            <div id="spielernetz-modal-body"></div>
+        </div>
     </div>
 
     <!-- Beziehungsnetz: Knoten bearbeiten/Beziehungen verwalten (netzwerk.js) -->

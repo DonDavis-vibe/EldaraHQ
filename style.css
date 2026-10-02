@@ -2784,3 +2784,6 @@ body.gm-mode .gm-title { color: var(--color-accent); }
     font-size: 0.75rem; padding: 0.2rem 0.1rem; text-decoration: underline;
 }
 .ir-desc-mehr:hover { color: var(--text-primary); }
+
+/* Zoom-Knöpfe im Spieler-Beziehungsnetz (spielernetz.js) - Handy hat kein Mausrad */
+.sn-zoom { position: absolute; right: 0.5rem; bottom: 0.5rem; display: flex; flex-direction: column; gap: 0.3rem; z-index: 5; }
