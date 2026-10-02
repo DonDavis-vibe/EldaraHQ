@@ -1,4 +1,4 @@
-// How to be a Hero - Handy-Schnellnavigation
+// How to be a Hero - Schnellnavigation (alle Geräte)
 //
 // Wunsch aus der Runde: auf dem Handy ist der Charakterbogen eine einzige
 // lange Seite (die drei Grid-Spalten Toolbar/links/rechts stacken sich unter
@@ -6,8 +6,12 @@
 // z.B. Logbuch (ganz unten rechts) und Inventar (weit oben links) hin- und
 // herzuscrollen ist auf einem Touchscreen mühsam. Diese Leiste bleibt beim
 // Scrollen am unteren Bildschirmrand stehen ("mitscrollend") und springt per
-// Klick/Tipp direkt zum gewünschten Panel (scrollIntoView) - nur unterhalb
-// der Mobile-Breakpoint sichtbar, siehe .mobile-nav in style.css.
+// Klick/Tipp direkt zum gewünschten Panel (scrollIntoView), siehe .mobile-nav
+// in style.css.
+//
+// Inzwischen für alle Spieler, nicht nur auf dem Handy: am Desktop als schwebende Leiste unten in der
+// Mitte. Chips der Panels, die gerade im Sichtfeld sind, werden hervorgehoben
+// (IntersectionObserver in mobilenavSichtfeldBeobachten).
 //
 // Nur Panels, die gerade tatsächlich sichtbar sind, bekommen einen Eintrag -
 // bei Eldara ist z.B. "Waffen" immer versteckt (die Waffen leben im
@@ -39,6 +43,7 @@ const MOBILENAV_ZIELE = [
 
 let mobilenavBeobachtet = false;
 let mobilenavTimer = null;
+let mobilenavSignatur = '';
 
 function mobilenavSichtbar(el) {
     if (!el) return false;
@@ -62,15 +67,37 @@ function mobilenavRender() {
     if (eintraege.length < 2) { nav.style.display = 'none'; return; }
     nav.style.display = '';
 
+    // Nur neu aufbauen, wenn sich die Liste wirklich geändert hat. Ein
+    // Neuaufbau zwischen Maus-/Fingerdruck und Loslassen ersetzt den Chip
+    // unter dem Zeiger und verschluckt den Klick - fühlte sich wie ein nötiger
+    // Doppelklick an, weil die Beobachter schon bei jeder gleichbleibenden
+    // style-Zuweisung eines Panels anschlagen.
+    const signatur = eintraege.map(e => e.ziel.id).join('|');
+    if (signatur === mobilenavSignatur) return;
+    mobilenavSignatur = signatur;
+
     nav.innerHTML = eintraege.map(e => `
         <button type="button" class="mobile-nav-chip" data-mobilnavziel="${e.ziel.id}">
             <i class="fa-solid ${e.ziel.icon}"></i>
             <span>${e.ziel.label}</span>
         </button>`).join('');
+    mobilenavSichtfeldBeobachten(eintraege.map(e => e.el));
+}
 
-    nav.querySelectorAll('[data-mobilnavziel]').forEach(btn => {
-        btn.addEventListener('click', () => mobilenavSpringenZu(btn.dataset.mobilnavziel));
-    });
+// Hebt die Chips der Panels hervor, die gerade (zu mindestens 15 %, bei sehr
+// hohen Panels reicht ein Streifen) im Sichtfeld stehen. Wird bei jedem
+// Neuaufbau der Leiste neu gestartet, weil sich die Panel-Liste ändern kann.
+let mobilenavSichtObserver = null;
+function mobilenavSichtfeldBeobachten(elemente) {
+    if (mobilenavSichtObserver) mobilenavSichtObserver.disconnect();
+    if (typeof IntersectionObserver === 'undefined') return;
+    mobilenavSichtObserver = new IntersectionObserver(treffer => {
+        treffer.forEach(t => {
+            const chip = document.querySelector(`#mobile-nav [data-mobilnavziel="${t.target.id}"]`);
+            if (chip) chip.classList.toggle('mobile-nav-aktiv', t.isIntersecting);
+        });
+    }, { threshold: [0, 0.15], rootMargin: '-10% 0px -15% 0px' });
+    elemente.forEach(el => mobilenavSichtObserver.observe(el));
 }
 
 function mobilenavSpringenZu(id) {
@@ -102,4 +129,11 @@ function mobilenavVerzoegertRendern() {
     mobilenavTimer = setTimeout(mobilenavRender, 150);
 }
 
-document.addEventListener('DOMContentLoaded', mobilenavRender);
+document.addEventListener('DOMContentLoaded', () => {
+    const nav = document.getElementById('mobile-nav');
+    if (nav) nav.addEventListener('click', e => {
+        const chip = e.target.closest('[data-mobilnavziel]');
+        if (chip) mobilenavSpringenZu(chip.dataset.mobilnavziel);
+    });
+    mobilenavRender();
+});

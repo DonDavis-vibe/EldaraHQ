@@ -3,7 +3,7 @@
 // UND den Änderungstext in willkommen.js (WILLKOMMEN_NEUIGKEITEN) anpassen -
 // die Willkommens-Nachricht erscheint dann automatisch noch einmal, weil sie
 // den zuletzt gesehenen Versionsstand im Browser (localStorage) abgleicht.
-const APP_VERSION = '0.8.4';
+const APP_VERSION = '0.8.5';
 const APP_REGELWERK_VERSION = '5.1';
 
 let saveTimeout;
