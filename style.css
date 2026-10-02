@@ -2810,3 +2810,99 @@ body.gm-mode .gm-title { color: var(--color-accent); }
 .tb-reset-hinweis { margin: 0.6rem 0; padding: 0.7rem 0.9rem; border: 1px solid #fbbf24; background: rgba(251,191,36,0.1); border-radius: 8px; font-size: 0.85rem; display: flex; flex-direction: column; gap: 0.4rem; }
 .tb-reset-hinweis p { margin: 0; }
 .tb-reset-hinweis .tool-btn { align-self: flex-start; }
+
+/* --- Regelwerk-Viewer (regelwerk.js) --------------------------------------- */
+.rw-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    z-index: 1100; /* über der Schnellnavigation (900) und Modals (1000), unter Karten-Vollbild/Kampf-Popup */
+    flex-direction: column;
+    background: #0a0f14;
+    color: var(--text-primary);
+}
+.rw-overlay.rw-offen { display: flex; }
+body.rw-aktiv { overflow: hidden; }
+.rw-kopf {
+    display: flex; flex-direction: column; gap: 0.4rem;
+    padding: calc(0.5rem + env(safe-area-inset-top, 0px)) 0.7rem 0.5rem;
+    background: rgba(6, 13, 18, 0.98);
+    border-bottom: 1px solid var(--glass-border);
+}
+.rw-zeile { display: flex; align-items: center; gap: 0.4rem; min-width: 0; }
+.rw-tabs { display: flex; gap: 0.3rem; flex: 1; min-width: 0; overflow-x: auto; }
+.rw-tab, .rw-btn {
+    font-family: var(--font-main); font-size: 0.82rem; font-weight: 600;
+    color: var(--text-secondary); background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.14); border-radius: 8px;
+    padding: 0.4rem 0.7rem; cursor: pointer; white-space: nowrap;
+}
+.rw-tab:hover, .rw-btn:hover { background: rgba(255,255,255,0.14); color: var(--text-primary); }
+.rw-tab-aktiv { color: var(--text-primary); border-color: var(--color-accent); background: rgba(255,255,255,0.12); }
+.rw-btn i { color: var(--color-accent); }
+.rw-seitenanzeige { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-secondary); white-space: nowrap; }
+.rw-suchform { display: flex; flex: 1; min-width: 0; gap: 0.3rem; }
+.rw-suchfeld {
+    flex: 1; min-width: 0; padding: 0.4rem 0.6rem; font-family: var(--font-main); font-size: 0.85rem;
+    background: rgba(0,0,0,0.4); border: 1px solid var(--panel-border); border-radius: 8px; color: var(--text-primary); outline: none;
+}
+.rw-suchfeld:focus { border-color: var(--color-accent); }
+.rw-koerper { flex: 1; display: flex; min-height: 0; position: relative; }
+.rw-seiten {
+    /* Scrollleiste immer reservieren, sonst ändert sich die verfügbare Breite nach dem Aufbau */
+    flex: 1; overflow-x: auto; overflow-y: scroll; -webkit-overflow-scrolling: touch;
+    padding: 0.75rem 0.5rem calc(1.5rem + env(safe-area-inset-bottom, 0px));
+    /* flex-start + auto-Rand statt align-items:center: eine breitere (gezoomte) Seite
+       bleibt sonst links abgeschnitten und unerreichbar */
+    display: flex; flex-direction: column; align-items: flex-start; gap: 12px;
+    outline: none;
+}
+.rw-seite {
+    position: relative; flex-shrink: 0; margin: 0 auto;
+    background: #111a22; box-shadow: 0 2px 14px rgba(0,0,0,0.6); border-radius: 2px;
+}
+.rw-seite canvas { display: block; }
+.rw-treffer-schicht { position: absolute; inset: 0; pointer-events: none; }
+.rw-treffer {
+    position: absolute; border-radius: 3px;
+    background: rgba(255, 214, 10, 0.38); outline: 1px solid rgba(255, 214, 10, 0.7);
+    mix-blend-mode: screen;
+}
+.rw-panel {
+    width: min(340px, 85vw); flex-shrink: 0; overflow-y: auto;
+    background: rgba(8, 16, 22, 0.98); border-right: 1px solid var(--glass-border);
+    padding: 0.6rem 0.5rem 1.5rem;
+}
+.rw-panel[hidden] { display: none; }
+.rw-panel-titel { font-weight: 700; font-size: 0.85rem; padding: 0.2rem 0.4rem 0.6rem; color: var(--text-secondary); }
+.rw-toc, .rw-treffer-liste { list-style: none; margin: 0; padding: 0; }
+.rw-toc-eintrag, .rw-treffer-eintrag {
+    display: flex; width: 100%; text-align: left; gap: 0.5rem; justify-content: space-between;
+    font-family: var(--font-main); color: var(--text-secondary); background: none; border: 0;
+    border-radius: 6px; padding: 0.35rem 0.5rem; cursor: pointer; font-size: 0.82rem;
+}
+.rw-toc-eintrag:hover, .rw-treffer-eintrag:hover { background: rgba(255,255,255,0.08); color: var(--text-primary); }
+.rw-toc-e1 { font-weight: 700; color: var(--text-primary); margin-top: 0.4rem; }
+.rw-toc-e2 { padding-left: 1.1rem; }
+.rw-toc-aktiv { background: rgba(255,255,255,0.1); box-shadow: inset 3px 0 0 var(--color-accent); }
+.rw-toc-seite { font-family: var(--font-mono); font-size: 0.72rem; opacity: 0.6; flex-shrink: 0; }
+.rw-treffer-eintrag { flex-direction: column; gap: 0.15rem; border-bottom: 1px solid rgba(255,255,255,0.06); border-radius: 0; }
+.rw-treffer-kopf { font-weight: 700; color: var(--color-accent); font-size: 0.75rem; }
+.rw-treffer-text { line-height: 1.35; }
+.rw-treffer-text mark { background: rgba(255, 214, 10, 0.35); color: var(--text-primary); border-radius: 2px; }
+.rw-hinweis { padding: 0.6rem 0.5rem; font-size: 0.82rem; color: var(--text-secondary); }
+.rw-status {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    padding: 0.7rem 1.1rem; border-radius: 10px; background: rgba(0,0,0,0.85);
+    border: 1px solid var(--glass-border); font-size: 0.9rem; text-align: center; max-width: 80vw;
+}
+.rw-status:empty { display: none; }
+
+@media (max-width: 700px) {
+    .rw-btn-text { display: none; }
+    /* Panel überdeckt auf dem Handy die Seite, statt sie zu verschieben */
+    .rw-panel { position: absolute; left: 0; top: 0; bottom: 0; z-index: 2; width: min(380px, 92vw); box-shadow: 4px 0 20px rgba(0,0,0,0.6); }
+}
+
+/* Sprung-Knopf zum Regelwerk (Talentbaum) */
+.tb-rw-btn { opacity: 0.75; }
+.tb-rw-btn:hover { opacity: 1; }

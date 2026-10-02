@@ -38,7 +38,9 @@ const MOBILENAV_ZIELE = [
     { id: 'dice-panel', icon: 'fa-dice-d20', label: 'Würfel', immer: true },
     { id: 'teamwuerfel-section', icon: 'fa-users-viewfinder', label: 'Team-Würfel' },
     { id: 'gruppe-panel', icon: 'fa-people-group', label: 'Gruppe' },
-    { id: 'activity-log-panel', icon: 'fa-book', label: 'Logbuch', immer: true }
+    { id: 'activity-log-panel', icon: 'fa-book', label: 'Logbuch', immer: true },
+    // Kein Panel, sondern öffnet den Regelwerk-Viewer (regelwerk.js)
+    { id: 'regelwerk', icon: 'fa-book-open', label: 'Regelwerk', immer: true, aktion: 'regelwerkOeffnen' }
 ];
 
 let mobilenavBeobachtet = false;
@@ -61,8 +63,8 @@ function mobilenavRender() {
     if (typeof isGmMode !== 'undefined' && isGmMode) { nav.style.display = 'none'; return; }
 
     const eintraege = MOBILENAV_ZIELE
-        .map(z => ({ ziel: z, el: document.getElementById(z.id) }))
-        .filter(e => mobilenavSichtbar(e.el));
+        .map(z => ({ ziel: z, el: z.aktion ? nav : document.getElementById(z.id) }))
+        .filter(e => e.ziel.aktion || mobilenavSichtbar(e.el));
 
     if (eintraege.length < 2) { nav.style.display = 'none'; return; }
     nav.style.display = '';
@@ -81,7 +83,7 @@ function mobilenavRender() {
             <i class="fa-solid ${e.ziel.icon}"></i>
             <span>${e.ziel.label}</span>
         </button>`).join('');
-    mobilenavSichtfeldBeobachten(eintraege.map(e => e.el));
+    mobilenavSichtfeldBeobachten(eintraege.filter(e => !e.ziel.aktion).map(e => e.el));
 }
 
 // Hebt die Chips der Panels hervor, die gerade (zu mindestens 15 %, bei sehr
@@ -133,7 +135,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const nav = document.getElementById('mobile-nav');
     if (nav) nav.addEventListener('click', e => {
         const chip = e.target.closest('[data-mobilnavziel]');
-        if (chip) mobilenavSpringenZu(chip.dataset.mobilnavziel);
+        if (!chip) return;
+        const ziel = MOBILENAV_ZIELE.find(z => z.id === chip.dataset.mobilnavziel);
+        if (ziel && ziel.aktion && typeof window[ziel.aktion] === 'function') window[ziel.aktion]();
+        else mobilenavSpringenZu(chip.dataset.mobilnavziel);
     });
     mobilenavRender();
 });

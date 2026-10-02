@@ -641,6 +641,7 @@ function renderTalentbaum() {
                             <div class="tb-node-kopf">${tbArtBadge(s)}<span class="tb-node-name">${escapeHtml(s.name)}</span></div>
                             <div class="tb-node-fuss">
                                 <span class="tb-node-level">${level}/${max}${effektiv > level ? ' ⚡' : ''}</span>
+                                <button class="x-mini tb-rw-btn" data-tbrw="${escapeHtml(key)}" title="Im Regelwerk nachschlagen"><i class="fa-solid fa-book-open"></i></button>
                                 ${wuerfelbar ? `<button class="x-mini" data-tbroll="${escapeHtml(key)}" title="Schaden ${escapeHtml(stufe.schaden)} würfeln"><i class="fa-solid fa-dice"></i></button>` : ''}
                                 ${level > 0 ? `<button class="x-mini x-mini-danger tb-mini-minus" data-tbminus="${escapeHtml(key)}" title="Ein Level zurückgeben">−</button>` : ''}
                             </div>
@@ -673,6 +674,7 @@ function renderTalentbaum() {
                         <div class="tb-node-kopf"><span class="tb-node-name">${escapeHtml(e.name)}</span></div>
                         <div class="tb-node-fuss">
                             <span class="tb-node-level">${stufe}/${max}</span>
+                            <button class="x-mini tb-rw-btn" data-tbrweigenschaft="${escapeHtml(e.name)}" title="Im Regelwerk nachschlagen"><i class="fa-solid fa-book-open"></i></button>
                             ${stufe > 0 ? `<button class="x-mini x-mini-danger" data-tbeigenschaftminus="${escapeHtml(e.name)}" title="Zurückgeben">−</button>` : ''}
                         </div>
                     </div>`;
@@ -720,6 +722,7 @@ function renderTalentbaum() {
                     <div><strong>${escapeHtml(name)}</strong> <span class="tb-dim">Lvl ${level}${effektiv !== level ? ` (effektiv ${effektiv} ⚡)` : ''} · ${escapeHtml(ast)}${formInaktiv ? ` · ${escapeHtml(s.form)} nicht aktiv` : (verwaist ? ' · Ast nicht mehr gewählt' : '')}</span></div>
                     ${detail ? `<div class="tb-dim tb-gelernt-detail">${escapeHtml(detail)}</div>` : ''}
                 </div>
+                <button class="x-mini tb-rw-btn" data-tbrw="${escapeHtml(key)}" title="Im Regelwerk nachschlagen"><i class="fa-solid fa-book-open"></i></button>
                 ${s ? `<button class="x-mini tb-expand-btn" data-tbgelernttoggle="${escapeHtml(key)}" title="${aufgeklappt ? 'Details einklappen' : 'Alle Stufen anzeigen'}"><i class="fa-solid fa-chevron-${aufgeklappt ? 'up' : 'down'}"></i></button>` : ''}
                 ${stufe.schaden && typeof parseDiceFormula === 'function' && parseDiceFormula(String(stufe.schaden)) ? `<button class="x-mini" data-tbroll="${escapeHtml(key)}" title="Schaden würfeln"><i class="fa-solid fa-dice"></i></button>` : ''}
                 ${verwaist ? `<button class="x-mini x-mini-danger tb-mini-minus" data-tbminus="${escapeHtml(key)}" title="Level zurückgeben">−</button>` : ''}
@@ -770,6 +773,15 @@ function renderTalentbaum() {
     section.querySelectorAll('[data-tbeigenschaftminus]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); tbEigenschaftZurueckgeben(b.dataset.tbeigenschaftminus); }));
     section.querySelectorAll('[data-tbroll]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); tbSchadenWuerfeln(b.dataset.tbroll); }));
     section.querySelectorAll('[data-tbtoggle]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); tbVerbrauchtToggle(b.dataset.tbtoggle); }));
+    section.querySelectorAll('[data-tbrw]').forEach(b => b.addEventListener('click', e => {
+        e.stopPropagation();
+        const key = b.dataset.tbrw, i = key.indexOf('::');
+        if (typeof regelwerkOeffnenSkill === 'function') regelwerkOeffnenSkill(key.slice(0, i), key.slice(i + 2));
+    }));
+    section.querySelectorAll('[data-tbrweigenschaft]').forEach(b => b.addEventListener('click', e => {
+        e.stopPropagation();
+        if (typeof regelwerkOeffnenEigenschaft === 'function') regelwerkOeffnenEigenschaft(b.dataset.tbrweigenschaft);
+    }));
     section.querySelectorAll('[data-tbgelernttoggle]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); tbGelerntAufklappenToggle(b.dataset.tbgelernttoggle); }));
 }
 
