@@ -11,12 +11,14 @@ const WILLKOMMEN_STORAGE_KEY = 'eldaraWillkommenVersion';
 // anhängen (sonst wird die Liste mit der Zeit zu lang für eine Willkommens-
 // Nachricht).
 const WILLKOMMEN_NEUIGKEITEN = [
-    'Neu: <b>Söldner-Pool</b> - SL kann rekrutierbare Zweitcharaktere vorbereiten',
-    'Neues Feld <b>„Gehört zu"</b> am Charakterbogen für Söldner/Mietlinge',
-    'SL kann Module jetzt einzeln für sich und/oder die Spieler <b>ein-/ausblenden</b> (Übersicht-Knopf im Dashboard)',
-    'Spielernamen auf der Karte aktualisieren sich jetzt live bei Namensänderung',
-    'Spieler können das Kartenraster nur bei sich ausblenden',
-    'Diverse Lesbarkeits- und Inventar-Bugfixes (Beträge, Kampf-Panel, Gürtel-Waffenplatz)',
+    'Neu: <b>Beziehungsnetz</b> - SL-Mindmap für Beziehungen zwischen Helden und NSCs',
+    'Neu: <b>Erste-Schritte-Tour</b> für neue Spieler, plus Sprungleiste im SL-Dashboard',
+    'Rüstung aus Tischmitte/Kiste kommt jetzt korrekt als <b>Rüstungsteil</b> an, nicht mehr als nackter Gegenstand',
+    'Loot-Tabellen im Zufallsgenerator auf <b>Regelwerk 5.1</b> aktualisiert (Waffen, Herstellbares, Handelswaren)',
+    'Talentbaum-Korrekturen: „Verstärker der Leiden" (Rang 2), „Berserker" (jetzt Besondere Eigenschaft)',
+    'Schmiede-Roulette: Gold wird zurückerstattet, wenn der SL ein Ergebnis ablehnt',
+    'Gelernte Fähigkeiten einzeln ausklappbar, Item-Beschreibungen direkt sichtbar statt hinter "Details"',
+    'Diverse Lesbarkeits-Fixes (Aktuelle Werte, Kiste-Meldungen bei voller Kiste)',
 ];
 
 function willkommenPruefen() {

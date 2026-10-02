@@ -359,6 +359,20 @@ function tbSchadenWuerfeln(schluessel) {
 // Platzfresser auf der langen gestapelten Seite ist.
 let tbPanelOffen = window.innerWidth > 768;
 
+// Welche Einträge in "Gelernte Fähigkeiten" gerade ausgeklappt sind (voller
+// Infotext + alle Stufen statt nur der aktuellen) - Wunsch aus der Runde
+// (Discord, JohoSaft): die Stufen-Übersicht gab's bisher nur als Hover-
+// Tooltip (siehe tbStufenText), auf Handy/Tablet praktisch unauffindbar.
+// Rein lokaler UI-Zustand wie tbPanelOffen, nicht in appData - überlebt
+// Neuaufbauten per Schlüssel in diesem Set statt per DOM-Zustand.
+let tbGelerntAufgeklappt = new Set();
+
+function tbGelerntAufklappenToggle(schluessel) {
+    if (tbGelerntAufgeklappt.has(schluessel)) tbGelerntAufgeklappt.delete(schluessel);
+    else tbGelerntAufgeklappt.add(schluessel);
+    renderTalentbaum();
+}
+
 function tbStufenText(skill, regeln) {
     const zeilen = [skill.info || ''];
     (skill.stufen || []).forEach(st => {
@@ -540,14 +554,28 @@ function renderTalentbaum() {
             const verbraucht = !!h.verbraucht[key];
             const stufe = s ? ((s.stufen || [])[effektiv - 1] || {}) : {};
             const detail = [stufe.reichweite, stufe.schaden ? stufe.schaden + (stufe.schadenArt ? ' ' + stufe.schadenArt : '') : '', stufe.effekt].filter(Boolean).join(' · ');
+            const aufgeklappt = tbGelerntAufgeklappt.has(key);
+            // Volle Stufen-Übersicht (Info + jede Stufe einzeln) - bisher nur
+            // als Hover-Tooltip (title-Attribut oben) verfügbar, auf Handy/
+            // Tablet praktisch nie gesehen. Jetzt zusätzlich per Klick
+            // ausklappbar, siehe tbGelerntAufklappenToggle.
+            const vollHtml = (aufgeklappt && s) ? `<div class="tb-gelernt-voll">
+                    ${s.info ? `<p>${escapeHtml(s.info)}</p>` : ''}
+                    <ul>${(s.stufen || []).map(st => {
+                        const teile = [st.reichweite, st.schaden ? st.schaden + (st.schadenArt ? ' ' + st.schadenArt : '') : '', st.effekt].filter(Boolean).join(' · ');
+                        return `<li${st.level === effektiv ? ' class="tb-gelernt-voll-aktuell"' : ''}><strong>Lvl ${st.level}:</strong> ${escapeHtml(teile)}</li>`;
+                    }).join('')}</ul>
+                </div>` : '';
             return `<div class="tb-gelernt ${verbraucht ? 'tb-gelernt-verbraucht' : ''} ${verwaist ? 'tb-gelernt-verwaist' : ''}" title="${escapeHtml(s ? tbStufenText(s, regeln) : '')}">
                 <button class="tb-check" data-tbtoggle="${escapeHtml(key)}" title="${verbraucht ? 'Wieder verfügbar machen' : 'Als verbraucht markieren'}"><i class="fa-solid ${verbraucht ? 'fa-square-check' : 'fa-square'}"></i></button>
                 <div class="tb-gelernt-text">
                     <div><strong>${escapeHtml(name)}</strong> <span class="tb-dim">Lvl ${level}${effektiv !== level ? ` (effektiv ${effektiv} ⚡)` : ''} · ${escapeHtml(ast)}${verwaist ? ' · Ast nicht mehr gewählt' : ''}</span></div>
                     ${detail ? `<div class="tb-dim tb-gelernt-detail">${escapeHtml(detail)}</div>` : ''}
                 </div>
+                ${s ? `<button class="x-mini tb-expand-btn" data-tbgelernttoggle="${escapeHtml(key)}" title="${aufgeklappt ? 'Details einklappen' : 'Alle Stufen anzeigen'}"><i class="fa-solid fa-chevron-${aufgeklappt ? 'up' : 'down'}"></i></button>` : ''}
                 ${stufe.schaden && typeof parseDiceFormula === 'function' && parseDiceFormula(String(stufe.schaden)) ? `<button class="x-mini" data-tbroll="${escapeHtml(key)}" title="Schaden würfeln"><i class="fa-solid fa-dice"></i></button>` : ''}
                 ${verwaist ? `<button class="x-mini x-mini-danger tb-mini-minus" data-tbminus="${escapeHtml(key)}" title="Level zurückgeben">−</button>` : ''}
+                ${vollHtml}
             </div>`;
         }).join('');
     }
@@ -593,6 +621,7 @@ function renderTalentbaum() {
     section.querySelectorAll('[data-tbeigenschaftminus]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); tbEigenschaftZurueckgeben(b.dataset.tbeigenschaftminus); }));
     section.querySelectorAll('[data-tbroll]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); tbSchadenWuerfeln(b.dataset.tbroll); }));
     section.querySelectorAll('[data-tbtoggle]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); tbVerbrauchtToggle(b.dataset.tbtoggle); }));
+    section.querySelectorAll('[data-tbgelernttoggle]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); tbGelerntAufklappenToggle(b.dataset.tbgelernttoggle); }));
 }
 
 // --- SL-Dashboard -----------------------------------------------------------

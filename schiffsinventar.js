@@ -26,7 +26,7 @@
 // Nachrichten (multiplayer.js):
 //   SL -> Spieler   { type: 'schiff', klasse, items: [...] }        kompletter Stand
 //   Spieler -> SL   { type: 'schiffNehmen', itemId }
-//   SL -> Spieler   { type: 'schiffGeben', item }                    dir gehört's jetzt (auch als Rückgabe, wenn's Ablegen mangels Lager nicht klappt)
+//   SL -> Spieler   { type: 'schiffGeben', item, grund? }             dir gehört's jetzt; grund:'voll' = eigentlich eine Rückgabe (Ablegen mangels Lager nicht geklappt), nicht "genommen"
 //   SL -> Spieler   { type: 'schiffAbgelehnt', itemId, grund }        'weg' | 'keinPlatz'
 //   Spieler -> SL   { type: 'schiffAblegen', item }
 //
@@ -52,7 +52,7 @@
 // anders als der geteilte Pool oben ist eine Kiste kein gemeinsamer Besitz):
 //   SL -> ein Spieler   { type: 'kiste', items: [...], kapazitaet }   kompletter Stand SEINER Kiste
 //   Spieler -> SL       { type: 'kisteNehmen', itemId }
-//   SL -> ein Spieler   { type: 'kisteGeben', item }                  dir gehört's jetzt (auch als Rückgabe)
+//   SL -> ein Spieler   { type: 'kisteGeben', item, grund? }          dir gehört's jetzt; grund:'voll' = eigentlich eine Rückgabe (Ablegen mangels Platz nicht geklappt), nicht "genommen"
 //   SL -> ein Spieler   { type: 'kisteAbgelehnt', itemId, grund }      'weg' | 'keinPlatz'
 //   Spieler -> SL       { type: 'kisteAblegen', item }
 
@@ -282,8 +282,13 @@ function schiffAnfrageVerarbeiten(peerId, payload) {
         if (schiffLagerBelegt() + kosten > schiffLagerKapazitaet(schiffKlasse)) {
             // Kein Lager mehr frei - Spieler hat es lokal schon aus dem eigenen
             // Raster entfernt (siehe schiffAblegen), darum direkt zurückgeben
-            // statt nur abzulehnen.
-            if (conn && conn.open) { try { conn.send({ type: 'schiffGeben', item }); } catch (e) { /* weg */ } }
+            // statt nur abzulehnen. grund:'voll' lässt den Spieler-Client
+            // zwischen "hab ich wirklich vom Schiff genommen" und "ist nur
+            // zurückgeprallt" unterscheiden (siehe schiffGeschenkEmpfangen) -
+            // sonst sieht eine fehlgeschlagene Ablage genauso aus wie ein
+            // erfolgreiches Nehmen ("... genommen."), obwohl nichts im Lager
+            // gelandet ist. Bug-Report aus der Runde (JohoSaft).
+            if (conn && conn.open) { try { conn.send({ type: 'schiffGeben', item, grund: 'voll' }); } catch (e) { /* weg */ } }
             if (typeof addGmLogEntry === 'function') addGmLogEntry(name, `wollte ${schiffLabel(item)} aufs Schiff legen, aber das Lager ist voll - bleibt bei ${name}.`, '⚠️');
             return true;
         }
@@ -383,7 +388,10 @@ function kisteAnfrageVerarbeiten(peerId, payload) {
         if (liste.length >= kistenKapazitaet) {
             // Kein Platz mehr - Spieler hat es lokal schon aus dem eigenen
             // Raster entfernt (siehe kisteAblegen), darum direkt zurückgeben.
-            kisteSenden(peerId, { type: 'kisteGeben', item });
+            // grund:'voll' siehe schiffAnfrageVerarbeiten (gleicher Bug/Fix,
+            // sonst zeigt kisteGeschenkEmpfangen fälschlich "... genommen.",
+            // obwohl die Ablage in die eigene Kiste gerade fehlgeschlagen ist).
+            kisteSenden(peerId, { type: 'kisteGeben', item, grund: 'voll' });
             if (typeof addGmLogEntry === 'function') addGmLogEntry(name, `wollte ${schiffLabel(item)} in die eigene Kiste legen, aber die ist voll - bleibt bei ${name}.`, '⚠️');
             return true;
         }
@@ -538,7 +546,7 @@ function schiffNehmen(id) {
     renderSchiffSpieler();
 }
 
-function schiffGeschenkEmpfangen(item) {
+function schiffGeschenkEmpfangen(item, grund) {
     if (!item || typeof appData === 'undefined') return;
     delete schiffAnfragen[item.id];
     if (!appData.inventory) appData.inventory = [];
@@ -552,6 +560,18 @@ function schiffGeschenkEmpfangen(item) {
     };
     appData.inventory.push(neu);
     const platziert = typeof irAutoPlatzieren === 'function' ? irAutoPlatzieren(neu.id) : true;
+    // grund:'voll' = das war kein echtes "vom Schiff nehmen", sondern eine
+    // Ablage, die mangels Lagerplatz direkt zurückgeprallt ist (siehe
+    // schiffAnfrageVerarbeiten) - eigene, klare Meldung statt "genommen.",
+    // sonst sieht eine fehlgeschlagene Ablage aus wie ein normaler Erfolg.
+    if (grund === 'voll') {
+        if (typeof addActivityLog === 'function') addActivityLog(`Passte nicht aufs Schiff (Lager voll): ${schiffLabel(item)}`, 'activity-bad', '<i class="fa-solid fa-sailboat"></i>');
+        if (typeof saveData === 'function') saveData();
+        if (typeof renderAll === 'function') renderAll();
+        if (!platziert && typeof irKeinPlatzHinweis === 'function') { irKeinPlatzHinweis(neu.name); return; }
+        schiffHinweis(`Schiffslager ist voll - "${schiffLabel(item)}" bleibt bei dir.`, true);
+        return;
+    }
     if (typeof addActivityLog === 'function') addActivityLog(`Vom Schiff genommen: ${schiffLabel(item)}`, 'activity-good', '<i class="fa-solid fa-sailboat"></i>');
     if (typeof saveData === 'function') saveData();
     if (typeof renderAll === 'function') renderAll();
@@ -601,7 +621,7 @@ function kisteNehmen(id) {
     renderSchiffSpieler();
 }
 
-function kisteGeschenkEmpfangen(item) {
+function kisteGeschenkEmpfangen(item, grund) {
     if (!item || typeof appData === 'undefined') return;
     delete kistenAnfragen[item.id];
     if (!appData.inventory) appData.inventory = [];
@@ -615,6 +635,20 @@ function kisteGeschenkEmpfangen(item) {
     };
     appData.inventory.push(neu);
     const platziert = typeof irAutoPlatzieren === 'function' ? irAutoPlatzieren(neu.id) : true;
+    // grund:'voll' = fehlgeschlagene Ablage in die eigene Kiste (siehe
+    // kisteAnfrageVerarbeiten), kein echtes "aus der Kiste genommen" - sonst
+    // wirkt eine fehlgeschlagene Ablage wie ein normaler Erfolg. Bug-Report
+    // aus der Runde (JohoSaft): "man kann keine Gegenstände in die eigene
+    // Kiste ziehen, irgendwie klappt das nicht" - der Mechanismus funktioniert,
+    // aber bei voller Kiste sah die Rückgabe genauso aus wie ein Erfolg.
+    if (grund === 'voll') {
+        if (typeof addActivityLog === 'function') addActivityLog(`Passte nicht in die eigene Kiste (voll): ${schiffLabel(item)}`, 'activity-bad', '<i class="fa-solid fa-box-archive"></i>');
+        if (typeof saveData === 'function') saveData();
+        if (typeof renderAll === 'function') renderAll();
+        if (!platziert && typeof irKeinPlatzHinweis === 'function') { irKeinPlatzHinweis(neu.name); return; }
+        schiffHinweis(`Deine Kiste ist voll - "${schiffLabel(item)}" bleibt bei dir.`, true);
+        return;
+    }
     if (typeof addActivityLog === 'function') addActivityLog(`Aus der eigenen Kiste genommen: ${schiffLabel(item)}`, 'activity-good', '<i class="fa-solid fa-box-archive"></i>');
     if (typeof saveData === 'function') saveData();
     if (typeof renderAll === 'function') renderAll();
@@ -750,10 +784,10 @@ function renderSchiffSpieler() {
 function schiffNachrichtVerarbeiten(payload) {
     if (!payload || typeof payload !== 'object') return false;
     if (payload.type === 'schiff') { schiffEmpfangen(payload.klasse, payload.items); return true; }
-    if (payload.type === 'schiffGeben') { schiffGeschenkEmpfangen(payload.item); return true; }
+    if (payload.type === 'schiffGeben') { schiffGeschenkEmpfangen(payload.item, payload.grund); return true; }
     if (payload.type === 'schiffAbgelehnt') { schiffAbgelehnt(payload.itemId, payload.grund); return true; }
     if (payload.type === 'kiste') { kisteEmpfangen(payload.items, payload.kapazitaet); return true; }
-    if (payload.type === 'kisteGeben') { kisteGeschenkEmpfangen(payload.item); return true; }
+    if (payload.type === 'kisteGeben') { kisteGeschenkEmpfangen(payload.item, payload.grund); return true; }
     if (payload.type === 'kisteAbgelehnt') { kisteAbgelehnt(payload.itemId, payload.grund); return true; }
     return false;
 }

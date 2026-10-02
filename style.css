@@ -1377,7 +1377,6 @@ h2 {
 .ir-karte-ausruestung .ir-schaden-input { color: var(--color-accent); }
 .ir-karte-reihe .item-amount-wrapper { margin-right: auto; }
 .ir-karte .btn-delete-icon { font-size: 0.85rem; }
-.ir-desc-toggle { font-size: 0.75rem; padding: 0; align-self: flex-start; }
 /* Runenmagie/Schmiede-Roulette (runenmagie.js) - eigene Lila-Akzentfarbe.
    .btn-icon-small ist eigentlich für reine 20x20-Icon-Buttons gedacht - der
    "Verzaubern"-Knopf hat aber Text dabei, deshalb hier auf Auto-Breite und
@@ -2180,7 +2179,7 @@ body.gm-mode .gm-title { color: var(--color-accent); }
    sind hier potenziell viele Einträge, nicht jeder braucht eine Card-Optik. */
 .tb-gelernt-liste { margin-top: 0.5rem; display: flex; flex-direction: column; }
 .tb-gelernt {
-    display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.2rem;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; padding: 0.5rem 0.2rem;
     font-size: 0.85rem; border-bottom: 1px solid var(--glass-border);
 }
 .tb-gelernt:last-child { border-bottom: none; }
@@ -2189,6 +2188,14 @@ body.gm-mode .gm-title { color: var(--color-accent); }
 .tb-gelernt-verwaist { border-bottom-style: dashed; }
 .tb-gelernt-text { flex: 1; min-width: 0; }
 .tb-gelernt-detail { font-size: 0.75rem; }
+/* Volle Stufen-Übersicht pro gelerntem Skill, per Chevron ausklappbar (siehe
+   tbGelerntAufklappenToggle) - flex-basis:100% in der flex-wrap-Zeile oben
+   zwingt den Block auf eine eigene Zeile statt daneben zu quetschen. */
+.tb-gelernt-voll { flex-basis: 100%; margin: 0.3rem 0 0 1.9rem; padding: 0.5rem 0.7rem; background: rgba(255,255,255,0.04); border-radius: 6px; font-size: 0.78rem; color: var(--text-secondary); }
+.tb-gelernt-voll p { margin: 0 0 0.4rem 0; }
+.tb-gelernt-voll ul { margin: 0; padding-left: 1.1rem; list-style: disc; }
+.tb-gelernt-voll li { margin: 0.15rem 0; }
+.tb-gelernt-voll-aktuell { color: var(--text-primary); font-weight: 600; }
 .tb-dim { color: var(--text-secondary); font-size: 0.78rem; }
 .tb-check { background: none; border: none; color: var(--color-accent); font-size: 1.1rem; cursor: pointer; padding: 0; flex-shrink: 0; }
 .tb-tabellen { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.8rem; }
@@ -2763,3 +2770,17 @@ body.gm-mode .gm-title { color: var(--color-accent); }
 #aktuelle-werte-container.status-tags { gap: 0.7rem; margin-top: 1.1rem; }
 .av-badge { font-size: 1rem; padding: 0.4rem 0.9rem; gap: 0.3rem; }
 .av-wert-input { font-size: 1rem !important; }
+
+/* --- Rasterinventar: Beschreibung direkt sichtbar (inventarraster.js) ------ */
+.ir-desc-wrap { margin-top: 0.5rem; }
+.ir-desc-input {
+    width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.2);
+    border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 0.4rem 0.5rem;
+    color: var(--text-primary); font-family: inherit; font-size: 0.85rem; resize: vertical; outline: none; min-height: 2.2rem;
+}
+.ir-desc-geklemmt { height: 1.8rem; min-height: 0; overflow: hidden; resize: none; }
+.ir-desc-mehr {
+    background: none; border: none; color: var(--text-secondary); cursor: pointer;
+    font-size: 0.75rem; padding: 0.2rem 0.1rem; text-decoration: underline;
+}
+.ir-desc-mehr:hover { color: var(--text-primary); }

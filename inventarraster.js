@@ -867,6 +867,23 @@ function irRunenZeileHtml(item) {
     return '';
 }
 
+// Beschreibung direkt sichtbar statt hinter einem "Details"-Klick versteckt -
+// Wunsch aus der Runde (Discord, JohoSaft): die Menge sei für die meisten
+// Gegenstände uninteressant, lieber den Platz für die Beschreibung nutzen.
+// Nur bei LANGEM Text (mehr als ~60 Zeichen oder mit Zeilenumbruch) wird auf
+// eine Zeile geklemmt, mit einem kleinen "mehr anzeigen"-Reiter zum
+// Ausklappen (item.showDesc, wiederverwendet aus der alten Toggle-Lösung) -
+// kurze Beschreibungen brauchen gar keinen Reiter, stehen immer voll da.
+function irBeschreibungHtml(item) {
+    const text = item.description || '';
+    const lang = text.length > 60 || text.includes('\n');
+    const geklemmt = lang && !item.showDesc;
+    return `<div class="ir-desc-wrap">
+        <textarea class="ir-desc-input ${geklemmt ? 'ir-desc-geklemmt' : ''}" placeholder="Beschreibung / Effekte..." data-irdesc="${escapeHtml(item.id)}">${escapeHtml(text)}</textarea>
+        ${lang ? `<button class="ir-desc-mehr" data-irdesctoggle="${escapeHtml(item.id)}">${item.showDesc ? 'weniger anzeigen' : 'mehr anzeigen'}</button>` : ''}
+    </div>`;
+}
+
 function irSlotHtml(slot, item, breite) {
     if (!item) {
         return `<div class="ir-slot ir-slot-leer" data-irslot="${slot}"><i class="fa-solid fa-plus ir-slot-leer-icon"></i></div>`;
@@ -913,8 +930,7 @@ function irSlotHtml(slot, item, breite) {
                 </select>
                 <button class="btn-delete-icon" data-irdel="${escapeHtml(item.id)}"><i class="fa-solid fa-trash"></i></button>
             </div>
-            <button class="item-desc-toggle ir-desc-toggle" data-irdesctoggle="${escapeHtml(item.id)}"><i class="fa-solid fa-chevron-${item.showDesc ? 'up' : 'down'}"></i> Details</button>
-            <textarea class="item-description ${item.showDesc ? 'show' : ''}" placeholder="Beschreibung / Effekte..." data-irdesc="${escapeHtml(item.id)}">${escapeHtml(item.description || '')}</textarea>
+            ${irBeschreibungHtml(item)}
         </div>
     </div>`;
 }
