@@ -93,9 +93,13 @@ function tbDaten(daten) {
 // Divinius Chimäre (RW 5.1 Anhang S.82ff): Der Grundbaum hat pro Rang einen
 // Platzhalter, der durch den Skill der gewählten Form (gleicher Rang) ersetzt
 // wird. regeln.formen = { Ast: [Formnamen] }, die Formskills liegen mit
-// Feld "form" im selben Ast. Skillpunkte/Rangfreischaltung zählen ALLE Skills
-// des Asts (auch die einer früher gewählten Form) - nur Lernen und Anzeige
-// beschränken sich auf die aktuelle Form.
+// Feld "form" im selben Ast. Der Platzhalter ist ein Slot pro Rang: sein
+// Level gilt für ALLE Formen dieses Rangs (SL-Regel, Discord JohoSaft:
+// Feuer Rang 1 gelernt = Wasser Rang 1 gelernt). Gespeichert wird es unter dem
+// Schlüssel des Form-Skills der aktuellen Form; beim Formwechsel zieht das
+// Level auf den Skill der neuen Form um (tbFormSkillsUebertragen). So bleiben
+// Schlüssel nach Skill-Name (Kreuz-Level, Liste, Dashboard) und die
+// Punkteberechnung unverändert - pro Rang trägt immer nur ein Skill Level.
 function tbAstFormen(ast, regeln) {
     return (regeln.formen && regeln.formen[ast]) || null;
 }
@@ -107,10 +111,55 @@ function tbSichtbareSkills(ast, h, regeln) {
     return alle.filter(s => !s.form || s.form === h.chimaerenForm);
 }
 
+function tbFormSkill(ast, form, rang, regeln) {
+    return regeln.skills.find(s => s.ast === ast && s.form === form && s.rang === rang) || null;
+}
+
+// Level (und "verbraucht"-Haken) der Form-Slots von einer Form auf die andere
+// übertragen - siehe Kommentar oben.
+function tbFormSkillsUebertragen(h, regeln, von, nach) {
+    Object.keys(regeln.formen || {}).forEach(ast => {
+        regeln.skills.filter(s => s.ast === ast && s.form === von).forEach(alt => {
+            const neu = tbFormSkill(ast, nach, alt.rang, regeln);
+            const kAlt = tbSchluessel(alt);
+            const level = parseInt(h.gelernt[kAlt]) || 0;
+            if (!neu || !level) return;
+            h.gelernt[tbSchluessel(neu)] = Math.max(level, parseInt(h.gelernt[tbSchluessel(neu)]) || 0);
+            delete h.gelernt[kAlt];
+            delete h.verbraucht[kAlt];
+        });
+    });
+}
+
+// Alte Stände (Version 0.8.4) können Level in mehreren Formen desselben Rangs
+// haben. Zusammenführen auf die gewählte Form (höchstes Level je Rang); ohne
+// gewählte Form gilt die Form des ersten gefundenen Skills.
+function tbFormenNormalisieren(h, regeln) {
+    let geaendert = false;
+    Object.keys(regeln.formen || {}).forEach(ast => {
+        const gelernteFormSkills = regeln.skills.filter(s => s.ast === ast && s.form && (parseInt(h.gelernt[tbSchluessel(s)]) || 0) > 0);
+        if (!gelernteFormSkills.length) return;
+        if (!h.chimaerenForm) { h.chimaerenForm = gelernteFormSkills[0].form; geaendert = true; }
+        gelernteFormSkills.filter(s => s.form !== h.chimaerenForm).forEach(alt => {
+            const neu = tbFormSkill(ast, h.chimaerenForm, alt.rang, regeln);
+            const kAlt = tbSchluessel(alt);
+            if (neu) h.gelernt[tbSchluessel(neu)] = Math.max(parseInt(h.gelernt[kAlt]) || 0, parseInt(h.gelernt[tbSchluessel(neu)]) || 0);
+            delete h.gelernt[kAlt];
+            delete h.verbraucht[kAlt];
+            geaendert = true;
+        });
+    });
+    if (geaendert && typeof saveData === 'function') saveData();
+}
+
 function tbChimaerenFormWaehlen(wert) {
     const h = tbDaten();
-    h.chimaerenForm = wert || null;
-    if (typeof addActivityLog === 'function' && wert) {
+    const regeln = talentbaumRegeln();
+    // Zurück auf "keine Form" würde die Level verstecken - ignorieren
+    if (!wert) { tbNachAenderung(); return; }
+    if (h.chimaerenForm && h.chimaerenForm !== wert && regeln) tbFormSkillsUebertragen(h, regeln, h.chimaerenForm, wert);
+    h.chimaerenForm = wert;
+    if (typeof addActivityLog === 'function') {
         addActivityLog(`Chimären-Form gewechselt: ${wert}.`, 'activity-neutral', '<i class="fa-solid fa-dragon"></i>');
     }
     tbNachAenderung();
@@ -509,6 +558,7 @@ function renderTalentbaum() {
     const h = tbDaten();
     h.paket = paket.id;
     tbStandPruefen(h, regeln);
+    tbFormenNormalisieren(h, regeln);
     // kostenStaffel/skillpunktSchwellen liegen unter paket.punkte, nicht im
     // talentbaum-Block selbst - hier einmal kurzschließen, damit die
     // Ast-Ökonomie-Funktionen nicht jedes Mal durchs Paket wandern müssen.
@@ -563,7 +613,7 @@ function renderTalentbaum() {
             const astEco = tbAstOekonomie(ast, h, regeln, appData);
             const skills = tbSichtbareSkills(ast, h, regeln);
             const formen = tbAstFormen(ast, regeln);
-            const formSelect = formen ? `<select class="x-select tb-select tb-select-form" onchange="tbChimaerenFormWaehlen(this.value)" title="Die Form ersetzt in jedem Rang den Platzhalter durch einen Skill">${[`<option value="">– Form wählen –</option>`].concat(formen.map(f => `<option value="${escapeHtml(f)}" ${f === h.chimaerenForm ? 'selected' : ''}>${escapeHtml(f)}</option>`)).join('')}</select>` : '';
+            const formSelect = formen ? `<select class="x-select tb-select tb-select-form" onchange="tbChimaerenFormWaehlen(this.value)" title="Die Form ersetzt in jedem Rang den Platzhalter durch einen Skill. Das Level eines Rangs gilt für alle Formen und zieht beim Wechsel mit.">${[`<option value="" ${h.chimaerenForm ? 'disabled' : ''}>– Form wählen –</option>`].concat(formen.map(f => `<option value="${escapeHtml(f)}" ${f === h.chimaerenForm ? 'selected' : ''}>${escapeHtml(f)}</option>`)).join('')}</select>` : '';
             const istWesen = ast === h.wesen;
             const kopfBadges = `<div class="tb-ast-stand" title="Skillpunkte gelten nur für diesen Ast">
                 Rang ${astEco.rang || 0} <span class="tb-dim">·</span> SP <span class="${astEco.spFrei < 0 ? 'tb-ueber' : ''}">${astEco.spFrei}/${astEco.skillpunkte}</span>
