@@ -141,6 +141,8 @@ function tourPruefenUndAutostarten() {
     let gesehen = null;
     try { gesehen = localStorage.getItem(TOUR_STORAGE_KEY); } catch (e) { /* Privates Fenster o.ä. */ }
     if (gesehen) return;
+    // Einladungslink: siehe willkommenPruefen - Beitreten-Fenster hat Vorrang.
+    if (typeof MULTIPLAYER_EINLADUNG !== 'undefined' && MULTIPLAYER_EINLADUNG) return;
     // Erst nach der Willkommens-Nachricht starten (siehe willkommen.js) - nie
     // zwei Overlays gleichzeitig. Kurze Verzögerung, bis die erste Render-
     // Runde (renderAll) durch ist, damit Talentbaum/Inventar schon im DOM stehen.

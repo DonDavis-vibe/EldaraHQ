@@ -691,7 +691,7 @@
             
             <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
                 <strong style="color: #ed4245;">👑 Als Spielleiter (Host)</strong>
-                <p style="font-size: 0.9rem; margin-top: 0.5rem; margin-bottom: 0.5rem;">Erstellt einen Raum und öffnet das GM Dashboard. Teile den Code mit deinen Spielern.</p>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem; margin-bottom: 0.5rem;">Erstellt einen Raum und öffnet das GM Dashboard. Teile den Code oder per „Link kopieren“ einen Direktlink mit deinen Spielern.</p>
                 <button class="tool-btn" onclick="hostMultiplayerSession()" style="width: 100%; justify-content: center; background: #ed4245; border: none;"><i class="fa-solid fa-tower-broadcast"></i> Session hosten</button>
             </div>
 
@@ -740,6 +740,7 @@
                     <span class="gm-group-label">Raum-Code</span>
                     <strong id="gm-room-code">----</strong>
                     <span id="gm-room-status"></span>
+                    <button class="gm-btn" onclick="multiplayerLinkKopieren(this)" title="Link kopieren, über den Spieler direkt in diesen Raum kommen - ohne den Code einzutippen"><i class="fa-solid fa-link"></i> Link kopieren</button>
                 </div>
                 <!-- Gruppe: Notizen & Speicherstand -->
                 <div class="gm-group">

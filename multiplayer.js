@@ -57,6 +57,57 @@ function loadMultiplayerSession() {
     try { return JSON.parse(sessionStorage.getItem(MULTIPLAYER_SESSION_KEY) || 'null'); } catch (e) { return null; }
 }
 
+// --- Einladungslink: ?raum=X7B9 ----------------------------------------------
+// Der SL teilt per "Link kopieren" im Dashboard einen Link mit seinem Raum-Code.
+// Beim Öffnen wird der Code einmalig aus der Adresse gelesen (und aus ihr
+// entfernt, damit ein Reload nicht erneut das Fenster aufpoppen lässt) und im
+// Beitreten-Fenster vorausgefüllt. Bewusst KEIN automatisches Beitreten: der
+// Spieler soll vorher seinen Charakter laden können, sonst sieht der SL erst
+// einen leeren Standardbogen.
+const MULTIPLAYER_EINLADUNG = (() => {
+    try {
+        const url = new URL(location.href);
+        const code = (url.searchParams.get('raum') || '').trim().toUpperCase();
+        if (!/^[A-Z0-9]{4}$/.test(code)) return null;
+        url.searchParams.delete('raum');
+        history.replaceState(null, '', url.pathname + url.search + url.hash);
+        return code;
+    } catch (e) { return null; }
+})();
+
+function multiplayerEinladungsLink() {
+    const code = (document.getElementById('gm-room-code') || {}).innerText || '';
+    if (!/^[A-Z0-9]{4}$/.test(code)) return '';
+    return `${location.origin}${location.pathname}?raum=${code}`;
+}
+
+function multiplayerLinkKopieren(btn) {
+    const link = multiplayerEinladungsLink();
+    if (!link) return;
+    const fertig = () => {
+        if (!btn) return;
+        const alt = btn.innerHTML;
+        btn.innerHTML = '<i class="fa-solid fa-check"></i> Kopiert';
+        setTimeout(() => { btn.innerHTML = alt; }, 1500);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(link).then(fertig, () => window.prompt('Einladungslink kopieren:', link));
+    } else {
+        window.prompt('Einladungslink kopieren:', link);
+    }
+}
+
+function multiplayerEinladungAnzeigen() {
+    if (!MULTIPLAYER_EINLADUNG) return;
+    setTimeout(() => {
+        openMultiplayerModal();
+        const feld = document.getElementById('multiplayer-join-code');
+        if (feld) feld.value = MULTIPLAYER_EINLADUNG;
+        // Nach dem PeerJS-Laden, sonst überschreibt dessen Callback (leert den Status) die Meldung
+        ensurePeerJsLoaded(() => updateMultiplayerStatus(`Einladung zu Raum <b>${MULTIPLAYER_EINLADUNG}</b> - lade ggf. erst deinen Charakter, dann „Beitreten“.`, '#57F287'));
+    }, 700);
+}
+
 let multiplayerAutoRestoreAttempted = false;
 
 function tryRestoreMultiplayerSession() {
@@ -65,6 +116,9 @@ function tryRestoreMultiplayerSession() {
 
     const stored = loadMultiplayerSession();
     if (!stored || !stored.roomCode) return;
+    // Einladungslink hat Vorrang vor einer alten Spieler-Sitzung (der SL-Fall
+    // bleibt: ein offener Host-Raum wird immer wiederhergestellt).
+    if (MULTIPLAYER_EINLADUNG && stored.role !== 'gm') return;
 
     if (stored.role === 'gm') {
         updateMultiplayerStatus("Stelle vorherige Sitzung wieder her...", "#fbbf24");
@@ -76,6 +130,7 @@ function tryRestoreMultiplayerSession() {
 }
 
 document.addEventListener('DOMContentLoaded', tryRestoreMultiplayerSession);
+document.addEventListener('DOMContentLoaded', multiplayerEinladungAnzeigen);
 
 function openMultiplayerModal() {
     if (!peerJsLoaded) {
