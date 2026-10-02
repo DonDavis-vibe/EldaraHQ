@@ -11,8 +11,8 @@ const WILLKOMMEN_STORAGE_KEY = 'eldaraWillkommenVersion';
 // anhängen (sonst wird die Liste mit der Zeit zu lang für eine Willkommens-
 // Nachricht).
 const WILLKOMMEN_NEUIGKEITEN = [
+    'Neu: <b>Anflüstern</b> - der Spielleiter kann dir private Nachrichten schicken, die nur du siehst (Hinweiskarte oben, später nachlesbar unter „Flüsterpost“)',
     'Neu: <b>Regelwerk zum Nachschlagen</b> - Basis-Regelwerk und Anhang direkt in der App, mit Inhaltsverzeichnis und Suche; im Talentbaum springt das Buch-Symbol zur passenden Seite',
-    'Neu: <b>Einladungslink</b> - der Spielleiter kopiert im Dashboard einen Link, über den ihr ohne Code-Eintippen direkt zum Beitreten kommt',
     'Neu: <b>Schnellnavigation</b> unten für alle - springt direkt zu Inventar, Talenten, Logbuch & Co., Bereiche im Bild sind markiert',
     'Neu: <b>Divinius Chimäre</b> nach Regelwerk 5.1 - Form wählen, der Form-Skill ersetzt in jedem Rang den Platzhalter, das Level gilt für alle Formen (Freigabe über den Spielleiter)',
     '<b>Talentbaum und Besondere Eigenschaften auf Regelwerk 5.1 aktualisiert</b> - viele Skills sind neu, umbenannt oder in anderen Bäumen (z.B. Wilde Wut statt Berserker-Skill, „Agilität" heißt jetzt „Athletik")',

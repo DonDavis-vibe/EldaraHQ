@@ -318,6 +318,7 @@ function hostMultiplayerSession(preferredCodeArg) {
             if (typeof karteSpielerEntfernen === 'function') karteSpielerEntfernen(conn.peer);
             if (typeof gruppeThumbVergessen === 'function') gruppeThumbVergessen(conn.peer);
             if (typeof eingriffAktualisieren === 'function') eingriffAktualisieren(conn.peer);
+            if (typeof fluesternAktualisieren === 'function') fluesternAktualisieren();
             if (typeof gruppeVerteilen === 'function') gruppeVerteilen();
             addGmLogSystemMessage(`Spieler hat den Raum verlassen.`);
         });
@@ -478,6 +479,8 @@ function handleIncomingData(peerId, payload) {
     if (typeof runenAnfrageVerarbeiten === 'function' && runenAnfrageVerarbeiten(peerId, payload)) return;
     // Söldner-Pool (soeldner.js): Spieler will einen vorbereiteten Söldner rekrutieren
     if (typeof soeldnerAnfrageVerarbeiten === 'function' && soeldnerAnfrageVerarbeiten(peerId, payload)) return;
+    // Anflüstern (fluestern.js): Spieler bestätigt, die Nachricht gelesen zu haben
+    if (typeof fluesternAnfrageVerarbeiten === 'function' && fluesternAnfrageVerarbeiten(peerId, payload)) return;
     if (payload.type === 'state') {
         const neuerSpieler = !connectedPlayersData[peerId];
         connectedPlayersData[peerId] = payload.data;
@@ -495,6 +498,7 @@ function handleIncomingData(peerId, payload) {
         if (neuerSpieler && typeof renderKampfGm === 'function') renderKampfGm();
         if (typeof gruppeVerteilen === 'function') gruppeVerteilen();
         if (typeof eingriffAktualisieren === 'function') eingriffAktualisieren(peerId);
+        if (neuerSpieler && typeof fluesternAktualisieren === 'function') fluesternAktualisieren();
     } else if (payload.type === 'log') {
         const charName = connectedPlayersData[peerId] ? [connectedPlayersData[peerId].vorname, connectedPlayersData[peerId].name].filter(Boolean).join(' ') : 'Unbekannt';
         addGmLogEntry(charName, payload.message, payload.emoji);
@@ -762,6 +766,7 @@ function renderGmDashboard() {
                 <span style="font-size: 0.7rem; opacity: 0.5; margin-right: 0.2rem;"><i class="fa-solid fa-palette"></i></span>
                 ${colorDotsHtml}
                 <button class="gm-btn gm-eingriff-btn" data-eingriff="${escapeHtml(peerId)}" title="Gegenstand geben oder Status setzen - auf Wunsch verdeckt"><i class="fa-solid fa-hand-sparkles"></i> Eingriff</button>
+                <button class="gm-btn" data-fluestern="${escapeHtml(peerId)}" title="Diesem Spieler eine private Nachricht zuflüstern - die anderen sehen nichts"><i class="fa-solid fa-comment-dots"></i> Anflüstern</button>
             </div>
             
             ${statusHtml ? `<div style="display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.3rem;">${statusHtml}</div>` : ''}
@@ -821,6 +826,8 @@ function renderGmDashboard() {
             sicherSpeichern('gmNotes_' + e.target.dataset.charname, e.target.value);
         });
         
+        const fluesternBtn = card.querySelector('[data-fluestern]');
+        if (fluesternBtn && typeof fluesternOeffnen === 'function') fluesternBtn.addEventListener('click', () => fluesternOeffnen(fluesternBtn.dataset.fluestern));
         const eingriffBtn = card.querySelector('[data-eingriff]');
         if (eingriffBtn && typeof openEingriff === 'function') eingriffBtn.addEventListener('click', () => openEingriff(eingriffBtn.dataset.eingriff));
 
@@ -1097,6 +1104,8 @@ function joinMultiplayerSession(codeArg) {
                 if (typeof stopAllAudio === 'function') stopAllAudio();
             } else if (payload && payload.type === 'fadeOutSound') {
                 if (typeof fadeOutAllAudio === 'function') fadeOutAllAudio();
+            } else if (payload && typeof fluesternNachrichtVerarbeiten === 'function' && fluesternNachrichtVerarbeiten(payload)) {
+                // erledigt in fluestern.js (privat - landet bewusst nicht im Logbuch)
             } else if (payload && typeof tischmitteNachrichtVerarbeiten === 'function' && tischmitteNachrichtVerarbeiten(payload)) {
                 // erledigt in tischmitte.js
             } else if (payload && typeof gruppeNachrichtVerarbeiten === 'function' && gruppeNachrichtVerarbeiten(payload)) {
