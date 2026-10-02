@@ -132,6 +132,21 @@ BAUM_TALENT = {
 # Bei jeder inhaltlichen Neu-Extraktion (z.B. neue Regelwerk-Version) erhöhen.
 TALENTBAUM_STAND = '5.1-2026-10-02'
 
+# Divinius Chimäre (RW 5.1 Anhang S.82-87, SL-Hinweis Discord 2026-10-02): der
+# Grundbaum hat pro Rang EINE Fähigkeit weniger (4/3/2/1 statt 5/4/3/2), die
+# fehlende ist ein Platzhalter, der je nach gewählter Form durch den Skill der
+# Form (Rang-gleich) ersetzt wird, z.B. Feuerball bei der Feuer Chimäre. Im
+# Anhang stehen die neun Formen als eigene Äste mit je einem Skill pro Rang -
+# hier werden deren Skills in den Grundbaum gelegt (Feld "form"), damit
+# Skillpunkte weiter in EINEM Ast zählen. talentbaum.js zeigt je Charakter
+# nur die Skills der gewählten Form (h.chimaerenForm).
+CHIMAEREN_FORMEN = {
+    'Divinius Chimäre': [
+        'Arkane Chimäre', 'Elektro Chimäre', 'Feuer Chimäre', 'Frost Chimäre', 'Gift Chimäre',
+        'Heilige Chimäre', 'Skelett Chimäre', 'Wald Chimäre', 'Wasser Chimäre',
+    ],
+}
+
 TALENTBAUM_REGELN = {
     'talentbaumStand': TALENTBAUM_STAND,
     'anzahlHauptbaeume': 3,
@@ -426,6 +441,15 @@ def konvertiere():
             eintrag['morphForm'] = s['morph_form']
         skills.append(eintrag)
 
+    # Chimären-Formen in den Grundbaum legen (siehe CHIMAEREN_FORMEN)
+    for grund, formen in CHIMAEREN_FORMEN.items():
+        formskills = [dict(sk, ast=grund, form=sk['ast']) for sk in skills if sk['ast'] in formen]
+        namen_grund = {sk['name'] for sk in skills if sk['ast'] == grund}
+        for fs in formskills:
+            if fs['name'] in namen_grund:
+                print(f"WARNUNG: Formskill {fs['name']!r} ({fs['form']}) heißt wie ein Grundbaum-Skill", file=sys.stderr)
+        skills = [sk for sk in skills if sk['ast'] not in formen] + formskills
+
     aeste = sorted({s['ast'] for s in skills})
     wesen = list(ch.get('wesen_effekte', {}).keys())
     fehlende_haupt = [h for h in HAUPTBAEUME if h not in aeste]
@@ -498,6 +522,7 @@ def konvertiere():
             'wesen': wesen,
             'weitereAeste': weitere,
             'skills': skills,
+            'formen': CHIMAEREN_FORMEN,
             'eigenschaften': EIGENSCHAFTEN,
         },
         'wesenEffekte': wesen_effekte,

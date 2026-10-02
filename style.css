@@ -2164,6 +2164,9 @@ body.gm-mode .gm-title { color: var(--color-accent); }
 .tb-node-max .tb-node-level { color: var(--color-accent); }
 .tb-node-gesperrt { opacity: 0.35; cursor: not-allowed; }
 .tb-node-gesperrt:hover { border-color: var(--glass-border); background: rgba(0,0,0,0.25); }
+.tb-node-platzhalter { border-style: dashed; }
+.tb-node-form { border-color: var(--color-accent); }
+.tb-select-form { width: 100%; margin: 0.3rem 0; }
 .tb-node-kopf { display: flex; align-items: flex-start; gap: 0.25rem; }
 .tb-node-name { font-size: 0.7rem; font-weight: 600; line-height: 1.15; overflow-wrap: anywhere; hyphens: auto; }
 .tb-art { font-size: 0.6rem; color: var(--text-secondary); flex-shrink: 0; margin-top: 1px; }

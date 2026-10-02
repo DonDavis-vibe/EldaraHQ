@@ -315,7 +315,6 @@ hausregelPaketRegistrieren({
   ],
   "weitereAeste": [
    "Abgrund Jäger",
-   "Arkane Chimäre",
    "Blutmagier",
    "Brandstifter der See",
    "Divinius Chimäre",
@@ -325,15 +324,10 @@ hausregelPaketRegistrieren({
    "Echsenmensch",
    "Eismeister der See",
    "Elben",
-   "Elektro Chimäre",
    "Engel",
-   "Feuer Chimäre",
-   "Frost Chimäre",
    "Geist",
-   "Gift Chimäre",
    "Gott/ Halbgott",
    "Guhl",
-   "Heilige Chimäre",
    "Hexe / Hexer",
    "Naga",
    "OrcaLord",
@@ -342,15 +336,12 @@ hausregelPaketRegistrieren({
    "Schattenskelett",
    "Seelenrufer",
    "Sirene",
-   "Skelett Chimäre",
    "Spinnenmensch",
    "Steintroll",
    "Sturmrufer",
    "Tiermensch",
    "Traumaturge",
    "Vampir",
-   "Wald Chimäre",
-   "Wasser Chimäre",
    "Wertitan",
    "Werwolf",
    "Zombie",
@@ -12840,1104 +12831,6 @@ hausregelPaketRegistrieren({
     ]
    },
    {
-    "name": "Magischer Schild",
-    "ast": "Arkane Chimäre",
-    "art": "extra",
-    "schadenTyp": "keiner",
-    "rang": 1,
-    "info": "Für 1/2/3 Runden 3/5/10 Rüstung.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "SE",
-      "schaden": "+3 RÜ",
-      "effekt": "Für 1 Runden 3 Rüstung."
-     },
-     {
-      "level": 2,
-      "reichweite": "SE",
-      "schaden": "+5 RÜ",
-      "effekt": "Für 2 Runden 5 Rüstung."
-     },
-     {
-      "level": 3,
-      "reichweite": "SE",
-      "schaden": "+10 RÜ",
-      "effekt": "Für 3 Runden 10 Rüstung."
-     }
-    ]
-   },
-   {
-    "name": "Arkanes Schwert",
-    "ast": "Arkane Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "magisch",
-    "rang": 2,
-    "info": "1/2/3× pro Kampf kannst du einen Arkanes Schwert zaubern, das bis zu 2 Gegner in einer 3/4/5m langen, geraden Linie trifft. Nach Anwendung des Skills 2/2/1 Runde Cooldown.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "5m",
-      "schaden": "3w10",
-      "schadenArt": "magisch",
-      "effekt": "1× pro Kampf kannst du einen Arkanes Schwert zaubern, das bis zu 2 Gegner in einer 3m langen, geraden Linie trifft. Nach Anwendung des Skills 2 Runde Cooldown."
-     },
-     {
-      "level": 2,
-      "reichweite": "10m",
-      "schaden": "4w10",
-      "schadenArt": "magisch",
-      "effekt": "2× pro Kampf kannst du einen Arkanes Schwert zaubern, das bis zu 2 Gegner in einer 4m langen, geraden Linie trifft. Nach Anwendung des Skills 2 Runde Cooldown."
-     },
-     {
-      "level": 3,
-      "reichweite": "15m",
-      "schaden": "5w10",
-      "schadenArt": "magisch",
-      "effekt": "3× pro Kampf kannst du einen Arkanes Schwert zaubern, das bis zu 2 Gegner in einer 5m langen, geraden Linie trifft. Nach Anwendung des Skills 1 Runde Cooldown."
-     }
-    ]
-   },
-   {
-    "name": "Arkane Geschosse",
-    "ast": "Arkane Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "keiner",
-    "rang": 3,
-    "info": "1/1/2× pro Kampf kannst du Arkane Geschosse zaubern und alle Kugeln auf ein Ziel in Reichweite schießen, oder die Kugeln bis zu 3/4/5 Runden hinter dir schweben lassen und pro Aktion A/B/Extra 1/2/3 Kugeln abfeuern. Nach Anwendung des Skills 2 Runde Cooldown.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "5m",
-      "schaden": "3w10 x 3",
-      "effekt": "1× pro Kampf kannst du Arkane Geschosse zaubern und alle Kugeln auf ein Ziel in Reichweite schießen, oder die Kugeln bis zu 3 Runden hinter dir schweben lassen und pro Aktion A/B/Extra 1 Kugeln abfeuern. Nach Anwendung des Skills 2 Runde Cooldown."
-     },
-     {
-      "level": 2,
-      "reichweite": "10m",
-      "schaden": "4w10 x 4",
-      "effekt": "1× pro Kampf kannst du Arkane Geschosse zaubern und alle Kugeln auf ein Ziel in Reichweite schießen, oder die Kugeln bis zu 4 Runden hinter dir schweben lassen und pro Aktion A/B/Extra 2 Kugeln abfeuern. Nach Anwendung des Skills 2 Runde Cooldown."
-     },
-     {
-      "level": 3,
-      "reichweite": "15m",
-      "schaden": "5w10 x 5",
-      "effekt": "2× pro Kampf kannst du Arkane Geschosse zaubern und alle Kugeln auf ein Ziel in Reichweite schießen, oder die Kugeln bis zu 5 Runden hinter dir schweben lassen und pro Aktion A/B/Extra 3 Kugeln abfeuern. Nach Anwendung des Skills 2 Runde Cooldown."
-     }
-    ]
-   },
-   {
-    "name": "Arkaner Sturm",
-    "ast": "Arkane Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "magisch",
-    "rang": 4,
-    "info": "1× pro Kampf kannst du einen Arkanen Sturm zaubern. Personen im Sturm verlieren für ihre nächsten Runde zu 20/40/60% eine Aktion in ihrer Wahl A oder B",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "6m",
-      "schaden": "5w10 2x2/3x3/3x3m",
-      "schadenArt": "magisch",
-      "effekt": "1× pro Kampf kannst du einen Arkanen Sturm zaubern. Personen im Sturm verlieren für ihre nächsten Runde zu 20% eine Aktion in ihrer Wahl A oder B"
-     },
-     {
-      "level": 2,
-      "reichweite": "9m",
-      "schaden": "6w10 2x2/3x3/3x3m",
-      "schadenArt": "magisch",
-      "effekt": "1× pro Kampf kannst du einen Arkanen Sturm zaubern. Personen im Sturm verlieren für ihre nächsten Runde zu 40% eine Aktion in ihrer Wahl A oder B"
-     },
-     {
-      "level": 3,
-      "reichweite": "12m",
-      "schaden": "7w10 2x2/3x3/3x3m",
-      "schadenArt": "magisch",
-      "effekt": "1× pro Kampf kannst du einen Arkanen Sturm zaubern. Personen im Sturm verlieren für ihre nächsten Runde zu 60% eine Aktion in ihrer Wahl A oder B"
-     }
-    ]
-   },
-   {
-    "name": "Stromstoß",
-    "ast": "Elektro Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "magisch",
-    "rang": 1,
-    "info": "Pro Rüstungsklasse des Gegners +1w10",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "2m",
-      "schaden": "2w10",
-      "schadenArt": "magisch",
-      "effekt": "Pro Rüstungsklasse des Gegners +1w10"
-     },
-     {
-      "level": 2,
-      "reichweite": "2m",
-      "schaden": "3w10",
-      "schadenArt": "magisch",
-      "effekt": "Pro Rüstungsklasse des Gegners +1w10"
-     },
-     {
-      "level": 3,
-      "reichweite": "2m",
-      "schaden": "4w10",
-      "schadenArt": "magisch",
-      "effekt": "Pro Rüstungsklasse des Gegners +1w10"
-     }
-    ]
-   },
-   {
-    "name": "Hochspannung",
-    "ast": "Elektro Chimäre",
-    "art": "passiv",
-    "schadenTyp": "magisch",
-    "rang": 2,
-    "info": "Pro Rüstungsklasse machen deine Angriffe mehr Schaden.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "NK FK",
-      "schaden": "NK +1w8 pro RÜ",
-      "schadenArt": "magisch",
-      "effekt": "Pro Rüstungsklasse machen deine Angriffe mehr Schaden."
-     },
-     {
-      "level": 2,
-      "reichweite": "NK FK",
-      "schaden": "NK +2w8 pro RÜ",
-      "schadenArt": "magisch",
-      "effekt": "Pro Rüstungsklasse machen deine Angriffe mehr Schaden."
-     },
-     {
-      "level": 3,
-      "reichweite": "NK FK",
-      "schaden": "NK +3w8 pro RÜ",
-      "schadenArt": "magisch",
-      "effekt": "Pro Rüstungsklasse machen deine Angriffe mehr Schaden."
-     }
-    ]
-   },
-   {
-    "name": "Zorn der Wolken",
-    "ast": "Elektro Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "magisch",
-    "rang": 3,
-    "info": "Blitz springt auf 1/2/3 Ziele im Umkreis von jeweils 1/2/3 m über.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "3m",
-      "schaden": "5w10 20% Stun",
-      "schadenArt": "magisch",
-      "effekt": "Blitz springt auf 1 Ziele im Umkreis von jeweils 1 m über."
-     },
-     {
-      "level": 2,
-      "reichweite": "5m",
-      "schaden": "6w10 40% Stun",
-      "schadenArt": "magisch",
-      "effekt": "Blitz springt auf 2 Ziele im Umkreis von jeweils 2 m über."
-     },
-     {
-      "level": 3,
-      "reichweite": "7m",
-      "schaden": "7w10 60% Stun",
-      "schadenArt": "magisch",
-      "effekt": "Blitz springt auf 3 Ziele im Umkreis von jeweils 3 m über."
-     }
-    ]
-   },
-   {
-    "name": "Sturmfokus",
-    "ast": "Elektro Chimäre",
-    "art": "extra",
-    "schadenTyp": "magisch",
-    "rang": 4,
-    "info": "Für 2/3/4 Runden machst du zusätzlichen Blitzschaden. +1/2/3w8 Pro Rüstungsklasse Ist das Ziel gestunnt machst du +2w10 Schaden",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "SE",
-      "schaden": "+2w10",
-      "schadenArt": "magisch",
-      "effekt": "Für 2 Runden machst du zusätzlichen Blitzschaden. +1w8 Pro Rüstungsklasse Ist das Ziel gestunnt machst du +2w10 Schaden"
-     },
-     {
-      "level": 2,
-      "reichweite": "SE",
-      "schaden": "+3w10",
-      "schadenArt": "magisch",
-      "effekt": "Für 3 Runden machst du zusätzlichen Blitzschaden. +2w8 Pro Rüstungsklasse Ist das Ziel gestunnt machst du +2w10 Schaden"
-     },
-     {
-      "level": 3,
-      "reichweite": "SE",
-      "schaden": "+4w10",
-      "schadenArt": "magisch",
-      "effekt": "Für 4 Runden machst du zusätzlichen Blitzschaden. +3w8 Pro Rüstungsklasse Ist das Ziel gestunnt machst du +2w10 Schaden"
-     }
-    ]
-   },
-   {
-    "name": "Feuerfaust",
-    "ast": "Feuer Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "magisch",
-    "rang": 1,
-    "info": "Ziele neben (Links und Rechts) und hinter deinem Ziel erhalten 1/2/3w10 Schaden und +1FM",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "NK",
-      "schaden": "NK +1w10 +1 FM",
-      "schadenArt": "magisch",
-      "effekt": "Ziele neben (Links und Rechts) und hinter deinem Ziel erhalten 1w10 Schaden und +1FM"
-     },
-     {
-      "level": 2,
-      "reichweite": "NK",
-      "schaden": "NK +2w10 +1 FM",
-      "schadenArt": "magisch",
-      "effekt": "Ziele neben (Links und Rechts) und hinter deinem Ziel erhalten 2w10 Schaden und +1FM"
-     },
-     {
-      "level": 3,
-      "reichweite": "NK",
-      "schaden": "NK +3w10 +1 FM",
-      "schadenArt": "magisch",
-      "effekt": "Ziele neben (Links und Rechts) und hinter deinem Ziel erhalten 3w10 Schaden und +1FM"
-     }
-    ]
-   },
-   {
-    "name": "Feuerball",
-    "ast": "Feuer Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "magisch",
-    "rang": 2,
-    "info": "1/2/3x pro Kampf Ziel erhält Feuermarker Nach Aktivierung 1 Runde Cooldown.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "5m",
-      "schaden": "4w10 +1 FM",
-      "schadenArt": "magisch",
-      "effekt": "1x pro Kampf Ziel erhält Feuermarker Nach Aktivierung 1 Runde Cooldown."
-     },
-     {
-      "level": 2,
-      "reichweite": "7m",
-      "schaden": "5w10 +1 FM",
-      "schadenArt": "magisch",
-      "effekt": "2x pro Kampf Ziel erhält Feuermarker Nach Aktivierung 1 Runde Cooldown."
-     },
-     {
-      "level": 3,
-      "reichweite": "10m",
-      "schaden": "6w10 +2 FM",
-      "schadenArt": "magisch",
-      "effekt": "3x pro Kampf Ziel erhält Feuermarker Nach Aktivierung 1 Runde Cooldown."
-     }
-    ]
-   },
-   {
-    "name": "Brennender Kreis",
-    "ast": "Feuer Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "magisch",
-    "rang": 3,
-    "info": "Im Umkreis bekommen alle Personen Feuerschaden und 1/2/3 Feuermarker.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "1m UK",
-      "schaden": "4w10 +1 FM",
-      "schadenArt": "magisch",
-      "effekt": "Im Umkreis bekommen alle Personen Feuerschaden und 1 Feuermarker."
-     },
-     {
-      "level": 2,
-      "reichweite": "2m UK",
-      "schaden": "5w10 +2 FM",
-      "schadenArt": "magisch",
-      "effekt": "Im Umkreis bekommen alle Personen Feuerschaden und 2 Feuermarker."
-     },
-     {
-      "level": 3,
-      "reichweite": "3m UK",
-      "schaden": "6w10 +3 FM",
-      "schadenArt": "magisch",
-      "effekt": "Im Umkreis bekommen alle Personen Feuerschaden und 3 Feuermarker."
-     }
-    ]
-   },
-   {
-    "name": "Inferno",
-    "ast": "Feuer Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "magisch",
-    "rang": 4,
-    "info": "1/2/3x pro Kampf machst du deinem Ziel Schaden und es erhält +2 FM Nach Anwendung des Skills 3 Runde Cooldown.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "10 m",
-      "schaden": "6w10 +2 FM",
-      "schadenArt": "magisch",
-      "effekt": "1x pro Kampf machst du deinem Ziel Schaden und es erhält +2 FM Nach Anwendung des Skills 3 Runde Cooldown."
-     },
-     {
-      "level": 2,
-      "reichweite": "15 m",
-      "schaden": "7w10 +2 FM",
-      "schadenArt": "magisch",
-      "effekt": "2x pro Kampf machst du deinem Ziel Schaden und es erhält +2 FM Nach Anwendung des Skills 3 Runde Cooldown."
-     },
-     {
-      "level": 3,
-      "reichweite": "20 m",
-      "schaden": "8w10 +2 FM",
-      "schadenArt": "magisch",
-      "effekt": "3x pro Kampf machst du deinem Ziel Schaden und es erhält +2 FM Nach Anwendung des Skills 3 Runde Cooldown."
-     }
-    ]
-   },
-   {
-    "name": "Frosthauch",
-    "ast": "Frost Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "magisch",
-    "rang": 1,
-    "info": "Ziel verliert -2/4/6 Bewegung für seine nächste Runde.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "2m",
-      "schaden": "2w10 -2m",
-      "schadenArt": "magisch",
-      "effekt": "Ziel verliert -2 Bewegung für seine nächste Runde."
-     },
-     {
-      "level": 2,
-      "reichweite": "4m",
-      "schaden": "3w10 -4m",
-      "schadenArt": "magisch",
-      "effekt": "Ziel verliert -4 Bewegung für seine nächste Runde."
-     },
-     {
-      "level": 3,
-      "reichweite": "6m",
-      "schaden": "4w10 -6m",
-      "schadenArt": "magisch",
-      "effekt": "Ziel verliert -6 Bewegung für seine nächste Runde."
-     }
-    ]
-   },
-   {
-    "name": "Eisfeld",
-    "ast": "Frost Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "magisch",
-    "rang": 2,
-    "info": "2x2/2x2/3x3m Fläche. Gegner, die dort ihre Runde starten, haben halbierte Bewegung und erhalten Schaden.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "5m",
-      "schaden": "2w10 -50% BW",
-      "schadenArt": "magisch",
-      "effekt": "2x2/2x2/3x3m Fläche. Gegner, die dort ihre Runde starten, haben halbierte Bewegung und erhalten Schaden."
-     },
-     {
-      "level": 2,
-      "reichweite": "7m",
-      "schaden": "3w10 -50% BW",
-      "schadenArt": "magisch",
-      "effekt": "2x2/2x2/3x3m Fläche. Gegner, die dort ihre Runde starten, haben halbierte Bewegung und erhalten Schaden."
-     },
-     {
-      "level": 3,
-      "reichweite": "10m",
-      "schaden": "4w10 -50% BW",
-      "schadenArt": "magisch",
-      "effekt": "2x2/2x2/3x3m Fläche. Gegner, die dort ihre Runde starten, haben halbierte Bewegung und erhalten Schaden."
-     }
-    ]
-   },
-   {
-    "name": "Eisstachel",
-    "ast": "Frost Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "magisch",
-    "rang": 3,
-    "info": "1/2/3-mal pro Kampf. Ziel erhält -10/-15/-20 Rüstung für 1w6 Runden. Nach Anwendung des Skills 2 Runde Cooldown.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "3m",
-      "schaden": "5w10",
-      "schadenArt": "magisch",
-      "effekt": "1-mal pro Kampf. Ziel erhält -10/-15/-20 Rüstung für 1w6 Runden. Nach Anwendung des Skills 2 Runde Cooldown."
-     },
-     {
-      "level": 2,
-      "reichweite": "6m",
-      "schaden": "6w10",
-      "schadenArt": "magisch",
-      "effekt": "2-mal pro Kampf. Ziel erhält -10/-15/-20 Rüstung für 1w6 Runden. Nach Anwendung des Skills 2 Runde Cooldown."
-     },
-     {
-      "level": 3,
-      "reichweite": "9m",
-      "schaden": "7w10",
-      "schadenArt": "magisch",
-      "effekt": "3-mal pro Kampf. Ziel erhält -10/-15/-20 Rüstung für 1w6 Runden. Nach Anwendung des Skills 2 Runde Cooldown."
-     }
-    ]
-   },
-   {
-    "name": "Stoppuhr/ Eissphäre",
-    "ast": "Frost Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "keiner",
-    "rang": 4,
-    "info": "Alles im entsprechenden Radius ist für 1/1/2 Runden in Raum und Zeit eingefroren. Eingefrorene Ziele können weder handeln noch bewegt, angegriffen oder von Fähigkeiten betroffen werden.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "5m",
-      "schaden": "2x2/3x3/3x3 einfrieren",
-      "effekt": "Alles im entsprechenden Radius ist für 1 Runden in Raum und Zeit eingefroren. Eingefrorene Ziele können weder handeln noch bewegt, angegriffen oder von Fähigkeiten betroffen werden."
-     },
-     {
-      "level": 2,
-      "reichweite": "7m",
-      "schaden": "2x2/3x3/3x3 einfrieren",
-      "effekt": "Alles im entsprechenden Radius ist für 1 Runden in Raum und Zeit eingefroren. Eingefrorene Ziele können weder handeln noch bewegt, angegriffen oder von Fähigkeiten betroffen werden."
-     },
-     {
-      "level": 3,
-      "reichweite": "10m",
-      "schaden": "2x2/3x3/3x3 einfrieren",
-      "effekt": "Alles im entsprechenden Radius ist für 2 Runden in Raum und Zeit eingefroren. Eingefrorene Ziele können weder handeln noch bewegt, angegriffen oder von Fähigkeiten betroffen werden."
-     }
-    ]
-   },
-   {
-    "name": "Giftmischer",
-    "ast": "Gift Chimäre",
-    "art": "extra",
-    "schadenTyp": "magisch",
-    "rang": 1,
-    "info": "NK- und FK-Angriffe verursachen 1/2/3 Runden Gift.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "SE",
-      "schaden": "GS 1",
-      "schadenArt": "magisch",
-      "effekt": "NK- und FK-Angriffe verursachen 1 Runden Gift."
-     },
-     {
-      "level": 2,
-      "reichweite": "SE",
-      "schaden": "GS 2",
-      "schadenArt": "magisch",
-      "effekt": "NK- und FK-Angriffe verursachen 2 Runden Gift."
-     },
-     {
-      "level": 3,
-      "reichweite": "SE",
-      "schaden": "GS 3",
-      "schadenArt": "magisch",
-      "effekt": "NK- und FK-Angriffe verursachen 3 Runden Gift."
-     }
-    ]
-   },
-   {
-    "name": "Atem der Verwesung",
-    "ast": "Gift Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "magisch",
-    "rang": 2,
-    "info": "Strahl, der 1/2/3 Gegnern Schaden verursacht und zusätzlich vergiftet. Angrenzende Personen erhalten auch Gift.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "2m",
-      "schaden": "4w10 +GS 2",
-      "schadenArt": "magisch",
-      "effekt": "Strahl, der 1 Gegnern Schaden verursacht und zusätzlich vergiftet. Angrenzende Personen erhalten auch Gift."
-     },
-     {
-      "level": 2,
-      "reichweite": "4m",
-      "schaden": "5w10 +GS 3",
-      "schadenArt": "magisch",
-      "effekt": "Strahl, der 2 Gegnern Schaden verursacht und zusätzlich vergiftet. Angrenzende Personen erhalten auch Gift."
-     },
-     {
-      "level": 3,
-      "reichweite": "6m",
-      "schaden": "6w10 +GS 4",
-      "schadenArt": "magisch",
-      "effekt": "Strahl, der 3 Gegnern Schaden verursacht und zusätzlich vergiftet. Angrenzende Personen erhalten auch Gift."
-     }
-    ]
-   },
-   {
-    "name": "Welle der Korrosion",
-    "ast": "Gift Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "magisch",
-    "rang": 3,
-    "info": "Alle im Umkreis",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "2m UK",
-      "schaden": "3w10 GS 3",
-      "schadenArt": "magisch",
-      "effekt": "Alle im Umkreis"
-     },
-     {
-      "level": 2,
-      "reichweite": "3m UK",
-      "schaden": "4w10 GS 4",
-      "schadenArt": "magisch",
-      "effekt": "Alle im Umkreis"
-     },
-     {
-      "level": 3,
-      "reichweite": "4m UK",
-      "schaden": "5w10 GS 5",
-      "schadenArt": "magisch",
-      "effekt": "Alle im Umkreis"
-     }
-    ]
-   },
-   {
-    "name": "Fauler Atem",
-    "ast": "Gift Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "magisch",
-    "rang": 4,
-    "info": "Alle im Umkreis werden vergiftet, brennen und fangen an zu bluten.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "1m UK",
-      "schaden": "GS 3 +2 FM +1 BL",
-      "schadenArt": "magisch",
-      "effekt": "Alle im Umkreis werden vergiftet, brennen und fangen an zu bluten."
-     },
-     {
-      "level": 2,
-      "reichweite": "2m UK",
-      "schaden": "GS 4 +3 FM +2 BL",
-      "schadenArt": "magisch",
-      "effekt": "Alle im Umkreis werden vergiftet, brennen und fangen an zu bluten."
-     },
-     {
-      "level": 3,
-      "reichweite": "3m UK",
-      "schaden": "GS 5 +4 FM +3 BL",
-      "schadenArt": "magisch",
-      "effekt": "Alle im Umkreis werden vergiftet, brennen und fangen an zu bluten."
-     }
-    ]
-   },
-   {
-    "name": "Beruhigende Aura",
-    "ast": "Heilige Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "heilung",
-    "rang": 1,
-    "info": "Verbündete heilen Lebenspunkte und können 1/1/2 Debuffs entfernen",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "2m UK",
-      "schaden": "HL 1w10, -1 Debuffs",
-      "schadenArt": "heilung",
-      "effekt": "Verbündete heilen Lebenspunkte und können 1 Debuffs entfernen"
-     },
-     {
-      "level": 2,
-      "reichweite": "4m UK",
-      "schaden": "HL 2w10, -1 Debuffs",
-      "schadenArt": "heilung",
-      "effekt": "Verbündete heilen Lebenspunkte und können 1 Debuffs entfernen"
-     },
-     {
-      "level": 3,
-      "reichweite": "6m UK",
-      "schaden": "HL 3w10, -2 Debuffs",
-      "schadenArt": "heilung",
-      "effekt": "Verbündete heilen Lebenspunkte und können 2 Debuffs entfernen"
-     }
-    ]
-   },
-   {
-    "name": "Buße",
-    "ast": "Heilige Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "heilung",
-    "rang": 2,
-    "info": "Geht nur, wenn der Anwender einen Debuff hat. 1/2/3 Ziele in Reichweite werden geheilt und verlieren alle Debuffs.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "2m",
-      "schaden": "HL 3w10 -alle Debuffs",
-      "schadenArt": "heilung",
-      "effekt": "Geht nur, wenn der Anwender einen Debuff hat. 1 Ziele in Reichweite werden geheilt und verlieren alle Debuffs."
-     },
-     {
-      "level": 2,
-      "reichweite": "4m",
-      "schaden": "HL 4w10 -alle Debuffs",
-      "schadenArt": "heilung",
-      "effekt": "Geht nur, wenn der Anwender einen Debuff hat. 2 Ziele in Reichweite werden geheilt und verlieren alle Debuffs."
-     },
-     {
-      "level": 3,
-      "reichweite": "6m",
-      "schaden": "HL 5w10 -alle Debuffs",
-      "schadenArt": "heilung",
-      "effekt": "Geht nur, wenn der Anwender einen Debuff hat. 3 Ziele in Reichweite werden geheilt und verlieren alle Debuffs."
-     }
-    ]
-   },
-   {
-    "name": "Welle der Heilung",
-    "ast": "Heilige Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "heilung",
-    "rang": 3,
-    "info": "Aura heilt jeden Verbündeten im Umkreis",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "2m UK",
-      "schaden": "HL 4w10",
-      "schadenArt": "heilung",
-      "effekt": "Aura heilt jeden Verbündeten im Umkreis"
-     },
-     {
-      "level": 2,
-      "reichweite": "4m UK",
-      "schaden": "HL 5w10",
-      "schadenArt": "heilung",
-      "effekt": "Aura heilt jeden Verbündeten im Umkreis"
-     },
-     {
-      "level": 3,
-      "reichweite": "6m UK",
-      "schaden": "HL 6w10",
-      "schadenArt": "heilung",
-      "effekt": "Aura heilt jeden Verbündeten im Umkreis"
-     }
-    ]
-   },
-   {
-    "name": "Kettenblitz der Heilung",
-    "ast": "Heilige Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "heilung",
-    "rang": 4,
-    "info": "Kettenheilung für 3/4/5 Ziele in jeweils 2/3/4 m Abstand. Kein Pingpong-Effekt also Hin und Her",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "2m",
-      "schaden": "HL 6w10",
-      "schadenArt": "heilung",
-      "effekt": "Kettenheilung für 3 Ziele in jeweils 2 m Abstand. Kein Pingpong-Effekt also Hin und Her"
-     },
-     {
-      "level": 2,
-      "reichweite": "3m",
-      "schaden": "HL 7w10",
-      "schadenArt": "heilung",
-      "effekt": "Kettenheilung für 4 Ziele in jeweils 3 m Abstand. Kein Pingpong-Effekt also Hin und Her"
-     },
-     {
-      "level": 3,
-      "reichweite": "4m",
-      "schaden": "HL 8w10",
-      "schadenArt": "heilung",
-      "effekt": "Kettenheilung für 5 Ziele in jeweils 4 m Abstand. Kein Pingpong-Effekt also Hin und Her"
-     }
-    ]
-   },
-   {
-    "name": "Knochengriff",
-    "ast": "Skelett Chimäre",
-    "art": "extra",
-    "schadenTyp": "keiner",
-    "rang": 1,
-    "info": "Ein Ziel erhält für 1/2/3 Runden -2/3/4 Bewegung und -10 auf Handeln.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "10m",
-      "schaden": "-2m BW -10 Handeln",
-      "effekt": "Ein Ziel erhält für 1 Runden -2 Bewegung und -10 auf Handeln."
-     },
-     {
-      "level": 2,
-      "reichweite": "10m",
-      "schaden": "-3m BW -10 Handeln",
-      "effekt": "Ein Ziel erhält für 2 Runden -3 Bewegung und -10 auf Handeln."
-     },
-     {
-      "level": 3,
-      "reichweite": "10m",
-      "schaden": "-4m BW -10 Handeln",
-      "effekt": "Ein Ziel erhält für 3 Runden -4 Bewegung und -10 auf Handeln."
-     }
-    ]
-   },
-   {
-    "name": "Knochenrüstung",
-    "ast": "Skelett Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "keiner",
-    "rang": 2,
-    "info": "Ein Ziel in Reichweite erhält Rüstung für 3/4/5 Runden.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "5m SE",
-      "schaden": "+5 RÜ",
-      "effekt": "Ein Ziel in Reichweite erhält Rüstung für 3 Runden."
-     },
-     {
-      "level": 2,
-      "reichweite": "10m SE",
-      "schaden": "+10 RÜ",
-      "effekt": "Ein Ziel in Reichweite erhält Rüstung für 4 Runden."
-     },
-     {
-      "level": 3,
-      "reichweite": "15m SE",
-      "schaden": "+15 RÜ",
-      "effekt": "Ein Ziel in Reichweite erhält Rüstung für 5 Runden."
-     }
-    ]
-   },
-   {
-    "name": "Knochenspeer",
-    "ast": "Skelett Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "magisch",
-    "rang": 3,
-    "info": "1/1/2-mal pro Kampf. Du schleuderst einen Knochenspeer der 2/3/4 Ziele in einer Linie aufspießt. Nach Anwendung des Skills 2 Runde Cooldown.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "5m",
-      "schaden": "4w10 5 RB",
-      "schadenArt": "magisch",
-      "effekt": "1-mal pro Kampf. Du schleuderst einen Knochenspeer der 2 Ziele in einer Linie aufspießt. Nach Anwendung des Skills 2 Runde Cooldown."
-     },
-     {
-      "level": 2,
-      "reichweite": "7m",
-      "schaden": "5w10 10 RB",
-      "schadenArt": "magisch",
-      "effekt": "1-mal pro Kampf. Du schleuderst einen Knochenspeer der 3 Ziele in einer Linie aufspießt. Nach Anwendung des Skills 2 Runde Cooldown."
-     },
-     {
-      "level": 3,
-      "reichweite": "10m",
-      "schaden": "6w10 15 RB",
-      "schadenArt": "magisch",
-      "effekt": "2-mal pro Kampf. Du schleuderst einen Knochenspeer der 4 Ziele in einer Linie aufspießt. Nach Anwendung des Skills 2 Runde Cooldown."
-     }
-    ]
-   },
-   {
-    "name": "Skelett-Magier",
-    "ast": "Skelett Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "keiner",
-    "rang": 4,
-    "info": "Für 2/3/4 Runden LP 10/20/30, Monsterwert 40/50/60, Fähigkeiten: Funke/ Feuerball/ Feuersturm",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "5m",
-      "schaden": "1 Skelettmagier",
-      "effekt": "Für 2 Runden LP 10, Monsterwert 40, Fähigkeiten: Funke/ Feuerball/ Feuersturm"
-     },
-     {
-      "level": 2,
-      "reichweite": "10m",
-      "schaden": "2 Skelettmagier",
-      "effekt": "Für 3 Runden LP 20, Monsterwert 50, Fähigkeiten: Funke/ Feuerball/ Feuersturm"
-     },
-     {
-      "level": 3,
-      "reichweite": "15m",
-      "schaden": "3 Skelettmagier",
-      "effekt": "Für 4 Runden LP 30, Monsterwert 60, Fähigkeiten: Funke/ Feuerball/ Feuersturm"
-     }
-    ]
-   },
-   {
-    "name": "Dornenhaut",
-    "ast": "Wald Chimäre",
-    "art": "extra",
-    "schadenTyp": "magisch",
-    "rang": 1,
-    "info": "Du erhältst für 1/2/3 Runden +5/5/10 Rüstung. Nahkampfangreifer erleiden automatisch 1/2/3W10 Schaden. Alternativ kannst du Dornenhaut als Aktiv- Fähigkeit auf einen Verbündeten in 5/7/10m wirken.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "(5m) SE",
-      "schaden": "+5 RÜ",
-      "schadenArt": "magisch",
-      "effekt": "Du erhältst für 1 Runden +5 Rüstung. Nahkampfangreifer erleiden automatisch 1W10 Schaden. Alternativ kannst du Dornenhaut als Aktiv- Fähigkeit auf einen Verbündeten in 5m wirken."
-     },
-     {
-      "level": 2,
-      "reichweite": "(7m) SE",
-      "schaden": "+5 RÜ",
-      "schadenArt": "magisch",
-      "effekt": "Du erhältst für 2 Runden +5 Rüstung. Nahkampfangreifer erleiden automatisch 2W10 Schaden. Alternativ kannst du Dornenhaut als Aktiv- Fähigkeit auf einen Verbündeten in 7m wirken."
-     },
-     {
-      "level": 3,
-      "reichweite": "(10m) SE",
-      "schaden": "+10 RÜ",
-      "schadenArt": "magisch",
-      "effekt": "Du erhältst für 3 Runden +10 Rüstung. Nahkampfangreifer erleiden automatisch 3W10 Schaden. Alternativ kannst du Dornenhaut als Aktiv- Fähigkeit auf einen Verbündeten in 10m wirken."
-     }
-    ]
-   },
-   {
-    "name": "Wurzelwucher",
-    "ast": "Wald Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "magisch",
-    "rang": 2,
-    "info": "Ziel muss SW - 5/10/15 bestehen, um sich zu befreien.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "2m",
-      "schaden": "GS 1 1 BL",
-      "schadenArt": "magisch",
-      "effekt": "Ziel muss SW - 5 bestehen, um sich zu befreien."
-     },
-     {
-      "level": 2,
-      "reichweite": "4m",
-      "schaden": "GS 2 1 BL",
-      "schadenArt": "magisch",
-      "effekt": "Ziel muss SW - 10 bestehen, um sich zu befreien."
-     },
-     {
-      "level": 3,
-      "reichweite": "6m",
-      "schaden": "GS 3 2 BL",
-      "schadenArt": "magisch",
-      "effekt": "Ziel muss SW - 15 bestehen, um sich zu befreien."
-     }
-    ]
-   },
-   {
-    "name": "Wucherfaust",
-    "ast": "Wald Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "magisch",
-    "rang": 3,
-    "info": "Triffst du deinen Gegner, kann er sich 1/1/2 Runden nicht von dir wegbewegen. Wenn er es doch will, muss er SW -15 bestehen.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "NK",
-      "schaden": "SS +1w10 +1 BL",
-      "schadenArt": "magisch",
-      "effekt": "Triffst du deinen Gegner, kann er sich 1 Runden nicht von dir wegbewegen. Wenn er es doch will, muss er SW -15 bestehen."
-     },
-     {
-      "level": 2,
-      "reichweite": "NK",
-      "schaden": "SS +2w10 +2 BL",
-      "schadenArt": "magisch",
-      "effekt": "Triffst du deinen Gegner, kann er sich 1 Runden nicht von dir wegbewegen. Wenn er es doch will, muss er SW -15 bestehen."
-     },
-     {
-      "level": 3,
-      "reichweite": "NK",
-      "schaden": "SS +3w10 +3 BL",
-      "schadenArt": "magisch",
-      "effekt": "Triffst du deinen Gegner, kann er sich 2 Runden nicht von dir wegbewegen. Wenn er es doch will, muss er SW -15 bestehen."
-     }
-    ]
-   },
-   {
-    "name": "Waldgedicht",
-    "ast": "Wald Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "magisch",
-    "rang": 4,
-    "info": "Alle Feinde im Umkreis.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "2m",
-      "schaden": "GS 4 +2 BL",
-      "schadenArt": "magisch",
-      "effekt": "Alle Feinde im Umkreis."
-     },
-     {
-      "level": 2,
-      "reichweite": "4m",
-      "schaden": "GS 5 +3 BL",
-      "schadenArt": "magisch",
-      "effekt": "Alle Feinde im Umkreis."
-     },
-     {
-      "level": 3,
-      "reichweite": "6m",
-      "schaden": "GS 6 +4 BL",
-      "schadenArt": "magisch",
-      "effekt": "Alle Feinde im Umkreis."
-     }
-    ]
-   },
-   {
-    "name": "Wasserpeitsche",
-    "ast": "Wasser Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "magisch",
-    "rang": 1,
-    "info": "Ziel wird 1w4m herangezogen oder weggeschleudert bei misslungener Stärkeprobe -10/-15/-20",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "3m",
-      "schaden": "2w10",
-      "schadenArt": "magisch",
-      "effekt": "Ziel wird 1w4m herangezogen oder weggeschleudert bei misslungener Stärkeprobe -10/-15/-20"
-     },
-     {
-      "level": 2,
-      "reichweite": "5m",
-      "schaden": "3w10",
-      "schadenArt": "magisch",
-      "effekt": "Ziel wird 1w4m herangezogen oder weggeschleudert bei misslungener Stärkeprobe -10/-15/-20"
-     },
-     {
-      "level": 3,
-      "reichweite": "7m",
-      "schaden": "4w10",
-      "schadenArt": "magisch",
-      "effekt": "Ziel wird 1w4m herangezogen oder weggeschleudert bei misslungener Stärkeprobe -10/-15/-20"
-     }
-    ]
-   },
-   {
-    "name": "Aquaknarre",
-    "ast": "Wasser Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "magisch",
-    "rang": 2,
-    "info": "1/2/3-mal pro Kampf kannst du einen Wasserstrahl schießen. Das Ziel muss einen SW bestehen (-5/10/15), sonst wird es 1w4 weggespült. Bei Benutzung löschst du alle FM bei dir und deinem Ziel. Nach Anwendung des Skills 1 Runde Cooldown.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "3m",
-      "schaden": "4w10 -alle FM",
-      "schadenArt": "magisch",
-      "effekt": "1-mal pro Kampf kannst du einen Wasserstrahl schießen. Das Ziel muss einen SW bestehen (-5), sonst wird es 1w4 weggespült. Bei Benutzung löschst du alle FM bei dir und deinem Ziel. Nach Anwendung des Skills 1 Runde Cooldown."
-     },
-     {
-      "level": 2,
-      "reichweite": "6m",
-      "schaden": "5w10 -alle FM",
-      "schadenArt": "magisch",
-      "effekt": "2-mal pro Kampf kannst du einen Wasserstrahl schießen. Das Ziel muss einen SW bestehen (-10), sonst wird es 1w4 weggespült. Bei Benutzung löschst du alle FM bei dir und deinem Ziel. Nach Anwendung des Skills 1 Runde Cooldown."
-     },
-     {
-      "level": 3,
-      "reichweite": "9m",
-      "schaden": "6w10 -alle FM",
-      "schadenArt": "magisch",
-      "effekt": "3-mal pro Kampf kannst du einen Wasserstrahl schießen. Das Ziel muss einen SW bestehen (-15), sonst wird es 1w4 weggespült. Bei Benutzung löschst du alle FM bei dir und deinem Ziel. Nach Anwendung des Skills 1 Runde Cooldown."
-     }
-    ]
-   },
-   {
-    "name": "Wasserschild",
-    "ast": "Wasser Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "magisch",
-    "rang": 3,
-    "info": "1/1/2 Ziele erhält Rüstung. Alle FM erlöschen. Immun gegen weitere FM solange der Schildaktiv ist.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "3m",
-      "schaden": "+10 RÜ für 3 Runden",
-      "schadenArt": "magisch",
-      "effekt": "1 Ziele erhält Rüstung. Alle FM erlöschen. Immun gegen weitere FM solange der Schildaktiv ist."
-     },
-     {
-      "level": 2,
-      "reichweite": "6m",
-      "schaden": "+20 RÜ für 4 Runden",
-      "schadenArt": "magisch",
-      "effekt": "1 Ziele erhält Rüstung. Alle FM erlöschen. Immun gegen weitere FM solange der Schildaktiv ist."
-     },
-     {
-      "level": 3,
-      "reichweite": "9m",
-      "schaden": "+30 RÜ für 5 Runden",
-      "schadenArt": "magisch",
-      "effekt": "2 Ziele erhält Rüstung. Alle FM erlöschen. Immun gegen weitere FM solange der Schildaktiv ist."
-     }
-    ]
-   },
-   {
-    "name": "Welle",
-    "ast": "Wasser Chimäre",
-    "art": "aktiv",
-    "schadenTyp": "magisch",
-    "rang": 4,
-    "info": "1/1/2-mal pro Kampf. Eine 2/3/4m breite Welle trifft die ersten Gegner, Gegner werden 1/2/3w4 mitgerissen (Stärkewurf) Nach Anwendung des Skills 3 Runde Cooldown.",
-    "stufen": [
-     {
-      "level": 1,
-      "reichweite": "2m",
-      "schaden": "6w10",
-      "schadenArt": "magisch",
-      "effekt": "1-mal pro Kampf. Eine 2m breite Welle trifft die ersten Gegner, Gegner werden 1w4 mitgerissen (Stärkewurf) Nach Anwendung des Skills 3 Runde Cooldown."
-     },
-     {
-      "level": 2,
-      "reichweite": "4m",
-      "schaden": "7w10",
-      "schadenArt": "magisch",
-      "effekt": "1-mal pro Kampf. Eine 3m breite Welle trifft die ersten Gegner, Gegner werden 2w4 mitgerissen (Stärkewurf) Nach Anwendung des Skills 3 Runde Cooldown."
-     },
-     {
-      "level": 3,
-      "reichweite": "6m",
-      "schaden": "8w10",
-      "schadenArt": "magisch",
-      "effekt": "2-mal pro Kampf. Eine 4m breite Welle trifft die ersten Gegner, Gegner werden 3w4 mitgerissen (Stärkewurf) Nach Anwendung des Skills 3 Runde Cooldown."
-     }
-    ]
-   },
-   {
     "name": "Dornenhaut",
     "ast": "Druide",
     "art": "extra",
@@ -25731,8 +24624,1155 @@ hausregelPaketRegistrieren({
       "effekt": "Ignoriert jegliche Rüstung."
      }
     ]
+   },
+   {
+    "name": "Magischer Schild",
+    "ast": "Divinius Chimäre",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Für 1/2/3 Runden 3/5/10 Rüstung.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "SE",
+      "schaden": "+3 RÜ",
+      "effekt": "Für 1 Runden 3 Rüstung."
+     },
+     {
+      "level": 2,
+      "reichweite": "SE",
+      "schaden": "+5 RÜ",
+      "effekt": "Für 2 Runden 5 Rüstung."
+     },
+     {
+      "level": 3,
+      "reichweite": "SE",
+      "schaden": "+10 RÜ",
+      "effekt": "Für 3 Runden 10 Rüstung."
+     }
+    ],
+    "form": "Arkane Chimäre"
+   },
+   {
+    "name": "Arkanes Schwert",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 2,
+    "info": "1/2/3× pro Kampf kannst du einen Arkanes Schwert zaubern, das bis zu 2 Gegner in einer 3/4/5m langen, geraden Linie trifft. Nach Anwendung des Skills 2/2/1 Runde Cooldown.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "schaden": "3w10",
+      "schadenArt": "magisch",
+      "effekt": "1× pro Kampf kannst du einen Arkanes Schwert zaubern, das bis zu 2 Gegner in einer 3m langen, geraden Linie trifft. Nach Anwendung des Skills 2 Runde Cooldown."
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "schaden": "4w10",
+      "schadenArt": "magisch",
+      "effekt": "2× pro Kampf kannst du einen Arkanes Schwert zaubern, das bis zu 2 Gegner in einer 4m langen, geraden Linie trifft. Nach Anwendung des Skills 2 Runde Cooldown."
+     },
+     {
+      "level": 3,
+      "reichweite": "15m",
+      "schaden": "5w10",
+      "schadenArt": "magisch",
+      "effekt": "3× pro Kampf kannst du einen Arkanes Schwert zaubern, das bis zu 2 Gegner in einer 5m langen, geraden Linie trifft. Nach Anwendung des Skills 1 Runde Cooldown."
+     }
+    ],
+    "form": "Arkane Chimäre"
+   },
+   {
+    "name": "Arkane Geschosse",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 3,
+    "info": "1/1/2× pro Kampf kannst du Arkane Geschosse zaubern und alle Kugeln auf ein Ziel in Reichweite schießen, oder die Kugeln bis zu 3/4/5 Runden hinter dir schweben lassen und pro Aktion A/B/Extra 1/2/3 Kugeln abfeuern. Nach Anwendung des Skills 2 Runde Cooldown.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "schaden": "3w10 x 3",
+      "effekt": "1× pro Kampf kannst du Arkane Geschosse zaubern und alle Kugeln auf ein Ziel in Reichweite schießen, oder die Kugeln bis zu 3 Runden hinter dir schweben lassen und pro Aktion A/B/Extra 1 Kugeln abfeuern. Nach Anwendung des Skills 2 Runde Cooldown."
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "schaden": "4w10 x 4",
+      "effekt": "1× pro Kampf kannst du Arkane Geschosse zaubern und alle Kugeln auf ein Ziel in Reichweite schießen, oder die Kugeln bis zu 4 Runden hinter dir schweben lassen und pro Aktion A/B/Extra 2 Kugeln abfeuern. Nach Anwendung des Skills 2 Runde Cooldown."
+     },
+     {
+      "level": 3,
+      "reichweite": "15m",
+      "schaden": "5w10 x 5",
+      "effekt": "2× pro Kampf kannst du Arkane Geschosse zaubern und alle Kugeln auf ein Ziel in Reichweite schießen, oder die Kugeln bis zu 5 Runden hinter dir schweben lassen und pro Aktion A/B/Extra 3 Kugeln abfeuern. Nach Anwendung des Skills 2 Runde Cooldown."
+     }
+    ],
+    "form": "Arkane Chimäre"
+   },
+   {
+    "name": "Arkaner Sturm",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 4,
+    "info": "1× pro Kampf kannst du einen Arkanen Sturm zaubern. Personen im Sturm verlieren für ihre nächsten Runde zu 20/40/60% eine Aktion in ihrer Wahl A oder B",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "6m",
+      "schaden": "5w10 2x2/3x3/3x3m",
+      "schadenArt": "magisch",
+      "effekt": "1× pro Kampf kannst du einen Arkanen Sturm zaubern. Personen im Sturm verlieren für ihre nächsten Runde zu 20% eine Aktion in ihrer Wahl A oder B"
+     },
+     {
+      "level": 2,
+      "reichweite": "9m",
+      "schaden": "6w10 2x2/3x3/3x3m",
+      "schadenArt": "magisch",
+      "effekt": "1× pro Kampf kannst du einen Arkanen Sturm zaubern. Personen im Sturm verlieren für ihre nächsten Runde zu 40% eine Aktion in ihrer Wahl A oder B"
+     },
+     {
+      "level": 3,
+      "reichweite": "12m",
+      "schaden": "7w10 2x2/3x3/3x3m",
+      "schadenArt": "magisch",
+      "effekt": "1× pro Kampf kannst du einen Arkanen Sturm zaubern. Personen im Sturm verlieren für ihre nächsten Runde zu 60% eine Aktion in ihrer Wahl A oder B"
+     }
+    ],
+    "form": "Arkane Chimäre"
+   },
+   {
+    "name": "Stromstoß",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 1,
+    "info": "Pro Rüstungsklasse des Gegners +1w10",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "schaden": "2w10",
+      "schadenArt": "magisch",
+      "effekt": "Pro Rüstungsklasse des Gegners +1w10"
+     },
+     {
+      "level": 2,
+      "reichweite": "2m",
+      "schaden": "3w10",
+      "schadenArt": "magisch",
+      "effekt": "Pro Rüstungsklasse des Gegners +1w10"
+     },
+     {
+      "level": 3,
+      "reichweite": "2m",
+      "schaden": "4w10",
+      "schadenArt": "magisch",
+      "effekt": "Pro Rüstungsklasse des Gegners +1w10"
+     }
+    ],
+    "form": "Elektro Chimäre"
+   },
+   {
+    "name": "Hochspannung",
+    "ast": "Divinius Chimäre",
+    "art": "passiv",
+    "schadenTyp": "magisch",
+    "rang": 2,
+    "info": "Pro Rüstungsklasse machen deine Angriffe mehr Schaden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "NK FK",
+      "schaden": "NK +1w8 pro RÜ",
+      "schadenArt": "magisch",
+      "effekt": "Pro Rüstungsklasse machen deine Angriffe mehr Schaden."
+     },
+     {
+      "level": 2,
+      "reichweite": "NK FK",
+      "schaden": "NK +2w8 pro RÜ",
+      "schadenArt": "magisch",
+      "effekt": "Pro Rüstungsklasse machen deine Angriffe mehr Schaden."
+     },
+     {
+      "level": 3,
+      "reichweite": "NK FK",
+      "schaden": "NK +3w8 pro RÜ",
+      "schadenArt": "magisch",
+      "effekt": "Pro Rüstungsklasse machen deine Angriffe mehr Schaden."
+     }
+    ],
+    "form": "Elektro Chimäre"
+   },
+   {
+    "name": "Zorn der Wolken",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 3,
+    "info": "Blitz springt auf 1/2/3 Ziele im Umkreis von jeweils 1/2/3 m über.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "schaden": "5w10 20% Stun",
+      "schadenArt": "magisch",
+      "effekt": "Blitz springt auf 1 Ziele im Umkreis von jeweils 1 m über."
+     },
+     {
+      "level": 2,
+      "reichweite": "5m",
+      "schaden": "6w10 40% Stun",
+      "schadenArt": "magisch",
+      "effekt": "Blitz springt auf 2 Ziele im Umkreis von jeweils 2 m über."
+     },
+     {
+      "level": 3,
+      "reichweite": "7m",
+      "schaden": "7w10 60% Stun",
+      "schadenArt": "magisch",
+      "effekt": "Blitz springt auf 3 Ziele im Umkreis von jeweils 3 m über."
+     }
+    ],
+    "form": "Elektro Chimäre"
+   },
+   {
+    "name": "Sturmfokus",
+    "ast": "Divinius Chimäre",
+    "art": "extra",
+    "schadenTyp": "magisch",
+    "rang": 4,
+    "info": "Für 2/3/4 Runden machst du zusätzlichen Blitzschaden. +1/2/3w8 Pro Rüstungsklasse Ist das Ziel gestunnt machst du +2w10 Schaden",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "SE",
+      "schaden": "+2w10",
+      "schadenArt": "magisch",
+      "effekt": "Für 2 Runden machst du zusätzlichen Blitzschaden. +1w8 Pro Rüstungsklasse Ist das Ziel gestunnt machst du +2w10 Schaden"
+     },
+     {
+      "level": 2,
+      "reichweite": "SE",
+      "schaden": "+3w10",
+      "schadenArt": "magisch",
+      "effekt": "Für 3 Runden machst du zusätzlichen Blitzschaden. +2w8 Pro Rüstungsklasse Ist das Ziel gestunnt machst du +2w10 Schaden"
+     },
+     {
+      "level": 3,
+      "reichweite": "SE",
+      "schaden": "+4w10",
+      "schadenArt": "magisch",
+      "effekt": "Für 4 Runden machst du zusätzlichen Blitzschaden. +3w8 Pro Rüstungsklasse Ist das Ziel gestunnt machst du +2w10 Schaden"
+     }
+    ],
+    "form": "Elektro Chimäre"
+   },
+   {
+    "name": "Feuerfaust",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 1,
+    "info": "Ziele neben (Links und Rechts) und hinter deinem Ziel erhalten 1/2/3w10 Schaden und +1FM",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "NK",
+      "schaden": "NK +1w10 +1 FM",
+      "schadenArt": "magisch",
+      "effekt": "Ziele neben (Links und Rechts) und hinter deinem Ziel erhalten 1w10 Schaden und +1FM"
+     },
+     {
+      "level": 2,
+      "reichweite": "NK",
+      "schaden": "NK +2w10 +1 FM",
+      "schadenArt": "magisch",
+      "effekt": "Ziele neben (Links und Rechts) und hinter deinem Ziel erhalten 2w10 Schaden und +1FM"
+     },
+     {
+      "level": 3,
+      "reichweite": "NK",
+      "schaden": "NK +3w10 +1 FM",
+      "schadenArt": "magisch",
+      "effekt": "Ziele neben (Links und Rechts) und hinter deinem Ziel erhalten 3w10 Schaden und +1FM"
+     }
+    ],
+    "form": "Feuer Chimäre"
+   },
+   {
+    "name": "Feuerball",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 2,
+    "info": "1/2/3x pro Kampf Ziel erhält Feuermarker Nach Aktivierung 1 Runde Cooldown.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "schaden": "4w10 +1 FM",
+      "schadenArt": "magisch",
+      "effekt": "1x pro Kampf Ziel erhält Feuermarker Nach Aktivierung 1 Runde Cooldown."
+     },
+     {
+      "level": 2,
+      "reichweite": "7m",
+      "schaden": "5w10 +1 FM",
+      "schadenArt": "magisch",
+      "effekt": "2x pro Kampf Ziel erhält Feuermarker Nach Aktivierung 1 Runde Cooldown."
+     },
+     {
+      "level": 3,
+      "reichweite": "10m",
+      "schaden": "6w10 +2 FM",
+      "schadenArt": "magisch",
+      "effekt": "3x pro Kampf Ziel erhält Feuermarker Nach Aktivierung 1 Runde Cooldown."
+     }
+    ],
+    "form": "Feuer Chimäre"
+   },
+   {
+    "name": "Brennender Kreis",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 3,
+    "info": "Im Umkreis bekommen alle Personen Feuerschaden und 1/2/3 Feuermarker.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "1m UK",
+      "schaden": "4w10 +1 FM",
+      "schadenArt": "magisch",
+      "effekt": "Im Umkreis bekommen alle Personen Feuerschaden und 1 Feuermarker."
+     },
+     {
+      "level": 2,
+      "reichweite": "2m UK",
+      "schaden": "5w10 +2 FM",
+      "schadenArt": "magisch",
+      "effekt": "Im Umkreis bekommen alle Personen Feuerschaden und 2 Feuermarker."
+     },
+     {
+      "level": 3,
+      "reichweite": "3m UK",
+      "schaden": "6w10 +3 FM",
+      "schadenArt": "magisch",
+      "effekt": "Im Umkreis bekommen alle Personen Feuerschaden und 3 Feuermarker."
+     }
+    ],
+    "form": "Feuer Chimäre"
+   },
+   {
+    "name": "Inferno",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 4,
+    "info": "1/2/3x pro Kampf machst du deinem Ziel Schaden und es erhält +2 FM Nach Anwendung des Skills 3 Runde Cooldown.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "10 m",
+      "schaden": "6w10 +2 FM",
+      "schadenArt": "magisch",
+      "effekt": "1x pro Kampf machst du deinem Ziel Schaden und es erhält +2 FM Nach Anwendung des Skills 3 Runde Cooldown."
+     },
+     {
+      "level": 2,
+      "reichweite": "15 m",
+      "schaden": "7w10 +2 FM",
+      "schadenArt": "magisch",
+      "effekt": "2x pro Kampf machst du deinem Ziel Schaden und es erhält +2 FM Nach Anwendung des Skills 3 Runde Cooldown."
+     },
+     {
+      "level": 3,
+      "reichweite": "20 m",
+      "schaden": "8w10 +2 FM",
+      "schadenArt": "magisch",
+      "effekt": "3x pro Kampf machst du deinem Ziel Schaden und es erhält +2 FM Nach Anwendung des Skills 3 Runde Cooldown."
+     }
+    ],
+    "form": "Feuer Chimäre"
+   },
+   {
+    "name": "Frosthauch",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 1,
+    "info": "Ziel verliert -2/4/6 Bewegung für seine nächste Runde.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "schaden": "2w10 -2m",
+      "schadenArt": "magisch",
+      "effekt": "Ziel verliert -2 Bewegung für seine nächste Runde."
+     },
+     {
+      "level": 2,
+      "reichweite": "4m",
+      "schaden": "3w10 -4m",
+      "schadenArt": "magisch",
+      "effekt": "Ziel verliert -4 Bewegung für seine nächste Runde."
+     },
+     {
+      "level": 3,
+      "reichweite": "6m",
+      "schaden": "4w10 -6m",
+      "schadenArt": "magisch",
+      "effekt": "Ziel verliert -6 Bewegung für seine nächste Runde."
+     }
+    ],
+    "form": "Frost Chimäre"
+   },
+   {
+    "name": "Eisfeld",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 2,
+    "info": "2x2/2x2/3x3m Fläche. Gegner, die dort ihre Runde starten, haben halbierte Bewegung und erhalten Schaden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "schaden": "2w10 -50% BW",
+      "schadenArt": "magisch",
+      "effekt": "2x2/2x2/3x3m Fläche. Gegner, die dort ihre Runde starten, haben halbierte Bewegung und erhalten Schaden."
+     },
+     {
+      "level": 2,
+      "reichweite": "7m",
+      "schaden": "3w10 -50% BW",
+      "schadenArt": "magisch",
+      "effekt": "2x2/2x2/3x3m Fläche. Gegner, die dort ihre Runde starten, haben halbierte Bewegung und erhalten Schaden."
+     },
+     {
+      "level": 3,
+      "reichweite": "10m",
+      "schaden": "4w10 -50% BW",
+      "schadenArt": "magisch",
+      "effekt": "2x2/2x2/3x3m Fläche. Gegner, die dort ihre Runde starten, haben halbierte Bewegung und erhalten Schaden."
+     }
+    ],
+    "form": "Frost Chimäre"
+   },
+   {
+    "name": "Eisstachel",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 3,
+    "info": "1/2/3-mal pro Kampf. Ziel erhält -10/-15/-20 Rüstung für 1w6 Runden. Nach Anwendung des Skills 2 Runde Cooldown.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "schaden": "5w10",
+      "schadenArt": "magisch",
+      "effekt": "1-mal pro Kampf. Ziel erhält -10/-15/-20 Rüstung für 1w6 Runden. Nach Anwendung des Skills 2 Runde Cooldown."
+     },
+     {
+      "level": 2,
+      "reichweite": "6m",
+      "schaden": "6w10",
+      "schadenArt": "magisch",
+      "effekt": "2-mal pro Kampf. Ziel erhält -10/-15/-20 Rüstung für 1w6 Runden. Nach Anwendung des Skills 2 Runde Cooldown."
+     },
+     {
+      "level": 3,
+      "reichweite": "9m",
+      "schaden": "7w10",
+      "schadenArt": "magisch",
+      "effekt": "3-mal pro Kampf. Ziel erhält -10/-15/-20 Rüstung für 1w6 Runden. Nach Anwendung des Skills 2 Runde Cooldown."
+     }
+    ],
+    "form": "Frost Chimäre"
+   },
+   {
+    "name": "Stoppuhr/ Eissphäre",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 4,
+    "info": "Alles im entsprechenden Radius ist für 1/1/2 Runden in Raum und Zeit eingefroren. Eingefrorene Ziele können weder handeln noch bewegt, angegriffen oder von Fähigkeiten betroffen werden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "schaden": "2x2/3x3/3x3 einfrieren",
+      "effekt": "Alles im entsprechenden Radius ist für 1 Runden in Raum und Zeit eingefroren. Eingefrorene Ziele können weder handeln noch bewegt, angegriffen oder von Fähigkeiten betroffen werden."
+     },
+     {
+      "level": 2,
+      "reichweite": "7m",
+      "schaden": "2x2/3x3/3x3 einfrieren",
+      "effekt": "Alles im entsprechenden Radius ist für 1 Runden in Raum und Zeit eingefroren. Eingefrorene Ziele können weder handeln noch bewegt, angegriffen oder von Fähigkeiten betroffen werden."
+     },
+     {
+      "level": 3,
+      "reichweite": "10m",
+      "schaden": "2x2/3x3/3x3 einfrieren",
+      "effekt": "Alles im entsprechenden Radius ist für 2 Runden in Raum und Zeit eingefroren. Eingefrorene Ziele können weder handeln noch bewegt, angegriffen oder von Fähigkeiten betroffen werden."
+     }
+    ],
+    "form": "Frost Chimäre"
+   },
+   {
+    "name": "Giftmischer",
+    "ast": "Divinius Chimäre",
+    "art": "extra",
+    "schadenTyp": "magisch",
+    "rang": 1,
+    "info": "NK- und FK-Angriffe verursachen 1/2/3 Runden Gift.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "SE",
+      "schaden": "GS 1",
+      "schadenArt": "magisch",
+      "effekt": "NK- und FK-Angriffe verursachen 1 Runden Gift."
+     },
+     {
+      "level": 2,
+      "reichweite": "SE",
+      "schaden": "GS 2",
+      "schadenArt": "magisch",
+      "effekt": "NK- und FK-Angriffe verursachen 2 Runden Gift."
+     },
+     {
+      "level": 3,
+      "reichweite": "SE",
+      "schaden": "GS 3",
+      "schadenArt": "magisch",
+      "effekt": "NK- und FK-Angriffe verursachen 3 Runden Gift."
+     }
+    ],
+    "form": "Gift Chimäre"
+   },
+   {
+    "name": "Atem der Verwesung",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 2,
+    "info": "Strahl, der 1/2/3 Gegnern Schaden verursacht und zusätzlich vergiftet. Angrenzende Personen erhalten auch Gift.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "schaden": "4w10 +GS 2",
+      "schadenArt": "magisch",
+      "effekt": "Strahl, der 1 Gegnern Schaden verursacht und zusätzlich vergiftet. Angrenzende Personen erhalten auch Gift."
+     },
+     {
+      "level": 2,
+      "reichweite": "4m",
+      "schaden": "5w10 +GS 3",
+      "schadenArt": "magisch",
+      "effekt": "Strahl, der 2 Gegnern Schaden verursacht und zusätzlich vergiftet. Angrenzende Personen erhalten auch Gift."
+     },
+     {
+      "level": 3,
+      "reichweite": "6m",
+      "schaden": "6w10 +GS 4",
+      "schadenArt": "magisch",
+      "effekt": "Strahl, der 3 Gegnern Schaden verursacht und zusätzlich vergiftet. Angrenzende Personen erhalten auch Gift."
+     }
+    ],
+    "form": "Gift Chimäre"
+   },
+   {
+    "name": "Welle der Korrosion",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 3,
+    "info": "Alle im Umkreis",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m UK",
+      "schaden": "3w10 GS 3",
+      "schadenArt": "magisch",
+      "effekt": "Alle im Umkreis"
+     },
+     {
+      "level": 2,
+      "reichweite": "3m UK",
+      "schaden": "4w10 GS 4",
+      "schadenArt": "magisch",
+      "effekt": "Alle im Umkreis"
+     },
+     {
+      "level": 3,
+      "reichweite": "4m UK",
+      "schaden": "5w10 GS 5",
+      "schadenArt": "magisch",
+      "effekt": "Alle im Umkreis"
+     }
+    ],
+    "form": "Gift Chimäre"
+   },
+   {
+    "name": "Fauler Atem",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 4,
+    "info": "Alle im Umkreis werden vergiftet, brennen und fangen an zu bluten.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "1m UK",
+      "schaden": "GS 3 +2 FM +1 BL",
+      "schadenArt": "magisch",
+      "effekt": "Alle im Umkreis werden vergiftet, brennen und fangen an zu bluten."
+     },
+     {
+      "level": 2,
+      "reichweite": "2m UK",
+      "schaden": "GS 4 +3 FM +2 BL",
+      "schadenArt": "magisch",
+      "effekt": "Alle im Umkreis werden vergiftet, brennen und fangen an zu bluten."
+     },
+     {
+      "level": 3,
+      "reichweite": "3m UK",
+      "schaden": "GS 5 +4 FM +3 BL",
+      "schadenArt": "magisch",
+      "effekt": "Alle im Umkreis werden vergiftet, brennen und fangen an zu bluten."
+     }
+    ],
+    "form": "Gift Chimäre"
+   },
+   {
+    "name": "Beruhigende Aura",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "heilung",
+    "rang": 1,
+    "info": "Verbündete heilen Lebenspunkte und können 1/1/2 Debuffs entfernen",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m UK",
+      "schaden": "HL 1w10, -1 Debuffs",
+      "schadenArt": "heilung",
+      "effekt": "Verbündete heilen Lebenspunkte und können 1 Debuffs entfernen"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m UK",
+      "schaden": "HL 2w10, -1 Debuffs",
+      "schadenArt": "heilung",
+      "effekt": "Verbündete heilen Lebenspunkte und können 1 Debuffs entfernen"
+     },
+     {
+      "level": 3,
+      "reichweite": "6m UK",
+      "schaden": "HL 3w10, -2 Debuffs",
+      "schadenArt": "heilung",
+      "effekt": "Verbündete heilen Lebenspunkte und können 2 Debuffs entfernen"
+     }
+    ],
+    "form": "Heilige Chimäre"
+   },
+   {
+    "name": "Buße",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "heilung",
+    "rang": 2,
+    "info": "Geht nur, wenn der Anwender einen Debuff hat. 1/2/3 Ziele in Reichweite werden geheilt und verlieren alle Debuffs.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "schaden": "HL 3w10 -alle Debuffs",
+      "schadenArt": "heilung",
+      "effekt": "Geht nur, wenn der Anwender einen Debuff hat. 1 Ziele in Reichweite werden geheilt und verlieren alle Debuffs."
+     },
+     {
+      "level": 2,
+      "reichweite": "4m",
+      "schaden": "HL 4w10 -alle Debuffs",
+      "schadenArt": "heilung",
+      "effekt": "Geht nur, wenn der Anwender einen Debuff hat. 2 Ziele in Reichweite werden geheilt und verlieren alle Debuffs."
+     },
+     {
+      "level": 3,
+      "reichweite": "6m",
+      "schaden": "HL 5w10 -alle Debuffs",
+      "schadenArt": "heilung",
+      "effekt": "Geht nur, wenn der Anwender einen Debuff hat. 3 Ziele in Reichweite werden geheilt und verlieren alle Debuffs."
+     }
+    ],
+    "form": "Heilige Chimäre"
+   },
+   {
+    "name": "Welle der Heilung",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "heilung",
+    "rang": 3,
+    "info": "Aura heilt jeden Verbündeten im Umkreis",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m UK",
+      "schaden": "HL 4w10",
+      "schadenArt": "heilung",
+      "effekt": "Aura heilt jeden Verbündeten im Umkreis"
+     },
+     {
+      "level": 2,
+      "reichweite": "4m UK",
+      "schaden": "HL 5w10",
+      "schadenArt": "heilung",
+      "effekt": "Aura heilt jeden Verbündeten im Umkreis"
+     },
+     {
+      "level": 3,
+      "reichweite": "6m UK",
+      "schaden": "HL 6w10",
+      "schadenArt": "heilung",
+      "effekt": "Aura heilt jeden Verbündeten im Umkreis"
+     }
+    ],
+    "form": "Heilige Chimäre"
+   },
+   {
+    "name": "Kettenblitz der Heilung",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "heilung",
+    "rang": 4,
+    "info": "Kettenheilung für 3/4/5 Ziele in jeweils 2/3/4 m Abstand. Kein Pingpong-Effekt also Hin und Her",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "schaden": "HL 6w10",
+      "schadenArt": "heilung",
+      "effekt": "Kettenheilung für 3 Ziele in jeweils 2 m Abstand. Kein Pingpong-Effekt also Hin und Her"
+     },
+     {
+      "level": 2,
+      "reichweite": "3m",
+      "schaden": "HL 7w10",
+      "schadenArt": "heilung",
+      "effekt": "Kettenheilung für 4 Ziele in jeweils 3 m Abstand. Kein Pingpong-Effekt also Hin und Her"
+     },
+     {
+      "level": 3,
+      "reichweite": "4m",
+      "schaden": "HL 8w10",
+      "schadenArt": "heilung",
+      "effekt": "Kettenheilung für 5 Ziele in jeweils 4 m Abstand. Kein Pingpong-Effekt also Hin und Her"
+     }
+    ],
+    "form": "Heilige Chimäre"
+   },
+   {
+    "name": "Knochengriff",
+    "ast": "Divinius Chimäre",
+    "art": "extra",
+    "schadenTyp": "keiner",
+    "rang": 1,
+    "info": "Ein Ziel erhält für 1/2/3 Runden -2/3/4 Bewegung und -10 auf Handeln.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "10m",
+      "schaden": "-2m BW -10 Handeln",
+      "effekt": "Ein Ziel erhält für 1 Runden -2 Bewegung und -10 auf Handeln."
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "schaden": "-3m BW -10 Handeln",
+      "effekt": "Ein Ziel erhält für 2 Runden -3 Bewegung und -10 auf Handeln."
+     },
+     {
+      "level": 3,
+      "reichweite": "10m",
+      "schaden": "-4m BW -10 Handeln",
+      "effekt": "Ein Ziel erhält für 3 Runden -4 Bewegung und -10 auf Handeln."
+     }
+    ],
+    "form": "Skelett Chimäre"
+   },
+   {
+    "name": "Knochenrüstung",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 2,
+    "info": "Ein Ziel in Reichweite erhält Rüstung für 3/4/5 Runden.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m SE",
+      "schaden": "+5 RÜ",
+      "effekt": "Ein Ziel in Reichweite erhält Rüstung für 3 Runden."
+     },
+     {
+      "level": 2,
+      "reichweite": "10m SE",
+      "schaden": "+10 RÜ",
+      "effekt": "Ein Ziel in Reichweite erhält Rüstung für 4 Runden."
+     },
+     {
+      "level": 3,
+      "reichweite": "15m SE",
+      "schaden": "+15 RÜ",
+      "effekt": "Ein Ziel in Reichweite erhält Rüstung für 5 Runden."
+     }
+    ],
+    "form": "Skelett Chimäre"
+   },
+   {
+    "name": "Knochenspeer",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 3,
+    "info": "1/1/2-mal pro Kampf. Du schleuderst einen Knochenspeer der 2/3/4 Ziele in einer Linie aufspießt. Nach Anwendung des Skills 2 Runde Cooldown.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "schaden": "4w10 5 RB",
+      "schadenArt": "magisch",
+      "effekt": "1-mal pro Kampf. Du schleuderst einen Knochenspeer der 2 Ziele in einer Linie aufspießt. Nach Anwendung des Skills 2 Runde Cooldown."
+     },
+     {
+      "level": 2,
+      "reichweite": "7m",
+      "schaden": "5w10 10 RB",
+      "schadenArt": "magisch",
+      "effekt": "1-mal pro Kampf. Du schleuderst einen Knochenspeer der 3 Ziele in einer Linie aufspießt. Nach Anwendung des Skills 2 Runde Cooldown."
+     },
+     {
+      "level": 3,
+      "reichweite": "10m",
+      "schaden": "6w10 15 RB",
+      "schadenArt": "magisch",
+      "effekt": "2-mal pro Kampf. Du schleuderst einen Knochenspeer der 4 Ziele in einer Linie aufspießt. Nach Anwendung des Skills 2 Runde Cooldown."
+     }
+    ],
+    "form": "Skelett Chimäre"
+   },
+   {
+    "name": "Skelett-Magier",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "keiner",
+    "rang": 4,
+    "info": "Für 2/3/4 Runden LP 10/20/30, Monsterwert 40/50/60, Fähigkeiten: Funke/ Feuerball/ Feuersturm",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "5m",
+      "schaden": "1 Skelettmagier",
+      "effekt": "Für 2 Runden LP 10, Monsterwert 40, Fähigkeiten: Funke/ Feuerball/ Feuersturm"
+     },
+     {
+      "level": 2,
+      "reichweite": "10m",
+      "schaden": "2 Skelettmagier",
+      "effekt": "Für 3 Runden LP 20, Monsterwert 50, Fähigkeiten: Funke/ Feuerball/ Feuersturm"
+     },
+     {
+      "level": 3,
+      "reichweite": "15m",
+      "schaden": "3 Skelettmagier",
+      "effekt": "Für 4 Runden LP 30, Monsterwert 60, Fähigkeiten: Funke/ Feuerball/ Feuersturm"
+     }
+    ],
+    "form": "Skelett Chimäre"
+   },
+   {
+    "name": "Dornenhaut",
+    "ast": "Divinius Chimäre",
+    "art": "extra",
+    "schadenTyp": "magisch",
+    "rang": 1,
+    "info": "Du erhältst für 1/2/3 Runden +5/5/10 Rüstung. Nahkampfangreifer erleiden automatisch 1/2/3W10 Schaden. Alternativ kannst du Dornenhaut als Aktiv- Fähigkeit auf einen Verbündeten in 5/7/10m wirken.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "(5m) SE",
+      "schaden": "+5 RÜ",
+      "schadenArt": "magisch",
+      "effekt": "Du erhältst für 1 Runden +5 Rüstung. Nahkampfangreifer erleiden automatisch 1W10 Schaden. Alternativ kannst du Dornenhaut als Aktiv- Fähigkeit auf einen Verbündeten in 5m wirken."
+     },
+     {
+      "level": 2,
+      "reichweite": "(7m) SE",
+      "schaden": "+5 RÜ",
+      "schadenArt": "magisch",
+      "effekt": "Du erhältst für 2 Runden +5 Rüstung. Nahkampfangreifer erleiden automatisch 2W10 Schaden. Alternativ kannst du Dornenhaut als Aktiv- Fähigkeit auf einen Verbündeten in 7m wirken."
+     },
+     {
+      "level": 3,
+      "reichweite": "(10m) SE",
+      "schaden": "+10 RÜ",
+      "schadenArt": "magisch",
+      "effekt": "Du erhältst für 3 Runden +10 Rüstung. Nahkampfangreifer erleiden automatisch 3W10 Schaden. Alternativ kannst du Dornenhaut als Aktiv- Fähigkeit auf einen Verbündeten in 10m wirken."
+     }
+    ],
+    "form": "Wald Chimäre"
+   },
+   {
+    "name": "Wurzelwucher",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 2,
+    "info": "Ziel muss SW - 5/10/15 bestehen, um sich zu befreien.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "schaden": "GS 1 1 BL",
+      "schadenArt": "magisch",
+      "effekt": "Ziel muss SW - 5 bestehen, um sich zu befreien."
+     },
+     {
+      "level": 2,
+      "reichweite": "4m",
+      "schaden": "GS 2 1 BL",
+      "schadenArt": "magisch",
+      "effekt": "Ziel muss SW - 10 bestehen, um sich zu befreien."
+     },
+     {
+      "level": 3,
+      "reichweite": "6m",
+      "schaden": "GS 3 2 BL",
+      "schadenArt": "magisch",
+      "effekt": "Ziel muss SW - 15 bestehen, um sich zu befreien."
+     }
+    ],
+    "form": "Wald Chimäre"
+   },
+   {
+    "name": "Wucherfaust",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 3,
+    "info": "Triffst du deinen Gegner, kann er sich 1/1/2 Runden nicht von dir wegbewegen. Wenn er es doch will, muss er SW -15 bestehen.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "NK",
+      "schaden": "SS +1w10 +1 BL",
+      "schadenArt": "magisch",
+      "effekt": "Triffst du deinen Gegner, kann er sich 1 Runden nicht von dir wegbewegen. Wenn er es doch will, muss er SW -15 bestehen."
+     },
+     {
+      "level": 2,
+      "reichweite": "NK",
+      "schaden": "SS +2w10 +2 BL",
+      "schadenArt": "magisch",
+      "effekt": "Triffst du deinen Gegner, kann er sich 1 Runden nicht von dir wegbewegen. Wenn er es doch will, muss er SW -15 bestehen."
+     },
+     {
+      "level": 3,
+      "reichweite": "NK",
+      "schaden": "SS +3w10 +3 BL",
+      "schadenArt": "magisch",
+      "effekt": "Triffst du deinen Gegner, kann er sich 2 Runden nicht von dir wegbewegen. Wenn er es doch will, muss er SW -15 bestehen."
+     }
+    ],
+    "form": "Wald Chimäre"
+   },
+   {
+    "name": "Waldgedicht",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 4,
+    "info": "Alle Feinde im Umkreis.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "schaden": "GS 4 +2 BL",
+      "schadenArt": "magisch",
+      "effekt": "Alle Feinde im Umkreis."
+     },
+     {
+      "level": 2,
+      "reichweite": "4m",
+      "schaden": "GS 5 +3 BL",
+      "schadenArt": "magisch",
+      "effekt": "Alle Feinde im Umkreis."
+     },
+     {
+      "level": 3,
+      "reichweite": "6m",
+      "schaden": "GS 6 +4 BL",
+      "schadenArt": "magisch",
+      "effekt": "Alle Feinde im Umkreis."
+     }
+    ],
+    "form": "Wald Chimäre"
+   },
+   {
+    "name": "Wasserpeitsche",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 1,
+    "info": "Ziel wird 1w4m herangezogen oder weggeschleudert bei misslungener Stärkeprobe -10/-15/-20",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "schaden": "2w10",
+      "schadenArt": "magisch",
+      "effekt": "Ziel wird 1w4m herangezogen oder weggeschleudert bei misslungener Stärkeprobe -10/-15/-20"
+     },
+     {
+      "level": 2,
+      "reichweite": "5m",
+      "schaden": "3w10",
+      "schadenArt": "magisch",
+      "effekt": "Ziel wird 1w4m herangezogen oder weggeschleudert bei misslungener Stärkeprobe -10/-15/-20"
+     },
+     {
+      "level": 3,
+      "reichweite": "7m",
+      "schaden": "4w10",
+      "schadenArt": "magisch",
+      "effekt": "Ziel wird 1w4m herangezogen oder weggeschleudert bei misslungener Stärkeprobe -10/-15/-20"
+     }
+    ],
+    "form": "Wasser Chimäre"
+   },
+   {
+    "name": "Aquaknarre",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 2,
+    "info": "1/2/3-mal pro Kampf kannst du einen Wasserstrahl schießen. Das Ziel muss einen SW bestehen (-5/10/15), sonst wird es 1w4 weggespült. Bei Benutzung löschst du alle FM bei dir und deinem Ziel. Nach Anwendung des Skills 1 Runde Cooldown.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "schaden": "4w10 -alle FM",
+      "schadenArt": "magisch",
+      "effekt": "1-mal pro Kampf kannst du einen Wasserstrahl schießen. Das Ziel muss einen SW bestehen (-5), sonst wird es 1w4 weggespült. Bei Benutzung löschst du alle FM bei dir und deinem Ziel. Nach Anwendung des Skills 1 Runde Cooldown."
+     },
+     {
+      "level": 2,
+      "reichweite": "6m",
+      "schaden": "5w10 -alle FM",
+      "schadenArt": "magisch",
+      "effekt": "2-mal pro Kampf kannst du einen Wasserstrahl schießen. Das Ziel muss einen SW bestehen (-10), sonst wird es 1w4 weggespült. Bei Benutzung löschst du alle FM bei dir und deinem Ziel. Nach Anwendung des Skills 1 Runde Cooldown."
+     },
+     {
+      "level": 3,
+      "reichweite": "9m",
+      "schaden": "6w10 -alle FM",
+      "schadenArt": "magisch",
+      "effekt": "3-mal pro Kampf kannst du einen Wasserstrahl schießen. Das Ziel muss einen SW bestehen (-15), sonst wird es 1w4 weggespült. Bei Benutzung löschst du alle FM bei dir und deinem Ziel. Nach Anwendung des Skills 1 Runde Cooldown."
+     }
+    ],
+    "form": "Wasser Chimäre"
+   },
+   {
+    "name": "Wasserschild",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 3,
+    "info": "1/1/2 Ziele erhält Rüstung. Alle FM erlöschen. Immun gegen weitere FM solange der Schildaktiv ist.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "3m",
+      "schaden": "+10 RÜ für 3 Runden",
+      "schadenArt": "magisch",
+      "effekt": "1 Ziele erhält Rüstung. Alle FM erlöschen. Immun gegen weitere FM solange der Schildaktiv ist."
+     },
+     {
+      "level": 2,
+      "reichweite": "6m",
+      "schaden": "+20 RÜ für 4 Runden",
+      "schadenArt": "magisch",
+      "effekt": "1 Ziele erhält Rüstung. Alle FM erlöschen. Immun gegen weitere FM solange der Schildaktiv ist."
+     },
+     {
+      "level": 3,
+      "reichweite": "9m",
+      "schaden": "+30 RÜ für 5 Runden",
+      "schadenArt": "magisch",
+      "effekt": "2 Ziele erhält Rüstung. Alle FM erlöschen. Immun gegen weitere FM solange der Schildaktiv ist."
+     }
+    ],
+    "form": "Wasser Chimäre"
+   },
+   {
+    "name": "Welle",
+    "ast": "Divinius Chimäre",
+    "art": "aktiv",
+    "schadenTyp": "magisch",
+    "rang": 4,
+    "info": "1/1/2-mal pro Kampf. Eine 2/3/4m breite Welle trifft die ersten Gegner, Gegner werden 1/2/3w4 mitgerissen (Stärkewurf) Nach Anwendung des Skills 3 Runde Cooldown.",
+    "stufen": [
+     {
+      "level": 1,
+      "reichweite": "2m",
+      "schaden": "6w10",
+      "schadenArt": "magisch",
+      "effekt": "1-mal pro Kampf. Eine 2m breite Welle trifft die ersten Gegner, Gegner werden 1w4 mitgerissen (Stärkewurf) Nach Anwendung des Skills 3 Runde Cooldown."
+     },
+     {
+      "level": 2,
+      "reichweite": "4m",
+      "schaden": "7w10",
+      "schadenArt": "magisch",
+      "effekt": "1-mal pro Kampf. Eine 3m breite Welle trifft die ersten Gegner, Gegner werden 2w4 mitgerissen (Stärkewurf) Nach Anwendung des Skills 3 Runde Cooldown."
+     },
+     {
+      "level": 3,
+      "reichweite": "6m",
+      "schaden": "8w10",
+      "schadenArt": "magisch",
+      "effekt": "2-mal pro Kampf. Eine 4m breite Welle trifft die ersten Gegner, Gegner werden 3w4 mitgerissen (Stärkewurf) Nach Anwendung des Skills 3 Runde Cooldown."
+     }
+    ],
+    "form": "Wasser Chimäre"
    }
   ],
+  "formen": {
+   "Divinius Chimäre": [
+    "Arkane Chimäre",
+    "Elektro Chimäre",
+    "Feuer Chimäre",
+    "Frost Chimäre",
+    "Gift Chimäre",
+    "Heilige Chimäre",
+    "Skelett Chimäre",
+    "Wald Chimäre",
+    "Wasser Chimäre"
+   ]
+  },
   "eigenschaften": [
    {
     "name": "Adrenalin",

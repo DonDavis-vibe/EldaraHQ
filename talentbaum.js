@@ -82,10 +82,38 @@ function tbDaten(daten) {
     // ihr einen Talentbaum aus diesem Bereich, kontaktiert bitte den
     // Spielleiter" - siehe eingriff.js).
     if (h.sonderAst === undefined) h.sonderAst = null;
+    // Gewählte Form der Divinius Chimäre (siehe tbAstFormen)
+    if (h.chimaerenForm === undefined) h.chimaerenForm = null;
     if (!h.gelernt || typeof h.gelernt !== 'object') h.gelernt = {};
     if (!h.verbraucht || typeof h.verbraucht !== 'object') h.verbraucht = {};
     if (!h.eigenschaften || typeof h.eigenschaften !== 'object') h.eigenschaften = {};
     return h;
+}
+
+// Divinius Chimäre (RW 5.1 Anhang S.82ff): Der Grundbaum hat pro Rang einen
+// Platzhalter, der durch den Skill der gewählten Form (gleicher Rang) ersetzt
+// wird. regeln.formen = { Ast: [Formnamen] }, die Formskills liegen mit
+// Feld "form" im selben Ast. Skillpunkte/Rangfreischaltung zählen ALLE Skills
+// des Asts (auch die einer früher gewählten Form) - nur Lernen und Anzeige
+// beschränken sich auf die aktuelle Form.
+function tbAstFormen(ast, regeln) {
+    return (regeln.formen && regeln.formen[ast]) || null;
+}
+
+// Skills des Asts, die der Charakter gerade sehen/lernen kann.
+function tbSichtbareSkills(ast, h, regeln) {
+    const alle = regeln.skills.filter(s => s.ast === ast);
+    if (!tbAstFormen(ast, regeln)) return alle;
+    return alle.filter(s => !s.form || s.form === h.chimaerenForm);
+}
+
+function tbChimaerenFormWaehlen(wert) {
+    const h = tbDaten();
+    h.chimaerenForm = wert || null;
+    if (typeof addActivityLog === 'function' && wert) {
+        addActivityLog(`Chimären-Form gewechselt: ${wert}.`, 'activity-neutral', '<i class="fa-solid fa-dragon"></i>');
+    }
+    tbNachAenderung();
 }
 
 // Gewählte Äste in Anzeigereihenfolge: Hauptbäume, dann Wesen
@@ -270,6 +298,10 @@ function tbLernen(schluessel) {
     const aktuell = parseInt(h.gelernt[schluessel]) || 0;
     const max = tbMaxLevel(skill, regeln);
     if (aktuell >= max) return;
+    if (skill.form && skill.form !== h.chimaerenForm) {
+        tbHinweis(`Dieser Skill gehört zur ${skill.form} - wähle zuerst diese Form im Ast "${skill.ast}".`);
+        return;
+    }
     if (aktuell === 0 && !tbFreigeschaltet(skill, h, regeln, appData)) {
         tbHinweis('Noch gesperrt – erst die Voraussetzungen im Ast erfüllen.');
         return;
@@ -529,14 +561,19 @@ function renderTalentbaum() {
     } else {
         baeumeHtml = aeste.map(ast => {
             const astEco = tbAstOekonomie(ast, h, regeln, appData);
-            const skills = regeln.skills.filter(s => s.ast === ast);
+            const skills = tbSichtbareSkills(ast, h, regeln);
+            const formen = tbAstFormen(ast, regeln);
+            const formSelect = formen ? `<select class="x-select tb-select tb-select-form" onchange="tbChimaerenFormWaehlen(this.value)" title="Die Form ersetzt in jedem Rang den Platzhalter durch einen Skill">${[`<option value="">– Form wählen –</option>`].concat(formen.map(f => `<option value="${escapeHtml(f)}" ${f === h.chimaerenForm ? 'selected' : ''}>${escapeHtml(f)}</option>`)).join('')}</select>` : '';
             const istWesen = ast === h.wesen;
             const kopfBadges = `<div class="tb-ast-stand" title="Skillpunkte gelten nur für diesen Ast">
                 Rang ${astEco.rang || 0} <span class="tb-dim">·</span> SP <span class="${astEco.spFrei < 0 ? 'tb-ueber' : ''}">${astEco.spFrei}/${astEco.skillpunkte}</span>
             </div>`;
             if (!skills.length) return `<div class="tb-ast card-layout"><div class="tb-ast-titel">${escapeHtml(ast)}</div>${kopfBadges}<div class="x-leer">Keine Skills im Paket.</div></div>`;
-            const raenge = [...new Set(skills.map(s => s.rang))].sort((a, b) => a - b);
+            const raenge = [...new Set(regeln.skills.filter(s => s.ast === ast).map(s => s.rang))].sort((a, b) => a - b);
             const gruppen = raenge.map(r => {
+                const platzhalter = (formen && !h.chimaerenForm)
+                    ? `<div class="tb-node tb-node-gesperrt tb-node-platzhalter" title="Platzhalter - wird durch den Skill deiner Chimären-Form ersetzt"><div class="tb-node-kopf"><span class="tb-node-name">Form-Skill</span></div><div class="tb-node-fuss"><span class="tb-node-level">–</span></div></div>`
+                    : '';
                 const knoten = skills.filter(s => s.rang === r).map(s => {
                     const key = tbSchluessel(s);
                     const level = parseInt(h.gelernt[key]) || 0;
@@ -550,7 +587,7 @@ function renderTalentbaum() {
                     const stufe = (s.stufen || [])[Math.max(0, Math.min(effektiv, max) - 1)] || {};
                     const wuerfelbar = level > 0 && stufe.schaden && typeof parseDiceFormula === 'function' && parseDiceFormula(String(stufe.schaden));
                     return `
-                        <div class="tb-node ${klasse}" data-tbkey="${escapeHtml(key)}" title="${escapeHtml(titel)}">
+                        <div class="tb-node ${klasse}${s.form ? ' tb-node-form' : ''}" data-tbkey="${escapeHtml(key)}" title="${escapeHtml(titel)}">
                             <div class="tb-node-kopf">${tbArtBadge(s)}<span class="tb-node-name">${escapeHtml(s.name)}</span></div>
                             <div class="tb-node-fuss">
                                 <span class="tb-node-level">${level}/${max}${effektiv > level ? ' ⚡' : ''}</span>
@@ -558,11 +595,12 @@ function renderTalentbaum() {
                                 ${level > 0 ? `<button class="x-mini x-mini-danger tb-mini-minus" data-tbminus="${escapeHtml(key)}" title="Ein Level zurückgeben">−</button>` : ''}
                             </div>
                         </div>`;
-                }).join('');
+                }).join('') + platzhalter;
                 return `<div class="tb-rang"><div class="tb-rang-label">Rang ${r}</div><div class="tb-rang-knoten">${knoten}</div></div>`;
             }).join('<div class="tb-verbinder"></div>');
             return `<div class="tb-ast card-layout ${istWesen ? 'tb-ast-wesen' : ''}">
                 <div class="tb-ast-titel">${istWesen ? '<i class="fa-solid fa-dragon"></i> ' : ''}${escapeHtml(ast)}</div>
+                ${formSelect}
                 ${kopfBadges}
                 ${gruppen}
             </div>`;
@@ -609,7 +647,8 @@ function renderTalentbaum() {
             const name = s ? s.name : key.split('::')[1];
             const ast = s ? s.ast : key.split('::')[0];
             const effektiv = s ? Math.min(tbEffektivesLevel(s.name, h, regeln), tbMaxLevel(s, regeln)) : level;
-            const verwaist = !aeste.includes(ast);
+            const formInaktiv = !!(s && s.form && s.form !== h.chimaerenForm);
+            const verwaist = !aeste.includes(ast) || formInaktiv;
             const verbraucht = !!h.verbraucht[key];
             const stufe = s ? ((s.stufen || [])[effektiv - 1] || {}) : {};
             const detail = [stufe.reichweite, stufe.schaden ? stufe.schaden + (stufe.schadenArt ? ' ' + stufe.schadenArt : '') : '', stufe.effekt].filter(Boolean).join(' · ');
@@ -628,7 +667,7 @@ function renderTalentbaum() {
             return `<div class="tb-gelernt ${verbraucht ? 'tb-gelernt-verbraucht' : ''} ${verwaist ? 'tb-gelernt-verwaist' : ''}" title="${escapeHtml(s ? tbStufenText(s, regeln) : '')}">
                 <button class="tb-check" data-tbtoggle="${escapeHtml(key)}" title="${verbraucht ? 'Wieder verfügbar machen' : 'Als verbraucht markieren'}"><i class="fa-solid ${verbraucht ? 'fa-square-check' : 'fa-square'}"></i></button>
                 <div class="tb-gelernt-text">
-                    <div><strong>${escapeHtml(name)}</strong> <span class="tb-dim">Lvl ${level}${effektiv !== level ? ` (effektiv ${effektiv} ⚡)` : ''} · ${escapeHtml(ast)}${verwaist ? ' · Ast nicht mehr gewählt' : ''}</span></div>
+                    <div><strong>${escapeHtml(name)}</strong> <span class="tb-dim">Lvl ${level}${effektiv !== level ? ` (effektiv ${effektiv} ⚡)` : ''} · ${escapeHtml(ast)}${formInaktiv ? ` · ${escapeHtml(s.form)} nicht aktiv` : (verwaist ? ' · Ast nicht mehr gewählt' : '')}</span></div>
                     ${detail ? `<div class="tb-dim tb-gelernt-detail">${escapeHtml(detail)}</div>` : ''}
                 </div>
                 ${s ? `<button class="x-mini tb-expand-btn" data-tbgelernttoggle="${escapeHtml(key)}" title="${aufgeklappt ? 'Details einklappen' : 'Alle Stufen anzeigen'}"><i class="fa-solid fa-chevron-${aufgeklappt ? 'up' : 'down'}"></i></button>` : ''}
@@ -696,7 +735,7 @@ function talentbaumDashboardHtml(pData) {
     const aeste = (h.hauptbaeume || []).filter(Boolean);
     const kopf = [
         aeste.length ? `<span>${aeste.map(escapeHtml).join(' · ')}</span>` : '',
-        h.wesen ? `<span><i class="fa-solid fa-dragon"></i> ${escapeHtml(h.wesen)}${h.wesenWert ? ` (${escapeHtml(h.wesenWert)})` : ''}</span>` : ''
+        h.wesen ? `<span><i class="fa-solid fa-dragon"></i> ${escapeHtml(h.wesen)}${h.wesenWert ? ` (${escapeHtml(h.wesenWert)})` : ''}${h.chimaerenForm && h.wesen && regeln && tbAstFormen(h.wesen, regeln) ? ` · ${escapeHtml(h.chimaerenForm)}` : ''}</span>` : ''
     ].filter(Boolean).join(' &nbsp;|&nbsp; ');
 
     let eco = '';

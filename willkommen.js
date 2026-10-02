@@ -11,11 +11,11 @@ const WILLKOMMEN_STORAGE_KEY = 'eldaraWillkommenVersion';
 // anhängen (sonst wird die Liste mit der Zeit zu lang für eine Willkommens-
 // Nachricht).
 const WILLKOMMEN_NEUIGKEITEN = [
+    'Neu: <b>Divinius Chimäre</b> nach Regelwerk 5.1 - Form wählen, der Form-Skill ersetzt in jedem Rang den Platzhalter (Freigabe über den Spielleiter)',
     '<b>Talentbaum und Besondere Eigenschaften auf Regelwerk 5.1 aktualisiert</b> - viele Skills sind neu, umbenannt oder in anderen Bäumen (z.B. Wilde Wut statt Berserker-Skill, „Agilität" heißt jetzt „Athletik")',
     '<b>Wichtig:</b> Bisher vergebene Skills und Besondere Eigenschaften werden einmalig zurückgesetzt - bitte neu vergeben. Deine Punkte bleiben, ein Hinweis im Talentbaum zeigt, was du vorher hattest',
     'Neu: <b>Mein Beziehungsnetz</b> - eigene Mindmap, verknüpft mit deinem Logbuch',
     'Rüstung aus Tischmitte/Kiste kommt jetzt als Rüstungsteil an; Loot-Tabellen im Zufallsgenerator auf 5.1',
-    'Gelernte Fähigkeiten einzeln ausklappbar, Item-Beschreibungen direkt sichtbar',
     'Schmiede-Roulette: Gold-Rückerstattung bei Ablehnung; klare Meldung bei voller Kiste',
 ];
 
