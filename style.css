@@ -2812,96 +2812,138 @@ body.gm-mode .gm-title { color: var(--color-accent); }
 .tb-reset-hinweis .tool-btn { align-self: flex-start; }
 
 /* --- Regelwerk-Viewer (regelwerk.js) --------------------------------------- */
-.rw-overlay {
-    display: none;
-    position: fixed; inset: 0;
-    z-index: 1100; /* über der Schnellnavigation (900) und Modals (1000), unter Karten-Vollbild/Kampf-Popup */
-    flex-direction: column;
-    background: #0a0f14;
-    color: var(--text-primary);
+/* Seitenleiste von rechts, nach dem Vorbild von KINETIK. Schmal (Handy): volle Breite. */
+.rb-scrim {
+    display: none; position: fixed; inset: 0; z-index: 1100; border: 0; cursor: default;
+    background: rgba(0, 0, 0, 0.5);
 }
-.rw-overlay.rw-offen { display: flex; }
-body.rw-aktiv { overflow: hidden; }
-.rw-kopf {
-    display: flex; flex-direction: column; gap: 0.4rem;
-    padding: calc(0.5rem + env(safe-area-inset-top, 0px)) 0.7rem 0.5rem;
-    background: rgba(6, 13, 18, 0.98);
-    border-bottom: 1px solid var(--glass-border);
+.rb-scrim.rb-offen { display: block; animation: rb-einblenden 0.2s; }
+@keyframes rb-einblenden { from { opacity: 0; } }
+body.rb-aktiv { overflow: hidden; }
+.rb {
+    position: fixed; top: 0; right: 0; bottom: 0; z-index: 1110;
+    width: min(560px, 100vw); display: flex; flex-direction: column;
+    container-type: inline-size; /* Tabellen werden je nach Breite der Leiste zu Karten */
+    background: #0a0f14; color: var(--text-primary);
+    border-left: 1px solid var(--glass-border); box-shadow: -10px 0 40px rgba(0,0,0,0.6);
+    transform: translateX(105%); visibility: hidden;
+    transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), width 0.25s, visibility 0s 0.28s;
 }
-.rw-zeile { display: flex; align-items: center; gap: 0.4rem; min-width: 0; }
-.rw-tabs { display: flex; gap: 0.3rem; flex: 1; min-width: 0; overflow-x: auto; }
-.rw-tab, .rw-btn {
-    font-family: var(--font-main); font-size: 0.82rem; font-weight: 600;
-    color: var(--text-secondary); background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.14); border-radius: 8px;
-    padding: 0.4rem 0.7rem; cursor: pointer; white-space: nowrap;
+.rb.rb-offen { transform: none; visibility: visible; transition-delay: 0s; }
+.rb.rb-breit { width: min(980px, 100vw); }
+.rb-kopf {
+    display: grid; gap: 0.5rem; flex-shrink: 0;
+    padding: calc(0.55rem + env(safe-area-inset-top, 0px)) 0.8rem 0.6rem;
+    background: rgba(6, 13, 18, 0.98); border-bottom: 1px solid var(--glass-border);
 }
-.rw-tab:hover, .rw-btn:hover { background: rgba(255,255,255,0.14); color: var(--text-primary); }
-.rw-tab-aktiv { color: var(--text-primary); border-color: var(--color-accent); background: rgba(255,255,255,0.12); }
-.rw-btn i { color: var(--color-accent); }
-.rw-seitenanzeige { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-secondary); white-space: nowrap; }
-.rw-suchform { display: flex; flex: 1; min-width: 0; gap: 0.3rem; }
-.rw-suchfeld {
-    flex: 1; min-width: 0; padding: 0.4rem 0.6rem; font-family: var(--font-main); font-size: 0.85rem;
+.rb-titelzeile { display: flex; align-items: center; gap: 0.3rem; }
+.rb-titel { font-size: 1.25rem; letter-spacing: 0.08em; color: var(--color-accent); }
+.rb-abstand { flex: 1; }
+.rb-btn {
+    display: inline-flex; align-items: center; justify-content: center; min-width: 2.1rem; height: 2.1rem;
+    padding: 0 0.5rem; border-radius: 8px; cursor: pointer; text-decoration: none;
+    font-family: var(--font-main); font-size: 0.9rem; color: var(--text-secondary);
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14);
+}
+.rb-btn:hover { background: rgba(255,255,255,0.14); color: var(--text-primary); }
+.rb-btn i { color: var(--color-accent); }
+.rb-btn-an { border-color: var(--color-accent); background: rgba(255,255,255,0.12); }
+.rb-btn-aus i { opacity: 0.4; }
+.rb-tabs { display: flex; gap: 0.35rem; }
+.rb-tab {
+    flex: 1; padding: 0.4rem 0.6rem; cursor: pointer; border-radius: 8px;
+    font-family: var(--font-main); font-size: 0.85rem; font-weight: 600; color: var(--text-secondary);
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.14);
+}
+.rb-tab:hover { background: rgba(255,255,255,0.12); color: var(--text-primary); }
+.rb-tab-aktiv { color: var(--text-primary); border-color: var(--color-accent); background: rgba(255,255,255,0.12); }
+.rb-suche {
+    width: 100%; box-sizing: border-box; padding: 0.5rem 0.7rem; font-family: var(--font-main); font-size: 0.9rem;
     background: rgba(0,0,0,0.4); border: 1px solid var(--panel-border); border-radius: 8px; color: var(--text-primary); outline: none;
 }
-.rw-suchfeld:focus { border-color: var(--color-accent); }
-.rw-koerper { flex: 1; display: flex; min-height: 0; position: relative; }
-.rw-seiten {
-    /* Scrollleiste immer reservieren, sonst ändert sich die verfügbare Breite nach dem Aufbau */
-    flex: 1; overflow-x: auto; overflow-y: scroll; -webkit-overflow-scrolling: touch;
-    padding: 0.75rem 0.5rem calc(1.5rem + env(safe-area-inset-bottom, 0px));
-    /* flex-start + auto-Rand statt align-items:center: eine breitere (gezoomte) Seite
-       bleibt sonst links abgeschnitten und unerreichbar */
-    display: flex; flex-direction: column; align-items: flex-start; gap: 12px;
-    outline: none;
-}
-.rw-seite {
-    position: relative; flex-shrink: 0; margin: 0 auto;
-    background: #111a22; box-shadow: 0 2px 14px rgba(0,0,0,0.6); border-radius: 2px;
-}
-.rw-seite canvas { display: block; }
-.rw-treffer-schicht { position: absolute; inset: 0; pointer-events: none; }
-.rw-treffer {
-    position: absolute; border-radius: 3px;
-    background: rgba(255, 214, 10, 0.38); outline: 1px solid rgba(255, 214, 10, 0.7);
-    mix-blend-mode: screen;
-}
-.rw-panel {
-    width: min(340px, 85vw); flex-shrink: 0; overflow-y: auto;
-    background: rgba(8, 16, 22, 0.98); border-right: 1px solid var(--glass-border);
-    padding: 0.6rem 0.5rem 1.5rem;
-}
-.rw-panel[hidden] { display: none; }
-.rw-panel-titel { font-weight: 700; font-size: 0.85rem; padding: 0.2rem 0.4rem 0.6rem; color: var(--text-secondary); }
-.rw-toc, .rw-treffer-liste { list-style: none; margin: 0; padding: 0; }
-.rw-toc-eintrag, .rw-treffer-eintrag {
-    display: flex; width: 100%; text-align: left; gap: 0.5rem; justify-content: space-between;
-    font-family: var(--font-main); color: var(--text-secondary); background: none; border: 0;
-    border-radius: 6px; padding: 0.35rem 0.5rem; cursor: pointer; font-size: 0.82rem;
-}
-.rw-toc-eintrag:hover, .rw-treffer-eintrag:hover { background: rgba(255,255,255,0.08); color: var(--text-primary); }
-.rw-toc-e1 { font-weight: 700; color: var(--text-primary); margin-top: 0.4rem; }
-.rw-toc-e2 { padding-left: 1.1rem; }
-.rw-toc-aktiv { background: rgba(255,255,255,0.1); box-shadow: inset 3px 0 0 var(--color-accent); }
-.rw-toc-seite { font-family: var(--font-mono); font-size: 0.72rem; opacity: 0.6; flex-shrink: 0; }
-.rw-treffer-eintrag { flex-direction: column; gap: 0.15rem; border-bottom: 1px solid rgba(255,255,255,0.06); border-radius: 0; }
-.rw-treffer-kopf { font-weight: 700; color: var(--color-accent); font-size: 0.75rem; }
-.rw-treffer-text { line-height: 1.35; }
-.rw-treffer-text mark { background: rgba(255, 214, 10, 0.35); color: var(--text-primary); border-radius: 2px; }
-.rw-hinweis { padding: 0.6rem 0.5rem; font-size: 0.82rem; color: var(--text-secondary); }
-.rw-status {
-    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-    padding: 0.7rem 1.1rem; border-radius: 10px; background: rgba(0,0,0,0.85);
-    border: 1px solid var(--glass-border); font-size: 0.9rem; text-align: center; max-width: 80vw;
-}
-.rw-status:empty { display: none; }
+.rb-suche:focus { border-color: var(--color-accent); }
+.rb-body { flex: 1; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; padding-bottom: env(safe-area-inset-bottom, 0px); }
+.rb-pad { padding: 1rem 1.2rem; }
+.rb-hinweis { padding: 1rem 1.2rem; color: var(--text-secondary); }
+.rb-fehler { color: var(--color-dmg); }
 
-@media (max-width: 700px) {
-    .rw-btn-text { display: none; }
-    /* Panel überdeckt auf dem Handy die Seite, statt sie zu verschieben */
-    .rw-panel { position: absolute; left: 0; top: 0; bottom: 0; z-index: 2; width: min(380px, 92vw); box-shadow: 4px 0 20px rgba(0,0,0,0.6); }
+/* Titelblatt, Kapitel, Abschnitte - Bilder behalten ihr Seitenverhältnis (width/height-Attribute
+   reservieren den Platz, damit die Seite beim Nachladen nicht springt) */
+.rb-deko { display: block; max-width: 100%; height: auto; }
+.rb.rb-ohne-bilder .rb-deko { display: none; }
+.rb-titelblatt { background: linear-gradient(to bottom, rgba(255,255,255,0.03), transparent); }
+.rb-titelbild { margin: 0 auto; max-height: min(70vh, 620px); width: auto; }
+.rb-titeltext { padding: 1.1rem 1.4rem 1.2rem; display: grid; gap: 0.4rem; justify-items: start; }
+.rb-titeltext h1 { margin: 0; font-size: 3.2rem; letter-spacing: 0.1em; line-height: 1; }
+.rb-kicker { font-size: 0.78rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--color-accent); }
+.rb-sub { color: var(--text-secondary); font-size: 0.95rem; }
+.rb-kapitel { border-top: 2px solid var(--color-accent); }
+.rb-bannerbild { width: 100%; }
+.rb-bannertext { padding: 0.9rem 1.4rem 0.7rem; border-bottom: 1px solid var(--glass-border); background: linear-gradient(to bottom, rgba(255,255,255,0.04), transparent); }
+.rb-nr { font-size: 0.78rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--color-accent); }
+.rb-bannertext h2 { margin: 0.15rem 0 0; font-size: 2.1rem; letter-spacing: 0.04em; line-height: 1.05; }
+.rb-abschnitt { padding: 0.4rem 1.2rem 1.2rem; }
+.rb-abschnitt h3 { font-size: 1.25rem; margin: 1rem 0 0.5rem; padding-bottom: 0.3rem; border-bottom: 1px solid var(--glass-border); color: var(--color-accent); }
+.rb-abschnittsbild { width: 100%; margin: 0.6rem 0; border: 1px solid var(--glass-border); border-radius: 4px; }
+
+/* Inhaltsverzeichnis */
+.rb-toc { display: grid; gap: 2px; border-bottom: 1px solid var(--glass-border); background: rgba(255,255,255,0.03); }
+.rb-toc button { text-align: left; background: none; border: 0; color: var(--text-primary); font: inherit; cursor: pointer; padding: 0.32em 0.4em; border-radius: 4px; }
+.rb-toc button:hover { background: rgba(255,255,255,0.1); color: var(--color-accent); }
+.rb-toc-kap { font-weight: 700; margin-top: 0.5rem; color: var(--color-accent) !important; }
+.rb-toc-abs { padding-left: 1.2em !important; color: var(--text-secondary) !important; font-size: 0.92rem; }
+
+/* Suchtreffer */
+.rb-treffer-liste h3 { margin: 0 0 0.6rem; font-size: 1rem; color: var(--text-secondary); }
+.rb-treffer-eintrag {
+    display: grid; gap: 2px; width: 100%; text-align: left; padding: 0.55rem 0.7rem; margin-bottom: 5px; cursor: pointer;
+    font: inherit; color: var(--text-primary); background: rgba(255,255,255,0.05);
+    border: 1px solid var(--glass-border); border-left: 3px solid var(--color-accent); border-radius: 4px;
 }
+.rb-treffer-eintrag:hover { border-color: var(--color-accent); background: rgba(255,255,255,0.09); }
+.rb-treffer-kopf { font-weight: 700; font-size: 0.88rem; color: var(--color-accent); }
+.rb-treffer-text { font-size: 0.85rem; line-height: 1.4; color: var(--text-secondary); }
+.rb mark, .rb mark.rb-treffer { background: rgba(255, 214, 10, 0.4); color: var(--text-primary); border-radius: 2px; padding: 0 1px; }
+
+/* Fließtext im Stil des Regelwerks */
+.rb-inhalt { font-size: 0.97rem; line-height: 1.55; }
+.rb-inhalt p { margin: 0 0 0.7em; }
+.rb-inhalt h4, .rb-inhalt h5 { font-size: 1.05rem; color: var(--color-accent); margin: 1.1rem 0 0.4rem; }
+.rb-inhalt strong { color: #fff; }
+.rb-inhalt ul, .rb-inhalt ol { padding-left: 1.3em; margin: 0 0 0.8em; }
+.rb-inhalt li { margin: 0.2em 0; }
+.rb-inhalt hr { border: 0; border-top: 1px solid var(--glass-border); margin: 1rem 0; }
+.rb-inhalt blockquote { margin: 0.8em 0; padding: 0.2em 0.9em; border-left: 3px solid var(--color-accent); color: var(--text-secondary); }
+.rb-inhalt code { font-family: var(--font-mono); font-size: 0.9em; background: rgba(255,255,255,0.08); padding: 0 0.3em; border-radius: 3px; }
+.rb-inhalt a { color: var(--color-accent); }
+.rb-inhalt .tablewrap { overflow-x: auto; margin: 0.8em 0; }
+.rb-inhalt table { width: 100%; border-collapse: collapse; border-top: 2px solid var(--color-accent); font-size: 0.88rem; }
+.rb-inhalt th { text-align: left; padding: 0.45em 0.6em; font-size: 0.76rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-accent); background: rgba(255,255,255,0.05); border-bottom: 1px solid var(--glass-border); }
+.rb-inhalt td { padding: 0.45em 0.6em; border-bottom: 1px solid rgba(255,255,255,0.08); vertical-align: top; }
+.rb-inhalt tr:nth-child(even) td { background: rgba(255,255,255,0.025); }
+.rb-inhalt td:first-child { font-weight: 600; }
+
+/* Sprung zu einer Tabellenzeile (Talentbaum): kurz aufleuchten */
+.rb-blitz td { animation: rb-blitz 2.4s ease; }
+@keyframes rb-blitz { 0%, 55% { background: rgba(255, 214, 10, 0.35); } 100% { background: transparent; } }
+
+/* Schmale Leiste (Handy, nicht verbreitert): breite Tabellen als Karten statt seitwärts scrollend */
+@container (max-width: 640px) {
+    .rb-titeltext h1 { font-size: 2.6rem; }
+    .rb-bannertext h2 { font-size: 1.7rem; }
+    .rb-inhalt .rb-karten thead { display: none; }
+    .rb-inhalt .rb-karten, .rb-inhalt .rb-karten tbody { display: block; width: 100%; border-top: 0; }
+    .rb-inhalt .rb-karten tr {
+        display: block; margin: 0.55rem 0; padding: 0.5rem 0.75rem;
+        background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border); border-left: 3px solid var(--color-accent); border-radius: 6px;
+    }
+    .rb-inhalt .rb-karten td, .rb-inhalt .rb-karten tr:nth-child(even) td { display: block; padding: 0.12rem 0; border: 0; background: none; }
+    .rb-inhalt .rb-karten td:first-child { font-size: 1rem; color: var(--color-accent); margin-bottom: 0.2rem; }
+    .rb-inhalt .rb-karten td[data-label]::before {
+        content: attr(data-label) ': '; font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-secondary);
+    }
+}
+@media (prefers-reduced-motion: reduce) { .rb { transition: none; } .rb-blitz td { animation: none; } }
 
 /* Sprung-Knopf zum Regelwerk (Talentbaum) */
 .tb-rw-btn { opacity: 0.75; }

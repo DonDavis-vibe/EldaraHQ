@@ -126,6 +126,7 @@ Sie werden hier ausschließlich im Rahmen eines kostenlosen Community-Projekts f
 
 ## 📜 Lizenzen
 - **Code:** Der Quellcode dieses Tools steht unter der [MIT License](LICENSE).
+- **Regelwerk-Viewer:** Die Darstellung des Regelwerks (Markdown → HTML in Kapiteln und Abschnitten statt PDF-Leser) und der Markdown-Parser `regelwerk/rbparse.py` stammen aus [KINETIK](https://github.com/Rec0iL/KINETIK-PNP) von Rec0iL, MIT License (Lizenztext: [`regelwerk/LICENSE-KINETIK`](regelwerk/LICENSE-KINETIK)).
 - **Regelwerk:** Das P&P Regelsystem "How to be a Hero" der *Rocket Beans* Community steht unter der **CC BY-NC-SA 4.0** Lizenz. (Siehe [howtobeahero.de](https://howtobeahero.de/))
 
 ## 📇 Impressum & Datenschutz
