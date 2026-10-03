@@ -54,6 +54,13 @@ function nscListeSichern() {
     sicherSpeichern(NSC_LISTE_KEY, JSON.stringify(nscListe));
 }
 
+// Hinzufügen/Entfernen/Duplizieren: die NSC-Auswahl im Quest-Formular
+// (quests.js) kennt die Liste nur von ihrem letzten Rendern - ohne diesen
+// Anstoß taucht ein neuer NSC dort erst nach einem Neuladen auf.
+function nscListeAndereAnsichtenAktualisieren() {
+    if (typeof renderQuesteGm === 'function') renderQuesteGm();
+}
+
 // Vorlage darf jedes Feld weglassen - beim manuellen Anlegen ist meist nur der
 // Name gesetzt, beim Übernehmen aus dem Generator (randomizer.js) alles.
 function nscListeHinzufuegen(vorlage) {
@@ -82,6 +89,7 @@ function nscListeHinzufuegen(vorlage) {
     nscListeOffen = true;
     renderNscListeGm();
     if (typeof renderNetzwerkGm === 'function') renderNetzwerkGm();
+    nscListeAndereAnsichtenAktualisieren();
     return eintrag;
 }
 
@@ -90,6 +98,7 @@ function nscListeEntfernen(id) {
     nscListe = nscListe.filter(n => n.id !== id);
     nscListeSichern();
     renderNscListeGm();
+    nscListeAndereAnsichtenAktualisieren();
     // Beziehungsnetz (netzwerk.js) hat keine eigene Kopie der NSCs, zeigt sie
     // live aus nscListe - Relationen zu einem gelöschten NSC räumt es selbst auf.
     if (typeof netzwerkNscGeloescht === 'function') netzwerkNscGeloescht(id);
@@ -227,6 +236,7 @@ function nscListeDuplizieren(id) {
     nscListeOffen = true;
     renderNscListeGm();
     if (typeof renderNetzwerkGm === 'function') renderNetzwerkGm();
+    nscListeAndereAnsichtenAktualisieren();
 }
 
 function nscListeManuellHinzufuegen() {
