@@ -106,6 +106,19 @@ Der Charakterbogen läuft fest im **Eldara**-Design: sanft rollende Ozeanwellen 
 Dieses Tool ist voll kompatibel mit dem **[PnPMaster](https://github.com/Rec0iL/PnPMaster)** – einem umfangreichen GM Tool von **[@Rec0iL](https://github.com/Rec0iL)**. 
 Du kannst Charaktere (via `.json` Export) direkt in PnPMaster einlesen und verwalten!
 
+### 🧭 PenNodePaper-Brücke (SL)
+Das SL-Dashboard lässt sich mit **[PenNodePaper](https://github.com/Rec0iL/PenNodePaper)** verbinden - einem KI-gestützten Welten- und Story-Baukasten für Pen & Paper. Was dort vorbereitet wurde, landet per Knopfdruck im Dashboard (Dashboard → **PenNodePaper**: Adresse und Pairing-Token stehen in PenNodePaper unter ⚙ Einstellungen → *VTT link*). Alles kommt **zuerst nur beim SL** an - die Spieler sehen nur, was du ausdrücklich zeigst.
+
+| PenNodePaper schickt … | … und EldaraHQ macht daraus |
+|---|---|
+| **Handout** (Vorlesetext oder Bild) | Eintrag in der **Handout-Bibliothek** (Knopf *Handouts*), auf Wunsch sofort allen oder einem Spieler gezeigt; Spieler lesen es über *Handouts* nach |
+| **Szene** (Kampfkarte oder Hintergrundbild) | neue **Karte** mit Raster, Maßstab und Figuren; Hintergrundbilder ohne Raster; auf Wunsch gleich für die Spieler aktiv |
+| **NSC / Gegner** | Eintrag der **NSC-Liste** inkl. Porträt als Kartentoken; mit Lebenspunkten und Seite zusätzlich im **Kampf-Tracker** |
+| **Musik-Stichwort** | wird über dein **Soundboard** abgespielt (Titel aus dessen Liste; Musik läuft auf Schleife bis zum Ausfaden). Audiodateien überträgt PenNodePaper nicht |
+| *(Gegenrichtung)* die **Gruppe** | PenNodePaper zeigt deine verbundenen Spieler samt Werten (ohne Notizen und Quest-Log) und sendet beim Schreiben der Geschichte mit |
+
+Die Brücke steckt in `pnpbridge.js` (Protokoll siehe [vtt-bridge-spec](https://github.com/Rec0iL/PenNodePaper/blob/main/docs/vtt-bridge-spec.md)), die Handouts in `handouts.js`. Ohne Verbindung ändert sich nichts.
+
 ---
 
 ## 💻 Für Entwickler & Contribution
