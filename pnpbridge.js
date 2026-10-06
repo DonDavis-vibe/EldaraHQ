@@ -34,6 +34,11 @@ const PNP_STANDARD_URL = 'ws://127.0.0.1:4317/bridge';
 const PNP_PROTOKOLL = 1;
 const PNP_PARTY_INTERVALL_MS = 1500;
 
+// Vorschläge für die Felder (PenNodePaper zeigt sie als Auswahlliste; eigene Werte bleiben möglich).
+// Die Haltungen treffen die Farben der NSC-Liste (nscHaltungTon in nscliste.js): grün / grau / rot.
+const PNP_HALTUNGEN = ['freundlich', 'hilfsbereit', 'zugewandt', 'verbündet', 'treu', 'neutral', 'neugierig', 'ängstlich', 'gleichgültig', 'argwöhnisch', 'ablehnend', 'feindselig'];
+const PNP_ROLLEN = ['Wirt / Wirtin', 'Händler', 'Schmuggler', 'Kapitän', 'Steuermann', 'Matrose', 'Schiffsarzt', 'Pirat', 'Soldat', 'Stadtwache', 'Adliger', 'Gelehrter', 'Heiler', 'Priester', 'Zauberer', 'Dieb', 'Söldner', 'Fischer', 'Handwerker', 'Bettler'];
+
 let pnpLink = null;            // { reportParty, close }
 let pnpStatus = 'getrennt';    // 'getrennt' | 'verbinde' | 'verbunden'
 let pnpKampagne = '';
@@ -87,6 +92,13 @@ function pnpClientStarten({ url, token, profile, onPush, onRequest, onStatus }) 
 
 // --- Profil: was EldaraHQ empfangen kann und wie die Bögen aufgebaut sind -----
 
+// Die Wesen und weiteren Äste des Eldara-Regelpakets (wird bei Bedarf nachgeladen, siehe pnpVerbinden)
+function pnpWesen() {
+    const paket = typeof hausregelPaketeGeladen !== 'undefined' && typeof ELDARA_PAKET_ID !== 'undefined' ? hausregelPaketeGeladen[ELDARA_PAKET_ID] : null;
+    const tb = (paket && paket.talentbaum) || {};
+    return [...new Set([...(tb.wesen || []), ...(tb.weitereAeste || [])])].filter(x => typeof x === 'string' && x.trim());
+}
+
 function pnpProfil() {
     const liste = (key, label, item, group) => ({ key, label, type: 'list', group, item });
     const text = (key, label, group, extra) => Object.assign({ key, label, type: 'text', group }, extra || {});
@@ -115,11 +127,11 @@ function pnpProfil() {
                     portrait: true,
                     fields: [
                         text('ort', 'Ort', 'Auftreten'),
-                        text('rolle', 'Rolle', 'Auftreten', { help: 'z.B. Wirtin, Schmuggler, Schiffsarzt' }),
-                        text('haltung', 'Haltung', 'Auftreten', { help: 'gegenüber der Gruppe, z.B. freundlich, misstrauisch, feindlich' }),
+                        text('rolle', 'Rolle', 'Auftreten', { suggestions: PNP_ROLLEN, help: 'was er tut, z.B. Wirtin, Schmuggler, Schiffsarzt' }),
+                        text('haltung', 'Haltung', 'Auftreten', { suggestions: PNP_HALTUNGEN, help: 'gegenüber der Gruppe' }),
                         text('auffaelligkeit', 'Auffälligkeit', 'Auftreten', { help: 'woran man ihn erkennt' }),
                         text('motivation', 'Motivation', 'Auftreten'),
-                        text('wesen', 'Eldara-Wesen', 'Auftreten', { help: 'nur falls ein Wesen aus dem Regelwerk passt' }),
+                        text('wesen', 'Eldara-Wesen', 'Auftreten', { suggestions: pnpWesen(), help: 'nur falls ein Wesen aus dem Regelwerk passt' }),
                         zahl('tokenGroesse', 'Tokengröße (Felder)', 'Karte', { min: 0.5, max: 8, step: 0.5, default: 1 }),
                         { key: 'kampfSeite', label: 'Im Kampf', type: 'select', group: 'Kampf', default: 'none',
                           options: [{ value: 'none', label: 'Nicht im Kampf-Tracker' }, { value: 'gegner', label: 'Gegner' }, { value: 'verbuendet', label: 'Verbündet' }] },
@@ -491,6 +503,21 @@ function pnpVerbinden(url, token, automatisch) {
     if (!token) { pnpStatusSetzen('getrennt', 'Pairing-Token fehlt'); return; }
     pnpEinstellungenSichern({ url, token, auto: true });
     pnpStatusSetzen('verbinde');
+    // das Profil nennt die Wesen aus dem Regelpaket: erst das Paket laden (höchstens kurz warten), dann verbinden
+    let los = false;
+    const starten = () => {
+        if (los) return;
+        los = true;
+        if (pnpStatus !== 'verbinde') return;   // zwischenzeitlich getrennt
+        pnpClientAufbauen(url, token, automatisch);
+    };
+    if (typeof hausregelPaketLaden === 'function' && typeof ELDARA_PAKET_ID !== 'undefined') {
+        hausregelPaketLaden(ELDARA_PAKET_ID, starten);
+        setTimeout(starten, 2500);
+    } else starten();
+}
+
+function pnpClientAufbauen(url, token, automatisch) {
     pnpLink = pnpClientStarten({
         url, token, profile: pnpProfil(),
         onPush: async (kind, payload) => {
