@@ -11,6 +11,7 @@ const WILLKOMMEN_STORAGE_KEY = 'eldaraWillkommenVersion';
 // anhängen (sonst wird die Liste mit der Zeit zu lang für eine Willkommens-
 // Nachricht).
 const WILLKOMMEN_NEUIGKEITEN = [
+    'Neu: <b>Handouts</b> - der Spielleiter kann dir Briefe, Bilder und Vorlesetexte zeigen; was er gezeigt hat, bleibt über den Knopf „Handouts“ nachlesbar',
     'Neu: <b>Anflüstern</b> - der Spielleiter kann dir private Nachrichten schicken, die nur du siehst (Hinweiskarte oben, später nachlesbar unter „Flüsterpost“)',
     'Neu: <b>Regelwerk zum Nachschlagen</b> - Basis-Regelwerk und Anhang als Seitenleiste mit Inhaltsverzeichnis und Suche, auf dem Handy mit lesbaren Skill-Karten; im Talentbaum springt das Buch-Symbol direkt zur Zeile des Skills',
     'Neu: <b>Schnellnavigation</b> unten für alle - springt direkt zu Inventar, Talenten, Logbuch & Co., Bereiche im Bild sind markiert',
