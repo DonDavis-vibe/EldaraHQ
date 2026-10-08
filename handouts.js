@@ -22,6 +22,11 @@
 const HANDOUT_GM_KEY = 'htbah_gm_handouts';
 const HANDOUT_SPIELER_KEY = 'eldaraHandouts';
 const HANDOUT_MAX_TEXT = 8000;
+// Die Bibliothek liegt im localStorage (Limit je Browser meist ~5 MB, geteilt mit
+// Karten, NSC-Liste, Quests ...). Bilder sind der große Posten: übersteigen alle
+// Handout-Bilder zusammen dieses Budget, verlieren die ältesten ihr Bild (Titel
+// und Text bleiben) - sonst scheitert irgendwann das Speichern aller Module.
+const HANDOUT_MAX_BILD_ZEICHEN = 2000000;
 
 // --- Spielleiter ------------------------------------------------------------
 
@@ -49,9 +54,23 @@ function handoutHinzufuegen(vorlage) {
         zeit: new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })
     };
     handouts = [eintrag].concat(handouts.filter(h => h.id !== eintrag.id)).slice(0, 60);
+    handoutBilderBegrenzen();
     handoutsSichern();
     handoutsRendernGm();
     return eintrag;
+}
+
+// Neueste zuerst: so lange Bilder behalten, bis das Budget aufgebraucht ist
+function handoutBilderBegrenzen() {
+    let summe = 0, entfernt = 0;
+    handouts.forEach(h => {
+        if (!h.bild) return;
+        summe += h.bild.length;
+        if (summe > HANDOUT_MAX_BILD_ZEICHEN) { h.bild = null; entfernt++; }
+    });
+    if (entfernt && typeof addGmLogSystemMessage === 'function') {
+        addGmLogSystemMessage(`Handout-Speicher voll: bei ${entfernt} älteren Handout${entfernt === 1 ? '' : 's'} wurde das Bild entfernt (Titel und Text bleiben).`);
+    }
 }
 
 function handoutEntfernen(id) {

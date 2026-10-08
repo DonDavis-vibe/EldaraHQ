@@ -2990,6 +2990,8 @@ body.rb-aktiv { overflow: hidden; }
 
 /* --- Handouts (handouts.js) und PenNodePaper-Brücke (pnpbridge.js) --------- */
 .handouts-modal { max-width: 560px; }
+/* Über der Regelwerk-Seitenleiste (1100/1110): ein gezeigtes Handout darf nicht dahinter aufgehen */
+#handout-modal-overlay { z-index: 1150; }
 .ho-eintrag { padding: 0.6rem 0.7rem; margin-bottom: 0.6rem; background: rgba(0,0,0,0.3); border-radius: 8px; border-left: 3px solid var(--color-accent); }
 .ho-kopf { display: flex; justify-content: space-between; gap: 0.6rem; margin-bottom: 0.4rem; }
 .ho-kopf span { font-family: var(--font-mono); font-size: 0.72rem; opacity: 0.65; }

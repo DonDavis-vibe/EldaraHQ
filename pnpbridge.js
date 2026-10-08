@@ -301,7 +301,8 @@ async function pnpHandout(p) {
     let bild = null;
     if (p.kind === 'image') {
         pnpBildPruefen(p.image, 'handout');
-        bild = (await BattleMap.bildVerkleinern(pnpBlob(p.image), 1600, 0.8)).dataUrl;
+        // 1200 px reichen zum Lesen/Vorzeigen und halten die Handout-Bibliothek klein (siehe HANDOUT_MAX_BILD_ZEICHEN in handouts.js)
+        bild = (await BattleMap.bildVerkleinern(pnpBlob(p.image), 1200, 0.72)).dataUrl;
     } else if (!p.text) {
         throw new Error('handout: text missing');
     }
