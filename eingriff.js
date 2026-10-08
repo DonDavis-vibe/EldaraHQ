@@ -29,6 +29,13 @@
 //                             kontaktiert bitte den Spielleiter" - das ist
 //                             genau diese Ausnahme, seltener SL-Sonderfall.
 //     aktion 'sonderAstWeg'  {} - nimmt die Sonderfreigabe wieder zurück.
+//     aktion 'skillsAuffrischen' { grund } - Eldara-Hausregel (kampf.js, RW 5.1
+//                             "Wie bekomme ich meine Skills zurück?"): setzt alle als
+//                             verbraucht abgehakten Skills wieder auf verfügbar.
+//                             Kampf beenden mit über 50 % LP, Nachtruhe (6+ Std.)
+//                             oder von Hand durch den SL.
+//     aktion 'rundenTick'     {} - Kampf-Tracker "Runde weiter": zählt die Runden-Status
+//                             (Tränke, herstellen.js) herunter und wendet Regenerationstrank an.
 //     aktion 'hp'             { betrag, grund } - Eldara-Hausregel (kampf.js):
 //                             Schaden (negativ) oder Heilung (positiv) aus dem
 //                             Kampf-Tracker, z.B. eine tickende Blutung oder
@@ -333,6 +340,25 @@ function eingriffEmpfangen(payload) {
         // um seine eigene HP-Änderung nachzuvollziehen.
         if (typeof adjustHp === 'function') adjustHp(payload.betrag, payload.grund ? String(payload.grund).slice(0, 120) : undefined);
         return;
+    } else if (payload.aktion === 'rundenTick') {
+        // Neue Kampfrunde (Kampf-Tracker "Runde weiter"): Status-Zähler (Tränke), Regenerationstrank
+        if (typeof herstellenRundenTick === 'function') herstellenRundenTick();
+        return;
+    } else if (payload.aktion === 'skillsAuffrischen' || payload.aktion === 'tagNeu') {
+        // skillsAuffrischen = Kampfende/Rast: verbrauchte Skills + Pro-Kampf-Einsätze der
+        // Besonderen Eigenschaften zurück. tagNeu = Nachtruhe: zusätzlich die Pro-Tag-Einsätze.
+        const h = appData.hausregeln;
+        const nurTag = payload.aktion === 'tagNeu';
+        const anzahl = !nurTag && h && h.verbraucht ? Object.keys(h.verbraucht).length : 0;
+        const eigenschaften = typeof tbEigenschaftenAuffrischen === 'function' ? tbEigenschaftenAuffrischen(nurTag ? 'tag' : 'kampf') : 0;
+        if (!anzahl && !eigenschaften) return;     // nichts zu tun - kein Eintrag, kein Neuzeichnen
+        if (anzahl) h.verbraucht = {};
+        const grund = payload.grund ? String(payload.grund).slice(0, 120) : 'vom Spielleiter';
+        const teile = [];
+        if (anzahl) teile.push(`${anzahl} Skill${anzahl === 1 ? '' : 's'}`);
+        if (eigenschaften) teile.push(`${eigenschaften} Eigenschaft${eigenschaften === 1 ? '' : 'en'}`);
+        log(`${teile.join(' und ')} wieder verfügbar (${grund})`, 'activity-good', '<i class="fa-solid fa-rotate"></i>');
+        if (typeof renderTalentbaum === 'function') renderTalentbaum();
     } else if (payload.aktion === 'sonderAstWeg') {
         if (appData.hausregeln) {
             const alt = appData.hausregeln.sonderAst;

@@ -1,7 +1,7 @@
 // How to be a Hero - Seekampf (Eldara-Hausregel)
 //
-// Taktischer Seekampf-Tracker fürs Regelwerk-Kapitel "Seekampf" (RW 4.1
-// S.3-5, siehe hausregeln/quellen/rw41.txt Zeile ~109-245). Nur sichtbar,
+// Taktischer Seekampf-Tracker fürs Regelwerk-Kapitel "Seekampf" (RW 5.1,
+// Kapitel 2 des Basis-Regelwerks; bis 0.9.x nach RW 4.1). Nur sichtbar,
 // wenn das Regelpaket "eldora-arrrrr" aktiv ist (eldaraAktiv() in
 // hausregeln.js). Der Zustand (Schiffe, Initiative, Wind, Log) wird per
 // Live-Sync an alle verbundenen Spieler geschickt.
@@ -20,9 +20,12 @@
 // AUTOMATISIERT (reine Würfelmechanik ohne Charakterwerte):
 //   - Initiative (1W10 pro Einheit, S.3)
 //   - Wind (1W8 Richtung + 1W6-Countdown bis zum nächsten Wechsel, S.3)
-//   - Bewegung (Grundgeschwindigkeit-Würfel + Windbonus, S.4)
-//   - Kanonenfeuer-Trefferquote (W100 nach erfolgreicher Probe, S.4)
-//   - Kritische Trefferzonen (1W4, S.4)
+//   - Bewegung (Grundgeschwindigkeit-Würfel + Windbonus, Summe durch 3 geteilt
+//     und aufgerundet = Felder; Segel zerstört -2, Mastbruch halbiert, RW 5.1 Pkt. 4)
+//   - Kanonenfeuer: Trefferquote (W100 nach erfolgreicher Probe) und Schaden
+//     (10w10 je treffender Kanone gegen Schiffe, RW 5.1 Pkt. 5 + Waffentabelle)
+//   - Kritische Trefferzonen (1W4): fällig bei mehr als 300 Schaden in einer
+//     Aktion (RW 5.1 Pkt. 6), das Tracker-Log meldet es beim Kanonenfeuer
 //   - Ramme-voraus-Schaden (2W10 + 1W10 pro 20t Lager, einzige Manöver-
 //     Schadensformel, die ohne Charakterwerte auskommt, S.5)
 //
@@ -135,31 +138,43 @@ function skSchiffBild(farbe) {
     return vorgerendert || skIconBild(SK_SCHIFF_ICON, farbe);
 }
 
-// Manöver-Referenz (S.4f, rw41.txt Zeile ~187-244) - Wurf&Effekt-Spalte
-// wörtlich übernommen. "±" im Rohtext ist durchgehend ein Malus auf die
-// genannte Probe (steigt 5/10/15 mit der Schwierigkeit des Manövers).
+// Manöver-Referenz (RW 5.1, Seekampf Pkt. 9, 11 Manöver) - Wurf&Effekt-Spalte
+// sinngemäß aus der Tabelle übernommen. Das Zahlenwort nach der Probe ist ein
+// Malus auf die genannte Probe. Ein eigenes Manöver "Entern" kennt 5.1 nicht
+// mehr, nur den Enterhakenwurf.
 const SK_MANOEVER = [
-    { id: 'hart_am_wind', name: 'Hart am Wind', probe: 'Steuern', malus: -10, effekt: 'Bei Erfolg darf das Schiff 1W4 Felder gegen den Wind fahren.' },
-    { id: 'ausweichrolle', name: 'Ausweichrolle', probe: 'Steuern', malus: -5, effekt: 'Bei Erfolg -10% Trefferchance für alle gegnerischen Kanonen in dieser Runde.' },
-    { id: 'entern', name: 'Entern', probe: 'Entern (gegen gegnerischen Wurf)', malus: 0, effekt: 'Bei Erfolg sind beide Schiffe verbunden; Enterkampf beginnt (normale Nahkampf-/Fernkampf-Proben).' },
-    { id: 'volle_breitseite', name: 'Volle Breitseite', probe: 'Steuern + Schießen', malus: -5, effekt: 'Bei Erfolg +10% Trefferchance für alle Schüsse dieser Salve.' },
+    { id: 'hart_am_wind', name: 'Hart am Wind', probe: 'Steuern', malus: -10, effekt: 'Bei Erfolg darf das Schiff gegen den Wind mit Bewegungsbonus von +1W6 würfeln.' },
+    { id: 'ausweichrolle', name: 'Ausweichrolle', probe: 'Steuern', malus: -5, effekt: 'Bei Erfolg -10% für alle gegnerischen Kanonen in dieser Runde.' },
+    { id: 'volle_breitseite', name: 'Volle Breitseite', probe: 'Steuern', malus: -5, effekt: 'Alle geladenen Kanonen einer Schiffsseite feuern gleichzeitig: +10 auf den Kanonentreffer-Wurf.' },
     { id: 'ramme_voraus', name: 'Ramme voraus', probe: 'Steuern', malus: -10, effekt: 'Bei Erfolg 2W10 Strukturschaden + 1W10 pro 20t Lagergewicht; eigener Rumpf erleidet halben Schaden.' },
     { id: 'kettenmanoever', name: 'Kettenmanöver', probe: 'Schießen', malus: -10, effekt: 'Bei Erfolg verliert das Ziel 1 Würfelstufe Geschwindigkeit für 1W4 Runden (W8→W6→W4).' },
-    { id: 'tarnfahrt', name: 'Tarnfahrt', probe: 'Heimlichkeit', malus: 0, effekt: 'Bei Erfolg -10% Trefferchance für Gegner in dieser Runde.' },
+    { id: 'tarnfahrt', name: 'Tarnfahrt', probe: 'Heimlichkeit', malus: 0, effekt: 'Bei Erfolg -10% Kanonentreffer in dieser Runde. Die Gegner können dich nicht sehen.' },
     { id: 'ueberholkurs', name: 'Überholkurs', probe: 'Steuern', malus: -5, effekt: 'Bei Erfolg muss der Gegner in der nächsten Runde -1 Würfelstufe Geschwindigkeit würfeln.' },
-    { id: 'ploetzliche_wende', name: 'Plötzliche Wende', probe: 'Steuern', malus: -15, effekt: 'Bei Erfolg sofortige Richtungsänderung; Gegner erhalten -15% auf alle Schüsse in dieser Runde.' },
+    { id: 'ploetzliche_wende', name: 'Plötzliche Wende', probe: 'Steuern', malus: -15, effekt: 'Bei Erfolg sofortige 180°-Kursänderung; Gegner erhalten -15% auf alle Schüsse in dieser Runde.' },
     { id: 'enterhakenwurf', name: 'Enterhakenwurf', probe: 'Entern', malus: 0, effekt: 'Bei Erfolg sind beide Schiffe bis zum nächsten Zug verbunden; Enterkampf kann beginnen.' },
-    { id: 'segel', name: 'Segel reffen / volle Segel', probe: 'Steuern (für "volle Segel")', malus: -10, effekt: 'Bei Erfolg +1W8 Felder Bewegung, aber -10% auf eigene Schüsse in dieser Runde.' },
+    { id: 'segel', name: 'Segel reffen / volle Segel', probe: 'Steuern', malus: -10, effekt: 'Bei Erfolg +1W8 auf den Geschwindigkeitswurf, aber -10% auf eigene Schüsse in dieser Runde.' },
     { id: 'gegenbug', name: 'Gegenbug', probe: 'Steuern', malus: -5, effekt: 'Bei Erfolg +10 Rüstung gegen Kanonentreffer in dieser Runde.' }
 ];
 
-// Kritische Trefferzonen (S.4, Zeile ~154-163) - 1W4 bei kritischem W100-Treffer.
+// Kritische Trefferzonen (RW 5.1, Pkt. 6): bei mehr als 300 Schaden in einer
+// Aktion tritt zusätzlich ein kritischer Effekt auf (1W4).
+const SK_KRIT_SCHADEN_SCHWELLE = 300;
+const SK_KANONE_SCHADEN_VS_SCHIFF = '10w10';   // je treffender Kanone (RW 5.1, Waffentabelle)
 const SK_KRITISCHE_TREFFERZONEN = [
-    { wurf: 1, name: 'Segel zerstört', effekt: 'Geschwindigkeit halbiert.', badge: 'Segel zerstört (Geschwindigkeit halbiert)' },
+    { wurf: 1, name: 'Segel zerstört', effekt: 'Geschwindigkeit -2.', badge: 'Segel zerstört (Geschwindigkeit -2)' },
     { wurf: 2, name: 'Ruder beschädigt', effekt: 'Manöverwürfe -10.', badge: 'Ruder beschädigt (Manöverwürfe -10)' },
     { wurf: 3, name: 'Magazin getroffen', effekt: 'Sofort 1W6 zusätzliche Kanonen explodieren.', badge: null },
     { wurf: 4, name: 'Mastbruch', effekt: 'Bewegung halbiert, bis repariert. (Handwerk -20)', badge: 'Mastbruch (Bewegung halbiert, Handwerk -20 zum Reparieren)' }
 ];
+
+// Spielerrollen an Bord (RW 5.1, Seekampf Pkt. 7): wenn mehrere Spieler auf demselben
+// Schiff sind, können sie spezielle Posten übernehmen. Die Proben laufen auf den
+// Charakterbögen - der Tracker hält fest, wer welchen Posten hat, und erinnert an den Bonus.
+const SK_ROLLEN = {
+    steuermann: { label: 'Steuermann', bonus: '+10 auf alle Steuern-/Manöver-Proben, nach erfolgreicher „Schiffe steuern“-Probe' },
+    ausguck: { label: 'Ausguck', bonus: '+10 auf Wahrnehmung/Heimlichkeit, frühere Sicht auf Gegner' },
+    richtschuetze: { label: 'Richtschütze', bonus: '+10 auf Kanonentreffer, wenn er eine Zielen-Probe (Fernkampf) besteht' }
+};
 
 const SEEKAMPF_OFFEN_KEY = 'htbah_gm_seekampf_offen';
 
@@ -460,6 +475,22 @@ function skEinheitSpielerToggle(id, peerId) {
     const idx = e.spielerIds.indexOf(peerId);
     if (idx === -1) e.spielerIds.push(peerId); else e.spielerIds.splice(idx, 1);
     if (idx !== -1 && e.kapitaen === peerId) e.kapitaen = null;
+    if (idx !== -1 && e.rollen) delete e.rollen[peerId];   // wer die Crew verlässt, gibt auch seinen Posten ab
+    skSichern();
+    renderSeekampfGm();
+}
+
+// Posten (Steuermann/Ausguck/Richtschütze) eines Crew-Mitglieds setzen; leer = kein Posten
+function skRolleSetzen(id, peerId, rolle) {
+    const e = skEinheit(id);
+    if (!e) return;
+    if (!e.rollen || typeof e.rollen !== 'object') e.rollen = {};
+    if (rolle && SK_ROLLEN[rolle]) {
+        e.rollen[peerId] = rolle;
+        skLog(`${e.name}: ${schiffSpielerName(peerId)} übernimmt den Posten ${SK_ROLLEN[rolle].label} (${SK_ROLLEN[rolle].bonus}).`);
+    } else {
+        delete e.rollen[peerId];
+    }
     skSichern();
     renderSeekampfGm();
 }
@@ -582,12 +613,20 @@ function skBewegungWuerfeln(id, windBezug) {
     const basis = skWuerfeln(e.geschwindigkeit);
     if (!basis) { skLog(`${e.name}: Geschwindigkeits-Formel "${e.geschwindigkeit}" nicht erkannt.`); renderSeekampfGm(); return; }
     const windWurf = bonus.formel ? skWuerfeln(bonus.formel) : null;
-    let felder = basis.summe + (windWurf ? windWurf.summe : 0);
+    let summe = basis.summe + (windWurf ? windWurf.summe : 0);
 
-    const halbiert = e.effekte.some(eff => /Geschwindigkeit halbiert|Bewegung halbiert/.test(eff.text));
+    // Segel zerstört: Geschwindigkeit -2 je zerstörtem Segel (auch ältere Badges "… halbiert")
+    const segelTreffer = e.effekte.filter(eff => /Segel zerstört/.test(eff.text)).length;
+    if (segelTreffer) summe = Math.max(0, summe - 2 * segelTreffer);
+
+    // RW 5.1 Pkt. 4: Ergebnis durch 3 teilen, aufrunden = Felder dieser Runde
+    let felder = Math.ceil(summe / 3);
+
+    // Mastbruch: Bewegung halbiert (auf die Felder, nach dem Teilen)
+    const halbiert = e.effekte.some(eff => /Mastbruch|Bewegung halbiert/.test(eff.text));
     if (halbiert) felder = Math.max(1, Math.floor(felder / 2));
 
-    skLog(`${e.name} Bewegung: ${e.geschwindigkeit} (${basis.summe})${windWurf ? ` + ${bonus.label} ${bonus.formel} (${windWurf.summe})` : ` + ${bonus.label} (kein Bonus)`}${halbiert ? ' → halbiert wegen Segel-/Mastschaden' : ''} = <b>${felder} Felder</b>`);
+    skLog(`${e.name} Bewegung: ${e.geschwindigkeit} (${basis.summe})${windWurf ? ` + ${bonus.label} ${bonus.formel} (${windWurf.summe})` : ` + ${bonus.label} (kein Bonus)`}${segelTreffer ? ` − ${2 * segelTreffer} (Segel zerstört)` : ''} = ${summe} → ÷3 aufgerundet = <b>${Math.ceil(summe / 3)} Felder</b>${halbiert ? ` → halbiert wegen Mastbruch = <b>${felder} Felder</b>` : ''} (nicht verbrauchte Bewegung verfällt am Zugende)`);
     skSichern();
     renderSeekampfGm();
 }
@@ -600,8 +639,11 @@ function skKanonenfeuerWuerfeln(id, anzahlKanonen) {
     if (!e) return;
     const pct = skW(100);
     const treffer = Math.round(n * pct / 100);
-    const kritisch = pct === 100;
-    skLog(`${e.name} Kanonenfeuer (${n} Kanonen): W100 → ${pct}% ⇒ <b>${treffer} von ${n} Kanonen treffen</b>${kritisch ? ' — <b>Kritischer Treffer!</b> (1W4 Trefferzone auswürfeln)' : ''}`);
+    // Schaden je treffender Kanone (RW 5.1: gegen Schiffe 10w10). Mehr als 300 in
+    // einer Aktion löst eine kritische Trefferzone aus (Pkt. 6).
+    const schaden = treffer > 0 ? skWuerfeln(`${treffer * 10}w10`).summe : 0;
+    const kritisch = schaden > SK_KRIT_SCHADEN_SCHWELLE;
+    skLog(`${e.name} Kanonenfeuer (${n} Kanonen): W100 → ${pct}% ⇒ <b>${treffer} von ${n} Kanonen treffen</b>${treffer ? ` — ${treffer}×${SK_KANONE_SCHADEN_VS_SCHIFF} = <b>${schaden} Schaden</b> (Feld „Schaden“ beim Ziel zum Abziehen)` : ''}${kritisch ? ` — <b>Mehr als ${SK_KRIT_SCHADEN_SCHWELLE} Schaden: Kritische Trefferzone!</b> (beim Ziel „Kritische Trefferzone“ würfeln)` : ''}`);
     skSichern();
     renderSeekampfGm();
 }
@@ -801,11 +843,17 @@ function skEinheitKarteHtml(e, istAmZug) {
                     const istKapitaen = e.kapitaen === pid;
                     return `<span class="sk-besitzer-chip-gruppe">
                         <button type="button" class="sk-besitzer-chip ${aktiv ? 'sk-besitzer-chip-aktiv' : ''}" onclick="skEinheitSpielerToggle('${e.id}', '${escapeHtml(pid)}')" title="${aktiv ? 'Gehört zur Crew - klicken zum Entfernen' : 'Klicken, um zur Crew hinzuzufügen'}">${aktiv ? '<i class="fa-solid fa-check"></i> ' : ''}${escapeHtml(schiffSpielerName(pid))}</button>
+                        ${aktiv ? `<select class="sk-input sk-rolle-wahl" onchange="skRolleSetzen('${e.id}', '${escapeHtml(pid)}', this.value)" title="Posten an Bord (RW 5.1): Steuermann, Ausguck oder Richtschütze">
+                            <option value="">Posten …</option>
+                            ${Object.entries(SK_ROLLEN).map(([k, v]) => `<option value="${k}" ${e.rollen && e.rollen[pid] === k ? 'selected' : ''}>${v.label}</option>`).join('')}
+                        </select>` : ''}
                         <button type="button" class="sk-badge-groesse ${istKapitaen ? 'sk-kapitaen-aktiv' : ''}" onclick="skEinheitKapitaenUmschalten('${e.id}', '${escapeHtml(pid)}')" title="${istKapitaen ? 'Ist Kapitän - klicken, damit wieder die ganze Crew steuern darf' : 'Zum Kapitän machen - nur diese Person darf das Schiff dann noch steuern'}"><i class="fa-solid fa-crown"></i></button>
                     </span>`;
                 }).join('')}
             </div>
         </div>` : ''}
+        ${e.rollen && Object.keys(e.rollen).length ? `<div class="sk-effekte">${Object.entries(e.rollen).filter(([pid]) => Array.isArray(e.spielerIds) && e.spielerIds.includes(pid)).map(([pid, rolle]) =>
+            `<span class="sk-badge" title="${escapeHtml(SK_ROLLEN[rolle] ? SK_ROLLEN[rolle].bonus : '')}"><i class="fa-solid fa-anchor"></i> ${escapeHtml(SK_ROLLEN[rolle] ? SK_ROLLEN[rolle].label : rolle)}: ${escapeHtml(schiffSpielerName(pid))}</span>`).join('')}</div>` : ''}
         ${gesunken ? '<p class="ir-hint ir-warnung"><i class="fa-solid fa-water"></i> Sinkt!</p>' : ''}
         <div class="sk-struktur-zeile">
             <div class="sk-struktur-bar"><div class="sk-struktur-fill" style="width:${strukturPct}%"></div></div>
@@ -831,10 +879,10 @@ function skEinheitKarteHtml(e, istAmZug) {
             </div>
             <div class="sk-aktion-zeile">
                 <input type="number" class="sk-input sk-input-schmal" value="${e.kanonen}" min="1" data-skkanonenzahl="${escapeHtml(e.id)}" title="Anzahl abgefeuerter Kanonen">
-                <button class="sk-mini-btn" onclick="skKanonenfeuerWuerfeln('${e.id}', document.querySelector('[data-skkanonenzahl=\\'${e.id}\\']').value)"><i class="fa-solid fa-dice"></i> Trefferquote (nach Erfolg)</button>
+                <button class="sk-mini-btn" onclick="skKanonenfeuerWuerfeln('${e.id}', document.querySelector('[data-skkanonenzahl=\\'${e.id}\\']').value)"><i class="fa-solid fa-dice"></i> Trefferquote + Schaden (nach Erfolg)</button>
             </div>
             <div class="sk-aktion-zeile">
-                <button class="sk-mini-btn" onclick="skKritischerTreffer('${e.id}')"><i class="fa-solid fa-burst"></i> Kritische Trefferzone (1W4)</button>
+                <button class="sk-mini-btn" onclick="skKritischerTreffer('${e.id}')"><i class="fa-solid fa-burst"></i> Kritische Trefferzone (1W4, bei &gt;300 Schaden)</button>
                 <input type="number" class="sk-input sk-input-schmal" placeholder="Schaden" data-skschaden="${escapeHtml(e.id)}">
                 <button class="sk-mini-btn" onclick="skSchadenAnwenden('${e.id}', document.querySelector('[data-skschaden=\\'${e.id}\\']').value)"><i class="fa-solid fa-minus"></i> Schaden abziehen</button>
             </div>
@@ -842,8 +890,26 @@ function skEinheitKarteHtml(e, istAmZug) {
     </div>`;
 }
 
-function skManoeverReferenzHtml() {
+// Regeln rund ums Schiff, die der Tracker nicht würfelt, aber der SL/die Crew
+// schnell nachschlagen können soll (RW 5.1, Seekampf Pkt. 1, 5, 7)
+function skSchiffsregelnHtml() {
     return `<details class="sk-manoever-referenz">
+        <summary>Spielerrollen, Kanonen-Aktionen &amp; Felder (Nachschlage)</summary>
+        <div class="sk-manoever-liste">
+            <div class="sk-manoever-karte"><div class="sk-manoever-kopf"><b>Spielerrollen</b></div>
+                <p class="ir-hint"><b>Steuermann:</b> nach erfolgreicher „Schiffe steuern“-Probe +10 auf alle Steuern/Manöver-Proben.<br>
+                <b>Ausguck:</b> +10 auf Wahrnehmung/Heimlichkeit, frühere Sicht auf Gegner.<br>
+                <b>Richtschütze:</b> +10 auf Kanonentreffer, wenn er eine Zielen-Probe (Fernkampf) besteht.</p></div>
+            <div class="sk-manoever-karte"><div class="sk-manoever-kopf"><b>Kanonenfeuer pro Crewmitglied &amp; Runde</b></div>
+                <p class="ir-hint">Abfeuern: bis zu 3 Kanonen (wenn vorbereitet). Nachladen: 1 Kanone. Treffer: W100 = Prozent der Kanonen, die Schaden verursachen.</p></div>
+            <div class="sk-manoever-karte"><div class="sk-manoever-kopf"><b>Felder &amp; Zeit</b></div>
+                <p class="ir-hint">1 Feld = 200 m; beim zweiten diagonalen Schritt zählt das Feld als 300 m. 1 Runde = 5 Minuten. Windwechsel: alle W6 Runden wirft der SL erneut 1W8 für die Richtung.</p></div>
+        </div>
+    </details>`;
+}
+
+function skManoeverReferenzHtml() {
+    return skSchiffsregelnHtml() + `<details class="sk-manoever-referenz">
         <summary>Manöver-Nachschlage (Probe läuft auf dem Charakterbogen des Steuermanns/Schützen)</summary>
         <div class="sk-manoever-liste">
         ${SK_MANOEVER.map(m => `

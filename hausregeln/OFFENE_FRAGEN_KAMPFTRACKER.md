@@ -1,5 +1,8 @@
 # Offene Fragen zum geplanten Kampf-Tracker (Landkampf)
 
+> **Stand 2026-10-09: Der Kampf-Tracker ist längst gebaut (`kampf.js`).** Die Fragen unten sind
+> historisch; was heute gilt, steht im Kopfkommentar von `kampf.js` und in `OFFENE_FRAGEN.md`.
+
 Idee: ein Gegenstück zum Seekampf-Tracker, aber für normale Kämpfe (Überfall,
 Monster, Wache) - Initiative sammeln, Zugreihenfolge durchgehen, grobe HP-
 Übersicht über NSCs/Monster im Kampf. **Noch nichts davon ist gebaut** - die

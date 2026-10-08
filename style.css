@@ -2202,6 +2202,31 @@ body.gm-mode .gm-title { color: var(--color-accent); }
 }
 .tb-gelernt:last-child { border-bottom: none; }
 .tb-gelernt-verbraucht { opacity: 0.45; }
+/* Wesen/Monster-Skill, während der Charakter in menschlicher Form ist (RW 5.1: nur in Monsterform nutzbar) */
+.tb-gelernt-menschlich { opacity: 0.6; border-left-style: dashed; }
+.tb-monsterform { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; margin-top: 0.5rem; padding: 0.5rem 0.7rem; border-radius: 8px; background: rgba(255,255,255,0.04); border: 1px dashed var(--glass-border); }
+.tb-monsterform-an { border: 1px solid #a855f7; background: rgba(168, 85, 247, 0.12); }
+/* Herstellen & Verbrauchen (herstellen.js) */
+.herstellen-modal { max-width: 620px; }
+.hs-art { margin: 1rem 0 0.4rem; color: var(--color-accent); font-size: 0.95rem; }
+.hs-eintrag { padding: 0.5rem 0.7rem; margin-bottom: 0.45rem; border-radius: 8px; background: rgba(255,255,255,0.04); border-left: 3px solid var(--color-accent); }
+.hs-teuer { opacity: 0.6; }
+.hs-kopf { display: flex; justify-content: space-between; gap: 0.6rem; flex-wrap: wrap; }
+.hs-preis { font-family: var(--font-mono); font-size: 0.78rem; opacity: 0.8; }
+.hs-effekt { font-size: 0.82rem; opacity: 0.85; margin: 0.15rem 0 0.4rem; }
+.hs-aktion { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+.ir-benutzen { background: rgba(87, 242, 135, 0.15); border-color: #57F287; }
+.ir-herstellen-btn { margin-bottom: 0.4rem; }
+/* Kampf-Tracker: verbrauchte Aktion A/B/Extra dieser Runde */
+.sk-aktion-benutzt { opacity: 0.55; text-decoration: line-through; border-color: var(--color-accent); }
+/* Meine Eigenschaften im Einsatz */
+.tb-einsatz-liste { display: flex; flex-direction: column; gap: 0.45rem; }
+.tb-einsatz-zeile { padding: 0.5rem 0.7rem; border-radius: 8px; background: rgba(255,255,255,0.04); border-left: 3px solid var(--color-accent); }
+.tb-einsatz-text { font-size: 0.82rem; margin: 0.1rem 0 0.3rem; }
+.tb-einsatz { display: inline-flex; align-items: center; gap: 0.4rem; }
+.tb-einsatz-punkt { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--color-accent); }
+.tb-einsatz-genutzt { background: var(--color-accent); opacity: 0.35; }
+.tb-einsatz-wert { font-size: 0.85rem; }
 .tb-gelernt-verbraucht .tb-gelernt-text > div:first-child { text-decoration: line-through; }
 .tb-gelernt-verwaist { border-bottom-style: dashed; }
 .tb-gelernt-text { flex: 1; min-width: 0; }

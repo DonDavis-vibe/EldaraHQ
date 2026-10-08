@@ -481,6 +481,8 @@ function handleIncomingData(peerId, payload) {
     if (typeof runenAnfrageVerarbeiten === 'function' && runenAnfrageVerarbeiten(peerId, payload)) return;
     // Söldner-Pool (soeldner.js): Spieler will einen vorbereiteten Söldner rekrutieren
     if (typeof soeldnerAnfrageVerarbeiten === 'function' && soeldnerAnfrageVerarbeiten(peerId, payload)) return;
+    // Verbrauchsgegenstände (herstellen.js): Gegengift, Blutstillende Paste ... wirken im Kampf-Tracker
+    if (typeof kampfVerbrauchVerarbeiten === 'function' && kampfVerbrauchVerarbeiten(peerId, payload)) return;
     // Anflüstern (fluestern.js): Spieler bestätigt, die Nachricht gelesen zu haben
     if (typeof fluesternAnfrageVerarbeiten === 'function' && fluesternAnfrageVerarbeiten(peerId, payload)) return;
     if (payload.type === 'state') {

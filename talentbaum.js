@@ -84,6 +84,10 @@ function tbDaten(daten) {
     if (h.sonderAst === undefined) h.sonderAst = null;
     // Gewählte Form der Divinius Chimäre (siehe tbAstFormen)
     if (h.chimaerenForm === undefined) h.chimaerenForm = null;
+    // Monsterform (RW 5.1, Wesen/Monster-Fähigkeiten): an = der Charakter ist gerade das Monster
+    if (h.monsterform === undefined) h.monsterform = false;
+    // Einsätze der Besonderen Eigenschaften (Name -> bereits genutzt), siehe TB_EIGENSCHAFT_EINSATZ
+    if (!h.eigenschaftGenutzt || typeof h.eigenschaftGenutzt !== 'object') h.eigenschaftGenutzt = {};
     if (!h.gelernt || typeof h.gelernt !== 'object') h.gelernt = {};
     if (!h.verbraucht || typeof h.verbraucht !== 'object') h.verbraucht = {};
     if (!h.eigenschaften || typeof h.eigenschaften !== 'object') h.eigenschaften = {};
@@ -401,6 +405,170 @@ function tbWesenWaehlen(wert) {
     tbNachAenderung();
 }
 
+// --- Besondere Eigenschaften im Einsatz (RW 5.1) -------------------------------
+// Die meisten Eigenschaften sind passive Texte, ein paar haben begrenzte Einsätze
+// (pro Kampf / pro Tag) oder greifen an einer klar abgrenzbaren Stelle ein:
+//   Adrenalin   - automatisch Heilung beim ersten Fall unter 50 % LP (1x pro Kampf)
+//   Unsterblich - automatisch LP auf 1/50/100 statt 0 (1x pro Tag)
+//   Kämpfer     - +1/2/3 auf Initiative (Bogen-Wurf und Kampf-Tracker)
+//   Hartnäckig / Kampfsanitäter / Meister Magus - Einsatz-Zähler zum Abhaken
+//   Berserker   - zeigt den aktuellen Schadensbonus nach LP-Stand an
+//   Ledrige Haut / Stahlmagen / Unbrennbar - tickt der Kampf-Tracker des SL
+// Zurückgesetzt werden die Zähler mit "Kampf beenden" (kampf) bzw. der Nachtruhe (tag).
+const TB_EIGENSCHAFT_EINSATZ = {
+    'Adrenalin':      { art: 'kampf', anzahl: () => 1, label: 'Heilung ausgelöst' },
+    'Hartnäckig':     { art: 'kampf', anzahl: s => s, label: 'Wurf wiederholt' },
+    'Kampfsanitäter': { art: 'kampf', anzahl: s => s, label: 'Heilfähigkeit als Extra-Aktion' },
+    'Meister Magus':  { art: 'kampf', anzahl: () => 1, label: 'Fähigkeiten erneuert' },
+    'Unsterblich':    { art: 'tag',   anzahl: () => 1, label: 'Rettung vor dem Tod genutzt' }
+};
+
+function tbEigenschaftStufe(name, hausregeln) {
+    const h = hausregeln || appData.hausregeln;
+    return h && h.eigenschaften ? (parseInt(h.eigenschaften[name]) || 0) : 0;
+}
+
+function tbEinsaetzeGenutzt(name) {
+    const g = appData.hausregeln && appData.hausregeln.eigenschaftGenutzt;
+    return g ? (parseInt(g[name]) || 0) : 0;
+}
+
+function tbEinsaetzeMax(name) {
+    const e = TB_EIGENSCHAFT_EINSATZ[name];
+    return e ? e.anzahl(tbEigenschaftStufe(name)) : 0;
+}
+
+function tbEinsatzMarkieren(name, delta) {
+    const h = tbDaten();
+    const neu = Math.max(0, Math.min(tbEinsaetzeMax(name), tbEinsaetzeGenutzt(name) + (delta === undefined ? 1 : delta)));
+    if (neu) h.eigenschaftGenutzt[name] = neu; else delete h.eigenschaftGenutzt[name];
+}
+
+function tbEinsatzKlick(name, delta) {
+    tbEinsatzMarkieren(name, delta);
+    tbNachAenderung();
+}
+
+// art 'kampf' = nur Pro-Kampf-Zähler, 'tag' = alles (ein neuer Tag beginnt auch einen neuen Kampf).
+// Gibt die Zahl der zurückgesetzten Eigenschaften zurück.
+function tbEigenschaftenAuffrischen(art) {
+    const h = appData.hausregeln;
+    if (!h || !h.eigenschaftGenutzt) return 0;
+    let n = 0;
+    Object.keys(h.eigenschaftGenutzt).forEach(name => {
+        const e = TB_EIGENSCHAFT_EINSATZ[name];
+        if (e && (art === 'tag' || e.art === 'kampf')) { delete h.eigenschaftGenutzt[name]; n++; }
+    });
+    return n;
+}
+
+// Von adjustHp (app.js) nach jeder LP-Änderung aufgerufen. altLp = LP vor der Änderung.
+function tbEigenschaftenBeiLpAenderung(altLp) {
+    const h = appData.hausregeln;
+    if (!h || !h.eigenschaften) return;
+    const max = Math.max(1, parseInt(appData.hpMax) || 1);
+
+    const unsterblich = tbEigenschaftStufe('Unsterblich');
+    if (unsterblich && altLp > 0 && appData.hpCurrent <= 0 && tbEinsaetzeGenutzt('Unsterblich') < 1) {
+        const wert = Math.min(max, [1, 50, 100][unsterblich - 1] || 1);
+        tbEinsatzMarkieren('Unsterblich');
+        appData.hpCurrent = wert;
+        const text = `Unsterblich: Du wärst auf 0 LP gefallen - stattdessen stehst du bei ${wert} LP. (Einmal pro Tag, jetzt verbraucht.)`;
+        if (typeof addActivityLog === 'function') addActivityLog(text, 'activity-good', '<i class="fa-solid fa-infinity"></i>');
+        setTimeout(() => alert(text), 450);
+        return;
+    }
+
+    const adrenalin = tbEigenschaftStufe('Adrenalin');
+    if (adrenalin && altLp >= max * 0.5 && appData.hpCurrent < max * 0.5 && appData.hpCurrent > 0 && tbEinsaetzeGenutzt('Adrenalin') < 1) {
+        const heilung = 10 * adrenalin;
+        tbEinsatzMarkieren('Adrenalin');
+        appData.hpCurrent = Math.min(max, appData.hpCurrent + heilung);
+        if (typeof addActivityLog === 'function') addActivityLog(`Adrenalin: unter 50 % LP gefallen - du erhältst ${heilung} LP Heilung.`, 'activity-good', '<i class="fa-solid fa-heart-pulse"></i>');
+    }
+}
+
+function tbBerserkerBonus() {
+    const stufe = tbEigenschaftStufe('Berserker');
+    if (!stufe) return null;
+    const anteil = (parseInt(appData.hpCurrent) || 0) / Math.max(1, parseInt(appData.hpMax) || 1);
+    const faktor = anteil < 0.25 ? 3 : (anteil < 0.5 ? 2 : (anteil < 0.75 ? 1 : 0));
+    const wuerfel = [4, 6, 8][stufe - 1] || 4;
+    return { faktor, text: faktor ? `+${faktor}W${wuerfel} Schaden` : 'noch kein Bonus (erst unter 75 % LP)' };
+}
+
+function tbEinsatzHtml(h, regeln) {
+    const gewaehlt = (regeln.eigenschaften || []).filter(e => (parseInt(h.eigenschaften[e.name]) || 0) > 0);
+    if (!gewaehlt.length) return '';
+    const zeilen = gewaehlt.map(e => {
+        const stufe = parseInt(h.eigenschaften[e.name]) || 0;
+        const einsatz = TB_EIGENSCHAFT_EINSATZ[e.name];
+        let zusatz = '';
+        if (einsatz) {
+            const max = einsatz.anzahl(stufe), genutzt = tbEinsaetzeGenutzt(e.name);
+            const punkte = Array.from({ length: max }, (_, i) => `<span class="tb-einsatz-punkt ${i < genutzt ? 'tb-einsatz-genutzt' : ''}"></span>`).join('');
+            zusatz = `<span class="tb-einsatz" title="${escapeHtml(einsatz.label)} - ${einsatz.art === 'kampf' ? 'kommt nach dem Kampf zurück' : 'kommt am nächsten Tag zurück'}">${punkte}
+                <button class="x-mini" type="button" data-tbeinsatz="${escapeHtml(e.name)}" data-delta="1" ${genutzt >= max ? 'disabled' : ''}>Einsatz</button>
+                <button class="x-mini" type="button" data-tbeinsatz="${escapeHtml(e.name)}" data-delta="-1" ${genutzt <= 0 ? 'disabled' : ''} title="Einsatz zurücknehmen">↺</button></span>`;
+        } else if (e.name === 'Berserker') {
+            zusatz = `<span class="tb-einsatz-wert">Jetzt: <b>${escapeHtml(tbBerserkerBonus().text)}</b></span>`;
+        } else if (e.name === 'Kämpfer') {
+            zusatz = '<span class="tb-einsatz-wert">+' + stufe + ' Initiative <i>(automatisch eingerechnet)</i></span>';
+        } else if (['Ledrige Haut', 'Stahlmagen', 'Unbrennbar'].includes(e.name)) {
+            zusatz = '<span class="tb-einsatz-wert"><i>tickt der Spielleiter im Kampf-Tracker</i></span>';
+        }
+        return `<div class="tb-einsatz-zeile"><div><strong>${escapeHtml(e.name)}</strong> <span class="tb-dim">Stufe ${stufe}/${e.wirkungen.length}</span></div>
+            <div class="tb-dim tb-einsatz-text">${escapeHtml(e.wirkungen[stufe - 1] || '')}</div>${zusatz}</div>`;
+    }).join('');
+    return `<details class="x-details tb-details" open>
+        <summary><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-bolt"></i> Meine Eigenschaften im Einsatz</summary>
+        <div class="tb-einsatz-liste">${zeilen}</div>
+    </details>`;
+}
+
+// --- Monsterform (RW 5.1, "Wesen/Monster-Fähigkeiten") ----------------------
+// Wesen/Monster-Skills können nur in Monsterform angewendet werden. Fällt der
+// Charakter in Monsterform unter 25 Lebenspunkte, muss er einen Monster-
+// Attributwurf (gegen den Wesen/Monsterwert) machen: bei Misserfolg verwandelt
+// er sich in die menschliche Form zurück, bei Erfolg bleibt er Monster. Das
+// wiederholt sich bei jedem erlittenen Schaden, solange er unter 25 LP ist
+// (adjustHp in app.js ruft tbMonsterAttributwurf auf).
+const TB_MONSTER_LP_SCHWELLE = 25;
+
+function tbWesenKannMonsterform(h) {
+    return !!(h && h.wesen && h.wesen !== 'Mensch');
+}
+
+function tbMonsterformUmschalten() {
+    const h = tbDaten();
+    if (!tbWesenKannMonsterform(h)) return;
+    h.monsterform = !h.monsterform;
+    if (typeof addActivityLog === 'function') {
+        addActivityLog(h.monsterform ? `Verwandlung: ${h.wesen} (Monsterform)` : 'Zurück in menschlicher Form', 'activity-neutral', '<i class="fa-solid fa-dragon"></i>');
+    }
+    tbNachAenderung();
+}
+
+// Würfelt den Monster-Attributwurf (W100 gegen den Wesen/Monsterwert; ≤ Wert = bestanden)
+function tbMonsterAttributwurf() {
+    const h = tbDaten();
+    if (!h.monsterform || !tbWesenKannMonsterform(h)) return;
+    const wert = Math.max(0, parseInt(h.wesenWert) || 0);
+    const wurf = Math.floor(Math.random() * 100) + 1;
+    const bestanden = wurf <= wert;
+    let text;
+    if (bestanden) {
+        text = `Monster-Attributwurf unter ${TB_MONSTER_LP_SCHWELLE} LP: ${wurf} gegen ${wert} - bestanden, du bleibst ${h.wesen}.`;
+    } else {
+        h.monsterform = false;
+        text = `Monster-Attributwurf unter ${TB_MONSTER_LP_SCHWELLE} LP: ${wurf} gegen ${wert} - misslungen, du verwandelst dich in deine menschliche Form zurück.`;
+    }
+    if (typeof addActivityLog === 'function') addActivityLog(text, bestanden ? 'activity-good' : 'activity-bad', '<i class="fa-solid fa-dragon"></i>');
+    if (typeof saveData === 'function') saveData();
+    renderTalentbaum();
+    alert(text);
+}
+
 function tbNachAenderung() {
     if (typeof saveData === 'function') saveData();
     renderTalentbaum();
@@ -601,6 +769,12 @@ function renderTalentbaum() {
         wesenHtml += `<p class="hr-hint" style="margin-top:0.4rem" title="Der Spielleiter vergibt sie über den Eingriff-Knopf in seinem Dashboard, nicht du selbst.">
             <i class="fa-solid fa-hand-sparkles"></i> Monsterpunkte: <strong>${h.wesenWert}</strong> (Rang ${astEco.rang || '–'})
         </p>`;
+        if (tbWesenKannMonsterform(h)) {
+            wesenHtml += `<div class="tb-monsterform ${h.monsterform ? 'tb-monsterform-an' : ''}">
+                <button class="tool-btn" type="button" onclick="tbMonsterformUmschalten()" title="Wesen/Monster-Skills lassen sich nur in Monsterform anwenden"><i class="fa-solid fa-dragon"></i> ${h.monsterform ? 'Monsterform AN - zurückverwandeln' : 'In Monsterform verwandeln'}</button>
+                <span class="hr-hint" style="margin:0">${h.monsterform ? `Unter ${TB_MONSTER_LP_SCHWELLE} LP würfelst du bei jedem Schaden einen Monster-Attributwurf (Wert ${h.wesenWert}); misslingt er, bist du wieder Mensch.` : 'Wesen/Monster-Skills funktionieren nur in Monsterform.'}</span>
+            </div>`;
+        }
     }
 
     // Die Bäume
@@ -716,10 +890,13 @@ function renderTalentbaum() {
                         return `<li${st.level === effektiv ? ' class="tb-gelernt-voll-aktuell"' : ''}><strong>Lvl ${st.level}:</strong> ${escapeHtml(teile)}</li>`;
                     }).join('')}</ul>
                 </div>` : '';
-            return `<div class="tb-gelernt ${verbraucht ? 'tb-gelernt-verbraucht' : ''} ${verwaist ? 'tb-gelernt-verwaist' : ''}" title="${escapeHtml(s ? tbStufenText(s, regeln) : '')}">
+            // Wesen/Monster-Skills gehen nur in Monsterform (nicht beim Wesen "Mensch")
+            const nurMonster = !!(h.wesen && ast === h.wesen && tbWesenKannMonsterform(h));
+            const gesperrtMenschlich = nurMonster && !h.monsterform;
+            return `<div class="tb-gelernt ${verbraucht ? 'tb-gelernt-verbraucht' : ''} ${verwaist ? 'tb-gelernt-verwaist' : ''} ${gesperrtMenschlich ? 'tb-gelernt-menschlich' : ''}" title=""${escapeHtml(s ? tbStufenText(s, regeln) : '')}">
                 <button class="tb-check" data-tbtoggle="${escapeHtml(key)}" title="${verbraucht ? 'Wieder verfügbar machen' : 'Als verbraucht markieren'}"><i class="fa-solid ${verbraucht ? 'fa-square-check' : 'fa-square'}"></i></button>
                 <div class="tb-gelernt-text">
-                    <div><strong>${escapeHtml(name)}</strong> <span class="tb-dim">Lvl ${level}${effektiv !== level ? ` (effektiv ${effektiv} ⚡)` : ''} · ${escapeHtml(ast)}${formInaktiv ? ` · ${escapeHtml(s.form)} nicht aktiv` : (verwaist ? ' · Ast nicht mehr gewählt' : '')}</span></div>
+                    <div><strong>${escapeHtml(name)}</strong> <span class="tb-dim">Lvl ${level}${effektiv !== level ? ` (effektiv ${effektiv} ⚡)` : ''} · ${escapeHtml(ast)}${formInaktiv ? ` · ${escapeHtml(s.form)} nicht aktiv` : (verwaist ? ' · Ast nicht mehr gewählt' : '')}${nurMonster ? (h.monsterform ? ' · 🐉 Monsterform' : ' · nur in Monsterform') : ''}</span></div>
                     ${detail ? `<div class="tb-dim tb-gelernt-detail">${escapeHtml(detail)}</div>` : ''}
                 </div>
                 <button class="x-mini tb-rw-btn" data-tbrw="${escapeHtml(key)}" title="Im Regelwerk nachschlagen"><i class="fa-solid fa-book-open"></i></button>
@@ -754,11 +931,13 @@ function renderTalentbaum() {
             <div id="tb-hinweis" class="x-hint"></div>
             <div class="tb-baeume">${baeumeHtml}</div>
             ${eigenschaftenHtml}
+            ${tbEinsatzHtml(h, regeln)}
             <details class="x-details tb-details" ${gelerntKeys.length ? 'open' : ''}>
                 <summary><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-list-check"></i> Gelernte Fähigkeiten (${gelerntKeys.length})
                     ${gelerntKeys.length ? `<button class="tool-btn tb-refresh" onclick="event.preventDefault(); event.stopPropagation(); tbAlleAuffrischen()" title="Alle als verfügbar markieren (z.B. nach dem Kampf)"><i class="fa-solid fa-rotate"></i> Alle auffrischen</button>` : ''}
                 </summary>
                 <div class="tb-gelernt-liste">${gelerntHtml || '<div class="x-leer">Noch nichts gelernt – klicke im Baum auf einen Skill.</div>'}</div>
+                ${gelerntKeys.length ? '<p class="hr-hint">Aktive und Extra-Skills gehen in der Regel einmal pro Kampf. Zurück bekommst du sie, wenn du am Kampfende <b>über 50 % deiner LP</b> hast oder <b>6 Stunden schläfst</b> (wer unter 50 % ist, muss eine Nacht schlafen). Ein <b>kritischer Treffer</b> mit einer Fähigkeit verbraucht ihre Ladung nicht. Der Spielleiter frischt sie meist für dich auf.</p>' : ''}
             </details>
             ${tabellenHtml}
         </details>`;
@@ -773,6 +952,7 @@ function renderTalentbaum() {
     section.querySelectorAll('[data-tbeigenschaftminus]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); tbEigenschaftZurueckgeben(b.dataset.tbeigenschaftminus); }));
     section.querySelectorAll('[data-tbroll]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); tbSchadenWuerfeln(b.dataset.tbroll); }));
     section.querySelectorAll('[data-tbtoggle]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); tbVerbrauchtToggle(b.dataset.tbtoggle); }));
+    section.querySelectorAll('[data-tbeinsatz]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); tbEinsatzKlick(b.dataset.tbeinsatz, parseInt(b.dataset.delta)); }));
     section.querySelectorAll('[data-tbrw]').forEach(b => b.addEventListener('click', e => {
         e.stopPropagation();
         const key = b.dataset.tbrw, i = key.indexOf('::');

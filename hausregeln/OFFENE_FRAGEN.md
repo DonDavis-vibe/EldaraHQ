@@ -309,7 +309,11 @@ trifft (die Vorrang-Regel greift nur, wo dort tatsächlich etwas steht):**
    Größenkatalog im Rasterinventar kennt aktuell nur 0,5/1/2/3
    (`inventarraster.js`, `IR_GROESSEN_KATALOG`), noch nicht ergänzt. Kein
    Widerspruch zu einer älteren Regel, nur eine fehlende Katalog-Stufe.
-4. Der 0-HP-Rettungswurf in `zwischenstand.docx` nennt weder die
+4. **ERLEDIGT (2026-10-09, SL: „muss auf die 5.1 Regel"):** Rettungswurf und
+   nächtliche Regeneration folgen jetzt RW 5.1 - keine Eskalations-Erschwernis,
+   kein Stun (stattdessen Schlaf), keine Grundregeneration. Der ursprüngliche
+   Absatz steht darunter nur noch zur Historie.
+   Der 0-HP-Rettungswurf in `zwischenstand.docx` nennt weder die
    Eskalations-Erschwernis (+10 pro weiterem Versuch am Tag) noch einen Stun
    bei Erfolg - beides macht der Code aktuell (`kampf.js`,
    `kampfRettungswurfWuerfeln`). Da `zwischenstand.docx` dazu schweigt statt
@@ -386,3 +390,78 @@ Bei künftigen inhaltlichen Neu-Extraktionen `TALENTBAUM_STAND` erhöhen.
 
 Offen: Der Schadenstyp (physisch/magisch/heilung) steht im Anhang nicht und wird
 vom gleichnamigen alten Skill übernommen bzw. grob geraten (nur Tooltip).
+
+
+## 2026-10-09: Seekampf, Rettungswurf und Regeneration auf RW 5.1 gebracht
+
+`seekampf.js` beruhte auf RW 4.1, `kampf.js` auf RW 4.3. Auf 5.1 umgestellt:
+- Seekampf-Bewegung: Würfelsumme (Grundtempo + Windbonus) **durch 3, aufgerundet**
+  = Felder (Beispiel im Regelwerk: 10 -> 4). Segel zerstört = Geschwindigkeit -2
+  (je Segel, vor dem Teilen), Mastbruch halbiert die Felder.
+- Kanonenfeuer würfelt zusätzlich den Schaden (10w10 je treffender Kanone gegen
+  Schiffe); **mehr als 300 Schaden in einer Aktion** = kritische Trefferzone
+  (Log-Hinweis, 1W4 weiterhin per Knopf). Vorher: nur bei W100 = 100.
+- Manöver-Tabelle auf die 11 Manöver von 5.1 (kein eigenes "Entern" mehr; Hart am
+  Wind +1w6 Bewegungsbonus, Segel +1w8 auf den Geschwindigkeitswurf, Volle
+  Breitseite +10 auf den Kanonentreffer-Wurf). Neu als Nachschlage: Spielerrollen
+  (Steuermann/Ausguck/Richtschütze +10), Kanonen-Aktionen pro Crewmitglied,
+  Diagonal-Regel (zweiter diagonaler Schritt = 300 m).
+- 0-HP-Rettungswurf: 1-50 = sofort 1w10 LP und Schlaf (1W4 Runden), 51-100 =
+  tot, Seele 1w6 Runden. Keine Erschwernis +10 pro Versuch, kein Stun mehr.
+- Nächtliche Regeneration: je ein Würfel für Nahrung und Schlaf (viel 1w12,
+  wenig 1w10, gar nicht 0), ab 2 Tagen ohne -1w10; **keine** Grundregeneration.
+- Waffen-Nachschlagetabelle (Kampf-Panel): Degen +15 Blocken, Dolch-Krit GS 4,
+  Kriegshammer-Krit 3w10 an angrenzende Felder, improvisierte Waffe 1w10,
+  Kanone lädt 4 Aktionen.
+Noch nicht umgesetzt (Rest der Lückenliste): Skill-Wiederherstellung (>50 % LP am
+Kampfende / 6 h Schlaf), Zustand "Monsterform" am Bogen (unter 25 LP
+Monster-Attributwurf), Wirkung der Besonderen Eigenschaften.
+
+## 2026-10-09: Skill-Wiederherstellung, Monsterform und Eigenschaften im Einsatz
+
+Aus der Lückenliste gegen RW 5.1 umgesetzt (alles nach dem 5.1-Text, bei den
+Annahmen unten bitte den SL bestätigen lassen):
+- **Skills zurück** (RW 5.1 "Wie bekomme ich meine Skills zurück?"): Kampf-Tracker
+  "Kampf beenden (Skills zurück)" - Spieler mit **über 50 % LP** bekommen ihre
+  verbrauchten Skills automatisch wieder; wer 50 % oder weniger hat, muss eine Nacht
+  schlafen (auch wenn er danach hochgeheilt wird). "Nacht auswerten" frischt bei
+  Schlaf "Viel (+7 Std.)" auf, bei "Wenig (6-3 Std.)" nicht automatisch (Knopf
+  "Skills auffrischen" an der Spielerkarte). *Annahme:* nur "Viel" gilt sicher als 6+ Std.
+- **Monsterform:** Schalter am Bogen (nicht beim Wesen Mensch). Wesen/Monster-Skills
+  sind in Menschenform abgeblendet ("nur in Monsterform"). Unter 25 LP in Monsterform:
+  bei jedem Schaden automatischer Monster-Attributwurf (W100 <= Monsterwert), bei
+  Misserfolg Rückverwandlung. Der Kampf-Tracker nutzt die Form für die Amputations-
+  schwelle (70/100), NSCs lassen sich dort auf Monsterform stellen.
+  *Annahmen:* "Monster-Attributwurf" = W100 gegen den Wesen/Monsterwert (Monsterpunkte);
+  alle Skills des Wesen-Astes zählen als Monster-Skills ("manche" im Regeltext).
+- **Besondere Eigenschaften im Einsatz:** Adrenalin (1x/Kampf) und Unsterblich
+  (1x/Tag) wirken automatisch, Kämpfer rechnet in die Initiative (Bogen + Tracker),
+  Berserker zeigt den aktuellen Bonus, Hartnäckig/Kampfsanitäter/Meister Magus haben
+  Einsatz-Zähler (zurück bei Kampfende bzw. Nachtruhe), Ledrige Haut/Stahlmagen/
+  Unbrennbar tickt der Kampf-Tracker bei "Runde weiter".
+  *Annahmen:* Adrenalin löst beim ersten Fall unter 50 % LP aus (auch außerhalb des
+  Kampf-Trackers); Unsterblich begrenzt die LP auf das Maximum; "Langes Leben" und
+  "Taktiker"/"Fluchtreflex" etc. bleiben reine Textwirkung (Max-LP von Hand).
+
+Zusätzlich (2026-10-09): **Aktionen pro Runde** im Kampf-Tracker (A/B/Extra, Reset bei
+"Runde weiter", Aktion A gesperrt bei <=10 LP, alles gesperrt bei Stun/Schlaf) - nur beim SL
+sichtbar, nicht an die Spieler gesynct. **Spielerrollen im Seekampf**: Posten Steuermann/
+Ausguck/Richtschütze je Crew-Mitglied als Badge am Schiff (mit den Spielern synchronisiert);
+der +10-Bonus selbst bleibt Erinnerung, die Probe läuft am Bogen.
+
+## 2026-10-09: Herstellen und Verbrauchen (RW 5.1 "Herstellbare Gegenstände")
+
+Neu in `herstellen.js`: Dialog **Herstellen** (25 Gegenstände aus der Tabelle; Probe auf eine der
+genannten Fertigkeiten mit dem Tabellen-Malus) und Knopf **Benutzen** an Inventar-Gegenständen, die
+so heißen wie in der Tabelle (Erkennung über den Namen). Heilsalben heilen sofort, Tränke setzen
+Status mit Rundenzähler (der Kampf-Tracker zählt bei "Runde weiter" herunter; Zahlen wie
+"+25 Stärke" fließen in Proben ein), Gegengift/Blutstillende Paste/Aufputschmittel/Langsames Gegengift
+wirken im Kampf-Tracker (Gift/Blutung/Schlaf liegen dort), Gifte/Brandöl setzen "Waffe präpariert".
+*Annahmen, bitte vom SL bestätigen lassen:*
+- **Kosten bei Misserfolg:** Gold wird nur bei Erfolg abgezogen, bei Misserfolg bleibt alles erhalten
+  (das Regelwerk sagt dazu nichts - evtl. sind Zutaten dann weg).
+- **"Kosten" der Tabelle = Herstellkosten in Gold.** Falls es der Kaufpreis beim Händler ist, wäre
+  Herstellen eine Alternative zum Kaufen (dann bitte Bescheid).
+- Hergestellte Gegenstände belegen 0,5 Plätze (Größe "Klein" wie der Trank im Regelwerk).
+- **Buffs ohne Zahl** (+2 Bewegung, +Rüstung, Lifesteal) sind nur Status-Erinnerungen, nicht verrechnet;
+  Gift-Stufen auf Waffen wendet der SL im Kampf-Tracker beim Treffer selbst an.

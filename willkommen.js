@@ -11,11 +11,11 @@ const WILLKOMMEN_STORAGE_KEY = 'eldaraWillkommenVersion';
 // anhängen (sonst wird die Liste mit der Zeit zu lang für eine Willkommens-
 // Nachricht).
 const WILLKOMMEN_NEUIGKEITEN = [
+    'Neu: <b>Herstellen & Benutzen</b> - Gifte, Öle, Heilsalben und Tränke aus dem Regelwerk 5.1 herstellen und im Inventar benutzen; Buffs fließen in deine Proben ein',
+    'Neu: <b>Besondere Eigenschaften im Einsatz</b>, <b>Monsterform</b> und <b>Skills zurück</b> nach Kampfende (über 50 % LP) bzw. Nachtruhe',
+    'Seekampf, 0-LP-Rettungswurf und nächtliche Regeneration nach Regelwerk 5.1; Kampf-Tracker mit Aktionen A/B/Extra',
     'Neu: <b>Handouts</b> - der Spielleiter kann dir Briefe, Bilder und Vorlesetexte zeigen; was er gezeigt hat, bleibt über den Knopf „Handouts“ nachlesbar',
     'Neu: <b>Anflüstern</b> - der Spielleiter kann dir private Nachrichten schicken, die nur du siehst (Hinweiskarte oben, später nachlesbar unter „Flüsterpost“)',
-    'Neu: <b>Regelwerk zum Nachschlagen</b> - Basis-Regelwerk und Anhang als Seitenleiste mit Inhaltsverzeichnis und Suche, auf dem Handy mit lesbaren Skill-Karten; im Talentbaum springt das Buch-Symbol direkt zur Zeile des Skills',
-    'Neu: <b>Schnellnavigation</b> unten für alle - springt direkt zu Inventar, Talenten, Logbuch & Co., Bereiche im Bild sind markiert',
-    'Neu: <b>Divinius Chimäre</b> nach Regelwerk 5.1 - Form wählen, der Form-Skill ersetzt in jedem Rang den Platzhalter, das Level gilt für alle Formen (Freigabe über den Spielleiter)',
     '<b>Talentbaum und Besondere Eigenschaften auf Regelwerk 5.1 aktualisiert</b> - viele Skills sind neu, umbenannt oder in anderen Bäumen (z.B. Wilde Wut statt Berserker-Skill, „Agilität" heißt jetzt „Athletik")',
     '<b>Wichtig:</b> Bisher vergebene Skills und Besondere Eigenschaften werden einmalig zurückgesetzt - bitte neu vergeben. Deine Punkte bleiben, ein Hinweis im Talentbaum zeigt, was du vorher hattest',
 ];

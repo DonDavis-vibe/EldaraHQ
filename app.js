@@ -3,7 +3,7 @@
 // UND den Änderungstext in willkommen.js (WILLKOMMEN_NEUIGKEITEN) anpassen -
 // die Willkommens-Nachricht erscheint dann automatisch noch einmal, weil sie
 // den zuletzt gesehenen Versionsstand im Browser (localStorage) abgleicht.
-const APP_VERSION = '0.9.4';
+const APP_VERSION = '0.9.5';
 const APP_REGELWERK_VERSION = '5.1';
 
 let saveTimeout;
@@ -236,6 +236,30 @@ function adjustHp(amount, grund) {
     const display = document.getElementById('hp-current');
     display.classList.add('shake');
     setTimeout(() => display.classList.remove('shake'), 400);
+
+    // Besondere Eigenschaften (talentbaum.js): Unsterblich/Adrenalin greifen bei LP-Änderungen ein
+    if (typeof tbEigenschaftenBeiLpAenderung === 'function') {
+        const vorEigenschaft = appData.hpCurrent;
+        tbEigenschaftenBeiLpAenderung(oldHp);
+        if (appData.hpCurrent !== vorEigenschaft) {
+            document.getElementById('hp-current').value = appData.hpCurrent;
+            updateHpBarVisual();
+            saveData();
+            if (typeof renderTalentbaum === 'function') renderTalentbaum();
+        }
+    }
+
+    // Notfall-Elixier (herstellen.js): LP fallen nicht unter 1
+    if (typeof herstellenBeiLpAenderung === 'function' && appData.hpCurrent <= 0 && herstellenBeiLpAenderung(oldHp)) {
+        document.getElementById('hp-current').value = appData.hpCurrent;
+        updateHpBarVisual();
+        saveData();
+    }
+
+    // Monsterform (talentbaum.js): unter 25 LP bei jedem erlittenen Schaden Monster-Attributwurf
+    if (diff < 0 && appData.hausregeln && appData.hausregeln.monsterform && appData.hpCurrent < 25 && typeof tbMonsterAttributwurf === 'function') {
+        setTimeout(tbMonsterAttributwurf, 450);
+    }
 
     if (amount < 0) {
         if (typeof AudioController !== 'undefined') AudioController.play('hit');
@@ -1539,8 +1563,15 @@ function statusBonusFuerSkill(skillId) {
     if (!skillId || !appData.statuses) return leer;
     let summe = 0;
     const quellen = [];
+    // Status mit wirktAufName (z.B. Trank "+25 Stärke") wirken auf Fertigkeiten dieses Namens,
+    // "*" auf alle Fertigkeiten (Konzentrationstrank) - siehe herstellen.js
+    const skillName = ['handeln', 'wissen', 'soziales'].map(a => (appData['skills_' + a] || []).find(sk => sk.id === skillId)).find(Boolean);
+    const nameKlein = skillName && skillName.name ? String(skillName.name).toLowerCase() : '';
     appData.statuses.forEach(s => {
-        if (!s || s.wirktAufSkill !== skillId) return;
+        if (!s) return;
+        const nachId = s.wirktAufSkill === skillId;
+        const nachName = s.wirktAufName && (s.wirktAufName === '*' || String(s.wirktAufName).toLowerCase() === nameKlein);
+        if (!nachId && !nachName) return;
         const n = parseInt(s.value, 10);
         if (!isNaN(n) && n !== 0) { summe += n; quellen.push(s.name); }
     });
@@ -1999,9 +2030,11 @@ function rollInitiative() {
     const handlnAttr = parseInt(appData['attr_handeln']) || 0;
     const w10Result = Math.floor(Math.random() * 10) + 1;
     const modifier = consumeModifier();
-    const total = w10Result + handlnAttr + modifier.mod;
+    // Besondere Eigenschaft "Kämpfer": +1/2/3 Initiative (talentbaum.js)
+    const kaempfer = typeof tbEigenschaftStufe === 'function' ? tbEigenschaftStufe('Kämpfer') : 0;
+    const total = w10Result + handlnAttr + modifier.mod + kaempfer;
     
-    addToLog(`<i class="fa-solid fa-bolt"></i> Initiative`, `1W10 (${w10Result}) + Handeln (${handlnAttr})${modifier.str} = <b>${total}</b>`);
+    addToLog(`<i class="fa-solid fa-bolt"></i> Initiative`, `1W10 (${w10Result}) + Handeln (${handlnAttr})${modifier.str}${kaempfer ? ` + Kämpfer (${kaempfer})` : ''} = <b>${total}</b>`);
     
     const displayRes = document.getElementById('dice-result');
     if(displayRes) {
@@ -2016,7 +2049,9 @@ function rollInitiative() {
     }
 }
 
-function rollSkillCheck(skillName, skillValue, isBaseAttribute = false, category = null, skillId = null) {
+// extra (optional): { mod, label } - zusätzlicher Bonus/Malus nur für diese Probe (z.B. der
+// Probe-Malus beim Herstellen, herstellen.js). Rückgabe: { erfolg, klasse, wurf, zielwert }.
+function rollSkillCheck(skillName, skillValue, isBaseAttribute = false, category = null, skillId = null, extra = null) {
     // Regelwerk S.8: "keine Fähigkeiten über 100 Punkte haben kann" - der Fähigkeitswert selbst
     // wird für den Wurf hart bei 100 gedeckelt, auch wenn auf dem Bogen mehr investiert ist.
     let capHint = '';
@@ -2042,7 +2077,10 @@ function rollSkillCheck(skillName, skillValue, isBaseAttribute = false, category
     const statusBonus = statusBonusFuerSkill(skillId);
     const manuellerAnteil = modifier.mod;
     modifier.mod += statusBonus.summe;
+    const extraMod = extra && Number.isFinite(extra.mod) ? extra.mod : 0;
+    modifier.mod += extraMod;
     const modTeile = [];
+    if (extraMod) modTeile.push(`${extraMod > 0 ? '+' : ''}${extraMod} ${extra.label || 'Modifikator'}`);
     if (manuellerAnteil) modTeile.push(manuellerAnteil > 0 ? `+${manuellerAnteil} Bonus` : `${manuellerAnteil} Malus`);
     if (statusBonus.summe) modTeile.push(`${statusBonus.summe > 0 ? '+' : ''}${statusBonus.summe} durch ${statusBonus.quellen.join(', ')}`);
     modifier.str = modTeile.length ? ` (inkl. ${modTeile.join(', ')})` : '';
@@ -2093,6 +2131,7 @@ function rollSkillCheck(skillName, skillValue, isBaseAttribute = false, category
 
     const critDamageHint = pendingCritDamage ? ` <span style="opacity:0.7">(nächster Schadenswurf wird verdoppelt!)</span>` : '';
     addToLog(`<i class="fa-solid fa-dice"></i> ${skillName}-Probe (Wert: ${zielwert}${modifier.str})`, `gewürfelt <b>${result}</b> &rarr; <span style="color:var(--accent)">${statusText}</span>${critDamageHint}${capHint}`);
+    return { erfolg: statusClass === 'success' || statusClass === 'crit-success', klasse: statusClass, wurf: result, zielwert };
 }
 
 function handleThemeLogoUpload(event) {

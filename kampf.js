@@ -23,9 +23,12 @@
 //     Misserfolg ein
 //   - Schlaf/tiefer Schlaf: Rundenzähler, Wecken-Zähler für tiefen Schlaf,
 //     Aufwachen durch Schaden (S.22)
-//   - 0-HP-Rettungswurf (1W100-Tabelle mit Tages-Eskalationsmalus, S.23)
+//   - 0-HP-Rettungswurf (1W100: 1-50 = 1W10 LP zurück und Schlaf, 51-100 tot mit
+//     Seele 1W6 Runden; RW 5.1 - die Eskalationserschwernis und der Stun der
+//     Fassung 4.3 sind entfallen)
 //   - Ohnmacht/Amputation (1W10-Körperteil-Tabelle, S.24)
-//   - Nächtliche Regeneration (1W10 Grund + Essen-/Schlaf-Würfel, S.24)
+//   - Nächtliche Regeneration (je ein Würfel für Nahrung und Schlaf, RW 5.1 -
+//     keine Grundregeneration mehr)
 //
 // NICHT AUTOMATISIERT: die eigentlichen Angriffs-/Verteidigungs-Proben
 // (Fähigkeitswert = Talentpunkte + Begabungswert, S.7) - die laufen ganz
@@ -50,8 +53,10 @@
 //                     hp: {aktuell, max} (nur nsc), init (1W10 oder null),
 //                     blutung (0-5), feuermarker (0-5), gift (0-6),
 //                     giftMisserfolge, schlaf (null | {tief, rundenUebrig,
-//                     geweckt}), stun, rettungswuerfe (Zähler für
-//                     Eskalationsmalus, mit "Zurücksetzen" gelöscht), tot,
+//                     geweckt}), stun, rettungswuerfe (nur noch Altlast aus
+//                     4.3, wird nicht mehr ausgewertet), tot,
+//                     aktionen ({a, b, extra}: in dieser Runde schon benutzt,
+//                     RW 5.1 "Grundprinzip des Kampfes": 2 Aktionen + 1 Extra-Aktion),
 //                     seeleRundenUebrig, permanenteEffekte: [{teil, folge}]
 //                     (Amputationen), tageOhneEssen, tageOhneSchlaf } ],
 //     log: [ text, ... ] (jüngste zuerst, gekappt)
@@ -95,21 +100,21 @@ const KAMPF_NACHT_WUERFEL = { viel: 12, wenig: 10, keine: 0 };
 // (siehe Datei-Kopfkommentar: die Angriffsprobe selbst braucht Charakterwerte).
 const KAMPF_WAFFEN_NAHKAMPF = [
     { name: 'Faust / Stärke', schaden: '1w10 pro 15 Stärke', info: 'Krit: Ziel 15% gestunnt' },
-    { name: 'Degen', schaden: '3w10+10', info: '+10 auf Blocken' },
+    { name: 'Degen', schaden: '3w10+10', info: '+15 auf Blocken' },
     { name: 'Säbel', schaden: '5w10', info: 'Krit: +3 BL' },
     { name: 'Machete', schaden: '4w10+10', info: '+5 rüstungsbrechend' },
     { name: 'Axt', schaden: '5w10', info: '+1w4 Schaden pro 10 unter Nahkampfwurf' },
-    { name: 'Kriegshammer/Streitkolben (2H)', schaden: 'Stärkeschaden +3w10', info: 'Krit: halber Schaden an angrenzenden Feldern' },
-    { name: 'Messer/Dolch', schaden: '2w10 + GS 1', info: 'Krit: +GS 5' },
+    { name: 'Kriegshammer/Streitkolben (2H)', schaden: 'Stärkeschaden +3w10', info: 'Krit: 3w10 Schaden an angrenzenden Feldern des Ziels (außer dir)' },
+    { name: 'Messer/Dolch', schaden: '2w10 + GS 1', info: 'Krit: GS 4' },
     { name: 'Stock', schaden: '1w10+5', info: '+5 auf Blocken, +5 Rüstung' },
-    { name: 'Improvisierte Waffe', schaden: '1w10+1w4', info: '' }
+    { name: 'Improvisierte Waffe', schaden: '1w10', info: '' }
 ];
 const KAMPF_WAFFEN_FERNKAMPF = [
     { name: 'Muskete', schaden: '7w10', reichweite: '20m', ladedauer: '3 Aktionen' },
     { name: 'Pistole', schaden: '5w10', reichweite: '10m', ladedauer: '2 Aktionen' },
     { name: 'Bogen', schaden: '4w10', reichweite: '15m', ladedauer: '1 Aktion' },
-    { name: 'Schrotflinte', schaden: '5w10 +2BL', reichweite: '5m', ladedauer: '3 Aktionen, 2 Ladungen' },
-    { name: 'Kanone', schaden: 'Vs. Schiff 10w10 / Vs. Mensch 12w10', reichweite: '300m', ladedauer: '3 Aktionen' },
+    { name: 'Schrotflinte', schaden: '5w10 +2BL', reichweite: '5m', ladedauer: '2 Ladungen, 3 Aktionen zum vollständigen Laden' },
+    { name: 'Kanone', schaden: 'Vs. Schiff 10w10 / Vs. Mensch 12w10', reichweite: '300m', ladedauer: '4 Aktionen' },
     { name: 'Wurfwaffe', schaden: '3w10', reichweite: '10m', ladedauer: '0 Aktionen' },
     { name: 'Bombe', schaden: '10w10', reichweite: '3x3m Radius', ladedauer: '3 Aktionen' }
 ];
@@ -141,9 +146,57 @@ function kampfLaden() {
             if (!Array.isArray(t.permanenteEffekte)) t.permanenteEffekte = [];
             if (t.tageOhneEssen == null) t.tageOhneEssen = 0;
             if (t.tageOhneSchlaf == null) t.tageOhneSchlaf = 0;
+            kampfAktionen(t);
         });
     } catch (e) { kampf = kampfLeererStand(); }
     try { kampfOffenGm = localStorage.getItem(KAMPF_OFFEN_KEY) !== '0'; } catch (e) { kampfOffenGm = true; }
+}
+
+// --- Aktionen pro Runde (RW 5.1, "Grundprinzip des Kampfes") -----------------------
+// Jeder Charakter hat pro Kampfrunde Aktion A (Angriff, Fähigkeit, Nachladen,
+// Bewegung, ...), Aktion B (Bewegung, Interaktion, ... - kein Angriff) und eine
+// Extra-Aktion (nur für ausdrücklich so gekennzeichnete Fähigkeiten). Kampfunfähig
+// (10 LP oder weniger) = keine Aktion A mehr. Stun/Schlaf = keine Aktionen.
+function kampfAktionen(t) {
+    if (!t.aktionen || typeof t.aktionen !== 'object') t.aktionen = { a: false, b: false, extra: false };
+    return t.aktionen;
+}
+
+function kampfAktuelleLp(t) {
+    if (t.art === 'nsc') return t.hp ? t.hp.aktuell : null;
+    const lp = kampfSpielerLpAnteil(t.peerId);
+    return lp ? lp.aktuell : null;
+}
+
+// 10 LP oder weniger (und noch nicht tot): Aktion A nicht mehr möglich
+function kampfKampfunfaehig(t) {
+    const lp = kampfAktuelleLp(t);
+    return lp !== null && lp <= 10 && !t.tot;
+}
+
+function kampfAktionUmschalten(id, welche) {
+    const t = kampfTeilnehmer(id);
+    if (!t || !['a', 'b', 'extra'].includes(welche)) return;
+    const a = kampfAktionen(t);
+    a[welche] = !a[welche];
+    kampfSichern();
+    renderKampfGm();
+}
+
+function kampfAktionenHtml(t) {
+    const a = kampfAktionen(t);
+    const handlungsunfaehig = t.stun || !!t.schlaf || t.tot;
+    const ohneA = kampfKampfunfaehig(t);
+    const knopf = (welche, label, titel, gesperrt) =>
+        `<button class="sk-mini-btn ${a[welche] ? 'sk-aktion-benutzt' : ''}" ${gesperrt ? 'disabled' : ''} onclick="kampfAktionUmschalten('${t.id}', '${welche}')" title="${titel}">${label}${a[welche] ? ' ✓' : ''}</button>`;
+    return `<div class="sk-aktion-zeile">
+        <span class="ir-hint" style="margin:0"><i class="fa-solid fa-hand"></i> Aktionen:</span>
+        ${knopf('a', 'A', 'Aktion A: Angriff / Fähigkeit / Nachladen / Bewegung / Interaktion', handlungsunfaehig || ohneA)}
+        ${knopf('b', 'B', 'Aktion B: Bewegung / Interaktion / Rufen / Wecken (kein Angriff)', handlungsunfaehig)}
+        ${knopf('extra', 'Extra', 'Extra-Aktion: nur für ausdrücklich gekennzeichnete Fähigkeiten', handlungsunfaehig)}
+        ${handlungsunfaehig && !t.tot ? '<span class="ir-hint ir-warnung" style="margin:0">Handlungsunfähig (Stun/Schlaf) - keine Aktionen</span>' : ''}
+        ${ohneA && !handlungsunfaehig ? '<span class="ir-hint ir-warnung" style="margin:0">Kampfunfähig (≤10 LP): keine Aktion A mehr</span>' : ''}
+    </div>`;
 }
 
 function kampfSichern() {
@@ -220,16 +273,23 @@ function kampfTeilnehmerEntfernen(id) {
 
 // --- Initiative --------------------------------------------------------------
 
+// Besondere Eigenschaft "Kämpfer": +1/2/3 Initiative (nur Spieler, Stufe vom Bogen)
+function kampfInitiativeWurf(t) {
+    const bonus = kampfEigenschaftStufe(t, 'Kämpfer');
+    return { wert: skW(10) + bonus, bonus };
+}
+
 function kampfInitiativeWuerfeln(id) {
     const t = kampfTeilnehmer(id);
     if (!t) return;
-    t.init = skW(10);
-    kampfLog(`${t.name} würfelt Initiative: ${t.init}.`);
+    const w = kampfInitiativeWurf(t);
+    t.init = w.wert;
+    kampfLog(`${t.name} würfelt Initiative: ${t.init}${w.bonus ? ` (inkl. Kämpfer +${w.bonus})` : ''}.`);
     renderKampfGm();
 }
 
 function kampfInitiativeAlleWuerfeln() {
-    kampf.teilnehmer.forEach(t => { if (t.init == null) t.init = skW(10); });
+    kampf.teilnehmer.forEach(t => { if (t.init == null) t.init = kampfInitiativeWurf(t).wert; });
     kampfLog(`Initiative für alle ohne Wurf ausgewürfelt.`);
     renderKampfGm();
 }
@@ -243,6 +303,15 @@ function kampfInitiativeSortierung() {
 function kampfRundeWeiter() {
     kampf.runde++;
     kampf.teilnehmer.forEach(t => {
+        // Neue Runde: Aktion A, B und Extra sind wieder frei
+        kampfAktionen(t).a = false; kampfAktionen(t).b = false; kampfAktionen(t).extra = false;
+        // Spieler: Runden-Status ihrer Tränke zählen herunter, Regenerationstrank heilt (herstellen.js)
+        if (t.art === 'spieler' && !t.tot) kampfSkillsAuffrischen(t.peerId, 'Runde ' + (kampf.runde), 'rundenTick');
+        // Langsames Gegengift: zu Rundenbeginn sinkt die Giftstufe um 1 (6 Runden)
+        if (t.giftMinusRunden > 0) {
+            t.giftMinusRunden--;
+            if (t.gift > 0) { t.gift = Math.max(0, t.gift - 1); if (t.gift === 0) t.giftMisserfolge = 0; kampf.log.unshift(`${t.name}: Langsames Gegengift senkt die Giftstufe auf ${t.gift}.`); }
+        }
         if (t.tot) {
             if (t.seeleRundenUebrig != null) {
                 t.seeleRundenUebrig--;
@@ -254,6 +323,14 @@ function kampfRundeWeiter() {
             return;
         }
         if (t.stun) t.stun = false;
+        // Stahlmagen: am Ende der Runde sinkt die Giftstufe um 1/2/3 (Besondere Eigenschaft)
+        const stahlmagen = kampfEigenschaftStufe(t, 'Stahlmagen');
+        if (stahlmagen && t.gift > 0) {
+            const alt = t.gift;
+            t.gift = Math.max(0, t.gift - stahlmagen);
+            if (t.gift === 0) t.giftMisserfolge = 0;
+            kampf.log.unshift(`${t.name}: Stahlmagen senkt die Giftstufe von ${alt} auf ${t.gift}.`);
+        }
         if (t.schlaf) {
             t.schlaf.rundenUebrig--;
             if (t.schlaf.rundenUebrig <= 0) {
@@ -264,10 +341,22 @@ function kampfRundeWeiter() {
         if (t.blutung > 0) {
             const w = kampfWuerfelSumme(t.blutung, 6);
             kampfSchadenAnwenden(t.id, w.summe, { grund: `Blutung (${t.blutung}x 1W6: ${w.rolls.join('+')})`, keineNeuBerechnung: true });
+            // Ledrige Haut: nachdem die Blutungen abgehandelt wurden, schließen sich 1/2 automatisch
+            const ledrig = kampfEigenschaftStufe(t, 'Ledrige Haut');
+            if (ledrig) {
+                const geschlossen = Math.min(t.blutung, ledrig);
+                t.blutung -= geschlossen;
+                if (geschlossen) kampf.log.unshift(`${t.name}: Ledrige Haut schließt ${geschlossen} Blutung${geschlossen === 1 ? '' : 'en'} (jetzt ${t.blutung}).`);
+            }
         }
         if (t.feuermarker > 0) {
             const w = kampfWuerfelSumme(t.feuermarker, 6);
             kampfSchadenAnwenden(t.id, w.summe, { grund: `Feuermarker (${t.feuermarker}x 1W6: ${w.rolls.join('+')})`, keineNeuBerechnung: true });
+            // Unbrennbar: jede Runde verliert der Charakter automatisch 1 Feuermarke
+            if (kampfEigenschaftStufe(t, 'Unbrennbar')) {
+                t.feuermarker = Math.max(0, t.feuermarker - 1);
+                kampf.log.unshift(`${t.name}: Unbrennbar löscht 1 Feuermarke (jetzt ${t.feuermarker}).`);
+            }
         }
     });
     kampf.log.unshift(`— Runde ${kampf.runde} beginnt —`);
@@ -342,6 +431,99 @@ function kampfStatusSenden(peerId, status) {
     catch (e) { return false; }
 }
 
+// RW 5.1 "Wie bekomme ich meine Skills zurück?": Skills (aktiv/extra) kommen
+// zurück, wenn der Charakter am Kampfende über 50 % seiner LP hat ODER mindestens
+// 6 Stunden schläft. Wer unter 50 % ist, muss eine Nacht schlafen - auch wenn er
+// danach auf über 50 % geheilt wird. Die Spieler-LP liegt auf ihrem Bogen
+// (connectedPlayersData), der Tracker schickt nur die Auffrisch-Nachricht.
+function kampfSkillsAuffrischen(peerId, grund, aktion) {
+    const conn = typeof clientConnections !== 'undefined' ? clientConnections[peerId] : null;
+    if (!conn || !conn.open) return false;
+    try { conn.send({ type: 'eingriff', aktion: aktion || 'skillsAuffrischen', still: false, grund }); return true; }
+    catch (e) { return false; }
+}
+
+// Besondere Eigenschaften eines Spielers (steht auf seinem Bogen, synchronisiert): Stufe 0 = nicht gewählt
+function kampfEigenschaftStufe(t, name) {
+    if (!t || t.art !== 'spieler') return 0;
+    const d = typeof connectedPlayersData !== 'undefined' ? connectedPlayersData[t.peerId] : null;
+    return d && d.hausregeln && d.hausregeln.eigenschaften ? (parseInt(d.hausregeln.eigenschaften[name]) || 0) : 0;
+}
+
+// Monsterform (talentbaum.js) entscheidet über die Amputationsschwelle (70 Mensch / 100 Monster):
+// bei Spielern steht sie auf ihrem Bogen, bei NSCs schaltet der SL sie an der Karte um.
+function kampfIstMonsterform(t) {
+    if (!t) return false;
+    if (t.art === 'spieler') {
+        const d = typeof connectedPlayersData !== 'undefined' ? connectedPlayersData[t.peerId] : null;
+        return !!(d && d.hausregeln && d.hausregeln.monsterform);
+    }
+    return !!t.monsterform;
+}
+
+function kampfNscMonsterformUmschalten(id) {
+    const t = kampfTeilnehmer(id);
+    if (!t || t.art !== 'nsc') return;
+    t.monsterform = !t.monsterform;
+    kampfLog(`${t.name} ist ${t.monsterform ? 'jetzt in Monsterform (Amputation ab 100 Schaden)' : 'wieder in normaler Form (Amputation ab 70 Schaden)'}.`);
+    kampfSichern();
+    renderKampfGm();
+}
+
+function kampfSpielerLpAnteil(peerId) {
+    const d = typeof connectedPlayersData !== 'undefined' ? connectedPlayersData[peerId] : null;
+    const aktuell = d ? Number(d.hpCurrent) : NaN, max = d ? Number(d.hpMax) : NaN;
+    if (!(max > 0) || Number.isNaN(aktuell)) return null;
+    return { aktuell, max, anteil: aktuell / max };
+}
+
+function kampfBeenden() {
+    const spieler = kampf.teilnehmer.filter(t => t.art === 'spieler' && !t.tot);
+    if (!spieler.length) { kampfLog('Kampf beendet.'); renderKampfGm(); return; }
+    spieler.forEach(t => {
+        const lp = kampfSpielerLpAnteil(t.peerId);
+        if (!lp) { kampfLog(`${t.name}: LP unbekannt - Skills ggf. von Hand auffrischen.`); return; }
+        if (lp.anteil > 0.5) {
+            kampfSkillsAuffrischen(t.peerId, 'Kampfende, über 50 % LP');
+            kampfLog(`${t.name}: ${lp.aktuell}/${lp.max} LP (über 50 %) - Skills wieder verfügbar.`);
+        } else {
+            kampfLog(`${t.name}: nur ${lp.aktuell}/${lp.max} LP (50 % oder weniger) - Skills erst nach einer Nacht Schlaf (6 Std.) wieder verfügbar.`);
+        }
+    });
+    kampfLog('Kampf beendet.');
+    renderKampfGm();
+}
+
+// Verbrauchsgegenstände (herstellen.js): ein Spieler benutzt Gegengift, Blutstillende Paste,
+// Aufputschmittel, Langsames Gegengift oder wirft einen Flächengegenstand. Der Zustand
+// (Gift/Blutung/Schlaf) liegt hier im Tracker, nicht auf dem Bogen. Ist der Spieler nicht im
+// Kampf, bleibt es bei einer Meldung im SL-Feed.
+function kampfVerbrauchVerarbeiten(peerId, payload) {
+    if (!payload || payload.type !== 'verbrauch') return false;
+    const d = typeof connectedPlayersData !== 'undefined' ? connectedPlayersData[peerId] : null;
+    const name = d ? ([d.vorname, d.name].filter(Boolean).join(' ') || 'Spieler') : 'Spieler';
+    const meldung = String(payload.meldung || payload.name || '').slice(0, 200);
+    if (typeof addGmLogEntry === 'function') addGmLogEntry(name, `${meldung || 'benutzt ' + payload.name}.`, '🧪');
+    const t = kampfTeilnehmer('spieler:' + peerId);
+    if (t) {
+        let aenderung = '';
+        if (payload.aktion === 'gegengift' && t.gift > 0) { t.gift = 0; t.giftMisserfolge = 0; aenderung = 'Gift entfernt'; }
+        else if (payload.aktion === 'blutstillen' && t.blutung > 0) { t.blutung = 0; aenderung = 'Blutungen gestoppt'; }
+        else if (payload.aktion === 'aufputsch' && t.schlaf) { t.schlaf = null; aenderung = 'Schlaf beendet'; }
+        else if (payload.aktion === 'langsamesGegengift') { t.giftMinusRunden = 6; aenderung = 'Giftstufe sinkt 6 Runden lang um 1 pro Runde'; }
+        if (aenderung) kampfLog(`${t.name}: ${payload.name} - ${aenderung}.`);
+        renderKampfGm();
+    }
+    return true;
+}
+
+function kampfSpielerSkillsManuell(id) {
+    const t = kampfTeilnehmer(id);
+    if (!t || t.art !== 'spieler') return;
+    if (kampfSkillsAuffrischen(t.peerId, 'vom Spielleiter')) kampfLog(`${t.name}: Skills vom Spielleiter aufgefrischt.`);
+    renderKampfGm();
+}
+
 function kampfSchadenManuell(id) {
     const betragEl = document.querySelector(`[data-kfschaden="${id}"]`);
     const rbEl = document.querySelector(`[data-kfrb="${id}"]`);
@@ -350,7 +532,7 @@ function kampfSchadenManuell(id) {
     if (!betrag) return;
     const rb = rbEl ? Math.max(0, parseInt(rbEl.value) || 0) : 0;
     const ruestung = ruestungEl ? Math.max(0, parseInt(ruestungEl.value) || 0) : 0;
-    kampfSchadenAnwenden(id, betrag, { rb, ruestung, einzelTreffer: true });
+    kampfSchadenAnwenden(id, betrag, { rb, ruestung, einzelTreffer: true, monsterform: kampfIstMonsterform(kampfTeilnehmer(id)) });
     if (betragEl) betragEl.value = '';
 }
 
@@ -463,17 +645,15 @@ function kampfStunSetzen(id, an) {
 function kampfRettungswurfWuerfeln(id) {
     const t = kampfTeilnehmer(id);
     if (!t) return;
-    const vorherigeVersuche = t.rettungswuerfe || 0;
     const wurf = skW(100);
-    const malus = vorherigeVersuche * 10;
-    const effektiv = wurf + malus;
-    t.rettungswuerfe = vorherigeVersuche + 1;
-    const wurfText = `Rettungswurf ${wurf}${malus ? ' +' + malus + ' Erschwernis' : ''} = ${effektiv}`;
-    if (effektiv <= 50) {
+    const wurfText = `Rettungswurf ${wurf}`;
+    if (wurf <= 50) {
+        // RW 5.1: 1-50 = sofort 1W10 LP zurück und der Charakter schläft (normaler Schlaf, 1W4 Runden)
         const heilung = skWuerfeln('1w10').summe;
-        t.stun = true;
         kampfHeilungAnwenden(id, heilung, `${wurfText}, bestanden`);
-        kampf.log.unshift(`${t.name} klammert sich ans Leben (${wurfText}), ist für 1 Runde gestunnt.`);
+        const runden = skW(4);
+        t.schlaf = { tief: false, rundenUebrig: runden, geweckt: 0 };
+        kampf.log.unshift(`${t.name} klammert sich ans Leben (${wurfText}) und schläft jetzt (${runden} Runden - Wecken oder Schaden beendet den Schlaf).`);
     } else {
         t.tot = true;
         t.seeleRundenUebrig = skW(6);
@@ -508,12 +688,16 @@ function kampfAmputationWuerfeln(id) {
 function kampfNachtRegeneration(id, essen, schlafQualitaet) {
     const t = kampfTeilnehmer(id);
     if (!t || t.tot) return;
-    let gesamt = skW(10);
-    const teile = [`Grund 1W10 (${gesamt})`];
+    // RW 5.1: jede Nacht je ein Würfel für Nahrung und für Schlaf (viel 1w12,
+    // wenig 1w10, gar nicht 0); ab 2 Tagen in Folge ohne Essen bzw. ohne Schlaf
+    // stattdessen -1w10. Keine Grundregeneration mehr.
+    let gesamt = 0;
+    const teile = [];
 
     if (essen === 'keine') {
         t.tageOhneEssen = (t.tageOhneEssen || 0) + 1;
         if (t.tageOhneEssen >= 2) { const m = skW(10); gesamt -= m; teile.push(`-1W10 Hunger (${m})`); }
+        else teile.push('kein Essen (0)');
     } else {
         t.tageOhneEssen = 0;
         const seiten = KAMPF_NACHT_WUERFEL[essen] || 0;
@@ -523,11 +707,22 @@ function kampfNachtRegeneration(id, essen, schlafQualitaet) {
     if (schlafQualitaet === 'keine') {
         t.tageOhneSchlaf = (t.tageOhneSchlaf || 0) + 1;
         if (t.tageOhneSchlaf >= 2) { const m = skW(10); gesamt -= m; teile.push(`-1W10 Schlafmangel (${m})`); }
+        else teile.push('kein Schlaf (0)');
     } else {
         t.tageOhneSchlaf = 0;
         const seiten = KAMPF_NACHT_WUERFEL[schlafQualitaet] || 0;
         if (seiten) { const w = skW(seiten); gesamt += w; teile.push(`+1W${seiten} Schlaf (${w})`); }
     }
+
+    // Skills zurück bei mindestens 6 Std. Schlaf = "Viel (+7 Std.)"; bei "Wenig (6-3 Std.)"
+    // ist nicht klar, ob es 6 Stunden waren - dann per Einzel-Knopf von Hand auffrischen.
+    if (t.art === 'spieler' && schlafQualitaet === 'viel') {
+        if (kampfSkillsAuffrischen(t.peerId, 'Nachtruhe, 6+ Std. Schlaf')) teile.push('Skills wieder verfügbar');
+    } else if (t.art === 'spieler' && schlafQualitaet === 'wenig') {
+        teile.push('Skills nicht automatisch zurück (Schlaf nur „Wenig“) - ggf. per Knopf an der Spielerkarte');
+    }
+    // Neuer Tag: Einsätze "einmal pro Tag" (z.B. Unsterblich) der Besonderen Eigenschaften zurück
+    if (t.art === 'spieler') kampfSkillsAuffrischen(t.peerId, 'neuer Tag', 'tagNeu');
 
     if (gesamt > 0) kampfHeilungAnwenden(id, gesamt, `Nächtliche Regeneration: ${teile.join(', ')}`);
     else if (gesamt < 0) kampfSchadenAnwenden(id, -gesamt, { grund: `Nächtliche Regeneration: ${teile.join(', ')}` });
@@ -552,6 +747,7 @@ function kampfZuruecksetzen() {
     kampf.teilnehmer.forEach(t => {
         t.init = null; t.blutung = 0; t.feuermarker = 0; t.gift = 0; t.giftMisserfolge = 0;
         t.schlaf = null; t.stun = false; t.rettungswuerfe = 0;
+        t.aktionen = { a: false, b: false, extra: false };
     });
     kampfLog(`Kampf zurückgesetzt.`);
     renderKampfGm();
@@ -621,7 +817,7 @@ function kampfTeilnehmerKarteHtml(t) {
     return `<div class="sk-einheit ${t.tot ? 'sk-einheit-gesunken' : ''}" style="--sk-farbe:${escapeHtml(t.farbe)}">
         <div class="sk-einheit-kopf">
             <span class="sk-farbpunkt"></span>
-            <span class="sk-name" style="flex:1; padding:0.3rem 0.5rem;">${escapeHtml(t.name)}${t.art === 'spieler' ? ' <i class="fa-solid fa-user" title="Spieler-Charakter"></i>' : ''}</span>
+            <span class="sk-name" style="flex:1; padding:0.3rem 0.5rem;">${escapeHtml(t.name)}${t.art === 'spieler' ? ' <i class="fa-solid fa-user" title="Spieler-Charakter"></i>' : ''}${kampfIstMonsterform(t) ? ' <span class="sk-badge" title="Monsterform: Amputation erst ab 100 Schaden in einem Treffer"><i class="fa-solid fa-dragon"></i> Monsterform</span>' : ''}</span>
             <select class="sk-input sk-seite" onchange="kampfSeiteAendern('${t.id}', this.value)">
                 ${Object.entries(KAMPF_SEITEN).map(([k, v]) => `<option value="${k}" ${t.seite === k ? 'selected' : ''}>${v.label}</option>`).join('')}
             </select>
@@ -632,6 +828,7 @@ function kampfTeilnehmerKarteHtml(t) {
             <button class="sk-mini-btn" onclick="kampfInitiativeWuerfeln('${t.id}')"><i class="fa-solid fa-dice"></i> 1W10</button>
             ${t.tot ? `<span class="ir-hint ir-warnung"><i class="fa-solid fa-skull"></i> Tot${t.seeleRundenUebrig != null ? ` - Seele noch ${t.seeleRundenUebrig} Runden rettbar` : ''}</span>` : ''}
         </div>
+        ${t.tot ? '' : kampfAktionenHtml(t)}
         ${t.art === 'nsc' ? `
         <div class="sk-struktur-zeile">
             <div class="sk-struktur-bar"><div class="sk-struktur-fill" style="width:${t.hp.max > 0 ? Math.max(0, Math.min(100, (t.hp.aktuell / t.hp.max) * 100)) : 0}%"></div></div>
@@ -682,6 +879,8 @@ function kampfTeilnehmerKarteHtml(t) {
         <div class="sk-aktion-zeile">
             <button class="sk-mini-btn" onclick="kampfRettungswurfWuerfeln('${t.id}')" title="0-HP-Rettungswurf, 1W100"><i class="fa-solid fa-heart-pulse"></i> Rettungswurf (0 HP)</button>
             <button class="sk-mini-btn" onclick="kampfAmputationWuerfeln('${t.id}')" title="Ohnmacht/Amputation, 1W10 - bei Einzeltreffer ≥70/100 Schaden"><i class="fa-solid fa-user-injured"></i> Amputation würfeln</button>
+            ${t.art === 'nsc' ? `<button class="sk-mini-btn ${t.monsterform ? 'sk-kapitaen-aktiv' : ''}" onclick="kampfNscMonsterformUmschalten('${t.id}')" title="Monsterform: Amputation erst ab 100 statt 70 Schaden"><i class="fa-solid fa-dragon"></i> Monsterform ${t.monsterform ? 'an' : 'aus'}</button>` : ''}
+            ${t.art === 'spieler' ? `<button class="sk-mini-btn" onclick="kampfSpielerSkillsManuell('${t.id}')" title="Alle verbrauchten Skills dieses Spielers wieder verfügbar machen"><i class="fa-solid fa-rotate"></i> Skills auffrischen</button>` : ''}
         </div>
         ${effekteHtml}
     </div>`;
@@ -747,6 +946,7 @@ function renderKampfGm() {
                     <span class="ir-hint" style="margin:0"><i class="fa-solid fa-flag-checkered"></i> Runde <b>${kampf.runde}</b></span>
                     <button class="tool-btn" onclick="kampfRundeWeiter()"><i class="fa-solid fa-forward"></i> Runde weiter</button>
                     <button class="sk-mini-btn" onclick="kampfInitiativeAlleWuerfeln()"><i class="fa-solid fa-dice"></i> Initiative für alle würfeln</button>
+                    <button class="sk-mini-btn" onclick="kampfBeenden()" title="Kampf beenden: Spieler mit über 50 % LP bekommen ihre verbrauchten Skills zurück (RW 5.1)"><i class="fa-solid fa-flag-checkered"></i> Kampf beenden (Skills zurück)</button>
                     <button class="x-mini x-mini-danger x-mini-label" onclick="kampfZuruecksetzen()" title="Runde, Initiative und Zustände zurücksetzen">Zurücksetzen</button>
                     <button class="x-mini x-mini-danger x-mini-label" onclick="kampfAlleEntfernen()" title="Alle Teilnehmer entfernen">Alle entfernen</button>
                 </div>

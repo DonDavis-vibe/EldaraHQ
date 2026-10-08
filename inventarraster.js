@@ -928,6 +928,7 @@ function irSlotHtml(slot, item, breite) {
                     <option value="waffe" ${item.istWaffe ? 'selected' : ''}>Waffe</option>
                     ${Object.entries(IR_AUSRUESTUNG_SLOTS).map(([key, s]) => `<option value="${key}" ${item.irAusruestungsslot === key ? 'selected' : ''}>${escapeHtml(s.label)}</option>`).join('')}
                 </select>
+                ${typeof herstellenBenutzbar === 'function' && herstellenBenutzbar(item) ? `<button class="x-mini ir-benutzen" data-irbenutzen="${escapeHtml(item.id)}" title="Benutzen: wendet den Effekt an und verbraucht eine Einheit">Benutzen</button>` : ''}
                 <button class="btn-delete-icon" data-irdel="${escapeHtml(item.id)}"><i class="fa-solid fa-trash"></i></button>
             </div>
             ${irBeschreibungHtml(item)}
@@ -1033,6 +1034,7 @@ function renderInventarRaster() {
         })()}
         <div id="ir-status" class="x-hint"></div>
         <div class="ir-form">
+            <button class="tool-btn ir-herstellen-btn" type="button" onclick="herstellenOeffnen()" title="Gifte, Öle, Heilmittel und Tränke herstellen (Regelwerk 5.1)"><i class="fa-solid fa-flask"></i> Herstellen</button>
             ${irKatalogHtml()}
             <input type="text" id="ir-neu-name" class="ir-input" placeholder="Item Name..." onkeydown="if(event.key==='Enter') irItemHinzufuegen()">
             <select id="ir-neu-groesse" class="ir-input ir-input-groesse" title="Größe laut Regelwerk S.26">
@@ -1066,6 +1068,7 @@ function renderInventarRaster() {
     box.querySelectorAll('[data-irgroesse]').forEach(el => el.addEventListener('change', () => irGroesseAendern(el.dataset.irgroesse, parseFloat(el.value) || 1)));
     box.querySelectorAll('[data-irart]').forEach(el => el.addEventListener('change', () => irArtAendern(el.dataset.irart, el.value)));
     box.querySelectorAll('[data-irdel]').forEach(el => el.addEventListener('click', () => irItemEntfernen(el.dataset.irdel)));
+    box.querySelectorAll('[data-irbenutzen]').forEach(el => el.addEventListener('click', () => herstellenBenutzen(el.dataset.irbenutzen)));
     box.querySelectorAll('[data-irminus]').forEach(el => el.addEventListener('click', () => irMengeAendern(el.dataset.irminus, -1)));
     box.querySelectorAll('[data-irplus]').forEach(el => el.addEventListener('click', () => irMengeAendern(el.dataset.irplus, 1)));
     box.querySelectorAll('[data-irdesctoggle]').forEach(el => el.addEventListener('click', () => irBeschreibungToggle(el.dataset.irdesctoggle)));
