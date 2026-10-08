@@ -469,7 +469,7 @@ function renderSchiffGm() {
 
     box.innerHTML = `
         <details class="x-details schiff-details" ${schiffOffenGm ? 'open' : ''}>
-            <summary class="tm-head">
+            <summary class="tm-head panel-kopf">
                 <div class="tm-title"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-sailboat"></i> Schiffs-Inventar
                     ${schiff.length ? `<span class="x-count">${schiff.length}</span>` : ''}
                     <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('schiff')" title="Hilfe zum Schiffs-Inventar"></i>
@@ -496,7 +496,7 @@ function renderSchiffGm() {
             <div class="tm-list">${zeilen || '<div class="x-leer">Noch nichts an Bord. Leg die Grundausstattung der Crew ab.</div>'}</div>
         </details>
         <details class="x-details schiff-details" ${kisteOffenGm ? 'open' : ''} style="margin-top:0.8rem">
-            <summary class="tm-head">
+            <summary class="tm-head panel-kopf">
                 <div class="tm-title"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-box-archive"></i> Spieler-Kisten
                     <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('kisten')" title="Hilfe zu den Kisten"></i>
                 </div>
@@ -744,7 +744,7 @@ function renderSchiffSpieler() {
 
     section.innerHTML = `
         <details class="x-details schiff-details" ${schiffOffenSpieler ? 'open' : ''}>
-            <summary class="tm-head">
+            <summary class="tm-head panel-kopf">
                 <h2 class="cat-title" style="margin:0"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-sailboat category-icon-fa"></i> Schiffs-Inventar
                     ${schiffSpieler.length ? `<span class="x-count">${schiffSpieler.length}</span>` : ''}
                     <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('schiff')" title="Hilfe zum Schiffs-Inventar"></i></h2>
@@ -759,7 +759,7 @@ function renderSchiffSpieler() {
             </div>` : ''}
         </details>
         <details class="x-details schiff-details" ${kisteOffenSpieler ? 'open' : ''} style="margin-top:0.8rem">
-            <summary class="tm-head">
+            <summary class="tm-head panel-kopf">
                 <h2 class="cat-title" style="margin:0"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-box-archive category-icon-fa"></i> Deine Kiste
                     ${meineKiste.length ? `<span class="x-count">${meineKiste.length}</span>` : ''}
                     <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('kisten')" title="Hilfe zu den Kisten"></i></h2>

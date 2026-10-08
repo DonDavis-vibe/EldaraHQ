@@ -34,7 +34,7 @@ const KARTEN_KATEGORIEN = {
 };
 
 function karteLeererZustand() {
-    return { raster: Object.assign({}, KARTE_RASTER_STANDARD), figuren: [], formen: [], nebel: { aktiv: false, aufgedeckt: [], entwurf: [] }, bild: null };
+    return { raster: Object.assign({}, KARTE_RASTER_STANDARD), figuren: [], formen: [], pins: [], nebel: { aktiv: false, aufgedeckt: [], entwurf: [] }, bild: null };
 }
 
 // Spiegel von battlemap.js' eigenen STANDARD-Rasterwerten (siehe dort) - wird
@@ -52,8 +52,23 @@ function karteLeererZustand() {
 // diesem Fix gespeicherte Karten mit unvollständigem raster.
 const KARTE_RASTER_STANDARD = {
     rasterGroesse: 50, rasterVersatzX: 0, rasterVersatzY: 0,
-    rasterSichtbar: true, rasterFarbe: 'rgba(212,162,76,0.30)', einrasten: true
+    rasterSichtbar: true, rasterFarbe: 'rgba(212,162,76,0.30)', einrasten: true, ringeAnzeigen: true, statusAnzeigen: true, lpAnzeigen: true,
+    einheit: 1, einheitName: 'm', diagonale: 'gleich'
 };
+
+// Messform (Linie/Kreis/Kegel/Strahl): rein lokale Ansichtswahl, gilt für GM-, Vollbild- und Spieler-Leiste
+let karteMessform = 'linie';
+function karteMessformSelectHtml() {
+    return `<select data-ktmessform class="sk-input sk-mal-art" onchange="karteMessformSetzen(this.value)" title="Messform: Linie = Strecke nach der Diagonalregel der Karte; Kreis, Kegel (60°) und Strahl (1 Feld breit) zeigen eine Fläche ab dem Startpunkt">
+        ${[['linie', 'Linie'], ['kreis', 'Kreis'], ['kegel', 'Kegel'], ['strahl', 'Strahl']].map(([k, l]) => `<option value="${k}" ${karteMessform === k ? 'selected' : ''}>${l}</option>`).join('')}
+    </select>`;
+}
+function karteMessformSetzen(wert) {
+    karteMessform = wert;
+    if (typeof karteMap !== 'undefined' && karteMap) karteMap.setMessForm(wert);
+    if (typeof karteSpielerMap !== 'undefined' && karteSpielerMap) karteSpielerMap.setMessForm(wert);
+    document.querySelectorAll('[data-ktmessform]').forEach(s => { s.value = wert; });
+}
 function karteZustandFuerAnwenden(zustand) {
     return Object.assign({}, zustand, { raster: Object.assign({}, KARTE_RASTER_STANDARD, (zustand && zustand.raster) || {}) });
 }
@@ -162,11 +177,13 @@ function karteSpielerFigurenAbgleichen() {
         }
         const pos = karteFreieSpawnPosition();
         karteMap.addFigur({ id, name, x: pos.x, y: pos.y, groesse: 1, besitzer: peerId, farbe });
+        karteRingAnwenden(karteMap.figuren.find(f => f.id === id));
     });
     karteFigurenPortraitsWiederherstellen();
     karteNscBilderAnwenden();
     karteNscGroessenAnwenden();
     karteNscBildPositionAnwenden();
+    karteTokenAnzeigeAbgleichen();
 }
 
 // Vom SL entfernt: seine Karten-Figur bleibt sonst als Leiche stehen.
@@ -188,6 +205,9 @@ function karteEinhaengen(canvas) {
 
     karteMap = BattleMap.create(canvas, {
         einheit: 1, einheitName: 'm',
+        onAuswahl: () => karteAuswahlLeisteAktualisieren(),
+        onPinKlick: (pin, x, y) => kartePinPopover(pin, x, y, 'gm'),
+        onPinNeu: (pin) => { kartePinPopover(pin, null, null, 'gm'); renderKarteGm(); },
         onChange: () => { karteAktuelleZurueckschreiben(); karteSichern(); karteVerteilen(); }
     });
     const eintrag = karten.find(k => k.id === karteAktivId);
@@ -227,6 +247,7 @@ function karteWechseln(id) {
     const eintrag = karten.find(k => k.id === id);
     if (!eintrag || !karteMap) return;
     karteAktivId = id;
+    karteMap.auswahlLeeren();
     karteMap.applyState(karteZustandFuerAnwenden(eintrag.zustand), eintrag.zustand.bild);
     karteSpielerFigurenAbgleichen();
     if (typeof skFigurenAbgleichen === 'function') skFigurenAbgleichen();
@@ -359,6 +380,7 @@ function karteNsPlatzieren(nsc) {
     if (karteMap.figuren.find(f => f.id === id)) { renderKarteGm(); return; }
     const pos = karteFreieSpawnPosition();
     karteMap.addFigur({ id, name: nsc.name || 'NSC', x: pos.x, y: pos.y, groesse: Number(nsc.groesse) || 1, besitzer: 'sl', farbe: '#a3342b' });
+    karteRingAnwenden(karteMap.figuren.find(f => f.id === id));
     if (nsc.bild) {
         karteMap.setFigurBild(id, nsc.bild);
         karteMap.setFigurBildPosition(id, Number(nsc.bildY));
@@ -590,7 +612,204 @@ function karteAktualisierenAnfordern(knopf) {
 
 // --- GM-Oberfläche --------------------------------------------------------------
 
+// --- Statussymbole & LP-Balken am Token (aus dem Kampf-Tracker, kampf.js) ----------------
+// Spieler-Figuren ('spieler:<peerId>') gehören direkt zum gleichnamigen Tracker-Teilnehmer, ihre
+// LP stehen auf dem Bogen (connectedPlayersData). NSC-/Gegner-Figuren werden über den Namen dem
+// Tracker-Teilnehmer zugeordnet (der Tracker kennt die Karten-Figuren nicht). Die LP-Balken von
+// Gegnern sehen die Spieler nur, wenn der SL sie freigibt (kampf.js: lpOeffentlich) - Verbündete
+// und Spieler-Figuren sind für alle sichtbar. Läuft bei jeder Tracker-Änderung (kampfSichern)
+// und nach Karten-/Spieleränderungen; meldet nur, wenn sich wirklich etwas geändert hat.
+function karteTokenAnzeigeAbgleichen() {
+    if (!karteMap || typeof kampf === 'undefined') return;
+    const teilnehmer = kampf.teilnehmer || [];
+    let geaendert = false;
+    const behandelt = new Set();
+    teilnehmer.forEach(t => {
+        let fig = null;
+        if (t.art === 'spieler') fig = karteMap.figuren.find(f => f.id === t.id);
+        else {
+            const name = String(t.name || '').trim().toLowerCase();
+            fig = karteMap.figuren.find(f => !f.id.startsWith('spieler:') && String(f.name || '').trim().toLowerCase() === name);
+        }
+        if (!fig) return;
+        behandelt.add(fig.id);
+        const status = [];
+        if (t.tot) status.push('tot');
+        if (t.blutung > 0) status.push('blutung');
+        if (t.feuermarker > 0) status.push('feuer');
+        if (t.gift > 0) status.push('gift');
+        if (t.schlaf) status.push('schlaf');
+        if (t.stun) status.push('stun');
+        if (typeof kampfIstMonsterform === 'function' && kampfIstMonsterform(t)) status.push('monster');
+        let lp = null;
+        if (t.art === 'spieler') {
+            const d = typeof connectedPlayersData !== 'undefined' ? connectedPlayersData[t.peerId] : null;
+            if (d && Number(d.hpMax) > 0) lp = { a: Number(d.hpCurrent), m: Number(d.hpMax), oeffentlich: true };
+        } else if (t.hp && t.hp.max > 0) {
+            const oeffentlich = t.lpOeffentlich !== undefined ? !!t.lpOeffentlich : t.seite !== 'gegner';
+            lp = { a: t.hp.aktuell, m: t.hp.max, oeffentlich };
+        }
+        if (karteMap.setFigurAnzeige(fig.id, { status, lp, amZug: kampf.amZug === t.id }, true)) geaendert = true;
+    });
+    // Figuren, die nicht (mehr) im Kampf sind, verlieren ihre Anzeige
+    karteMap.figuren.forEach(f => {
+        if (behandelt.has(f.id) || (!f.status && !f.lp && !f.amZug)) return;
+        if (karteMap.setFigurAnzeige(f.id, { status: [], lp: null, amZug: false }, true)) geaendert = true;
+    });
+    if (geaendert) karteMap.setRaster({});   // ein einziges Melden/Verteilen für alle Änderungen
+}
+
+// --- Token-Ringe (Farbe/Breite/Stil je Figur, nur der Spielleiter ändert sie) ---------
+// Wie Foundrys "Disposition": freundlich/neutral/feindlich als schnelle Vorgaben, dazu freie
+// Farbe, Breite und Stil. Gemerkt wird die Einstellung für NSC-Figuren (nach NSC-Eintrag) und
+// Spieler-Figuren (nach Charaktername), damit ein neu platziertes Token auf der nächsten Karte
+// denselben Ring hat. Alle anderen Figuren (Markierungen) behalten den Ring nur auf ihrer Karte.
+const KARTE_RING_KEY = 'htbah_gm_ringe';
+const KARTE_RING_VORGABEN = {
+    verbuendet: { label: 'Verbündet', ring: '#4ade80', ringBreite: 'normal', ringStil: 'voll' },
+    neutral:    { label: 'Neutral',   ring: '#facc15', ringBreite: 'normal', ringStil: 'voll' },
+    feindlich:  { label: 'Feindlich', ring: '#ef4444', ringBreite: 'normal', ringStil: 'voll' },
+    boss:       { label: 'Boss',      ring: '#a855f7', ringBreite: 'dick',   ringStil: 'doppelt' },
+    geheim:     { label: 'Geheim',    ring: '#94a3b8', ringBreite: 'normal', ringStil: 'gestrichelt' }
+};
+const KARTE_RING_STILE = { voll: 'Voll', gestrichelt: 'Gestrichelt', doppelt: 'Doppelt', leuchtend: 'Leuchtend' };
+const KARTE_RING_BREITEN = { duenn: 'Dünn', normal: 'Normal', dick: 'Dick' };
+
+function karteRingVorlagenLesen() {
+    try { return JSON.parse(localStorage.getItem(KARTE_RING_KEY) || '{}') || {}; } catch (e) { return {}; }
+}
+
+// Schlüssel, unter dem der Ring einer Figur gemerkt wird (null = nicht merken)
+function karteRingSchluessel(f) {
+    if (!f) return null;
+    if (f.id.startsWith('nsc:')) return f.id;
+    if (f.id.startsWith('spieler:')) return 'spieler:' + String(f.name || '').trim().toLowerCase();
+    return null;
+}
+
+function karteRingEigenschaften(f) {
+    const o = {};
+    if (f.ring) o.ring = f.ring;
+    if (f.ringBreite) o.ringBreite = f.ringBreite;
+    if (f.ringStil) o.ringStil = f.ringStil;
+    if (f.ringAus) o.ringAus = true;
+    return o;
+}
+
+function karteRingMerken(f) {
+    const key = karteRingSchluessel(f);
+    if (!key) return;
+    const alle = karteRingVorlagenLesen();
+    const o = karteRingEigenschaften(f);
+    if (Object.keys(o).length) alle[key] = o; else delete alle[key];
+    sicherSpeichern(KARTE_RING_KEY, JSON.stringify(alle));
+}
+
+// Gemerkten Ring auf eine frisch angelegte Figur anwenden
+function karteRingAnwenden(f) {
+    if (!karteMap || !f) return;
+    const key = karteRingSchluessel(f);
+    const o = key ? karteRingVorlagenLesen()[key] : null;
+    if (o) karteMap.setFigurRing(f.id, Object.assign({ ring: '', ringBreite: '', ringStil: '', ringAus: false }, o));
+}
+
+// patch: { ring, ringBreite, ringStil }; nurAnzeige = Live-Vorschau beim Ziehen im Farbwähler
+function karteRingSetzen(id, patch, nurAnzeige) {
+    if (!karteMap) return;
+    karteMap.setFigurRing(id, patch, !!nurAnzeige);
+    if (nurAnzeige) return;
+    karteRingMerken(karteMap.figuren.find(f => f.id === id));
+    renderKarteGm();
+}
+
+function karteRingVorgabeAnwenden(id, vorgabe) {
+    if (vorgabe === 'standard') { karteRingSetzen(id, { ring: '', ringBreite: '', ringStil: '', ringAus: false }); return; }
+    const v = KARTE_RING_VORGABEN[vorgabe];
+    if (v) karteRingSetzen(id, { ring: v.ring, ringBreite: v.ringBreite, ringStil: v.ringStil });
+}
+
+function karteRingZeileHtml(f) {
+    const id = escapeHtml(f.id);
+    return `<div class="kt-ring-zeile">
+        <span class="ir-hint" style="margin:0" title="Farbe, Breite und Stil des Rings um das Token - die Spieler sehen ihn so">Ring:</span>
+        <input type="color" class="sk-mal-farbe kt-ring-farbe" value="${escapeHtml(f.ring || (/^#[0-9a-f]{6}$/i.test(f.farbe || '') ? f.farbe : '#9ca3af'))}"
+            oninput="karteRingSetzen('${id}', { ring: this.value }, true)" onchange="karteRingSetzen('${id}', { ring: this.value })" title="Ringfarbe">
+        <select class="sk-input kt-ring-wahl" onchange="karteRingVorgabeAnwenden('${id}', this.value)" title="Schnellwahl wie die Disposition in Foundry">
+            <option value="">Vorgabe …</option>
+            ${Object.entries(KARTE_RING_VORGABEN).map(([k, v]) => `<option value="${k}">${escapeHtml(v.label)}</option>`).join('')}
+            <option value="standard">Standard</option>
+        </select>
+        <select class="sk-input kt-ring-wahl" onchange="karteRingSetzen('${id}', { ringBreite: this.value })" title="Ringbreite">
+            ${Object.entries(KARTE_RING_BREITEN).map(([k, l]) => `<option value="${k}" ${(f.ringBreite || 'normal') === k ? 'selected' : ''}>${l}</option>`).join('')}
+        </select>
+        <select class="sk-input kt-ring-wahl" onchange="karteRingSetzen('${id}', { ringStil: this.value })" title="Ringstil">
+            ${Object.entries(KARTE_RING_STILE).map(([k, l]) => `<option value="${k}" ${(f.ringStil || 'voll') === k ? 'selected' : ''}>${l}</option>`).join('')}
+        </select>
+        <label class="hr-check kt-ring-aus" style="margin:0" title="Ring nur für dieses Token abschalten (Farbe und Stil bleiben gemerkt)"><input type="checkbox" ${f.ringAus ? 'checked' : ''} onchange="karteRingSetzen('${id}', { ringAus: this.checked })"> <span>Aus</span></label>
+    </div>`;
+}
+
+// Aura-Zeile: Kreis um das Token (Buff-Reichweite, Lichtkreis, Waffenreichweite ...). Die Spieler
+// sehen sie, außer sie ist auf "nur SL" gestellt.
+function karteAuraSetzen(id, patch, nurAnzeige) {
+    if (!karteMap) return;
+    karteMap.setFigurAura(id, patch, !!nurAnzeige);
+    if (!nurAnzeige) renderKarteGm();
+}
+
+function karteAuraZeileHtml(f) {
+    const id = escapeHtml(f.id);
+    const a = f.aura;
+    if (!a || !a.an) {
+        return `<div class="kt-ring-zeile">
+            <label class="hr-check" style="margin:0" title="Kreis um das Token einblenden (Buff-Reichweite, Lichtkreis, Waffenreichweite ...)"><input type="checkbox" onchange="karteAuraSetzen('${id}', { an: this.checked })"> <span>Aura</span></label>
+        </div>`;
+    }
+    return `<div class="kt-ring-zeile">
+        <label class="hr-check" style="margin:0"><input type="checkbox" checked onchange="karteAuraSetzen('${id}', { an: this.checked })"> <span>Aura</span></label>
+        <label class="sk-raster-feld" title="Radius in Feldern ab dem Mittelpunkt des Tokens${karteMap && karteMap.raster.einheit ? ' (1 Feld = ' + karteMap.raster.einheit + ' ' + escapeHtml(karteMap.raster.einheitName) + ')' : ''}">Radius
+            <input type="number" class="sk-input sk-input-schmal" value="${a.r}" min="0.5" max="40" step="0.5" onchange="karteAuraSetzen('${id}', { r: this.value })"></label>
+        <input type="color" class="sk-mal-farbe kt-ring-farbe" value="${escapeHtml(a.farbe || '#fbbf24')}"
+            oninput="karteAuraSetzen('${id}', { farbe: this.value }, true)" onchange="karteAuraSetzen('${id}', { farbe: this.value })" title="Aurafarbe">
+        <select class="sk-input kt-ring-wahl" onchange="karteAuraSetzen('${id}', { stil: this.value })" title="Darstellung">
+            ${[['flaeche', 'Fläche'], ['ring', 'Ring'], ['gestrichelt', 'Gestrichelt']].map(([k, l]) => `<option value="${k}" ${(a.stil || 'flaeche') === k ? 'selected' : ''}>${l}</option>`).join('')}
+        </select>
+        <input type="text" class="sk-input kt-pin-label" value="${escapeHtml(a.name || '')}" maxlength="40" placeholder="Bezeichnung (z.B. Kommando-Aura) …" onchange="karteAuraSetzen('${id}', { name: this.value })">
+        <label class="hr-check" style="margin:0" title="Nur du siehst diese Aura"><input type="checkbox" ${a.verdeckt ? 'checked' : ''} onchange="karteAuraSetzen('${id}', { verdeckt: this.checked })"> <span>nur SL</span></label>
+    </div>`;
+}
+
 function karteFigurZeileHtml(f) {
+    return `<div class="kt-figur ${karteMap && karteMap.getAuswahl().includes(f.id) ? 'kt-figur-gewaehlt' : ''}" data-figur-id="${escapeHtml(f.id)}">${karteFigurKopfHtml(f)}${karteRingZeileHtml(f)}${karteAuraZeileHtml(f)}</div>`;
+}
+
+// --- Mehrfachauswahl ------------------------------------------------------------------
+// Die Auswahl lebt in battlemap.js (nur SL, lokal). Hier nur die Leiste mit Sammelaktionen und die
+// Markierung der gewählten Figuren in der Liste.
+function karteAuswahlLeisteInnenHtml() {
+    if (!karteMap) return '';
+    const n = karteMap.getAuswahl().length;
+    return `<span class="ir-hint" style="margin:0" title="Strg+Klick auf Figuren, Strg+Rahmen ziehen oder das Werkzeug Auswahl; eine gewählte Figur ziehen bewegt alle"><i class="fa-solid fa-object-group"></i> Auswahl: <b>${n}</b></span>
+        <button class="sk-mini-btn" onclick="karteMap.setAuswahl(karteMap.figuren.map(f => f.id))">Alle</button>
+        ${n ? `<button class="sk-mini-btn" onclick="karteAuswahlVerdecken(true)" title="Alle gewählten Figuren vor den Spielern verstecken"><i class="fa-solid fa-eye-slash"></i> Verstecken</button>
+        <button class="sk-mini-btn" onclick="karteAuswahlVerdecken(false)" title="Alle gewählten Figuren aufdecken"><i class="fa-solid fa-eye"></i> Aufdecken</button>
+        <button class="sk-mini-btn" onclick="karteMap.auswahlLeeren()"><i class="fa-solid fa-xmark"></i> Aufheben</button>` : ''}`;
+}
+
+function karteAuswahlLeisteAktualisieren() {
+    const el = document.getElementById('kt-auswahl-leiste');
+    if (el && karteMap) el.innerHTML = karteAuswahlLeisteInnenHtml();
+    const gewaehlt = karteMap ? karteMap.getAuswahl() : [];
+    document.querySelectorAll('.kt-figur[data-figur-id]').forEach(e => e.classList.toggle('kt-figur-gewaehlt', gewaehlt.includes(e.dataset.figurId)));
+}
+
+function karteAuswahlVerdecken(verdeckt) {
+    if (!karteMap) return;
+    karteMap.getAuswahl().forEach(id => karteMap.setVerdeckt(id, verdeckt));
+    renderKarteGm();
+}
+
+function karteFigurKopfHtml(f) {
     return `
         <div class="sk-marker-zeile" style="justify-content:space-between; flex-wrap:nowrap;">
             <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"><span class="sk-farbpunkt" style="background:${escapeHtml(f.farbe || '#9ca3af')}"></span> ${escapeHtml(f.name)}</span>
@@ -612,8 +831,15 @@ function renderKtRasterWerkzeuge() {
         <label class="sk-raster-feld">Versatz X <input type="number" id="kt-raster-versatzx" class="sk-input sk-input-schmal" value="${r.rasterVersatzX}"></label>
         <label class="sk-raster-feld">Versatz Y <input type="number" id="kt-raster-versatzy" class="sk-input sk-input-schmal" value="${r.rasterVersatzY}"></label>
         <input type="color" id="kt-raster-farbe" class="sk-mal-farbe" value="#d4a24c" title="Rasterfarbe">
+        <label class="sk-raster-feld" title="Was ein Feld in der Spielwelt bedeutet - Grundlage für alle Entfernungsangaben beim Messen">1 Feld = <input type="number" id="kt-raster-einheit" class="sk-input sk-input-schmal" value="${r.einheit}" min="0.1" step="any"> <input type="text" id="kt-raster-einheitname" class="sk-input sk-input-schmal" value="${escapeHtml(r.einheitName)}" maxlength="6" style="width:3.2rem"></label>
+        <label class="sk-raster-feld" title="Seekampf-Regel (RW 5.1): jeder zweite diagonale Schritt zählt 1,5 Felder (300 m statt 200 m)">Diagonale
+            <select id="kt-raster-diagonale" class="sk-input"><option value="gleich" ${r.diagonale !== 'alternierend' ? 'selected' : ''}>immer 1 Feld</option><option value="alternierend" ${r.diagonale === 'alternierend' ? 'selected' : ''}>jede 2. = 1,5</option></select></label>
+        <button class="tool-btn" id="kt-raster-seekarte" title="Seekampf-Maßstab: 1 Feld = 200 m, jeder zweite diagonale Schritt zählt 1,5 Felder (RW 5.1)"><i class="fa-solid fa-water"></i> Seekarte-Vorgabe</button>
         <label class="hr-check" style="margin:0"><input type="checkbox" id="kt-raster-sichtbar" ${r.rasterSichtbar ? 'checked' : ''}> <span>Raster sichtbar</span></label>
-        <label class="hr-check" style="margin:0"><input type="checkbox" id="kt-raster-einrasten" ${r.einrasten ? 'checked' : ''}> <span>Einrasten</span></label>`;
+        <label class="hr-check" style="margin:0"><input type="checkbox" id="kt-raster-einrasten" ${r.einrasten ? 'checked' : ''}> <span>Einrasten</span></label>
+        <label class="hr-check" style="margin:0" title="Schaltet die Ringe um ALLE Tokens dieser Karte ab (die Einstellungen je Token bleiben erhalten)"><input type="checkbox" id="kt-raster-ringe" ${r.ringeAnzeigen !== false ? 'checked' : ''}> <span>Token-Ringe</span></label>
+        <label class="hr-check" style="margin:0" title="Symbole für Blutung, Feuer, Gift, Schlaf, Stun, Tod und Monsterform über den Tokens (aus dem Kampf-Tracker)"><input type="checkbox" id="kt-raster-status" ${r.statusAnzeigen !== false ? 'checked' : ''}> <span>Status-Symbole</span></label>
+        <label class="hr-check" style="margin:0" title="LP-Balken unter den Tokens (Gegner-LP sehen die Spieler nur, wenn du sie im Kampf-Tracker freigibst)"><input type="checkbox" id="kt-raster-lp" ${r.lpAnzeigen !== false ? 'checked' : ''}> <span>LP-Balken</span></label>`;
     const anwenden = () => {
         if (!karteMap) return;
         karteMap.setRaster({
@@ -621,15 +847,27 @@ function renderKtRasterWerkzeuge() {
             rasterVersatzX: parseFloat(document.getElementById('kt-raster-versatzx').value) || 0,
             rasterVersatzY: parseFloat(document.getElementById('kt-raster-versatzy').value) || 0,
             rasterSichtbar: document.getElementById('kt-raster-sichtbar').checked,
-            einrasten: document.getElementById('kt-raster-einrasten').checked
+            einrasten: document.getElementById('kt-raster-einrasten').checked,
+            ringeAnzeigen: document.getElementById('kt-raster-ringe').checked,
+            statusAnzeigen: document.getElementById('kt-raster-status').checked,
+            lpAnzeigen: document.getElementById('kt-raster-lp').checked,
+            einheit: Math.max(0.1, parseFloat(document.getElementById('kt-raster-einheit').value) || 1),
+            einheitName: (document.getElementById('kt-raster-einheitname').value || '').trim().slice(0, 6) || 'm',
+            diagonale: document.getElementById('kt-raster-diagonale').value === 'alternierend' ? 'alternierend' : 'gleich'
         });
     };
-    ['kt-raster-groesse', 'kt-raster-versatzx', 'kt-raster-versatzy', 'kt-raster-sichtbar', 'kt-raster-einrasten'].forEach(id => {
+    ['kt-raster-groesse', 'kt-raster-versatzx', 'kt-raster-versatzy', 'kt-raster-sichtbar', 'kt-raster-einrasten', 'kt-raster-ringe', 'kt-raster-status', 'kt-raster-lp', 'kt-raster-einheit', 'kt-raster-einheitname', 'kt-raster-diagonale'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.addEventListener('change', anwenden);
     });
     const farbe = document.getElementById('kt-raster-farbe');
     if (farbe) farbe.addEventListener('input', () => karteMap && karteMap.setRaster({ rasterFarbe: farbe.value }));
+    const seekarte = document.getElementById('kt-raster-seekarte');
+    if (seekarte) seekarte.addEventListener('click', () => {
+        if (!karteMap) return;
+        karteMap.setRaster({ einheit: 200, einheitName: 'm', diagonale: 'alternierend' });
+        renderKtRasterWerkzeuge();
+    });
 }
 
 function renderKarteGm() {
@@ -641,7 +879,7 @@ function renderKarteGm() {
     if (!document.getElementById('kt-canvas')) {
         box.innerHTML = `
             <details class="x-details sk-details" ${karteOffenGm ? 'open' : ''}>
-                <summary class="tm-head">
+                <summary class="tm-head panel-kopf">
                     <div class="tm-title"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-map"></i> Karte
                         <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('karte')" title="Hilfe zur Karte"></i>
                     </div>
@@ -667,9 +905,12 @@ function renderKarteGm() {
                         <div class="sk-kt-gruppe-titel"><i class="fa-solid fa-pen-ruler"></i> Werkzeuge</div>
                         <div class="sk-kt-gruppe-reihe">
                             <button class="tool-btn" data-ktwerkzeug="zeigen"><i class="fa-solid fa-arrow-pointer"></i> Zeigen</button>
+                            <button class="tool-btn" data-ktwerkzeug="auswahl" title="Rahmen aufziehen oder Figuren anklicken; ausgewählte Figuren lassen sich gemeinsam verschieben (auch: Strg+Klick / Strg+Ziehen im Werkzeug Zeigen)"><i class="fa-solid fa-object-group"></i> Auswahl</button>
                             <button class="tool-btn" data-ktwerkzeug="messen"><i class="fa-solid fa-ruler"></i> Messen</button>
+                            ${karteMessformSelectHtml()}
                             <button class="tool-btn" data-ktwerkzeug="malen"><i class="fa-solid fa-pen"></i> Zeichnen</button>
                             <button class="tool-btn" data-ktwerkzeug="radieren"><i class="fa-solid fa-eraser"></i> Radieren</button>
+                            <button class="tool-btn" data-ktwerkzeug="pin" title="Klick auf die Karte setzt einen Pin (Ort/Hinweis, optional mit Handout)"><i class="fa-solid fa-location-pin"></i> Pin</button>
                             <span class="sk-kt-trenner"></span>
                             <select id="kt-mal-art" class="sk-input sk-mal-art" title="Form">
                                 <option value="freihand">Freihand</option>
@@ -790,9 +1031,249 @@ function renderKarteGm() {
             <input type="text" id="kt-marker-name" class="sk-input" placeholder="Markierung benennen …" onkeydown="if(event.key==='Enter') karteMarkierungHinzufuegen()">
             <button class="sk-mini-btn" onclick="karteMarkierungHinzufuegen()"><i class="fa-solid fa-location-dot"></i> Markierung setzen</button>
         </div>
+        <div class="kt-auswahl-leiste" id="kt-auswahl-leiste">${karteAuswahlLeisteInnenHtml()}</div>
+        ${kartePinListeHtml()}
+        ${karteFigurenListeHtml()}`;
+}
+
+// --- Figurenliste (Spieler, NSC, freie Markierungen) ---------------------------------------
+// Wie die Pin-Liste: ein-/ausklappbar, sortierbar, bei vielen Figuren filterbar; nur die Darstellung
+// der Liste - Reihenfolge und Zeichenordnung auf der Karte bleiben unberührt. Wird im Browser gemerkt.
+const KARTE_FIGUREN_UI_KEY = 'htbah_gm_figuren_ui';
+const KARTE_FIGUREN_SORTIERUNGEN = {
+    karte: 'Reihenfolge auf der Karte',
+    name: 'Name A–Z',
+    namez: 'Name Z–A',
+    art: 'Spieler, NSC, Sonstige',
+    verdeckt: 'Verdeckte zuerst',
+    auswahl: 'Ausgewählte zuerst'
+};
+let karteFigurenUi = (() => {
+    try {
+        const roh = JSON.parse(localStorage.getItem(KARTE_FIGUREN_UI_KEY) || '{}');
+        return { offen: roh.offen !== false, sortierung: KARTE_FIGUREN_SORTIERUNGEN[roh.sortierung] ? roh.sortierung : 'karte' };
+    } catch (e) { return { offen: true, sortierung: 'karte' }; }
+})();
+function karteFigurenUiSichern() {
+    try { localStorage.setItem(KARTE_FIGUREN_UI_KEY, JSON.stringify(karteFigurenUi)); } catch (e) { /* Speicher voll/gesperrt */ }
+}
+function karteFigurenOffenSetzen(offen) { karteFigurenUi.offen = !!offen; karteFigurenUiSichern(); }
+function karteFigurenSortierungSetzen(wert) {
+    if (!KARTE_FIGUREN_SORTIERUNGEN[wert]) return;
+    karteFigurenUi.sortierung = wert;
+    karteFigurenUiSichern();
+    renderKarteGm();
+}
+function karteFigurArt(f) {
+    if (String(f.id).startsWith('spieler:')) return 0;
+    if (String(f.id).startsWith('nsc:')) return 1;
+    return 2;
+}
+function karteFigurenSortiert(figuren) {
+    const liste = figuren.slice();
+    const name = (f) => String(f.name || '').trim();
+    const nach = (a, b) => name(a).localeCompare(name(b), 'de', { sensitivity: 'base' });
+    const gewaehlt = karteMap ? karteMap.getAuswahl() : [];
+    switch (karteFigurenUi.sortierung) {
+        case 'name': return liste.sort(nach);
+        case 'namez': return liste.sort((a, b) => nach(b, a));
+        case 'art': return liste.sort((a, b) => karteFigurArt(a) - karteFigurArt(b) || nach(a, b));
+        case 'verdeckt': return liste.sort((a, b) => (b.verdeckt ? 1 : 0) - (a.verdeckt ? 1 : 0) || nach(a, b));
+        case 'auswahl': return liste.sort((a, b) => (gewaehlt.includes(b.id) ? 1 : 0) - (gewaehlt.includes(a.id) ? 1 : 0) || nach(a, b));
+        default: return liste;
+    }
+}
+// Filtert die Zeilen ohne Neuaufbau (das Suchfeld behält so beim Tippen den Fokus)
+function karteFigurenFilter(text) {
+    const q = String(text || '').trim().toLowerCase();
+    let sichtbar = 0;
+    document.querySelectorAll('.kt-figur[data-figur-id]').forEach(z => {
+        const f = karteMap.figuren.find(x => x.id === z.dataset.figurId);
+        const treffer = !q || !f || String(f.name || '').toLowerCase().includes(q);
+        z.style.display = treffer ? '' : 'none';
+        if (treffer) sichtbar++;
+    });
+    const leer = document.getElementById('kt-figuren-filter-leer');
+    if (leer) leer.style.display = q && !sichtbar ? '' : 'none';
+}
+
+function karteFigurenListeHtml() {
+    const figuren = karteMap.figuren;
+    const spieler = figuren.filter(f => karteFigurArt(f) === 0).length;
+    const nsc = figuren.filter(f => karteFigurArt(f) === 1).length;
+    const verdeckt = figuren.filter(f => f.verdeckt).length;
+    return `<details class="kt-pins kt-figuren x-details" ${karteFigurenUi.offen ? 'open' : ''} ontoggle="karteFigurenOffenSetzen(this.open)">
+        <summary class="kt-pins-kopf"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-users"></i> Spieler &amp; NSC
+            <span class="x-count" title="Alle Figuren auf der Karte">${figuren.length}</span>
+            ${spieler ? `<span class="x-count" title="Spieler-Figuren"><i class="fa-solid fa-user"></i> ${spieler}</span>` : ''}
+            ${nsc ? `<span class="x-count" title="NSC-Figuren"><i class="fa-solid fa-address-book"></i> ${nsc}</span>` : ''}
+            ${verdeckt ? `<span class="x-count" title="Verdeckte Figuren - nur du siehst sie"><i class="fa-solid fa-eye-slash"></i> ${verdeckt}</span>` : ''}</summary>
+        ${figuren.length > 1 ? `<div class="kt-pins-werkzeuge">
+            <select class="sk-input" onchange="karteFigurenSortierungSetzen(this.value)" title="Sortierung der Liste (die Figuren auf der Karte bleiben unverändert)">
+                ${Object.entries(KARTE_FIGUREN_SORTIERUNGEN).map(([k, l]) => `<option value="${k}" ${karteFigurenUi.sortierung === k ? 'selected' : ''}>${l}</option>`).join('')}
+            </select>
+            ${figuren.length > 5 ? `<input type="search" class="sk-input" placeholder="Figuren suchen …" oninput="karteFigurenFilter(this.value)">` : ''}
+        </div>` : ''}
         <div class="sk-einheiten-liste">
-            ${karteMap.figuren.length ? karteMap.figuren.map(f => karteFigurZeileHtml(f)).join('') : '<p class="x-leer">Noch keine Figuren auf der Karte.</p>'}
-        </div>`;
+            ${figuren.length ? karteFigurenSortiert(figuren).map(f => karteFigurZeileHtml(f)).join('') : '<p class="x-leer">Noch keine Figuren auf der Karte.</p>'}
+        </div>
+        <p class="x-leer" id="kt-figuren-filter-leer" style="display:none">Keine Figur passt zur Suche.</p>
+    </details>`;
+}
+
+// --- Pins (Orte & Hinweise auf der Karte) ----------------------------------------------
+// Ein Pin ist ein beschrifteter Punkt mit Symbol, Notiz und optional einem Handout aus der
+// Handout-Bibliothek (handouts.js). Gesetzt mit dem Pin-Werkzeug, verschiebbar per Ziehen. Die
+// Spieler sehen nur nicht-verdeckte Pins (und keine im Nebel) und können sie anklicken, um
+// Beschriftung und Notiz zu lesen. Das Handout selbst bekommen sie nur, wenn der SL es zeigt
+// (Knopf in der Pinzeile oder im Popover) - danach öffnet der Pin es auch bei ihnen wieder.
+const KARTE_PIN_ICONS = ['📍', '⚓', '🏝️', '🏴‍☠️', '💰', '🗝️', '📜', '⚔️', '❓', '❗', '🏠', '🔥', '☠️', '🌀', '🧭'];
+
+// Darstellung der Pin-Liste (nur Anzeige - die Reihenfolge der Pins auf der Karte bleibt unberührt):
+// ein-/ausklappbar, sortierbar, bei langen Listen filterbar. Wird im Browser des SL gemerkt.
+const KARTE_PIN_UI_KEY = 'htbah_gm_pins_ui';
+const KARTE_PIN_SORTIERUNGEN = {
+    angelegt: 'Zuletzt angelegt zuerst',
+    aelteste: 'Älteste zuerst',
+    name: 'Name A–Z',
+    namez: 'Name Z–A',
+    symbol: 'Nach Symbol',
+    verdeckt: 'Verdeckte zuerst',
+    handout: 'Mit Handout zuerst'
+};
+let kartePinUi = (() => {
+    try {
+        const roh = JSON.parse(localStorage.getItem(KARTE_PIN_UI_KEY) || '{}');
+        return { offen: roh.offen !== false, sortierung: KARTE_PIN_SORTIERUNGEN[roh.sortierung] ? roh.sortierung : 'angelegt' };
+    } catch (e) { return { offen: true, sortierung: 'angelegt' }; }
+})();
+function kartePinUiSichern() {
+    try { localStorage.setItem(KARTE_PIN_UI_KEY, JSON.stringify(kartePinUi)); } catch (e) { /* Speicher voll/gesperrt */ }
+}
+function kartePinsOffenSetzen(offen) { kartePinUi.offen = !!offen; kartePinUiSichern(); }
+function kartePinSortierungSetzen(wert) {
+    if (!KARTE_PIN_SORTIERUNGEN[wert]) return;
+    kartePinUi.sortierung = wert;
+    kartePinUiSichern();
+    renderKarteGm();
+}
+// Filtert die Zeilen in der Liste, ohne neu zu rendern (sonst verliert das Suchfeld beim Tippen den Fokus)
+function kartePinFilter(text) {
+    const q = String(text || '').trim().toLowerCase();
+    let sichtbar = 0;
+    document.querySelectorAll('.kt-pin-zeile').forEach(z => {
+        const p = (karteMap.pins || []).find(x => x.id === z.dataset.pin);
+        const treffer = !q || !p || `${p.label || ''} ${p.text || ''}`.toLowerCase().includes(q);
+        z.style.display = treffer ? '' : 'none';
+        if (treffer) sichtbar++;
+    });
+    const leer = document.getElementById('kt-pin-filter-leer');
+    if (leer) leer.style.display = q && !sichtbar ? '' : 'none';
+}
+function kartePinsSortiert(pins) {
+    const liste = pins.slice();
+    const name = (p) => (p.label || '').trim();
+    const nach = (a, b) => (name(a) === '' ? 1 : 0) - (name(b) === '' ? 1 : 0) || name(a).localeCompare(name(b), 'de', { sensitivity: 'base' });
+    switch (kartePinUi.sortierung) {
+        case 'angelegt': return liste.reverse();
+        case 'name': return liste.sort(nach);
+        case 'namez': return liste.sort((a, b) => (name(a) === '' ? 1 : 0) - (name(b) === '' ? 1 : 0) || name(b).localeCompare(name(a), 'de', { sensitivity: 'base' }));
+        case 'symbol': return liste.sort((a, b) => String(a.icon || '').localeCompare(String(b.icon || '')) || nach(a, b));
+        case 'verdeckt': return liste.sort((a, b) => (b.verdeckt ? 1 : 0) - (a.verdeckt ? 1 : 0) || nach(a, b));
+        case 'handout': return liste.sort((a, b) => (b.handoutId ? 1 : 0) - (a.handoutId ? 1 : 0) || nach(a, b));
+        default: return liste;   // 'aelteste' = Reihenfolge des Anlegens
+    }
+}
+
+function kartePinListeHtml() {
+    const pins = karteMap.pins || [];
+    const handoutListe = typeof handouts !== 'undefined' ? handouts : [];
+    const zeilen = kartePinsSortiert(pins).map(p => `
+        <div class="kt-pin-zeile" data-pin="${escapeHtml(p.id)}">
+            <select class="sk-input kt-pin-icon" onchange="kartePinSetzen('${escapeHtml(p.id)}', { icon: this.value })" title="Symbol">
+                ${KARTE_PIN_ICONS.concat(KARTE_PIN_ICONS.includes(p.icon) ? [] : [p.icon]).map(i => `<option value="${escapeHtml(i)}" ${i === p.icon ? 'selected' : ''}>${escapeHtml(i)}</option>`).join('')}
+            </select>
+            <input type="text" class="sk-input kt-pin-label" value="${escapeHtml(p.label || '')}" maxlength="60" placeholder="Beschriftung …" onchange="kartePinSetzen('${escapeHtml(p.id)}', { label: this.value })">
+            <input type="text" class="sk-input kt-pin-text" value="${escapeHtml(p.text || '')}" maxlength="600" placeholder="Notiz für die Spieler (optional) …" onchange="kartePinSetzen('${escapeHtml(p.id)}', { text: this.value })">
+            <select class="sk-input kt-pin-handout" onchange="kartePinSetzen('${escapeHtml(p.id)}', { handoutId: this.value })" title="Handout, das zu diesem Ort gehört">
+                <option value="">Kein Handout</option>
+                ${handoutListe.map(h => `<option value="${escapeHtml(h.id)}" ${h.id === p.handoutId ? 'selected' : ''}>${escapeHtml(h.titel)}</option>`).join('')}
+            </select>
+            <label class="hr-check" style="margin:0" title="Verdeckt: nur du siehst den Pin, bis du ihn aufdeckst"><input type="checkbox" ${p.verdeckt ? 'checked' : ''} onchange="kartePinSetzen('${escapeHtml(p.id)}', { verdeckt: this.checked })"> <span>verdeckt</span></label>
+            ${p.handoutId ? `<button class="sk-mini-btn" onclick="kartePinHandoutZeigen('${escapeHtml(p.id)}')" title="Das Handout allen verbundenen Spielern zeigen"><i class="fa-solid fa-scroll"></i> Handout zeigen</button>` : ''}
+            <button class="btn-delete-icon" onclick="kartePinLoeschen('${escapeHtml(p.id)}')" title="Pin löschen"><i class="fa-solid fa-trash"></i></button>
+        </div>`).join('');
+    const verdeckte = pins.filter(p => p.verdeckt).length;
+    return `<details class="kt-pins x-details" ${kartePinUi.offen ? 'open' : ''} ontoggle="kartePinsOffenSetzen(this.open)">
+        <summary class="kt-pins-kopf"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-location-pin"></i> Pins (Orte &amp; Hinweise)
+            <span class="x-count">${pins.length}</span>${verdeckte ? ` <span class="x-count" title="Verdeckte Pins - nur du siehst sie"><i class="fa-solid fa-eye-slash"></i> ${verdeckte}</span>` : ''}</summary>
+        ${pins.length > 1 ? `<div class="kt-pins-werkzeuge">
+            <select class="sk-input" onchange="kartePinSortierungSetzen(this.value)" title="Sortierung der Liste (die Pins auf der Karte bleiben unverändert)">
+                ${Object.entries(KARTE_PIN_SORTIERUNGEN).map(([k, l]) => `<option value="${k}" ${kartePinUi.sortierung === k ? 'selected' : ''}>${l}</option>`).join('')}
+            </select>
+            ${pins.length > 4 ? `<input type="search" class="sk-input" placeholder="Pins suchen …" oninput="kartePinFilter(this.value)" title="Sucht in Beschriftung und Notiz">` : ''}
+        </div>` : ''}
+        ${zeilen || '<p class="x-leer">Noch keine Pins - Werkzeug <b>Pin</b> wählen und auf die Karte klicken.</p>'}
+        <p class="x-leer" id="kt-pin-filter-leer" style="display:none">Kein Pin passt zur Suche.</p>
+    </details>`;
+}
+
+function kartePinSetzen(id, patch) {
+    if (!karteMap) return;
+    karteMap.updatePin(id, patch);
+    if ('handoutId' in patch || 'icon' in patch) renderKarteGm();
+}
+
+function kartePinLoeschen(id) {
+    if (!karteMap) return;
+    karteMap.removePin(id);
+    renderKarteGm();
+}
+
+function kartePinHandoutZeigen(id) {
+    const pin = karteMap && (karteMap.pins || []).find(p => p.id === id);
+    if (!pin || !pin.handoutId || typeof handoutZeigen !== 'function') return;
+    handoutZeigen(pin.handoutId);   // Rückmeldung steht im Live-Feed (addGmLogEntry)
+}
+
+let kartePinPopoverEl = null;
+function kartePinPopoverSchliessen() {
+    if (kartePinPopoverEl) { kartePinPopoverEl.remove(); kartePinPopoverEl = null; }
+    document.removeEventListener('pointerdown', kartePinPopoverAussen, true);
+    document.removeEventListener('keydown', kartePinPopoverEsc, true);
+}
+function kartePinPopoverAussen(e) { if (kartePinPopoverEl && !kartePinPopoverEl.contains(e.target)) kartePinPopoverSchliessen(); }
+function kartePinPopoverEsc(e) { if (e.key === 'Escape') kartePinPopoverSchliessen(); }
+
+// Kleine Infokarte zu einem Pin. rolle 'gm': mit Handout-Knopf; 'spieler': Handout nur, wenn sie
+// es schon erhalten haben. x/y = Bildschirmposition des Klicks (null: Fensterrand rechts oben).
+function kartePinPopover(pin, x, y, rolle) {
+    kartePinPopoverSchliessen();
+    const hatHandout = !!pin.handoutId;
+    const handoutName = hatHandout && typeof handouts !== 'undefined' ? ((handouts.find(h => h.id === pin.handoutId) || {}).titel || 'Handout') : 'Handout';
+    const erhalten = rolle === 'spieler' && hatHandout && typeof handoutVerlauf !== 'undefined' && handoutVerlauf.some(h => h.id === pin.handoutId);
+    const el = document.createElement('div');
+    el.className = 'kt-pin-popover';
+    el.innerHTML = `
+        <div class="kt-pin-popover-kopf"><span class="kt-pin-popover-icon">${escapeHtml(pin.icon || '📍')}</span><strong>${escapeHtml(pin.label || 'Ort')}</strong>${pin.verdeckt ? ' <span class="x-count" title="Nur du siehst diesen Pin"><i class="fa-solid fa-eye-slash"></i></span>' : ''}</div>
+        ${pin.text ? `<div class="kt-pin-popover-text">${escapeHtml(pin.text)}</div>` : (rolle === 'spieler' ? '<div class="kt-pin-popover-text x-leer">Keine weitere Notiz.</div>' : '')}
+        ${rolle === 'gm' && hatHandout ? `<button class="tool-btn" id="kt-pin-popover-handout"><i class="fa-solid fa-scroll"></i> „${escapeHtml(handoutName)}“ allen zeigen</button>` : ''}
+        ${erhalten ? `<button class="tool-btn" id="kt-pin-popover-lesen"><i class="fa-solid fa-scroll"></i> Handout lesen</button>` : ''}`;
+    document.body.appendChild(el);
+    kartePinPopoverEl = el;
+    const breite = el.offsetWidth, hoehe = el.offsetHeight;
+    const links = x == null ? window.innerWidth - breite - 24 : Math.min(Math.max(8, x + 12), window.innerWidth - breite - 8);
+    const oben = y == null ? 90 : Math.min(Math.max(8, y - hoehe - 12 < 8 ? y + 16 : y - hoehe - 12), window.innerHeight - hoehe - 8);
+    el.style.left = links + 'px';
+    el.style.top = oben + 'px';
+    const handoutBtn = el.querySelector('#kt-pin-popover-handout');
+    if (handoutBtn) handoutBtn.addEventListener('click', () => { kartePinHandoutZeigen(pin.id); kartePinPopoverSchliessen(); });
+    const lesenBtn = el.querySelector('#kt-pin-popover-lesen');
+    if (lesenBtn) lesenBtn.addEventListener('click', () => { kartePinPopoverSchliessen(); if (typeof handoutVerlaufOeffnen === 'function') handoutVerlaufOeffnen(); });
+    setTimeout(() => {
+        document.addEventListener('pointerdown', kartePinPopoverAussen, true);
+        document.addEventListener('keydown', kartePinPopoverEsc, true);
+    }, 0);
 }
 
 // --- Vollbild ---------------------------------------------------------------
@@ -812,10 +1293,13 @@ let karteVollbildRolle = null; // 'gm' | 'spieler' | null
 function karteVollbildWerkzeugleisteHtml(rolle) {
     const gemeinsam = `
         <button class="tool-btn" data-ktvwerkzeug="zeigen"><i class="fa-solid fa-arrow-pointer"></i> Zeigen</button>
-        <button class="tool-btn" data-ktvwerkzeug="messen"><i class="fa-solid fa-ruler"></i> Messen</button>`;
+        <button class="tool-btn" data-ktvwerkzeug="messen"><i class="fa-solid fa-ruler"></i> Messen</button>
+        ${karteMessformSelectHtml()}`;
     const nurGm = `
+        <button class="tool-btn" data-ktvwerkzeug="auswahl" title="Rahmen aufziehen oder Figuren anklicken, dann gemeinsam verschieben"><i class="fa-solid fa-object-group"></i> Auswahl</button>
         <button class="tool-btn" data-ktvwerkzeug="malen"><i class="fa-solid fa-pen"></i> Zeichnen</button>
         <button class="tool-btn" data-ktvwerkzeug="radieren"><i class="fa-solid fa-eraser"></i> Radieren</button>
+        <button class="tool-btn" data-ktvwerkzeug="pin" title="Klick auf die Karte setzt einen Pin"><i class="fa-solid fa-location-pin"></i> Pin</button>
         <span class="sk-kt-trenner"></span>
         <button class="tool-btn" data-ktvwerkzeug="nebel-auf"><i class="fa-solid fa-cloud"></i> Nebel aufdecken</button>
         <button class="tool-btn" data-ktvwerkzeug="nebel-zu"><i class="fa-solid fa-cloud-sun"></i> Nebel abdecken</button>`;
@@ -952,7 +1436,7 @@ function renderKarteSpieler() {
     if (!document.getElementById('kt-spieler-canvas')) {
         section.innerHTML = `
             <details class="x-details sk-details" ${karteSpielerOffen ? 'open' : ''}>
-                <summary class="tm-head">
+                <summary class="tm-head panel-kopf">
                     <h2 class="cat-title" style="margin:0"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-map category-icon-fa"></i> Karte
                         <span id="kt-spieler-name-badge"></span>
                         <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('karte')" title="Hilfe zur Karte"></i></h2>
@@ -960,6 +1444,7 @@ function renderKarteSpieler() {
                 <div class="sk-karten-werkzeuge">
                     <button class="tool-btn" data-ktspielerwerkzeug="zeigen"><i class="fa-solid fa-arrow-pointer"></i> Zeigen</button>
                     <button class="tool-btn" data-ktspielerwerkzeug="messen"><i class="fa-solid fa-ruler"></i> Messen</button>
+                    ${karteMessformSelectHtml()}
                     <button class="tool-btn" onclick="karteVollbildOeffnen('spieler')" title="Karte großformatig anzeigen"><i class="fa-solid fa-up-right-and-down-left-from-center"></i> Vollbild</button>
                     <button class="tool-btn" onclick="karteAktualisierenAnfordern(this)" title="Aktuellen Stand vom Spielleiter neu abrufen, falls die Karte hängen geblieben wirkt - ohne die Seite neu zu laden"><i class="fa-solid fa-rotate"></i> Aktualisieren</button>
                     <button class="tool-btn ${typeof appData !== 'undefined' && appData.karteRasterAusblenden ? 'tool-btn-aktiv' : ''}" data-ktraster-toggle onclick="karteRasterAusblendenUmschalten()" title="Raster nur bei dir aus-/einblenden - wirkt sich nicht auf den SL oder andere Spieler aus"><i class="fa-solid fa-table-cells"></i> Raster</button>
@@ -970,6 +1455,7 @@ function renderKarteSpieler() {
         const canvas = document.getElementById('kt-spieler-canvas');
         karteSpielerMap = BattleMap.create(canvas, {
             einheit: 1, einheitName: 'm',
+            onPinKlick: (pin, x, y) => kartePinPopover(pin, x, y, 'spieler'),
             bestaetigungNoetig: true,
             nebelDeckend: true,
             onZugVorschlag: (figur) => {

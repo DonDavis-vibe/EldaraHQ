@@ -89,7 +89,7 @@ function renderSpielerlog() {
 
     box.innerHTML = `
         <details class="x-details qs-details" ${spielerlogOffen ? 'open' : ''}>
-            <summary class="qs-head">
+            <summary class="qs-head panel-kopf">
                 <h2 class="cat-title" style="margin:0"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-feather-pointed category-icon-fa"></i> Mein Logbuch
                     ${eintraege.length ? `<span class="x-count">${eintraege.length}</span>` : ''}
                     <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('spielerlog')" title="Hilfe zum eigenen Logbuch"></i></h2>

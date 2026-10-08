@@ -315,7 +315,7 @@ function renderNscListeGm() {
 
     box.innerHTML = `
         <details class="x-details nsc-details" ${nscListeOffen ? 'open' : ''}>
-            <summary class="nsc-head">
+            <summary class="nsc-head panel-kopf">
                 <div class="nsc-title"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-address-book"></i> NSC-Liste
                     ${nscListe.length ? `<span class="x-count">${nscListe.length}</span>` : ''}
                     <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('nscliste')" title="Hilfe zur NSC-Liste"></i>

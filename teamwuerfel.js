@@ -198,7 +198,7 @@ function renderTeamwuerfel() {
     box.innerHTML = `
         ${letzterHtml}
         <details class="x-details tw-details" ${teamwuerfelOffen ? 'open' : ''}>
-            <summary>
+            <summary class="panel-kopf">
                 <h2 class="cat-title" style="margin:0"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-dice category-icon-fa"></i> Team-Würfel
                     ${teamwuerfelEintraege.length ? `<span class="x-count">${teamwuerfelEintraege.length}</span>` : ''}
                     <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('teamwuerfel')" title="Hilfe zum Team-Würfel"></i></h2>

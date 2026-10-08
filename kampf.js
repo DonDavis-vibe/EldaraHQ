@@ -123,7 +123,7 @@ let kampf = kampfLeererStand();
 let kampfOffenGm = true;
 
 function kampfLeererStand() {
-    return { runde: 0, teilnehmer: [], log: [], modusAktiv: false };
+    return { runde: 0, teilnehmer: [], log: [], modusAktiv: false, amZug: null };
 }
 
 function kampfLaden() {
@@ -202,6 +202,18 @@ function kampfAktionenHtml(t) {
 function kampfSichern() {
     sicherSpeichern(KAMPF_KEY, JSON.stringify(kampf));
     kampfVerteilen();
+    // Statussymbole und LP-Balken an den Karten-Tokens nachziehen (karten.js)
+    if (typeof karteTokenAnzeigeAbgleichen === 'function') karteTokenAnzeigeAbgleichen();
+}
+
+// Gegner-LP auf der Karte für die Spieler sichtbar machen (Standard: nur Verbündete/Neutrale)
+function kampfLpOeffentlich(t) { return t.lpOeffentlich !== undefined ? !!t.lpOeffentlich : t.seite !== 'gegner'; }
+function kampfLpOeffentlichUmschalten(id) {
+    const t = kampfTeilnehmer(id);
+    if (!t || t.art !== 'nsc') return;
+    t.lpOeffentlich = !kampfLpOeffentlich(t);
+    kampfSichern();
+    renderKampfGm();
 }
 
 function kampfLog(text) {
@@ -266,6 +278,12 @@ function kampfNscAusListeUebernehmen() {
 function kampfTeilnehmerEntfernen(id) {
     const t = kampfTeilnehmer(id);
     if (!t) return;
+    if (kampf.amZug === id) {
+        // Der Zug geht an den Nächsten in der Reihenfolge weiter (oder endet, wenn er der Letzte war)
+        const reihe = kampfZugReihenfolge();
+        const idx = reihe.findIndex(x => x.id === id);
+        kampf.amZug = reihe[idx + 1] ? reihe[idx + 1].id : null;
+    }
     kampf.teilnehmer = kampf.teilnehmer.filter(x => x.id !== id);
     kampfLog(`${t.name} verlässt den Kampf.`);
     renderKampfGm();
@@ -296,6 +314,40 @@ function kampfInitiativeAlleWuerfeln() {
 
 function kampfInitiativeSortierung() {
     return kampf.teilnehmer.slice().sort((a, b) => (b.init == null ? -1 : b.init) - (a.init == null ? -1 : a.init));
+}
+
+// --- Am Zug (Reihenfolge der Initiative) ------------------------------------------
+// Wer gerade dran ist, steht in kampf.amZug (Teilnehmer-ID) und wird auf der Karte markiert und den
+// Spielern im Tracker gezeigt. Dran kommen nur Lebende MIT Initiativewurf, höchste zuerst. Der SL
+// schaltet per Knopf weiter; nach dem Letzten ist niemand mehr dran, bis "Runde weiter" kommt.
+function kampfZugReihenfolge() {
+    return kampfInitiativeSortierung().filter(t => !t.tot && t.init != null);
+}
+
+function kampfNaechsterZug() {
+    const reihe = kampfZugReihenfolge();
+    if (!reihe.length) { kampfLog('Niemand hat Initiative - erst würfeln.'); renderKampfGm(); return; }
+    const idx = reihe.findIndex(t => t.id === kampf.amZug);
+    const next = reihe[idx + 1];
+    if (next) {
+        kampf.amZug = next.id;
+        kampfLog(`${next.name} ist am Zug.`);
+    } else if (idx >= 0) {
+        kampf.amZug = null;
+        kampfLog('Alle waren dran - "Runde weiter" startet die nächste Runde.');
+    } else {
+        kampf.amZug = reihe[0].id;
+        kampfLog(`${reihe[0].name} ist am Zug.`);
+    }
+    renderKampfGm();
+}
+
+function kampfZugSetzen(id) {
+    const t = kampfTeilnehmer(id);
+    if (!t) return;
+    kampf.amZug = kampf.amZug === id ? null : id;
+    if (kampf.amZug) kampfLog(`${t.name} ist am Zug.`); else kampfSichern();
+    renderKampfGm();
 }
 
 // --- Rundenablauf --------------------------------------------------------------
@@ -360,6 +412,9 @@ function kampfRundeWeiter() {
         }
     });
     kampf.log.unshift(`— Runde ${kampf.runde} beginnt —`);
+    const erster = kampfZugReihenfolge()[0];
+    kampf.amZug = erster ? erster.id : null;
+    if (erster) kampf.log.unshift(`${erster.name} ist am Zug.`);
     kampfSichern();
     renderKampfGm();
 }
@@ -744,6 +799,7 @@ function kampfNachtRegenerationAlle() {
 function kampfZuruecksetzen() {
     if (!confirm('Kampf wirklich zurücksetzen? Runde und alle Zustände (Blutung/Feuermarker/Gift/Schlaf/Stun/Initiative) werden gelöscht. Teilnehmer, HP und Amputationen bleiben erhalten.')) return;
     kampf.runde = 0;
+    kampf.amZug = null;
     kampf.teilnehmer.forEach(t => {
         t.init = null; t.blutung = 0; t.feuermarker = 0; t.gift = 0; t.giftMisserfolge = 0;
         t.schlaf = null; t.stun = false; t.rettungswuerfe = 0;
@@ -756,6 +812,7 @@ function kampfZuruecksetzen() {
 function kampfAlleEntfernen() {
     if (!confirm('Wirklich ALLE Teilnehmer aus dem Kampf entfernen?')) return;
     kampf.teilnehmer = [];
+    kampf.amZug = null;
     kampfLog(`Alle Teilnehmer entfernt.`);
     renderKampfGm();
 }
@@ -783,7 +840,7 @@ function kampfVerteilen() {
 // eigenen Bogen jedes Spielers, siehe Datei-Kopfkommentar.
 function kampfZustandFuerSpieler() {
     return {
-        type: 'kampf', runde: kampf.runde, modusAktiv: !!kampf.modusAktiv,
+        type: 'kampf', runde: kampf.runde, modusAktiv: !!kampf.modusAktiv, amZug: kampf.amZug || null,
         teilnehmer: kampf.teilnehmer.map(t => ({
             id: t.id, art: t.art, name: t.name, seite: t.seite, farbe: t.farbe, init: t.init,
             hp: t.art === 'nsc' ? t.hp : undefined,
@@ -814,7 +871,7 @@ function kampfTeilnehmerKarteHtml(t) {
         `<span class="sk-badge" title="${escapeHtml(e.folge)}"><i class="fa-solid fa-user-injured"></i> ${escapeHtml(e.teil)}</span>`
     ).join('')}</div>` : '';
 
-    return `<div class="sk-einheit ${t.tot ? 'sk-einheit-gesunken' : ''}" style="--sk-farbe:${escapeHtml(t.farbe)}">
+    return `<div class="sk-einheit ${t.tot ? 'sk-einheit-gesunken' : ''} ${kampf.amZug === t.id ? 'sk-am-zug' : ''}" style="--sk-farbe:${escapeHtml(t.farbe)}">
         <div class="sk-einheit-kopf">
             <span class="sk-farbpunkt"></span>
             <span class="sk-name" style="flex:1; padding:0.3rem 0.5rem;">${escapeHtml(t.name)}${t.art === 'spieler' ? ' <i class="fa-solid fa-user" title="Spieler-Charakter"></i>' : ''}${kampfIstMonsterform(t) ? ' <span class="sk-badge" title="Monsterform: Amputation erst ab 100 Schaden in einem Treffer"><i class="fa-solid fa-dragon"></i> Monsterform</span>' : ''}</span>
@@ -826,6 +883,7 @@ function kampfTeilnehmerKarteHtml(t) {
         <div class="sk-aktion-zeile">
             <span class="ir-hint" style="margin:0"><i class="fa-solid fa-bolt"></i> Initiative: <b>${t.init == null ? '–' : t.init}</b></span>
             <button class="sk-mini-btn" onclick="kampfInitiativeWuerfeln('${t.id}')"><i class="fa-solid fa-dice"></i> 1W10</button>
+            <button class="sk-mini-btn ${kampf.amZug === t.id ? 'sk-kapitaen-aktiv' : ''}" onclick="kampfZugSetzen('${t.id}')" title="Diesen Teilnehmer als am Zug markieren (nochmal klicken: Markierung weg)"><i class="fa-solid fa-crosshairs"></i> ${kampf.amZug === t.id ? 'Am Zug' : 'Zug'}</button>
             ${t.tot ? `<span class="ir-hint ir-warnung"><i class="fa-solid fa-skull"></i> Tot${t.seeleRundenUebrig != null ? ` - Seele noch ${t.seeleRundenUebrig} Runden rettbar` : ''}</span>` : ''}
         </div>
         ${t.tot ? '' : kampfAktionenHtml(t)}
@@ -879,6 +937,7 @@ function kampfTeilnehmerKarteHtml(t) {
         <div class="sk-aktion-zeile">
             <button class="sk-mini-btn" onclick="kampfRettungswurfWuerfeln('${t.id}')" title="0-HP-Rettungswurf, 1W100"><i class="fa-solid fa-heart-pulse"></i> Rettungswurf (0 HP)</button>
             <button class="sk-mini-btn" onclick="kampfAmputationWuerfeln('${t.id}')" title="Ohnmacht/Amputation, 1W10 - bei Einzeltreffer ≥70/100 Schaden"><i class="fa-solid fa-user-injured"></i> Amputation würfeln</button>
+            ${t.art === 'nsc' ? `<button class="sk-mini-btn ${kampfLpOeffentlich(t) ? 'sk-kapitaen-aktiv' : ''}" onclick="kampfLpOeffentlichUmschalten('${t.id}')" title="LP-Balken dieser Figur auf der Karte für die Spieler sichtbar (Standard: nur Verbündete)"><i class="fa-solid fa-heart-pulse"></i> LP für Spieler ${kampfLpOeffentlich(t) ? 'sichtbar' : 'verdeckt'}</button>` : ''}
             ${t.art === 'nsc' ? `<button class="sk-mini-btn ${t.monsterform ? 'sk-kapitaen-aktiv' : ''}" onclick="kampfNscMonsterformUmschalten('${t.id}')" title="Monsterform: Amputation erst ab 100 statt 70 Schaden"><i class="fa-solid fa-dragon"></i> Monsterform ${t.monsterform ? 'an' : 'aus'}</button>` : ''}
             ${t.art === 'spieler' ? `<button class="sk-mini-btn" onclick="kampfSpielerSkillsManuell('${t.id}')" title="Alle verbrauchten Skills dieses Spielers wieder verfügbar machen"><i class="fa-solid fa-rotate"></i> Skills auffrischen</button>` : ''}
         </div>
@@ -936,7 +995,7 @@ function renderKampfGm() {
 
     box.innerHTML = `
         <details class="x-details" ${kampfOffenGm ? 'open' : ''}>
-            <summary>
+            <summary class="panel-kopf">
                 <h3 style="margin:0"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-hand-fist"></i> Kampf
                     ${kampf.teilnehmer.length ? `<span class="x-count">${kampf.teilnehmer.length}</span>` : ''}
                     <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('kampf')" title="Hilfe zum Kampf-Tracker"></i></h3>
@@ -945,6 +1004,7 @@ function renderKampfGm() {
                 <div class="sk-aktion-zeile">
                     <span class="ir-hint" style="margin:0"><i class="fa-solid fa-flag-checkered"></i> Runde <b>${kampf.runde}</b></span>
                     <button class="tool-btn" onclick="kampfRundeWeiter()"><i class="fa-solid fa-forward"></i> Runde weiter</button>
+                    <button class="tool-btn" onclick="kampfNaechsterZug()" title="Markiert den Nächsten in der Initiative-Reihenfolge auf der Karte und bei den Spielern"><i class="fa-solid fa-angles-right"></i> Nächster Zug${kampf.amZug && kampfTeilnehmer(kampf.amZug) ? ': ' + escapeHtml(kampfTeilnehmer(kampf.amZug).name) : ''}</button>
                     <button class="sk-mini-btn" onclick="kampfInitiativeAlleWuerfeln()"><i class="fa-solid fa-dice"></i> Initiative für alle würfeln</button>
                     <button class="sk-mini-btn" onclick="kampfBeenden()" title="Kampf beenden: Spieler mit über 50 % LP bekommen ihre verbrauchten Skills zurück (RW 5.1)"><i class="fa-solid fa-flag-checkered"></i> Kampf beenden (Skills zurück)</button>
                     <button class="x-mini x-mini-danger x-mini-label" onclick="kampfZuruecksetzen()" title="Runde, Initiative und Zustände zurücksetzen">Zurücksetzen</button>
@@ -1025,6 +1085,7 @@ function kampfEmpfangen(payload) {
     kampfSpieler.runde = payload.runde || 0;
     kampfSpieler.teilnehmer = Array.isArray(payload.teilnehmer) ? payload.teilnehmer : [];
     kampfSpieler.modusAktiv = !!payload.modusAktiv;
+    kampfSpieler.amZug = payload.amZug || null;
     if (kampfSpieler.modusAktiv !== vorherModus) kampfPopupZeigen(kampfSpieler.modusAktiv ? 'start' : 'ende');
     renderKampfSpieler();
     if (typeof renderInventarRaster === 'function' && typeof eldaraAktiv === 'function' && eldaraAktiv()) renderInventarRaster();
@@ -1077,10 +1138,10 @@ function kampfTeilnehmerSpielerHtml(t) {
     if (t.schlaf) badges.push(`<span class="sk-badge">😴 Schlaf (${t.schlaf.rundenUebrig})</span>`);
     if (t.stun) badges.push(`<span class="sk-badge">⭐ Gestunnt</span>`);
     (t.permanenteEffekte || []).forEach(e => badges.push(`<span class="sk-badge" title="${escapeHtml(e.folge)}">🩹 ${escapeHtml(e.teil)}</span>`));
-    return `<div class="sk-einheit ${t.tot ? 'sk-einheit-gesunken' : ''}" style="--sk-farbe:${escapeHtml(t.farbe)}">
+    return `<div class="sk-einheit ${t.tot ? 'sk-einheit-gesunken' : ''} ${kampfSpieler.amZug === t.id ? 'sk-am-zug' : ''}" style="--sk-farbe:${escapeHtml(t.farbe)}">
         <div class="sk-einheit-kopf">
             <span class="sk-farbpunkt"></span>
-            <span class="sk-name" style="flex:1; padding:0.3rem 0.5rem;">${escapeHtml(t.name)}</span>
+            <span class="sk-name" style="flex:1; padding:0.3rem 0.5rem;">${kampfSpieler.amZug === t.id ? '<i class="fa-solid fa-crosshairs" title="Am Zug"></i> ' : ''}${escapeHtml(t.name)}</span>
             <span class="ir-hint" style="margin:0"><i class="fa-solid fa-bolt"></i> ${t.init == null ? '–' : t.init}</span>
         </div>
         ${t.art === 'nsc' && t.hp ? `<div class="sk-struktur-zeile">
@@ -1111,7 +1172,7 @@ function renderKampfSpieler() {
     const sortiert = kampfSpieler.teilnehmer.slice().sort((a, b) => (b.init == null ? -1 : b.init) - (a.init == null ? -1 : a.init));
     section.innerHTML = `
         <details class="x-details gm-seekampf" open>
-            <summary><h3 style="margin:0"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-hand-fist"></i> Kampf - Runde ${kampfSpieler.runde}
+            <summary class="panel-kopf"><h3 style="margin:0"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-hand-fist"></i> Kampf - Runde ${kampfSpieler.runde}
                 ${kampfSpieler.modusAktiv ? '<i class="fa-solid fa-lock" style="color:var(--color-dmg)" title="Inventar gesperrt"></i>' : ''}
                 <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('kampf')" title="Hilfe zum Kampf"></i></h3></summary>
             <div class="sk-details">${sperrHinweis}${sortiert.map(t => kampfTeilnehmerSpielerHtml(t)).join('')}</div>

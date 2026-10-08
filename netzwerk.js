@@ -382,7 +382,7 @@ function renderNetzwerkGm() {
 
     box.innerHTML = `
         <details class="x-details nw-details" ${warOffen ? 'open' : ''}>
-            <summary class="nsc-head">
+            <summary class="nsc-head panel-kopf">
                 <div class="nsc-title"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-diagram-project"></i> Beziehungsnetz
                     <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('netzwerk')" title="Hilfe zum Beziehungsnetz"></i>
                 </div>

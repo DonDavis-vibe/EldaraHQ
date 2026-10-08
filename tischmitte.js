@@ -325,7 +325,7 @@ function renderTischmitteGm() {
 
     box.innerHTML = `
         <details class="x-details tm-details" ${tischmitteOffenGm ? 'open' : ''}>
-        <summary class="tm-head">
+        <summary class="tm-head panel-kopf">
             <div class="tm-title"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-hand-holding"></i> Tischmitte
                 <span class="x-count" title="Für Spieler sichtbar"><i class="fa-solid fa-eye"></i> ${sichtbar}</span>
                 ${versteckt ? `<span class="x-count" title="Nur du siehst diese"><i class="fa-solid fa-eye-slash"></i> ${versteckt}</span>` : ''}
@@ -560,7 +560,7 @@ function renderTischmitteSpieler() {
 
     section.innerHTML = `
         <details class="x-details tm-details" ${tischmitteOffenSpieler ? 'open' : ''}>
-        <summary class="tm-head">
+        <summary class="tm-head panel-kopf">
             <h2 class="cat-title" style="margin:0"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-hand-holding category-icon-fa"></i> Tischmitte
                 ${tischmitte.length ? `<span class="x-count">${tischmitte.length}</span>` : ''}
                 <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('tischmitte')" title="Hilfe zur Tischmitte"></i></h2>

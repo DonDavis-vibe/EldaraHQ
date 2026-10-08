@@ -36,10 +36,20 @@ const BattleMap = (() => {
         rasterFarbe: 'rgba(212,162,76,0.30)',  // Rasterlinien — vom SL umstellbar
         einheit: 1,             // wie viele Einheiten ein Feld entspricht
         einheitName: 'm',
-        einrasten: true
+        einrasten: true,
+        diagonale: 'gleich',    // 'gleich' | 'alternierend' (jeder 2. diagonale Schritt = 1,5 Felder, Seekampf)
+        ringeAnzeigen: true,    // Token-Ringe für die ganze Karte an/aus (je Figur zusätzlich: ringAus)
+        statusAnzeigen: true,   // Statussymbole am Token (Blutung, Feuer, Gift ...) - von außen gesetzt, siehe setFigurAnzeige
+        lpAnzeigen: true        // LP-Balken am Token
     };
 
     const FIGUR_RADIUS = 0.42;  // in Feldern
+    // Ringbreite der Figuren (Faktor auf die Standarddicke) - vom SL je Figur wählbar
+    const RING_BREITEN = { duenn: 0.55, normal: 1, dick: 1.7 };
+    const RING_STILE = ['voll', 'gestrichelt', 'doppelt', 'leuchtend'];
+    const FARBE_MUSTER = /^#[0-9a-f]{3,8}$/i;
+    // Statussymbole am Token (der einbettende Code liefert nur die Schlüssel, z.B. aus dem Kampf-Tracker)
+    const STATUS_SYMBOLE = { blutung: '🩸', feuer: '🔥', gift: '☠️', schlaf: '💤', stun: '💫', tot: '💀', monster: '🐉' };
 
     // Liegt ein Feld in einem Nebel-/Aufgedeckt-Bereich? Rein rechnerisch, ohne
     // Zustand — daher auf Modulebene, damit auch `fuerSpieler` sie nutzen kann.
@@ -68,6 +78,12 @@ const BattleMap = (() => {
             if (f.besitzer !== 'sl') return true;
             return !imNebel(f.x, f.y);
         });
+        // LP-Balken sehen die Spieler nur, wenn der Spielleiter sie freigibt (lp.oeffentlich)
+        z.figuren.forEach(f => { if (f.lp && !f.lp.oeffentlich) delete f.lp; });
+        // Auren, die der SL nur für sich zeichnet, bleiben bei ihm
+        z.figuren.forEach(f => { if (f.aura && f.aura.verdeckt) delete f.aura; });
+        // Pins: verdeckte und solche im unaufgedeckten Nebel bleiben beim SL
+        z.pins = (z.pins || []).filter(p => !p.verdeckt && !imNebel(p.x, p.y));
         return z;
     }
 
@@ -79,6 +95,7 @@ const BattleMap = (() => {
             raster: Object.assign({}, STANDARD, optionen),
             figuren: [],                // {id, name, farbe, x, y, groesse, besitzer, verdeckt}
             formen: [],                 // {id, art, punkte:[{x,y}], farbe, radius}
+            pins: [],                   // {id, x, y, icon, label, text, handoutId, verdeckt} - Orte/Hinweise auf der Karte
             // Nebel des Krieges: Ist er aktiv, liegt die ganze Karte unter einer
             // Decke. `aufgedeckt` sind die freigegebenen Bereiche, die auch die
             // Spieler sehen; `entwurf` sind vorbereitete Bereiche, die erst nach
@@ -133,6 +150,26 @@ const BattleMap = (() => {
         // Spieler sehen den Nebel deckend, der Spielleiter halbdurchsichtig
         let nebelDeckend = !!optionen.nebelDeckend;
         const onZugVorschlag = optionen.onZugVorschlag || (() => {});
+        const onPinKlick = optionen.onPinKlick || (() => {});   // (pin, clientX, clientY) - Klick ohne Ziehen
+        const onPinNeu = optionen.onPinNeu || (() => {});
+        const onAuswahl = optionen.onAuswahl || (() => {});     // (ids) - Auswahl hat sich geändert
+        // Mehrfachauswahl (nur Spielleiter, rein lokal - wird nie synchronisiert): Strg/Cmd+Klick schaltet
+        // eine Figur um, Strg+Ziehen oder das Auswahl-Werkzeug zieht einen Rahmen; eine ausgewählte Figur
+        // zu ziehen bewegt die ganze Auswahl.
+        const auswahl = new Set();
+        function auswahlMelden() { onAuswahl(Array.from(auswahl)); }
+        function setAuswahl(ids) {
+            auswahl.clear();
+            (ids || []).forEach(id => { if (zustand.figuren.some(f => f.id === id)) auswahl.add(id); });
+            zeichnen(); auswahlMelden();
+        }
+        function auswahlLeeren() { if (auswahl.size) setAuswahl([]); }
+        function getAuswahl() { return Array.from(auswahl); }
+        function auswahlBereinigen() {
+            const vorher = auswahl.size;
+            Array.from(auswahl).forEach(id => { if (!zustand.figuren.some(f => f.id === id)) auswahl.delete(id); });
+            if (auswahl.size !== vorher) auswahlMelden();
+        }       // (pin) - SL hat mit dem Pin-Werkzeug einen gesetzt
         // Figurenbilder liegen bewusst NEBEN dem Zustand: Sie ändern sich selten,
         // während der Zustand bei jeder Bewegung übertragen wird.
         const figurBilder = {};    // id -> Image
@@ -141,6 +178,7 @@ const BattleMap = (() => {
         // Mitte/Standard, 100 = unten) - bei hohen Hochformat-Porträts landet
         // sonst der Bauch statt des Gesichts in der Mitte des runden Tokens.
         const figurBildPosition = {};
+        let messForm = 'linie';                    // 'linie' | 'kreis' | 'kegel' | 'strahl' (siehe zeichneMessung)
         let messung = null;                        // {vonX, vonY, zuX, zuY}
         let ziehen = null;
         let nurEigene = null;                      // Besitzer-Kennung für Spieler
@@ -227,8 +265,12 @@ const BattleMap = (() => {
             zustand.formen.filter(f => !markierungVersteckt(f)).forEach(zeichneForm);
             if (entwurf) zeichneForm(entwurf, true);
             zeichneNebel(breite, hoehe);
+            zustand.figuren.forEach(zeichneAura);
             zustand.figuren.forEach(zeichneGeplantenZug);
             zustand.figuren.forEach(zeichneFigur);
+            zustand.figuren.filter(f => auswahl.has(f.id)).forEach(zeichneAuswahlRing);
+            zustand.pins.forEach(zeichnePin);
+            if (ziehen && ziehen.art === 'lasso') zeichneLasso();
             if (messung) zeichneMessung();
         }
 
@@ -305,7 +347,7 @@ const BattleMap = (() => {
                 if (form.art === 'linie' && p.length >= 2) {
                     const felder = entfernungInFeldern(p[0].x, p[0].y, p[1].x, p[1].y);
                     const m = s({ x: (p[0].x + p[1].x) / 2, y: (p[0].y + p[1].y) / 2 });
-                    beschrifte(m.x, m.y - 12, `${felder} Felder · ${(felder * r.einheit).toLocaleString('de-DE')}${r.einheitName}`,
+                    beschrifte(m.x, m.y - 12, messText(felder),
                         form.farbe || malFarbe);
                 }
             }
@@ -430,7 +472,7 @@ const BattleMap = (() => {
             ctx.setLineDash([]);
 
             if (radius > 6) {
-                const text = `${felder} Feld${felder === 1 ? '' : 'er'} · ${(felder * r.einheit).toLocaleString('de-DE')}${r.einheitName}`;
+                const text = messText(felder);
                 ctx.font = 'bold 12px "Segoe UI", sans-serif';
                 const tb = ctx.measureText(text).width;
                 ctx.fillStyle = farbe.beschriftung;
@@ -464,6 +506,68 @@ const BattleMap = (() => {
                 ctx.lineTo(breite, Math.round(y) + 0.5);
             }
             ctx.stroke();
+            ctx.restore();
+        }
+
+        function zeichneAuswahlRing(f) {
+            const mitte = feldZuBildschirm(f.x, f.y);
+            const radius = FIGUR_RADIUS * (f.groesse || 1) * zustand.raster.rasterGroesse * ansicht.zoom;
+            ctx.save();
+            ctx.strokeStyle = '#22d3ee';
+            ctx.shadowColor = '#22d3ee';
+            ctx.shadowBlur = 8;
+            ctx.lineWidth = Math.max(2, radius * 0.1);
+            ctx.setLineDash([radius * 0.5, radius * 0.3]);
+            ctx.beginPath();
+            ctx.arc(mitte.x, mitte.y, radius * 1.3 + 3, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        function zeichneLasso() {
+            const a = feldZuBildschirm(ziehen.vonX, ziehen.vonY), b = feldZuBildschirm(ziehen.zuX, ziehen.zuY);
+            ctx.save();
+            ctx.fillStyle = 'rgba(34,211,238,0.12)';
+            ctx.strokeStyle = '#22d3ee';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([6, 4]);
+            ctx.fillRect(Math.min(a.x, b.x), Math.min(a.y, b.y), Math.abs(b.x - a.x), Math.abs(b.y - a.y));
+            ctx.strokeRect(Math.min(a.x, b.x), Math.min(a.y, b.y), Math.abs(b.x - a.x), Math.abs(b.y - a.y));
+            ctx.restore();
+        }
+
+        // Aura (z.B. Buff-Reichweite, Lichtkreis, Waffenreichweite): Kreis um die Figur, Radius in
+        // Feldern ab dem Mittelpunkt. Stil 'flaeche' (getönte Fläche), 'ring' (nur Umriss) oder
+        // 'gestrichelt'. Liegt unter allen Figuren.
+        function zeichneAura(f) {
+            const a = f.aura;
+            if (!a || !a.an || !(a.r > 0)) return;
+            const mitte = feldZuBildschirm(f.x, f.y);
+            const radius = a.r * zustand.raster.rasterGroesse * ansicht.zoom;
+            if (radius < 4) return;
+            const col = a.farbe || '#fbbf24';
+            ctx.save();
+            if (f.verdeckt || a.verdeckt) ctx.globalAlpha = 0.5;
+            ctx.beginPath();
+            ctx.arc(mitte.x, mitte.y, radius, 0, Math.PI * 2);
+            if (a.stil !== 'ring' && a.stil !== 'gestrichelt') {
+                ctx.save(); ctx.globalAlpha *= (a.deckkraft != null ? a.deckkraft : 0.2); ctx.fillStyle = col; ctx.fill(); ctx.restore();
+            }
+            ctx.strokeStyle = col;
+            ctx.lineWidth = Math.max(1.5, 2.5 * ansicht.zoom);
+            if (a.stil === 'gestrichelt') ctx.setLineDash([8, 6]);
+            ctx.stroke();
+            if (a.name && radius > 24) {
+                const text = String(a.name).slice(0, 28);
+                ctx.setLineDash([]);
+                ctx.font = 'bold 12px "Segoe UI", sans-serif';
+                const b = ctx.measureText(text).width;
+                ctx.fillStyle = 'rgba(10,14,18,0.78)';
+                ctx.fillRect(mitte.x - b / 2 - 5, mitte.y - radius - 9, b + 10, 18);
+                ctx.fillStyle = col;
+                ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+                ctx.fillText(text, mitte.x, mitte.y - radius);
+            }
             ctx.restore();
         }
 
@@ -508,14 +612,87 @@ const BattleMap = (() => {
                 ctx.fillText(kuerzel, mitte.x, mitte.y);
             }
 
-            // Farbiger Ring — bei Porträts die einzige Zuordnungshilfe
-            ctx.beginPath();
-            ctx.arc(mitte.x, mitte.y, radius, 0, Math.PI * 2);
-            ctx.lineWidth = Math.max(1.5, radius * (portrait ? 0.16 : 0.12));
-            ctx.strokeStyle = portrait ? (f.farbe || farbe.tinte) : farbe.umriss;
-            ctx.stroke();
+            // Farbiger Ring — bei Porträts die einzige Zuordnungshilfe. Standard: Spielerfarbe
+            // (Porträt) bzw. dunkler Umriss. Der Spielleiter kann je Figur Farbe, Breite und Stil
+            // überschreiben (f.ring, f.ringBreite, f.ringStil - siehe setFigurRing); der Zustand
+            // geht komplett an die Spieler, sie sehen dieselben Ringe.
+            const ringAn = zustand.raster.ringeAnzeigen !== false && !f.ringAus;
+            const ringFaktor = RING_BREITEN[f.ringBreite] || 1;
+            const ringDicke = Math.max(1.5, radius * (portrait ? 0.16 : 0.12)) * ringFaktor;
+            const ringFarbe = f.ring || (portrait ? (f.farbe || farbe.tinte) : farbe.umriss);
+            if (ringAn) {
+            ctx.save();
+            ctx.strokeStyle = ringFarbe;
+            if (f.ringStil === 'leuchtend') { ctx.shadowColor = ringFarbe; ctx.shadowBlur = Math.max(6, radius * 0.7); }
+            if (f.ringStil === 'gestrichelt') ctx.setLineDash([radius * 0.45, radius * 0.25]);
+            if (f.ringStil === 'doppelt') {
+                const d = ringDicke * 0.42;
+                ctx.lineWidth = d;
+                ctx.beginPath(); ctx.arc(mitte.x, mitte.y, radius + d * 0.9, 0, Math.PI * 2); ctx.stroke();
+                ctx.beginPath(); ctx.arc(mitte.x, mitte.y, radius - d * 0.5, 0, Math.PI * 2); ctx.stroke();
+            } else {
+                ctx.lineWidth = ringDicke;
+                ctx.beginPath(); ctx.arc(mitte.x, mitte.y, radius, 0, Math.PI * 2); ctx.stroke();
+            }
+            ctx.restore();
+            }
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
+
+            // Am Zug (Kampf-Tracker): goldener Leuchtring und Pfeil über dem Token
+            if (f.amZug && radius > 6) {
+                ctx.save();
+                ctx.strokeStyle = '#fbbf24';
+                ctx.shadowColor = '#fbbf24';
+                ctx.shadowBlur = Math.max(8, radius * 0.9);
+                ctx.lineWidth = Math.max(2, radius * 0.11);
+                ctx.beginPath(); ctx.arc(mitte.x, mitte.y, radius * 1.22 + ringDicke * 0.5, 0, Math.PI * 2); ctx.stroke();
+                ctx.restore();
+            }
+
+            // Statussymbole (Kampf-Tracker): kleine Plaketten in einer Reihe über dem Token
+            const symbole = (zustand.raster.statusAnzeigen !== false && Array.isArray(f.status)) ? f.status.filter(k => STATUS_SYMBOLE[k]).slice(0, 6) : [];
+            if (symbole.length && radius > 9) {
+                const d = Math.max(11, radius * 0.66);
+                symbole.forEach((k, i) => {
+                    const sx = mitte.x - (symbole.length * d) / 2 + i * d + d / 2;
+                    const sy = mitte.y - radius - d * 0.5;
+                    ctx.beginPath();
+                    ctx.arc(sx, sy, d / 2, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(10,14,18,0.82)';
+                    ctx.fill();
+                    ctx.font = `${Math.round(d * 0.66)}px "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = '#fff';
+                    ctx.fillText(STATUS_SYMBOLE[k], sx, sy + d * 0.04);
+                });
+            }
+
+            if (f.amZug && radius > 6) {
+                // Pfeil über den Statusplaketten (falls vorhanden), damit nichts überdeckt wird
+                const plakette = symbole.length && radius > 9 ? Math.max(11, radius * 0.66) + 4 : 0;
+                const pb = Math.max(7, radius * 0.5), py = mitte.y - radius * 1.22 - ringDicke * 0.5 - plakette - 3;
+                ctx.save();
+                ctx.fillStyle = '#fbbf24';
+                ctx.strokeStyle = 'rgba(10,14,18,0.85)';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath(); ctx.moveTo(mitte.x - pb, py - pb * 1.1); ctx.lineTo(mitte.x + pb, py - pb * 1.1); ctx.lineTo(mitte.x, py); ctx.closePath();
+                ctx.fill(); ctx.stroke();
+                ctx.restore();
+            }
+
+            // LP-Balken unter dem Token (nur wenn LP bekannt sind - für Spieler nur bei Freigabe)
+            let untenY = mitte.y + radius + 2;
+            if (zustand.raster.lpAnzeigen !== false && f.lp && f.lp.m > 0 && radius > 9) {
+                const bw = Math.max(26, radius * 1.9), bh = Math.max(3, radius * 0.2);
+                const anteil = Math.max(0, Math.min(1, f.lp.a / f.lp.m));
+                ctx.fillStyle = 'rgba(0,0,0,0.7)';
+                ctx.fillRect(mitte.x - bw / 2 - 1, untenY - 1, bw + 2, bh + 2);
+                ctx.fillStyle = anteil > 0.5 ? '#57F287' : (anteil > 0.25 ? '#fbbf24' : '#ef4444');
+                ctx.fillRect(mitte.x - bw / 2, untenY, bw * anteil, bh);
+                untenY += bh + 4;
+            }
 
             // Name darunter, sobald genug Platz ist
             if (radius > 12) {
@@ -524,34 +701,128 @@ const BattleMap = (() => {
                 const text = f.name || '';
                 const breite = ctx.measureText(text).width;
                 ctx.fillStyle = farbe.beschriftung;
-                ctx.fillRect(mitte.x - breite / 2 - 3, mitte.y + radius + 2, breite + 6, schrift + 4);
+                ctx.fillRect(mitte.x - breite / 2 - 3, untenY, breite + 6, schrift + 4);
                 ctx.fillStyle = farbe.tinte;
+                ctx.textAlign = 'center';
                 ctx.textBaseline = 'top';
-                ctx.fillText(text, mitte.x, mitte.y + radius + 4);
+                ctx.fillText(text, mitte.x, untenY + 2);
             }
             ctx.restore();
         }
 
+        // --- Pins ------------------------------------------------------------
+        // Markierte Orte/Hinweise: Symbol im Kreis mit Spitze nach unten (die Spitze steht auf dem
+        // Punkt), darunter die Beschriftung. Verdeckte Pins sieht nur der SL (blass).
+        function pinRadius() { return Math.max(11, 0.34 * zustand.raster.rasterGroesse * ansicht.zoom); }
+
+        function zeichnePin(p) {
+            const spitze = feldZuBildschirm(p.x, p.y);
+            const r = pinRadius();
+            const mx = spitze.x, my = spitze.y - r * 1.55;
+            ctx.save();
+            if (p.verdeckt) ctx.globalAlpha = 0.5;
+            ctx.beginPath();
+            ctx.moveTo(spitze.x, spitze.y);
+            ctx.lineTo(mx - r * 0.62, my + r * 0.78);
+            ctx.arc(mx, my, r, Math.PI * 0.72, Math.PI * 0.28, false);
+            ctx.closePath();
+            ctx.fillStyle = '#17202a';
+            ctx.fill();
+            ctx.lineWidth = Math.max(2, r * 0.14);
+            ctx.strokeStyle = p.handoutId ? '#fbbf24' : '#e8dcc2';
+            ctx.stroke();
+            ctx.font = `${Math.round(r * 1.1)}px "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = '#fff';
+            ctx.fillText(p.icon || '📍', mx, my + r * 0.05);
+            if (p.label && r > 11) {
+                const text = String(p.label).slice(0, 28);
+                ctx.font = 'bold 12px "Segoe UI", sans-serif';
+                const b = ctx.measureText(text).width;
+                ctx.fillStyle = 'rgba(10,14,18,0.82)';
+                ctx.fillRect(mx - b / 2 - 5, spitze.y + 3, b + 10, 18);
+                ctx.fillStyle = '#f2e7d3';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(text, mx, spitze.y + 12);
+            }
+            ctx.restore();
+        }
+
+        function pinAn(px, py) {
+            const r = pinRadius();
+            for (let i = zustand.pins.length - 1; i >= 0; i--) {
+                const p = zustand.pins[i];
+                const s = feldZuBildschirm(p.x, p.y);
+                const dx = px - s.x, dy = py - (s.y - r * 1.55);
+                if (dx * dx + dy * dy <= (r * 1.1) * (r * 1.1)) return p;
+            }
+            return null;
+        }
+
+        // Messen: Linie (Strecke nach der Diagonalregel der Karte) oder Vorlage - Kreis (Radius ab
+        // Mittelpunkt), Kegel (60°, ab Spitze) und Strahl (1 Feld breit). Vorlagen messen die
+        // tatsächliche Luftlinie in Feldern; sie bleiben nur während des Ziehens sichtbar.
+        function feldText(n) {
+            return (Math.round(n * 10) / 10).toLocaleString('de-DE');
+        }
+        function messText(felder) {
+            const r = zustand.raster;
+            return `${feldText(felder)} Feld${felder === 1 ? '' : 'er'} · ${feldText(felder * r.einheit)}${r.einheitName}`;
+        }
         function zeichneMessung() {
             const von = feldZuBildschirm(messung.vonX, messung.vonY);
             const zu = feldZuBildschirm(messung.zuX, messung.zuY);
-            const felder = entfernungInFeldern(messung.vonX, messung.vonY, messung.zuX, messung.zuY);
             const r = zustand.raster;
+            const px = r.rasterGroesse * ansicht.zoom;       // Pixel je Feld auf dem Bildschirm
+            const luft = Math.hypot(messung.zuX - messung.vonX, messung.zuY - messung.vonY);
+            let text, mx = (von.x + zu.x) / 2, my = (von.y + zu.y) / 2;
 
             ctx.save();
             ctx.strokeStyle = farbe.stempel;
+            ctx.fillStyle = farbe.stempel;
             ctx.lineWidth = 2;
-            ctx.setLineDash([6, 4]);
-            ctx.beginPath();
-            ctx.moveTo(von.x, von.y);
-            ctx.lineTo(zu.x, zu.y);
-            ctx.stroke();
+            if (messForm === 'kreis') {
+                ctx.save(); ctx.globalAlpha = 0.18;
+                ctx.beginPath(); ctx.arc(von.x, von.y, luft * px, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+                ctx.beginPath(); ctx.arc(von.x, von.y, luft * px, 0, Math.PI * 2); ctx.stroke();
+                ctx.setLineDash([6, 4]);
+                ctx.beginPath(); ctx.moveTo(von.x, von.y); ctx.lineTo(zu.x, zu.y); ctx.stroke();
+                text = 'Radius ' + messText(luft); mx = von.x; my = von.y - luft * px + 6;
+            } else if (messForm === 'kegel') {
+                const winkel = Math.atan2(zu.y - von.y, zu.x - von.x), halb = Math.PI / 6;   // 60° gesamt
+                const kegel = () => {
+                    ctx.beginPath(); ctx.moveTo(von.x, von.y);
+                    ctx.arc(von.x, von.y, luft * px, winkel - halb, winkel + halb);
+                    ctx.closePath();
+                };
+                ctx.save(); ctx.globalAlpha = 0.18; kegel(); ctx.fill(); ctx.restore();
+                kegel(); ctx.stroke();
+                text = 'Kegel ' + messText(luft);
+            } else if (messForm === 'strahl') {
+                const winkel = Math.atan2(zu.y - von.y, zu.x - von.x), halbB = px / 2;
+                const nx = -Math.sin(winkel) * halbB, ny = Math.cos(winkel) * halbB;
+                const strahl = () => {
+                    ctx.beginPath();
+                    ctx.moveTo(von.x + nx, von.y + ny); ctx.lineTo(zu.x + nx, zu.y + ny);
+                    ctx.lineTo(zu.x - nx, zu.y - ny); ctx.lineTo(von.x - nx, von.y - ny);
+                    ctx.closePath();
+                };
+                ctx.save(); ctx.globalAlpha = 0.18; strahl(); ctx.fill(); ctx.restore();
+                strahl(); ctx.stroke();
+                text = 'Strahl ' + messText(luft);
+            } else {
+                ctx.setLineDash([6, 4]);
+                ctx.beginPath();
+                ctx.moveTo(von.x, von.y);
+                ctx.lineTo(zu.x, zu.y);
+                ctx.stroke();
+                text = messText(entfernungInFeldern(messung.vonX, messung.vonY, messung.zuX, messung.zuY));
+            }
             ctx.setLineDash([]);
 
-            const text = `${felder} Felder · ${(felder * r.einheit).toLocaleString('de-DE')}${r.einheitName}`;
             ctx.font = 'bold 13px "Segoe UI", sans-serif';
             const tb = ctx.measureText(text).width;
-            const mx = (von.x + zu.x) / 2, my = (von.y + zu.y) / 2;
             ctx.fillStyle = farbe.beschriftung;
             ctx.fillRect(mx - tb / 2 - 6, my - 22, tb + 12, 20);
             ctx.strokeStyle = farbe.tinte;
@@ -564,10 +835,17 @@ const BattleMap = (() => {
             ctx.restore();
         }
 
-        // Entfernung nach der üblichen Tischregel: diagonale Schritte zählen wie
-        // gerade, also der größere der beiden Achsabstände.
+        // Entfernung in Feldern. Standard ('gleich'): diagonale Schritte zählen wie gerade, also der
+        // größere der beiden Achsabstände. 'alternierend' (Seekampf, RW 5.1 Kap. 1): jeder zweite
+        // diagonale Schritt zählt 1,5 Felder (300 m statt 200 m) - Strecke = gerade Schritte +
+        // diagonale Schritte + 0,5 je zwei Diagonalen.
         function entfernungInFeldern(x1, y1, x2, y2) {
-            return Math.max(Math.abs(Math.round(x2) - Math.round(x1)), Math.abs(Math.round(y2) - Math.round(y1)));
+            const dx = Math.abs(Math.round(x2) - Math.round(x1)), dy = Math.abs(Math.round(y2) - Math.round(y1));
+            if (zustand.raster.diagonale === 'alternierend') {
+                const diag = Math.min(dx, dy);
+                return Math.max(dx, dy) + Math.floor(diag / 2) * 0.5;
+            }
+            return Math.max(dx, dy);
         }
 
         // --- Eingaben -------------------------------------------------------
@@ -584,6 +862,15 @@ const BattleMap = (() => {
                 ereignis.preventDefault();
                 ziehen = { art: 'karte', vonX: pos.x - ansicht.x, vonY: pos.y - ansicht.y };
                 canvas.style.cursor = 'grabbing';
+                return;
+            }
+
+            // Pin setzen (nur SL-Werkzeug)
+            if (werkzeug === 'pin' && !nurEigene && ereignis.button === 0) {
+                let px = feldJetzt.x, py = feldJetzt.y;
+                if (zustand.raster.einrasten) { px = Math.round(px * 2) / 2; py = Math.round(py * 2) / 2; }
+                const pin = addPin({ x: px, y: py });
+                onPinNeu(pin);
                 return;
             }
 
@@ -621,7 +908,37 @@ const BattleMap = (() => {
                 return;
             }
 
+            const pin = pinAn(pos.x, pos.y);
+            if (pin) {
+                const feld = bildschirmZuFeld(pos.x, pos.y);
+                ziehen = { art: 'pin', pin, versatzX: pin.x - feld.x, versatzY: pin.y - feld.y, startPx: pos, bewegt: false, clientX: ereignis.clientX, clientY: ereignis.clientY };
+                return;
+            }
             const figur = figurAn(pos.x, pos.y);
+            if (!nurEigene && ereignis.button === 0) {
+                const strg = ereignis.ctrlKey || ereignis.metaKey;
+                const feld = bildschirmZuFeld(pos.x, pos.y);
+                if (figur && strg) {
+                    // Strg+Klick: Figur zur Auswahl hinzufügen bzw. entfernen
+                    if (auswahl.has(figur.id)) auswahl.delete(figur.id); else auswahl.add(figur.id);
+                    zeichnen(); auswahlMelden();
+                    return;
+                }
+                if (figur && (werkzeug === 'auswahl' || (auswahl.has(figur.id) && auswahl.size > 1))) {
+                    // Figur ziehen: bei Auswahl-Werkzeug oder wenn sie zu einer Mehrfachauswahl gehört -> alle mitnehmen
+                    if (!auswahl.has(figur.id)) { auswahl.clear(); auswahl.add(figur.id); auswahlMelden(); }
+                    ziehen = {
+                        art: 'gruppe', vonX: feld.x, vonY: feld.y, bewegt: false,
+                        figuren: zustand.figuren.filter(f => auswahl.has(f.id)).map(f => ({ f, startX: f.x, startY: f.y }))
+                    };
+                    zeichnen();
+                    return;
+                }
+                if (!figur && (werkzeug === 'auswahl' || strg)) {
+                    ziehen = { art: 'lasso', vonX: feld.x, vonY: feld.y, zuX: feld.x, zuY: feld.y, additiv: strg };
+                    return;
+                }
+            }
             if (figur && darfBewegen(figur)) {
                 const feld = bildschirmZuFeld(pos.x, pos.y);
                 ziehen = {
@@ -646,6 +963,21 @@ const BattleMap = (() => {
                 const feld = bildschirmZuFeld(pos.x, pos.y);
                 ziehen.figur.x = feld.x + ziehen.versatzX;
                 ziehen.figur.y = feld.y + ziehen.versatzY;
+            } else if (ziehen.art === 'lasso') {
+                const feld = bildschirmZuFeld(pos.x, pos.y);
+                ziehen.zuX = feld.x; ziehen.zuY = feld.y;
+            } else if (ziehen.art === 'gruppe') {
+                const feld = bildschirmZuFeld(pos.x, pos.y);
+                const dx = feld.x - ziehen.vonX, dy = feld.y - ziehen.vonY;
+                if (Math.hypot(dx, dy) > 0.05) ziehen.bewegt = true;
+                ziehen.figuren.forEach(g => { g.f.x = g.startX + dx; g.f.y = g.startY + dy; });
+            } else if (ziehen.art === 'pin') {
+                if (!ziehen.bewegt && Math.hypot(pos.x - ziehen.startPx.x, pos.y - ziehen.startPx.y) > 4) ziehen.bewegt = !nurEigene;
+                if (ziehen.bewegt) {
+                    const feld = bildschirmZuFeld(pos.x, pos.y);
+                    ziehen.pin.x = feld.x + ziehen.versatzX;
+                    ziehen.pin.y = feld.y + ziehen.versatzY;
+                }
             } else if (ziehen.art === 'messen') {
                 const feld = bildschirmZuFeld(pos.x, pos.y);
                 messung.zuX = feld.x;
@@ -685,6 +1017,30 @@ const BattleMap = (() => {
                     f.x = zielX; f.y = zielY;
                     onLokaleFigur(f);
                     melden();
+                }
+            } else if (ziehen.art === 'lasso') {
+                const x0 = Math.min(ziehen.vonX, ziehen.zuX), x1 = Math.max(ziehen.vonX, ziehen.zuX);
+                const y0 = Math.min(ziehen.vonY, ziehen.zuY), y1 = Math.max(ziehen.vonY, ziehen.zuY);
+                const klein = (x1 - x0) < 0.15 && (y1 - y0) < 0.15;
+                if (klein) { if (!ziehen.additiv) auswahlLeeren(); }
+                else {
+                    if (!ziehen.additiv) auswahl.clear();
+                    zustand.figuren.forEach(f => { if (f.x >= x0 && f.x <= x1 && f.y >= y0 && f.y <= y1) auswahl.add(f.id); });
+                    auswahlMelden();
+                }
+            } else if (ziehen.art === 'gruppe') {
+                // Alle um denselben (gerasteten) Versatz verschieben, damit die Aufstellung erhalten bleibt
+                let dx = ziehen.figuren[0].f.x - ziehen.figuren[0].startX, dy = ziehen.figuren[0].f.y - ziehen.figuren[0].startY;
+                if (zustand.raster.einrasten) { dx = Math.round(dx * 2) / 2; dy = Math.round(dy * 2) / 2; }
+                ziehen.figuren.forEach(g => { g.f.x = g.startX + dx; g.f.y = g.startY + dy; onLokaleFigur(g.f); });
+                if (ziehen.bewegt) melden();
+            } else if (ziehen.art === 'pin') {
+                const p = ziehen.pin;
+                if (ziehen.bewegt) {
+                    if (zustand.raster.einrasten) { p.x = Math.round(p.x * 2) / 2; p.y = Math.round(p.y * 2) / 2; }
+                    melden();
+                } else {
+                    onPinKlick(p, ziehen.clientX, ziehen.clientY);
                 }
             } else if (ziehen.art === 'messen') {
                 messung = null;
@@ -818,6 +1174,7 @@ const BattleMap = (() => {
                 raster: zustand.raster,
                 figuren: zustand.figuren,
                 formen: zustand.formen,
+                pins: zustand.pins,
                 nebel: zustand.nebel
             }));
         }
@@ -831,7 +1188,9 @@ const BattleMap = (() => {
             if (neu.raster) Object.assign(zustand.raster, neu.raster);
             if (neu.figuren) zustand.figuren = JSON.parse(JSON.stringify(neu.figuren));
             if (neu.formen) zustand.formen = JSON.parse(JSON.stringify(neu.formen));
+            zustand.pins = Array.isArray(neu.pins) ? JSON.parse(JSON.stringify(neu.pins)) : [];   // ältere Karten haben keine
             if (neu.nebel) zustand.nebel = JSON.parse(JSON.stringify(neu.nebel));
+            auswahlBereinigen();
             if (mitBild !== undefined) setBild(mitBild);
             meldeSperre = false;
             zeichnen();
@@ -869,8 +1228,103 @@ const BattleMap = (() => {
             melden();
         }
 
+        // Ring einer Figur: { ring: '#rrggbb', ringBreite: 'duenn'|'normal'|'dick', ringStil:
+        // 'voll'|'gestrichelt'|'doppelt'|'leuchtend', ringAus: true = kein Ring }. Nur übergebene Schlüssel werden
+        // geändert; ein leerer Wert setzt den Standard zurück. nurAnzeige: nur zeichnen (Live-
+        // Vorschau beim Farbwählen), ohne den Zustand zu melden/zu verteilen.
+        function setFigurRing(id, o, nurAnzeige) {
+            const f = zustand.figuren.find(x => x.id === id);
+            if (!f || !o) return;
+            if ('ring' in o) { if (o.ring && FARBE_MUSTER.test(o.ring)) f.ring = o.ring; else delete f.ring; }
+            if ('ringBreite' in o) { if (RING_BREITEN[o.ringBreite] && o.ringBreite !== 'normal') f.ringBreite = o.ringBreite; else delete f.ringBreite; }
+            if ('ringAus' in o) { if (o.ringAus) f.ringAus = true; else delete f.ringAus; }
+            if ('ringStil' in o) { if (RING_STILE.includes(o.ringStil) && o.ringStil !== 'voll') f.ringStil = o.ringStil; else delete f.ringStil; }
+            zeichnen();
+            if (!nurAnzeige) melden();
+        }
+
+        // Aura einer Figur: { an: true/false, r: Radius in Feldern (0,5-40), farbe: '#rrggbb', stil: 'flaeche'|'ring'|
+        // 'gestrichelt', deckkraft: 0,05-0,6 (nur Fläche), name: Beschriftung, verdeckt: nur der SL sieht sie }.
+        // Nur übergebene Schlüssel ändern sich; o === null entfernt die Aura ganz. nurAnzeige: nur zeichnen.
+        function setFigurAura(id, o, nurAnzeige) {
+            const f = zustand.figuren.find(x => x.id === id);
+            if (!f) return null;
+            if (o === null) { delete f.aura; }
+            else {
+                const a = f.aura || (f.aura = { an: true, r: 3, farbe: '#fbbf24', stil: 'flaeche', deckkraft: 0.2, name: '', verdeckt: false });
+                if ('an' in o) a.an = !!o.an;
+                if ('r' in o && Number.isFinite(Number(o.r))) a.r = Math.max(0.5, Math.min(40, Math.round(Number(o.r) * 2) / 2));
+                if ('farbe' in o && /^#[0-9a-f]{6}$/i.test(String(o.farbe))) a.farbe = String(o.farbe);
+                if ('stil' in o && ['flaeche', 'ring', 'gestrichelt'].includes(o.stil)) a.stil = o.stil;
+                if ('deckkraft' in o && Number.isFinite(Number(o.deckkraft))) a.deckkraft = Math.max(0.05, Math.min(0.6, Number(o.deckkraft)));
+                if ('name' in o) a.name = String(o.name || '').slice(0, 40);
+                if ('verdeckt' in o) a.verdeckt = !!o.verdeckt;
+            }
+            zeichnen();
+            if (!nurAnzeige) melden();
+            return f.aura || null;
+        }
+
+        // Pins: addPin legt an (id wird vergeben), updatePin ändert Felder, removePin löscht.
+        // Erlaubte Felder: x, y, icon, label, text, handoutId, verdeckt. Gibt den Pin zurück.
+        function pinBereinigen(o) {
+            const aus = {};
+            if ('x' in o && Number.isFinite(Number(o.x))) aus.x = Number(o.x);
+            if ('y' in o && Number.isFinite(Number(o.y))) aus.y = Number(o.y);
+            if ('icon' in o) aus.icon = String(o.icon || '📍').slice(0, 4);
+            if ('label' in o) aus.label = String(o.label || '').slice(0, 60);
+            if ('text' in o) aus.text = String(o.text || '').slice(0, 600);
+            if ('handoutId' in o) aus.handoutId = o.handoutId ? String(o.handoutId).slice(0, 120) : null;
+            if ('verdeckt' in o) aus.verdeckt = !!o.verdeckt;
+            return aus;
+        }
+        function addPin(o) {
+            const pin = Object.assign({ id: 'pin-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), x: 1, y: 1, icon: '📍', label: '', text: '', handoutId: null, verdeckt: false }, pinBereinigen(o || {}));
+            zustand.pins.push(pin);
+            zeichnen();
+            melden();
+            return pin;
+        }
+        function updatePin(id, o, nurAnzeige) {
+            const p = zustand.pins.find(x => x.id === id);
+            if (!p) return null;
+            Object.assign(p, pinBereinigen(o || {}));
+            zeichnen();
+            if (!nurAnzeige) melden();
+            return p;
+        }
+        function removePin(id) {
+            const vorher = zustand.pins.length;
+            zustand.pins = zustand.pins.filter(p => p.id !== id);
+            if (zustand.pins.length !== vorher) { zeichnen(); melden(); }
+        }
+
+        // Anzeige-Daten einer Figur, von außen befüllt (z.B. aus dem Kampf-Tracker):
+        //   status: ['blutung','feuer','gift','schlaf','stun','tot','monster']
+        //   lp: { a: aktuell, m: maximal, oeffentlich: true/false } oder null
+        // Gibt zurück, ob sich etwas geändert hat. nurAnzeige: nicht melden (Sammelaufruf).
+        function setFigurAnzeige(id, o, nurAnzeige) {
+            const f = zustand.figuren.find(x => x.id === id);
+            if (!f || !o) return false;
+            const vorher = JSON.stringify([f.status, f.lp, f.amZug]);
+            if ('status' in o) {
+                const st = (Array.isArray(o.status) ? o.status : []).filter(k => STATUS_SYMBOLE[k]);
+                if (st.length) f.status = st; else delete f.status;
+            }
+            if ('lp' in o) {
+                const l = o.lp;
+                if (l && Number.isFinite(Number(l.m)) && Number(l.m) > 0 && Number.isFinite(Number(l.a))) f.lp = { a: Math.round(Number(l.a)), m: Math.round(Number(l.m)), oeffentlich: !!l.oeffentlich };
+                else delete f.lp;
+            }
+            if ('amZug' in o) { if (o.amZug) f.amZug = true; else delete f.amZug; }
+            const geaendert = JSON.stringify([f.status, f.lp, f.amZug]) !== vorher;
+            if (geaendert) { zeichnen(); if (!nurAnzeige) melden(); }
+            return geaendert;
+        }
+
         function removeFigur(id) {
             zustand.figuren = zustand.figuren.filter(f => f.id !== id);
+            auswahl.delete(id);
             delete figurBilder[id];
             delete figurBildQuellen[id];
             delete figurBildPosition[id];
@@ -914,6 +1368,7 @@ const BattleMap = (() => {
 
         function figurenLoeschen() {
             zustand.figuren = [];
+            auswahlBereinigen();
             zeichnen();
             melden();
         }
@@ -1005,7 +1460,7 @@ const BattleMap = (() => {
 
         function werkzeugCursorSetzen() {
             const zeiger = {
-                messen: 'crosshair', malen: 'crosshair', radieren: 'cell',
+                messen: 'crosshair', malen: 'crosshair', pin: 'crosshair', auswahl: 'crosshair', radieren: 'cell',
                 'nebel-auf': 'copy', 'nebel-zu': 'not-allowed'
             };
             canvas.style.cursor = zeiger[werkzeug] || 'grab';
@@ -1020,6 +1475,8 @@ const BattleMap = (() => {
         }
         function getWerkzeug() { return werkzeug; }
         function setMalArt(art) { malArt = art; }
+        function setMessForm(art) { messForm = ['linie', 'kreis', 'kegel', 'strahl'].includes(art) ? art : 'linie'; zeichnen(); }
+        function getMessForm() { return messForm; }
         function getMalArt() { return malArt; }
         function setMalFarbe(farbe) { malFarbe = farbe; }
         function getMalFarbe() { return malFarbe; }
@@ -1124,11 +1581,12 @@ const BattleMap = (() => {
         zeichnen();
 
         return {
+            setAuswahl, auswahlLeeren, getAuswahl, setFigurAura, addPin, updatePin, removePin, get pins() { return zustand.pins; },
             setBild, setRaster, addFigur, removeFigur, figurenLoeschen,
-            setFigurBild, getFigurBilder, setFigurGroesse, setFigurBildPosition,
+            setFigurBild, getFigurBilder, setFigurGroesse, setFigurBildPosition, setFigurRing, setFigurAnzeige,
             setBestaetigung, zugBestaetigen, zugVerwerfen, offeneZuege,
             setMessModus, istMessModus, setVerdeckt, getStateFuerSpieler,
-            setWerkzeug, getWerkzeug, setMalArt, getMalArt, setMalFarbe, getMalFarbe, formenLoeschen,
+            setWerkzeug, getWerkzeug, setMessForm, getMessForm, setMalArt, getMalArt, setMalFarbe, getMalFarbe, formenLoeschen,
             setMalDeckkraft, getMalDeckkraft, setMarkierungenAusblenden, getMarkierungenAusblenden,
             rueckgaengig, kannRueckgaengig,
             setNebelDeckend, nebelAktiv, istNebelAktiv, nebelAllesZudecken, nebelAllesAufdecken,

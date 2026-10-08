@@ -219,7 +219,7 @@
 
             <!-- Attributes Section -->
             <details class="x-details" id="fertigkeiten-details" open>
-                <summary class="tb-kopf"><h2 class="cat-title" style="margin:0"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-list-check category-icon-fa"></i> Fertigkeiten</h2></summary>
+                <summary class="tb-kopf panel-kopf"><h2 class="cat-title" style="margin:0"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-list-check category-icon-fa"></i> Fertigkeiten</h2></summary>
             <div class="attributes-grid" id="attributes-grid">
 
                 <!-- Handeln -->
@@ -309,7 +309,7 @@
                  hält es aktuell, statt es sich jedes Mal neu zusammenzurechnen.
                  Gleiche Optik wie Status-Effekte, siehe aktuelleWerte.js. -->
             <details class="x-details" id="aktuelle-werte-details">
-                <summary class="tb-kopf"><h2 class="cat-title" style="margin:0"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-gauge-high category-icon-fa"></i> Aktuelle Werte <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('aktuelleWerte')" title="Hilfe zu Aktuelle Werte"></i></h2></summary>
+                <summary class="tb-kopf panel-kopf"><h2 class="cat-title" style="margin:0"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-gauge-high category-icon-fa"></i> Aktuelle Werte <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('aktuelleWerte')" title="Hilfe zu Aktuelle Werte"></i></h2></summary>
                 <div class="status-tags" id="aktuelle-werte-container" style="justify-content: flex-start; margin-bottom: 0.5rem;">
                     <!-- Populated by JS -->
                 </div>
@@ -326,7 +326,7 @@
 
             <!-- Inventory Section -->
             <details class="x-details inventory-section" id="inventory-section" open>
-                <summary style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem;">
+                <summary class="panel-kopf" style="flex-wrap: wrap;">
                     <h2 class="cat-title" style="margin: 0;"><i class="fa-solid fa-chevron-right x-chevron"></i> <img id="icon-inventar" src="assets/icon_inventar_pirates.jpg" class="category-icon" alt=""> Inventar <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('inventory')" title="Hilfe zum Sortieren"></i></h2>
                     <div class="currency-badge" onclick="event.preventDefault(); event.stopPropagation();" style="display: flex; align-items: center; gap: 0.6rem; flex-shrink: 0; background: rgba(10,10,15,0.65); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border: 1px solid rgba(251,191,36,0.45); padding: 0.45rem 1rem; border-radius: 20px; color: #fbbf24; font-weight: bold; font-size: 1.05rem; text-shadow: 0 1px 3px rgba(0,0,0,0.9);">
                         <i class="fa-solid fa-coins"></i>
@@ -412,7 +412,7 @@
 
         <!-- Notes Section (Movable) -->
         <div class="notes-section glass-panel" id="notes-panel">
-            <div class="notes-header" onclick="toggleNotes()" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+            <div class="notes-header panel-kopf" onclick="toggleNotes()" style="cursor: pointer;">
                 <h2 class="cat-title" style="margin: 0;"><img id="icon-notizen" src="assets/icon_notizen_pirates.jpg" class="category-icon" alt=""> Notizen <i class="fa-solid fa-circle-question help-icon" onclick="showHelp('logs')" title="Hilfe zum Logbuch Drag & Drop"></i></h2>
                 <div style="display: flex; align-items: center; gap: 1rem;">
                     <button class="tool-btn" onclick="event.stopPropagation(); toggleLayout()" title="Notizen anheften (Links / Unten)" style="background: rgba(0,0,0,0.3); border: 1px solid var(--panel-border); color: white; cursor: pointer; padding: 0.2rem 0.5rem; border-radius: 4px; display: flex; align-items: center; gap: 0.5rem;">
@@ -431,7 +431,7 @@
             
             <!-- Lebenspunkte (HP) -->
             <div class="hp-tracker glass-panel" id="hp-panel">
-                <h2 class="cat-title"><img id="icon-hp" src="assets/icon_hp_pirates.jpg" class="category-icon" alt=""> Lebenspunkte <i class="fa-solid fa-circle-question help-icon" onclick="showHelp('hp')" title="Hilfe zu Lebenspunkten"></i></h2>
+                <h2 class="cat-title panel-kopf"><img id="icon-hp" src="assets/icon_hp_pirates.jpg" class="category-icon" alt=""> Lebenspunkte <i class="fa-solid fa-circle-question help-icon" onclick="showHelp('hp')" title="Hilfe zu Lebenspunkten"></i></h2>
                 <div class="hp-display">
                     <input type="number" id="hp-current" value="100" onchange="updateHp()">
                     <span class="hp-divider">/</span>
@@ -459,7 +459,7 @@
 
             <!-- Dice Roller -->
             <details class="x-details dice-roller glass-panel" id="dice-panel" open>
-                <summary><h2 style="display:inline-flex;align-items:center;gap:0.4rem;margin:0"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-dice-d20"></i> Würfel Tool <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('dice')" title="Hilfe zu Custom Dice & Bonus"></i></h2></summary>
+                <summary class="panel-kopf"><h2 style="display:inline-flex;align-items:center;gap:0.4rem;margin:0"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-dice-d20"></i> Würfel Tool <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('dice')" title="Hilfe zu Custom Dice & Bonus"></i></h2></summary>
 
                 <div class="dice-buttons">
                     <button class="dice-btn w6" onclick="rollDice(6)">
@@ -507,7 +507,7 @@
 
             <div class="glass-panel" style="margin-top: 1rem;" id="activity-log-panel">
                 <details class="activity-log-container" open>
-                    <summary class="logbuch-summary" style="display: flex; justify-content: space-between; align-items: center; outline: none; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); cursor: pointer;">
+                    <summary class="logbuch-summary panel-kopf">
                         <h3 style="margin:0;"><i class="fa-solid fa-book"></i> Logbuch <i class="fa-solid fa-circle-question help-icon" onclick="showHelp('logs')" title="Hilfe zum Logbuch Drag & Drop"></i></h3>
                         <i class="fa-solid fa-chevron-down toggle-icon" style="transition: transform 0.3s; color: rgba(255,255,255,0.5);"></i>
                     </summary>
@@ -903,7 +903,7 @@
             <div class="gm-side-panel">
                 <!-- GM Dice Roller -->
                 <div style="padding: 1.5rem; border-bottom: 1px solid var(--panel-border); background: rgba(0,0,0,0.2);">
-                    <div style="font-weight: bold; margin-bottom: 1rem; color: #fbbf24; font-size: 1.1rem; text-align: center;"><i class="fa-solid fa-dice"></i> GM Würfel-Box <i class="fa-solid fa-circle-question help-icon" onclick="showHelp('gmDice')" title="Hilfe zur GM Würfel-Box"></i></div>
+                    <div class="panel-kopf"><span><i class="fa-solid fa-dice"></i> GM Würfel-Box <i class="fa-solid fa-circle-question help-icon" onclick="showHelp('gmDice')" title="Hilfe zur GM Würfel-Box"></i></span></div>
                     <div style="display: flex; gap: 0.5rem; margin-bottom: 0.8rem;">
                         <button class="tool-btn" onclick="rollGmDice(6)" style="flex: 1; justify-content: center; background: #f59e0b; color: black; border: none; font-weight: bold; padding: 0.8rem;"><i class="fa-solid fa-dice-d6"></i> 1W6</button>
                         <button class="tool-btn" onclick="rollGmDice(100)" style="flex: 1; justify-content: center; background: #8b5cf6; color: white; border: none; font-weight: bold; padding: 0.8rem;"><i class="fa-solid fa-dice-d20"></i> 1W100</button>
@@ -923,7 +923,7 @@
 
                 <!-- Letzter Spieler-Wurf -->
                 <div style="padding: 1.5rem; border-bottom: 1px solid var(--panel-border); background: linear-gradient(180deg, rgba(59, 130, 246, 0.1) 0%, rgba(0,0,0,0.2) 100%);">
-                    <div style="font-weight: bold; margin-bottom: 1rem; color: #3b82f6; font-size: 1.1rem; text-align: center;"><i class="fa-solid fa-users"></i> Letzter Spieler-Wurf</div>
+                    <div class="panel-kopf" style="--pk-farbe:#3b82f6"><span><i class="fa-solid fa-users"></i> Letzter Spieler-Wurf</span></div>
                     <div style="background: rgba(0,0,0,0.6); padding: 1.5rem; border-radius: 8px; text-align: center; border: 1px solid rgba(59, 130, 246, 0.4); box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
                         <div id="gm-player-dice-big-result" style="font-size: 3.5rem; font-weight: 900; color: #3b82f6; text-shadow: 0 0 15px rgba(59, 130, 246, 0.6); line-height: 1;">--</div>
                         <div id="gm-player-dice-subtitle" style="font-size: 1rem; font-weight: bold; color: white; margin-top: 0.8rem;">Warte auf Wurf...</div>
@@ -931,7 +931,7 @@
                     </div>
                 </div>
 
-                <div style="padding: 1rem; border-bottom: 1px solid var(--panel-border); font-weight: bold; display: flex; justify-content: space-between; background: rgba(0,0,0,0.4);">
+                <div class="panel-kopf panel-kopf-leiste">
                     <span><i class="fa-solid fa-tower-broadcast"></i> Live-Feed</span>
                     <button onclick="clearGmLog()" style="background:transparent; border:none; color:#ed4245; cursor:pointer; font-size:0.8rem;" title="Log leeren"><i class="fa-solid fa-trash"></i></button>
                 </div>
@@ -1039,8 +1039,8 @@
                 <!-- General GM Notes -->
                 <div class="gm-panel-slot" data-panel="notizen">
                     <div class="gm-panel-griff" title="Ziehen zum Umsortieren"><i class="fa-solid fa-grip-lines"></i></div>
-                    <div id="gm-notes-panel" style="background: rgba(0,0,0,0.3); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--panel-border);">
-                        <div style="font-weight: bold; margin-bottom: 0.8rem; color: #fbbf24; font-size: 1.1rem;"><i class="fa-solid fa-book-journal-whills"></i> Allgemeine SL-Notizen</div>
+                    <div id="gm-notes-panel" class="gm-tischmitte">
+                        <h3 class="panel-kopf"><i class="fa-solid fa-book-journal-whills"></i> Allgemeine SL-Notizen</h3>
                         <textarea id="gm-general-notes" oninput="saveGmGeneralNotes(this.value)" placeholder="Hier kannst du gruppenübergreifende Kampagnen-Notizen, NPCs oder Plot-Ideen festhalten..." style="width: 100%; height: 250px; background: rgba(0,0,0,0.5); border: 1px solid var(--panel-border); color: white; padding: 1rem; border-radius: 4px; resize: vertical; outline: none; font-family: inherit; line-height: 1.5;"></textarea>
                     </div>
                 </div>

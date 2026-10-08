@@ -917,7 +917,7 @@ function renderTalentbaum() {
 
     section.innerHTML = `
         <details class="x-details" id="tb-panel-details" ${tbPanelOffen ? 'open' : ''}>
-            <summary class="tb-kopf">
+            <summary class="tb-kopf panel-kopf">
                 <h2 class="cat-title" style="margin:0"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-diagram-project category-icon-fa"></i> Talentbaum
                     <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('talentbaum')" title="Hilfe zum Talentbaum"></i></h2>
                 <div class="tb-punkte">

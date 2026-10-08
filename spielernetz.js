@@ -416,7 +416,7 @@ function renderSpielernetz() {
 
     box.innerHTML = `
         <details class="x-details qs-details" ${spielernetzOffen ? 'open' : ''}>
-            <summary class="qs-head">
+            <summary class="qs-head panel-kopf">
                 <h2 class="cat-title" style="margin:0"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-diagram-project category-icon-fa"></i> Mein Beziehungsnetz
                     ${anzahl ? `<span class="x-count">${anzahl}</span>` : ''}
                     <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('spielernetz')" title="Hilfe zum Beziehungsnetz"></i></h2>

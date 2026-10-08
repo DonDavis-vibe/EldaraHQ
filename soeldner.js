@@ -174,7 +174,7 @@ function renderSoeldnerGm() {
 
     box.innerHTML = `
         <details class="x-details tm-details" ${soeldnerOffenGm ? 'open' : ''}>
-        <summary class="tm-head">
+        <summary class="tm-head panel-kopf">
             <div class="tm-title"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-user-ninja"></i> Söldner-Pool
                 ${soeldnerPoolGm.length ? `<span class="x-count">${soeldnerPoolGm.length}</span>` : ''}
                 <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('soeldner')" title="Hilfe zum Söldner-Pool"></i>
@@ -277,7 +277,7 @@ function renderSoeldnerSpieler() {
 
     section.innerHTML = `
         <details class="x-details tm-details" ${soeldnerOffenSpieler ? 'open' : ''}>
-        <summary class="tm-head">
+        <summary class="tm-head panel-kopf">
             <h2 class="cat-title" style="margin:0"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-user-ninja category-icon-fa"></i> Söldner verfügbar
                 <span class="x-count">${soeldnerPoolSpieler.length}</span>
                 <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('soeldner')" title="Hilfe zum Söldner-Pool"></i></h2>

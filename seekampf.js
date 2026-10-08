@@ -969,7 +969,7 @@ function renderSeekampfGm() {
     if (!box.querySelector('.sk-details')) {
         box.innerHTML = `
             <details class="x-details sk-details" ${skOffenGm ? 'open' : ''}>
-                <summary class="tm-head">
+                <summary class="tm-head panel-kopf">
                     <div class="tm-title"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-ship"></i> Seekampf
                         ${seekampf.einheiten.length ? `<span class="x-count">${seekampf.einheiten.length}</span>` : ''}
                         <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('seekampf')" title="Hilfe zum Seekampf"></i>
@@ -1162,7 +1162,7 @@ function renderSeekampfSpieler() {
     if (!section.querySelector('.sk-details')) {
         section.innerHTML = `
             <details class="x-details sk-details" ${skSpielerOffen ? 'open' : ''}>
-                <summary class="tm-head">
+                <summary class="tm-head panel-kopf">
                     <h2 class="cat-title" style="margin:0"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-ship category-icon-fa"></i> Seekampf
                         <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('seekampf')" title="Hilfe zum Seekampf"></i>
                     </h2>

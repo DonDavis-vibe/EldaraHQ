@@ -161,7 +161,7 @@ function renderGruppe() {
 
     panel.innerHTML = `
         <details class="x-details gr-details" ${gruppeOffen ? 'open' : ''}>
-            <summary>
+            <summary class="panel-kopf">
                 <h3 style="margin:0"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-people-group"></i> Gruppe
                     ${andere.length ? `<span class="x-count">${andere.length}</span>` : ''}
                     <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('gruppe')" title="Hilfe zur Gruppenübersicht"></i></h3>

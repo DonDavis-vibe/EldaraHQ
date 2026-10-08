@@ -270,7 +270,7 @@ function renderQuesteGm() {
 
     box.innerHTML = `
         <details class="x-details qs-details" ${questeOffenGm ? 'open' : ''}>
-            <summary class="qs-head">
+            <summary class="qs-head panel-kopf">
                 <div class="qs-title"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-scroll"></i> Quest-Logbuch
                     ${queste.length ? `<span class="x-count">${queste.length}</span>` : ''}
                     <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('quests')" title="Hilfe zum Quest-Logbuch"></i>
@@ -375,7 +375,7 @@ function renderQuesteSpieler() {
 
     section.innerHTML = `
         <details class="x-details qs-details" ${questeOffenSpieler ? 'open' : ''}>
-            <summary class="qs-head">
+            <summary class="qs-head panel-kopf">
                 <h2 class="cat-title" style="margin:0"><i class="fa-solid fa-chevron-right x-chevron"></i> <i class="fa-solid fa-scroll category-icon-fa"></i> Quest-Logbuch
                     <span class="x-count">${questeSpieler.length}</span>
                     <i class="fa-solid fa-circle-question help-icon" onclick="event.preventDefault(); event.stopPropagation(); showHelp('quests')" title="Hilfe zum Quest-Logbuch"></i></h2>

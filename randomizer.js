@@ -599,7 +599,7 @@ function renderRandomizerGm() {
 
     box.innerHTML = `
         <details class="x-details rz-details" ${randomizerOffen ? 'open' : ''}>
-            <summary>
+            <summary class="panel-kopf">
                 <div class="rz-titelzeile">
                     <i class="fa-solid fa-chevron-right x-chevron"></i>
                     <i class="fa-solid fa-dice-d20 rz-titel-icon"></i>

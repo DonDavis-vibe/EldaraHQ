@@ -895,9 +895,9 @@ h2 {
 .log-val { font-family: var(--font-mono); font-weight: 700; color: #fbbf24; }
 
 /* Activity Log */
-.activity-log-container { margin-top: 1.5rem; }
+.activity-log-container { margin-top: 0; }
 .activity-log-container summary { cursor: pointer; user-select: none; }
-.activity-log-container summary h3 { display: inline-block; font-size: 1rem; color: var(--text-secondary); margin: 0; transition: color 0.2s; }
+.activity-log-container summary h3 { display: inline-flex; margin: 0; transition: color 0.2s; }
 .activity-log-container summary::marker, .activity-log-container summary::-webkit-details-marker { display: none; content: ""; }
 .activity-log-container summary:hover h3, .activity-log-container summary:hover .toggle-icon { color: white !important; }
 .activity-log-container[open] summary .toggle-icon { transform: rotate(180deg); }
@@ -2206,6 +2206,11 @@ body.gm-mode .gm-title { color: var(--color-accent); }
 .tb-gelernt-menschlich { opacity: 0.6; border-left-style: dashed; }
 .tb-monsterform { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; margin-top: 0.5rem; padding: 0.5rem 0.7rem; border-radius: 8px; background: rgba(255,255,255,0.04); border: 1px dashed var(--glass-border); }
 .tb-monsterform-an { border: 1px solid #a855f7; background: rgba(168, 85, 247, 0.12); }
+/* Token-Ringe (karten.js) */
+.kt-figur { padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.kt-ring-zeile { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem; margin: 0.25rem 0 0.1rem; }
+.kt-ring-farbe { width: 30px; height: 28px; }
+.kt-ring-wahl { flex: 0 1 auto; width: auto; max-width: 8.5rem; padding: 0.2rem 0.3rem; font-size: 0.78rem; }
 /* Herstellen & Verbrauchen (herstellen.js) */
 .herstellen-modal { max-width: 620px; }
 .hs-art { margin: 1rem 0 0.4rem; color: var(--color-accent); font-size: 0.95rem; }
@@ -3032,3 +3037,109 @@ body.rb-aktiv { overflow: hidden; }
 .pnp-punkt { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 0.35rem; background: #6b7280; }
 .pnp-punkt[data-status="verbunden"] { background: #57F287; }
 .pnp-punkt[data-status="verbinde"] { background: #fee75c; }
+
+
+/* ---------- Panel-Kopfband ----------
+   Überschrift jedes Panels als abgesetztes Band (statt freischwebendem Titel
+   im Fließtext, wie im alten How-to-be-a-Hero-Layout): getönt in der Signatur-
+   farbe des Themes (--color-accent: Spieler-Grün / SL-Bernstein), Funktions-
+   Elemente (Hilfe, Knöpfe, Zähler) sitzen rechts im Band.
+   Drei Lagen: (1) erstes Element eines Panels = Band bis an den Rand (hebt das
+   Panel-Padding --pk-x/--pk-y auf, oben mit dem Panel-Radius --pk-r); (2) Abschnitt
+   im Charakterbogen = Band über die volle Bogenbreite; (3) alles andere (z.B.
+   zweites Panel im selben Container) = eigenständiges, abgerundetes Band. */
+.glass-panel { --pk-x: 2rem; --pk-y: 2rem; --pk-r: 19px; }
+.gruppe-panel, .teamwuerfel-section { --pk-x: 1.5rem; --pk-y: 1.2rem; }
+.gm-tischmitte, .gm-nscliste, .gm-quests, .gm-schiff, .gm-seekampf { --pk-x: 1.5rem; --pk-y: 1.2rem; --pk-r: 7px; }
+.gm-randomizer { --pk-x: 1.6rem; --pk-y: 1.4rem; --pk-r: 9px; --pk-farbe: #22d3ee; }
+
+.panel-kopf {
+    display: flex; align-items: center; justify-content: space-between; gap: 0.6rem;
+    margin: 0 0 1rem 0; padding: 0.55rem 1rem;
+    background: linear-gradient(90deg,
+        color-mix(in srgb, var(--pk-farbe, var(--color-accent, #45d694)) 22%, rgba(0,0,0,0.45)),
+        color-mix(in srgb, var(--pk-farbe, var(--color-accent, #45d694)) 6%, rgba(0,0,0,0.35)));
+    border: 1px solid color-mix(in srgb, var(--pk-farbe, var(--color-accent, #45d694)) 32%, transparent);
+    border-radius: 12px;
+    font-size: 0.92rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;
+    color: var(--text-primary);
+}
+h2.panel-kopf { justify-content: flex-start; }   /* Band IST die Überschrift (z.B. Lebenspunkte) */
+.panel-kopf h2, .panel-kopf h3, .panel-kopf .tm-title, .panel-kopf .qs-title, .panel-kopf .nsc-title {
+    margin: 0; font: inherit; color: inherit; letter-spacing: inherit; text-transform: inherit;
+    display: inline-flex; align-items: center; flex-wrap: wrap; gap: 0.5rem;
+}
+.panel-kopf .category-icon { width: 26px; height: 26px; }
+.panel-kopf .category-icon-fa, .panel-kopf .tm-title > i:not(.x-chevron):not(.help-icon), .panel-kopf .qs-title > i:not(.x-chevron):not(.help-icon),
+.panel-kopf .nsc-title > i:not(.x-chevron):not(.help-icon), .panel-kopf h2 > i:not(.x-chevron):not(.help-icon), .panel-kopf h3 > i:not(.x-chevron):not(.help-icon),
+.panel-kopf .rz-titel-icon {
+    color: var(--pk-farbe, var(--color-accent, #45d694)); font-size: 1em; width: auto;
+}
+.panel-kopf .help-icon, .panel-kopf .x-count, .panel-kopf button, .panel-kopf select { text-transform: none; letter-spacing: 0; }
+details > summary.panel-kopf { cursor: pointer; }
+.panel-kopf .rz-titelzeile { flex: 1; }
+.panel-kopf .rz-titel { font-size: 0.95rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; }
+.panel-kopf .rz-untertitel { letter-spacing: 0; text-transform: none; font-weight: 400; }
+
+/* (1) erstes Element im Panel: Band bis an den Rand */
+:is(.glass-panel, .gruppe-panel, .teamwuerfel-section, .gm-tischmitte, .gm-nscliste, .gm-quests, .gm-schiff, .gm-seekampf, .gm-randomizer) > .panel-kopf:first-child,
+:is(.glass-panel, .gruppe-panel, .teamwuerfel-section, .gm-tischmitte, .gm-nscliste, .gm-quests, .gm-schiff, .gm-seekampf, .gm-randomizer) > details:first-child > .panel-kopf {
+    margin: calc(-1 * var(--pk-y)) calc(-1 * var(--pk-x)) 1.3rem calc(-1 * var(--pk-x));
+    border-width: 0 0 1px 0; border-radius: var(--pk-r) var(--pk-r) 0 0; padding: 0.75rem 1.4rem;
+}
+/* zugeklappt: Band füllt das ganze Panel */
+:is(.glass-panel, .gruppe-panel, .teamwuerfel-section, .gm-tischmitte, .gm-nscliste, .gm-quests, .gm-schiff, .gm-seekampf, .gm-randomizer) > details:first-child:only-child:not([open]) > .panel-kopf,
+details:is(.glass-panel, .gm-seekampf):not([open]) > .panel-kopf:first-child {
+    margin-bottom: calc(-1 * var(--pk-y)); border-bottom-width: 0; border-radius: var(--pk-r);
+}
+:is(.gm-tischmitte, .gm-nscliste, .gm-quests, .gm-schiff, .gm-seekampf, .gm-randomizer) > details:first-child:not(:only-child):not([open]) > .panel-kopf { margin-bottom: 0; }
+
+/* (2) Abschnitte im Charakterbogen (Fertigkeiten, Inventar, Talentbaum, Tischmitte, Quests …):
+   Band über die ganze Bogenbreite, bleibt aber mitten im Panel - ohne Radius und ohne Zug nach oben */
+.character-sheet .panel-kopf {
+    margin: 1.5rem -2rem 1.2rem -2rem; border-width: 1px 0; border-radius: 0; padding: 0.7rem 1.4rem;
+}
+.character-sheet > details:not([open]) > .panel-kopf { margin-bottom: 0; }
+
+/* SL-Seitenleiste (Würfel-Box, letzter Spieler-Wurf, Live-Feed): Bänder über die volle Breite,
+   Abschnitte haben 1.5rem Innenabstand */
+.gm-side-panel .panel-kopf {
+    margin: -1.5rem -1.5rem 1.2rem -1.5rem; border-width: 0 0 1px 0; border-radius: 0; padding: 0.7rem 1.4rem;
+}
+.gm-side-panel > .panel-kopf-leiste { margin: 0; padding: 0.7rem 1.4rem; }
+.gm-side-panel .panel-kopf > span { display: inline-flex; align-items: center; gap: 0.5rem; }
+.gm-side-panel .panel-kopf .help-icon { margin-left: 0.2rem; }
+
+/* Notizen zugeklappt: Band füllt das ganze Panel (kein <details>, daher per :has) */
+.notes-section:has(> #notes-content[style*="display: none"]) > .panel-kopf {
+    margin-bottom: calc(-1 * var(--pk-y)); border-bottom-width: 0; border-radius: var(--pk-r);
+}
+
+/* Kampf-Tracker: wer gerade am Zug ist (kampf.amZug), gleiche Goldfarbe wie die Markierung auf der Karte */
+.sk-einheit.sk-am-zug { border-color: #fbbf24; box-shadow: 0 0 0 1px #fbbf24, 0 0 14px rgba(251,191,36,0.35); }
+
+/* Karten-Pins: Zeilen in der SL-Liste und Infokarte beim Anklicken */
+.kt-pins { margin: 0.6rem 0; }
+.kt-pin-zeile { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; padding: 0.4rem 0; border-top: 1px dashed var(--glass-border); }
+.kt-pin-icon { width: 4rem; }
+.kt-pin-label { flex: 1 1 130px; min-width: 100px; }
+.kt-pin-text { flex: 2 1 200px; min-width: 140px; }
+.kt-pin-handout { flex: 1 1 140px; max-width: 220px; }
+.kt-pin-popover {
+    position: fixed; z-index: 1300; width: min(300px, calc(100vw - 16px));
+    background: var(--glass-bg, rgba(7,18,22,0.92)); backdrop-filter: blur(10px);
+    border: 1px solid color-mix(in srgb, var(--color-accent, #45d694) 45%, transparent); border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); padding: 0.8rem 1rem; display: flex; flex-direction: column; gap: 0.6rem;
+}
+.kt-pin-popover-kopf { display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary); }
+.kt-pin-popover-icon { font-size: 1.5rem; }
+.kt-pin-popover-text { white-space: pre-wrap; font-size: 0.9rem; color: var(--text-secondary); }
+
+/* Mehrfachauswahl: Sammelleiste und markierte Figuren in der Liste */
+.kt-auswahl-leiste { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin: 0.4rem 0; }
+.kt-figur-gewaehlt { box-shadow: inset 3px 0 0 #22d3ee; background: rgba(34,211,238,0.07); }
+
+/* Pin-Liste: einklappbar, sortierbar, filterbar */
+.kt-pins-kopf { cursor: pointer; font-weight: 700; color: #fbbf24; display: flex; align-items: center; gap: 0.4rem; padding: 0.2rem 0; }
+.kt-pins-werkzeuge { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.3rem 0; }
+.kt-pins-werkzeuge input[type="search"] { flex: 1 1 160px; min-width: 120px; }

@@ -465,3 +465,12 @@ wirken im Kampf-Tracker (Gift/Blutung/Schlaf liegen dort), Gifte/Brandöl setzen
 - Hergestellte Gegenstände belegen 0,5 Plätze (Größe "Klein" wie der Trank im Regelwerk).
 - **Buffs ohne Zahl** (+2 Bewegung, +Rüstung, Lifesteal) sind nur Status-Erinnerungen, nicht verrechnet;
   Gift-Stufen auf Waffen wendet der SL im Kampf-Tracker beim Treffer selbst an.
+
+## Karte: Diagonal-Regel beim Messen (Seekampf)
+
+Im Regelwerk (RW 5.1, Seekampf Kap. 1): "Beim zweiten diagonalen Schritt zählt das Feld als 300 m"
+(1 Feld = 200 m). Die Karte kennt dafür die Einstellung *Diagonale: jede 2. = 1,5* (Vorgabe
+*Seekarte* in den Raster-Werkzeugen), Standard bleibt "immer 1 Feld".
+*Annahme, bitte vom SL bestätigen lassen:* Die Regel gilt **abwechselnd** - 1. Diagonale 200 m, 2. Diagonale
+300 m, 3. wieder 200 m, 4. 300 m ... (wie bei D&D 5e). Mögliche Lesart wäre auch "nur der zweite
+Diagonalschritt einer Strecke kostet mehr" oder "jede Diagonale 300 m".
