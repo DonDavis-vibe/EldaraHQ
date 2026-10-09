@@ -1527,7 +1527,7 @@ body.theme-pirates {
     --accent: var(--color-accent);
     --accent-blue: var(--color-accent);
     --color-primary: var(--color-accent);
-    background-image: url('assets/bg_eldara_b.jpg');
+    background-image: url('assets/bg_eldara_f.jpg');
 }
 
 body.theme-pirates .app-container {
