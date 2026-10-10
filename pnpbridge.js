@@ -110,7 +110,7 @@ function pnpProfil() {
         protocol: PNP_PROTOKOLL,
         push: {
             handout: { text: true, image: true, toPlayer: true },
-            scene: { grids: ['square'], tokens: true },
+            scene: { grids: ['square'], tokens: true, characterTokens: true },
             character: {},
             music_cue: { tracks: true, mood: true }
         },
@@ -339,15 +339,20 @@ async function pnpSzene(p) {
     });
 
     // Spieler-Figuren entstehen von selbst (karteSpielerFigurenAbgleichen), 'pc'-Marken brauchen wir nicht.
-    // Eine Figur, deren Label wie ein NSC der Liste heißt, wird dieser NSC (Porträt, Größe).
+    // Eine Figur, die für einen Charakter von PenNodePaper steht (t.character; die Charaktere folgen direkt nach der Karte),
+    // ist der NSC-Eintrag dieses Charakters: gleiche Id wie beim Setzen aus der NSC-Liste, also Porträt und Größe des Eintrags -
+    // und derselbe Charakter ist im Kampf-Tracker. Steht ein Charakter mehrfach auf der Karte, ist die erste Figur der NSC, die
+    // weiteren sind gleichnamige freie Figuren (eine Figur-Id gibt es nur einmal).
+    // Eine Figur ohne Charakter, deren Label wie ein NSC der Liste heißt, wird ebenfalls dieser NSC.
     const nscs = typeof nscListe !== 'undefined' ? nscListe : [];
     (p.tokens || []).forEach((t, i) => {
         if (t.kind === 'pc') return;
-        const nsc = t.label ? nscs.find(n => String(n.name).toLowerCase() === String(t.label).toLowerCase()) : null;
-        let id = nsc ? 'nsc:' + nsc.id : null;
+        const nsc = t.character ? nscs.find(n => n.id === 'nsc_pnp_' + pnpSlug(t.character))
+            : t.label ? nscs.find(n => String(n.name).toLowerCase() === String(t.label).toLowerCase()) : null;
+        let id = t.character ? 'nsc:nsc_pnp_' + pnpSlug(t.character) : nsc ? 'nsc:' + nsc.id : null;
         if (!id || zustand.figuren.some(f => f.id === id)) id = 'pnp:' + p.id + ':' + i;
         zustand.figuren.push({
-            id, name: t.label || (t.kind === 'enemy' ? 'Gegner' : 'NSC'),
+            id, name: t.label || (nsc && nsc.name) || (t.kind === 'enemy' ? 'Gegner' : 'NSC'),
             x: Number(t.x) + 0.5, y: Number(t.y) + 0.5,    // Figuren sitzen auf Gitterpunkten, die Marke meint die Feldmitte
             groesse: nsc ? Number(nsc.groesse) || 1 : 1,
             besitzer: 'sl', farbe: t.kind === 'enemy' ? '#a3342b' : '#d4a24c'
