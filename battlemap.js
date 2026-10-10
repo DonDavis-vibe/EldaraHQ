@@ -147,6 +147,7 @@ const BattleMap = (() => {
         // Muss eine Bewegung erst bestätigt werden? Dann landet sie zunächst als
         // Vorschlag in figur.geplantX/geplantY, statt die Figur direkt zu setzen.
         let bestaetigungNoetig = !!optionen.bestaetigungNoetig;
+        let bestaetigungNurEigene = false;
         // Spieler sehen den Nebel deckend, der Spielleiter halbdurchsichtig
         let nebelDeckend = !!optionen.nebelDeckend;
         const onZugVorschlag = optionen.onZugVorschlag || (() => {});
@@ -1003,7 +1004,7 @@ const BattleMap = (() => {
                     zielY = Math.round(zielY * 2) / 2;
                 }
 
-                if (bestaetigungNoetig) {
+                if (bestaetigungNoetig || (bestaetigungNurEigene && !String(f.id).startsWith('spieler:'))) {
                     // Figur bleibt stehen; der Zug wird nur vorgeschlagen
                     f.x = ziehen.startX;
                     f.y = ziehen.startY;
@@ -1399,7 +1400,9 @@ const BattleMap = (() => {
         function setBesitzer(kennung) { nurEigene = kennung || null; }
 
         // Muss eine Bewegung bestätigt werden? (Spieler: ja, Spielleiter: nein)
-        function setBestaetigung(an) { bestaetigungNoetig = !!an; }
+        // nurEigene: auch ohne Bestätigungspflicht müssen alles außer den eigenen Spieler-Figuren (z.B. Schiffe des Seekampfs)
+        // bestätigt werden - die Spieler bewegen sich frei, der SL behält die Hand auf allem anderen
+        function setBestaetigung(an, nurEigene) { bestaetigungNoetig = !!an; bestaetigungNurEigene = !!nurEigene; }
 
         // Messen per Knopf statt Umschalttaste — wichtig auf Tablets
         function setMessModus(an) {

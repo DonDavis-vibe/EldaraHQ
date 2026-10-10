@@ -19,7 +19,10 @@
 // Nachrichten (multiplayer.js):
 //   SL -> Spieler   { type: 'karte', karteId, name, kategorie, zuegeFrei,
 //                      zustand: {...battlemap-Zustand, bild} }
-//   Spieler -> SL    { type: 'karteZugVorschlag', karteId, figurId, x, y }
+//                      zuegeFrei = der Spieler darf seine Figur frei ziehen (Auto: solange kein Kampf-Modus läuft),
+//                      zuegeNurEigene = dabei gilt die Freiheit nur für die eigene Spieler-Figur (Schiffe bleiben bestätigungspflichtig)
+//   Spieler -> SL    { type: 'karteZugVorschlag', karteId, figurId, x, y, frei? }  frei: die Figur steht lokal schon dort - der SL
+//                      übernimmt die Position sofort, wenn die Bewegung gerade frei ist, sonst gilt es als Vorschlag
 //
 // Figur-IDs: 'spieler:'+peerId (eine pro verbundenem Spieler, automatisch),
 // 'nsc:'+nscId (aus der NSC-Liste), 'frei:'+uid (freie SL-Markierung).
@@ -101,7 +104,17 @@ let karten = [];              // [{ id, name, kategorie, zustand }]
 let karteAktivId = null;
 let karteMap = null;          // aktuell eingehängte BattleMap-Instanz
 let karteOffenGm = true;
-let karteZuegeFrei = false;   // Spieler bewegen ohne Bestätigung (pro Sitzung)
+// Wie sich die Spieler auf der Karte bewegen (pro Sitzung): 'auto' (Standard) = frei, solange kein Kampf-Modus
+// läuft - dann nur Anfragen, die der SL bestätigt; 'frei' = immer frei; 'bestaetigung' = immer nur Anfragen.
+// Im Auto-Modus gilt die Freiheit nur für die eigene Spieler-Figur, Schiffe des Seekampfs bleiben bestätigungspflichtig.
+let karteZuegeModus = 'auto';
+
+function karteZuegeEffektiv() {
+    const kampfModus = typeof kampf !== 'undefined' && !!kampf.modusAktiv;
+    if (karteZuegeModus === 'frei') return { frei: true, nurEigene: false };
+    if (karteZuegeModus === 'bestaetigung') return { frei: false, nurEigene: false };
+    return { frei: !kampfModus, nurEigene: true };
+}
 
 function karteNeueId() {
     return 'kt_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
@@ -468,8 +481,8 @@ function karteNebelEntwurfVerwerfen() {
     renderKarteGm();
 }
 
-function karteZugFreigabeUmschalten(an) {
-    karteZuegeFrei = !!an;
+function karteZugModusSetzen(modus) {
+    karteZuegeModus = ['auto', 'frei', 'bestaetigung'].includes(modus) ? modus : 'auto';
     karteVerteilen();
     renderKarteGm();
 }
@@ -503,7 +516,7 @@ function karteZustandFuerSpieler() {
     return {
         type: 'karte', karteId: karteAktivId,
         name: eintrag ? eintrag.name : '', kategorie: eintrag ? eintrag.kategorie : 'land',
-        zuegeFrei: karteZuegeFrei, zustand
+        zuegeFrei: karteZuegeEffektiv().frei, zuegeNurEigene: karteZuegeEffektiv().nurEigene, zustand
     };
 }
 
@@ -584,7 +597,9 @@ function karteAnfrageVerarbeiten(peerId, payload) {
     if (!karteMap || payload.karteId !== karteAktivId) return false;
     const eigeneId = 'spieler:' + peerId;
     if (payload.figurId !== eigeneId) return false;
-    karteMap.addFigur({ id: eigeneId, geplantX: payload.x, geplantY: payload.y });
+    // Ist die Bewegung gerade frei (karteZuegeEffektiv), steht die Figur sofort dort; sonst ist es ein Vorschlag zum Bestätigen
+    if (karteZuegeEffektiv().frei) karteMap.addFigur({ id: eigeneId, x: Number(payload.x), y: Number(payload.y), geplantX: null, geplantY: null });
+    else karteMap.addFigur({ id: eigeneId, geplantX: payload.x, geplantY: payload.y });
     renderKarteGm();
     return true;
 }
@@ -946,7 +961,13 @@ function renderKarteGm() {
                     <div class="sk-kt-gruppe">
                         <div class="sk-kt-gruppe-titel"><i class="fa-solid fa-users"></i> Spieler</div>
                         <div class="sk-kt-gruppe-reihe">
-                            <label class="hr-check" style="margin:0"><input type="checkbox" id="kt-zuege-frei"> <span>Spieler bewegen ohne Bestätigung</span></label>
+                            <label class="sk-raster-feld" title="Auto: Die Spieler ziehen ihre Figur frei, solange kein Kampf-Modus läuft; im Kampf-Modus schlagen sie Züge nur vor und du bestätigst. Schiffe des Seekampfs brauchen im Auto-Modus immer deine Bestätigung.">Spieler-Bewegung
+                                <select id="kt-zuege-modus" class="sk-input">
+                                    <option value="auto">Auto (frei, im Kampf-Modus mit Bestätigung)</option>
+                                    <option value="frei">Immer frei</option>
+                                    <option value="bestaetigung">Immer mit Bestätigung</option>
+                                </select>
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -978,8 +999,8 @@ function renderKarteGm() {
         if (markierungAusblendenCb) markierungAusblendenCb.addEventListener('change', () => karteMap && karteMap.setMarkierungenAusblenden(markierungAusblendenCb.checked));
         const nebelAktivCb = document.getElementById('kt-nebel-aktiv');
         if (nebelAktivCb) nebelAktivCb.addEventListener('change', () => karteNebelUmschalten(nebelAktivCb.checked));
-        const zuegeFreiCb = document.getElementById('kt-zuege-frei');
-        if (zuegeFreiCb) zuegeFreiCb.addEventListener('change', () => karteZugFreigabeUmschalten(zuegeFreiCb.checked));
+        const zuegeModusSel = document.getElementById('kt-zuege-modus');
+        if (zuegeModusSel) zuegeModusSel.addEventListener('change', () => karteZugModusSetzen(zuegeModusSel.value));
         const auswahl = document.getElementById('kt-auswahl');
         if (auswahl) auswahl.addEventListener('change', () => karteWechseln(auswahl.value));
         const kategorieSel = document.getElementById('kt-kategorie');
@@ -1004,8 +1025,8 @@ function renderKarteGm() {
     if (kategorieSel && aktuelleKarte) kategorieSel.value = aktuelleKarte.kategorie;
     const nebelAktivCb = document.getElementById('kt-nebel-aktiv');
     if (nebelAktivCb && karteMap) nebelAktivCb.checked = karteMap.istNebelAktiv();
-    const zuegeFreiCb = document.getElementById('kt-zuege-frei');
-    if (zuegeFreiCb) zuegeFreiCb.checked = karteZuegeFrei;
+    const zuegeModusSel = document.getElementById('kt-zuege-modus');
+    if (zuegeModusSel) zuegeModusSel.value = karteZuegeModus;
 
     const dyn = document.getElementById('kt-dynamic');
     if (!dyn || !karteMap) return;
@@ -1378,7 +1399,7 @@ function karteEmpfangen(payload) {
     // (gleiche Reihenfolge wie bei skEmpfangen in seekampf.js).
     renderKarteSpieler();
     if (karteSpielerMap && payload.zustand) {
-        karteSpielerMap.setBestaetigung(!payload.zuegeFrei);
+        karteSpielerMap.setBestaetigung(!payload.zuegeFrei, !!payload.zuegeNurEigene);
         karteSpielerMap.applyState(karteSpielerZustandFuerAnwenden(payload.zustand), payload.zustand.bild);
         const meinPeer = typeof peer !== 'undefined' && peer ? peer.id : null;
         const meineFigur = meinPeer && karteSpielerMap.figuren.find(f => f.besitzer === meinPeer);
@@ -1462,6 +1483,14 @@ function renderKarteSpieler() {
                 if (typeof hostConnection !== 'undefined' && hostConnection && hostConnection.open && karteSpielerLetzte) {
                     try { hostConnection.send({ type: 'karteZugVorschlag', karteId: karteSpielerLetzte.karteId, figurId: figur.id, x: figur.geplantX, y: figur.geplantY }); } catch (e) { /* weg */ }
                 }
+            },
+            // Freie Bewegung (kein Kampf-Modus, siehe karteZuegeEffektiv beim SL): die Figur steht lokal schon am Ziel -
+            // dem SL die neue Position melden, sonst bliebe der Zug nur auf dem eigenen Bildschirm (und der nächste
+            // Kartenstand des SL würde die Figur zurücksetzen). Dieselbe Nachricht wie ein Zugvorschlag, der SL wendet sie an.
+            onLokaleFigur: (figur) => {
+                if (typeof hostConnection !== 'undefined' && hostConnection && hostConnection.open && karteSpielerLetzte) {
+                    try { hostConnection.send({ type: 'karteZugVorschlag', karteId: karteSpielerLetzte.karteId, figurId: figur.id, x: figur.x, y: figur.y, frei: true }); } catch (e) { /* weg */ }
+                }
             }
         });
         const meinPeer = typeof peer !== 'undefined' && peer ? peer.id : null;
@@ -1475,7 +1504,7 @@ function renderKarteSpieler() {
         const details = section.querySelector('details');
         if (details) details.addEventListener('toggle', () => { karteSpielerOffen = details.open; if (details.open && karteSpielerMap) karteSpielerMap.zeichnen(); });
         if (karteSpielerLetzte.zustand) {
-            karteSpielerMap.setBestaetigung(!karteSpielerLetzte.zuegeFrei);
+            karteSpielerMap.setBestaetigung(!karteSpielerLetzte.zuegeFrei, !!karteSpielerLetzte.zuegeNurEigene);
             karteSpielerMap.applyState(karteSpielerZustandFuerAnwenden(karteSpielerLetzte.zustand), karteSpielerLetzte.zustand.bild);
         }
     }

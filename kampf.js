@@ -824,7 +824,9 @@ function kampfAlleEntfernen() {
 // sperren kann ("Hinterhalt!").
 function kampfModusUmschalten() {
     kampf.modusAktiv = !kampf.modusAktiv;
-    kampfLog(kampf.modusAktiv ? 'Kampf-Modus aktiviert - Inventar der Spieler ist gesperrt.' : 'Kampf-Modus beendet - Inventar der Spieler ist wieder frei.');
+    kampfLog(kampf.modusAktiv ? 'Kampf-Modus aktiviert - Inventar der Spieler ist gesperrt, auf der Karte ziehen sie nur noch mit deiner Bestätigung.' : 'Kampf-Modus beendet - Inventar der Spieler ist wieder frei, auf der Karte bewegen sie sich wieder frei.');
+    // die Karte der Spieler hängt davon ab (Auto-Modus der Spieler-Bewegung, karten.js)
+    if (typeof karteVerteilen === 'function') karteVerteilen();
     renderKampfGm();
 }
 

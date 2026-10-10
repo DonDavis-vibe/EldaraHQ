@@ -6,7 +6,7 @@
 //   Gürtel        5 Plätze für normale Sachen + 2 eigene Waffen-Plätze (siehe
 //                 unten - Waffen belegen dort immer nur 1 Platz, egal welche
 //                 Größe sie sonst hätte)
-//   Rucksack      12 Plätze (Standard), -1 bei mittlerer, -2 bei schwerer Rüstung
+//   Rucksack      12 Plätze (Rüstung verkleinert ihn nicht mehr - Feedback aus der Runde, 2026-10)
 //   Zusatztasche  optional, bis zu 3 gleichzeitig: klein = +3 Plätze/-3 Handeln,
 //                 groß = +5 Plätze/-5 Handeln, solange getragen
 //
@@ -53,7 +53,8 @@
 // Rüstungswert mit (freies Zahlenfeld, keine Nachschlagetabelle - Ausrüstung
 // ist hier frei erfunden/benannt). Die Summe aller getragenen Werte ergibt
 // die Rüstungsstufe (Ungepanzert 0 / Leicht 1-10 / Mittel 11-20 / Schwer
-// 21+), die wie bisher den Rucksack verkleinert (-1 Mittel, -2 Schwer). Die
+// 21+). Die Stufe verkleinert den Rucksack NICHT mehr (früher -1 Mittel, -2 Schwer; auf
+// Wunsch der Runde gestrichen, 2026-10). Die
 // zusätzlichen Bewegungs-/Handeln-/Heimlichkeit-Mali pro Stufe (siehe
 // IR_RUESTUNGSSTUFE_MALI) sind seit zwischenstand.docx eindeutig - als
 // Hinweis angezeigt, aber NICHT automatisch in Würfe eingerechnet (siehe
@@ -273,13 +274,11 @@ function irRuestungsstufe(wert) {
 // eigenen des SL.
 function irZonenDefinition(kontext) {
     const daten = kontext || appData;
-    const stufe = irRuestungsstufe(irRuestungswert(daten));
-    const ruestungsMalus = stufe === 'schwer' ? 2 : (stufe === 'mittel' ? 1 : 0);
     const zonen = [
         { id: 'guertel', titel: 'Gürtel', breite: 5, deaktiviert: 0 },
         { id: 'guertel_waffen', titel: 'Gürtel (Waffen)', breite: 2, deaktiviert: 0, nurWaffen: true }
     ].concat(irAusruestungsZonen(), [
-        { id: 'rucksack', titel: 'Rucksack', breite: 12, deaktiviert: ruestungsMalus }
+        { id: 'rucksack', titel: 'Rucksack', breite: 12, deaktiviert: 0 }
     ]);
     (daten.eldaraZusatztaschen || []).forEach((art, i) => {
         const info = IR_ZUSATZTASCHE_DATEN[art] || IR_ZUSATZTASCHE_DATEN.klein;
@@ -683,7 +682,7 @@ function irSchadenAendern(itemId, wert) {
     saveData();
 }
 
-// Ändert sich live die Summe (Rüstungsstufe hängt u.a. am Rucksack-Malus),
+// Ändert sich live die Summe (die Rüstungsstufe steht in der Überschrift und den Mali-Hinweisen),
 // deshalb hier komplett neu rendern statt nur den appData-Wert zu setzen.
 function irRuestungswertAendern(itemId, wert) {
     const item = (appData.inventory || []).find(i => i.id === itemId);
@@ -987,7 +986,7 @@ function renderInventarRaster() {
             <div class="ir-einstellung ir-ruestung-block">
                 <div class="ir-ruestung-titel">Rüstung <span class="ir-zone-malus">${ruestungswert} Rüstungswert - ${IR_RUESTUNGSSTUFE_LABEL[ruestungsstufe]}</span></div>
                 <p class="ir-hint">Zieh Ausrüstung aus Gürtel/Rucksack auf die passenden Plätze weiter unten (Kopf, Schulter/Hals, Brust, Hände, Beine, Füße, Schmuck) - jedes Item bringt seinen eigenen Rüstungswert mit.</p>
-                <p class="ir-hint">Rucksack-Malus: ${ruestungsstufe === 'schwer' ? '-2 Plätze' : ruestungsstufe === 'mittel' ? '-1 Platz' : 'keiner'} durch diese Stufe.</p>
+                <p class="ir-hint">Rüstung nimmt keinen Rucksack-Platz weg.</p>
                 <p class="ir-hint">Weitere Mali durch diese Stufe: ${(() => { const m = IR_RUESTUNGSSTUFE_MALI[ruestungsstufe]; return (m.bewegung || m.handeln || m.heimlichkeit) ? `Bewegung ${m.bewegung}m, Handeln ${m.handeln || 0}, Heimlichkeit ${m.heimlichkeit}` : 'keine'; })()} - nicht automatisch verrechnet, bitte selbst beim Würfeln eintragen. <i class="fa-solid fa-circle-question help-icon" onclick="showHelp('inventarraster')" title="Hilfe zum Rasterinventar"></i></p>
             </div>
             <div class="ir-einstellung">

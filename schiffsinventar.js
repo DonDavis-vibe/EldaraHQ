@@ -124,13 +124,13 @@ function schiffLaden() {
         const roh = localStorage.getItem(SCHIFF_KEY);
         const geladen = roh ? JSON.parse(roh) : null;
         if (geladen && Array.isArray(geladen.items)) {
-            schiff = geladen.items;
+            schiff = schiffStapelBereinigen(geladen.items.filter(i => i && i.name));
             schiffKlasse = SCHIFF_KLASSEN[geladen.klasse] ? geladen.klasse : 'schoner';
             kisten = geladen.kisten && typeof geladen.kisten === 'object' ? geladen.kisten : {};
             kistenKapazitaet = Math.max(1, parseInt(geladen.kistenKapazitaet) || 5);
         } else if (Array.isArray(geladen)) {
             // Alter Stand ohne Schiffsklasse (vor der Lager-Kapazität)
-            schiff = geladen;
+            schiff = schiffStapelBereinigen(geladen.filter(i => i && i.name));
             schiffKlasse = 'schoner';
             kisten = {};
             kistenKapazitaet = 5;
@@ -146,6 +146,44 @@ function schiffLaden() {
 
 function schiffSichern() {
     sicherSpeichern(SCHIFF_KEY, JSON.stringify({ klasse: schiffKlasse, items: schiff, kisten, kistenKapazitaet }));
+}
+
+// Gleiche Güter bilden EINEN Stapel (Feedback aus der Runde: "12 Fässer Nahrung" standen als
+// Fass, Fass, 4 Fässer, 2 Fässer ... untereinander): wer etwas mit gleichem Namen und gleicher
+// Größe ablegt, erhöht die Menge des vorhandenen Eintrags. Ein Stapel belegt wie bisher EINEN
+// Lagerplatz (Kosten je Eintrag, nicht je Stück) - ein neuer Eintrag nur, wenn es noch keinen gibt.
+function schiffStapelSchluessel(item) {
+    return String(item.name || '').trim().toLowerCase() + '|' + (Number(item.groesse) || 1);
+}
+
+function schiffZusammenfuehren(liste, item) {
+    const schluessel = schiffStapelSchluessel(item);
+    const vorhanden = liste.find(i => schiffStapelSchluessel(i) === schluessel);
+    if (!vorhanden) return { liste: [item].concat(liste), zusammengefasst: false, eintrag: item };
+    const eintrag = Object.assign({}, vorhanden, {
+        amount: (Number(vorhanden.amount) || 1) + (Number(item.amount) || 1),
+        description: vorhanden.description || item.description || ''
+    });
+    return { liste: liste.map(i => (i.id === vorhanden.id ? eintrag : i)), zusammengefasst: true, eintrag };
+}
+
+// Bereits zersplitterte Altbestände (mehrere Einträge für dasselbe Gut) einmal zusammenfassen
+function schiffStapelBereinigen(liste) {
+    return liste.reduce((aus, item) => schiffZusammenfuehren(aus, item).liste, []).reverse();
+}
+
+// Verbrauch: Menge ändern, bei 0 verschwindet der Eintrag samt Lagerplatz
+function schiffMengeSetzen(id, menge) {
+    const wert = Math.max(0, Math.round(Number(menge)) || 0);
+    const item = schiff.find(i => i.id === id);
+    if (!item) return;
+    if (wert === 0) { schiffCommit(schiff.filter(i => i.id !== id)); return; }
+    schiffCommit(schiff.map(i => (i.id === id ? Object.assign({}, i, { amount: wert }) : i)));
+}
+
+function schiffMengeAendern(id, delta) {
+    const item = schiff.find(i => i.id === id);
+    if (item) schiffMengeSetzen(id, (Number(item.amount) || 1) + delta);
 }
 
 function schiffLagerKapazitaet(klasse) {
@@ -186,12 +224,6 @@ function schiffHinzufuegen() {
     const name = (nameEl ? nameEl.value : '').trim();
     if (!name) { if (nameEl) nameEl.focus(); return; }
     const groesse = groesseEl ? parseFloat(groesseEl.value) || 1 : 1;
-    const kosten = schiffSlotKosten(groesse);
-    if (schiffLagerBelegt() + kosten > schiffLagerKapazitaet(schiffKlasse)) {
-        alert(`Lager voll: ${schiffLagerBelegt()}/${schiffLagerKapazitaet(schiffKlasse)} belegt. Größere Schiffsklasse wählen oder erst Platz schaffen.`);
-        return;
-    }
-
     const item = {
         id: schiffNeueId(),
         name,
@@ -199,7 +231,13 @@ function schiffHinzufuegen() {
         groesse,
         description: (descEl ? descEl.value : '').trim()
     };
-    schiffCommit([item].concat(schiff));
+    const stapel = schiffZusammenfuehren(schiff, item);
+    // ein bestehender Stapel braucht keinen neuen Lagerplatz
+    if (!stapel.zusammengefasst && schiffLagerBelegt() + schiffSlotKosten(groesse) > schiffLagerKapazitaet(schiffKlasse)) {
+        alert(`Lager voll: ${schiffLagerBelegt()}/${schiffLagerKapazitaet(schiffKlasse)} belegt. Größere Schiffsklasse wählen oder erst Platz schaffen.`);
+        return;
+    }
+    schiffCommit(stapel.liste);
     if (nameEl) { nameEl.value = ''; nameEl.focus(); }
     if (mengeEl) mengeEl.value = '1';
     if (descEl) descEl.value = '';
@@ -278,8 +316,9 @@ function schiffAnfrageVerarbeiten(peerId, payload) {
             groesse: Number(roh.groesse) || 1,
             description: String(roh.description || '').slice(0, 1000)
         };
+        const stapel = schiffZusammenfuehren(schiff, item);
         const kosten = schiffSlotKosten(item.groesse);
-        if (schiffLagerBelegt() + kosten > schiffLagerKapazitaet(schiffKlasse)) {
+        if (!stapel.zusammengefasst && schiffLagerBelegt() + kosten > schiffLagerKapazitaet(schiffKlasse)) {
             // Kein Lager mehr frei - Spieler hat es lokal schon aus dem eigenen
             // Raster entfernt (siehe schiffAblegen), darum direkt zurückgeben
             // statt nur abzulehnen. grund:'voll' lässt den Spieler-Client
@@ -292,14 +331,37 @@ function schiffAnfrageVerarbeiten(peerId, payload) {
             if (typeof addGmLogEntry === 'function') addGmLogEntry(name, `wollte ${schiffLabel(item)} aufs Schiff legen, aber das Lager ist voll - bleibt bei ${name}.`, '⚠️');
             return true;
         }
-        schiffCommit([item].concat(schiff));
-        if (typeof addGmLogEntry === 'function') addGmLogEntry(name, `legt ${schiffLabel(item)} aufs Schiff.`, '📥');
+        schiffCommit(stapel.liste);
+        if (typeof addGmLogEntry === 'function') addGmLogEntry(name, `legt ${schiffLabel(item)} aufs Schiff${stapel.zusammengefasst ? ` (jetzt ${schiffLabel(stapel.eintrag)})` : ''}.`, '📥');
         return true;
     }
     return false;
 }
 
 // --- Kisten: Spielleiter -----------------------------------------------------
+
+// Wie beim Schiff: gleiche Gegenstände (Name) in einer Kiste sind ein Stapel und belegen EINEN Platz
+function kisteZusammenfuehren(liste, item) {
+    const schluessel = String(item.name || '').trim().toLowerCase();
+    const vorhanden = liste.find(i => String(i.name || '').trim().toLowerCase() === schluessel);
+    if (!vorhanden) return { liste: [item].concat(liste), zusammengefasst: false, eintrag: item };
+    const eintrag = Object.assign({}, vorhanden, {
+        amount: (Number(vorhanden.amount) || 1) + (Number(item.amount) || 1),
+        description: vorhanden.description || item.description || ''
+    });
+    return { liste: liste.map(i => (i.id === vorhanden.id ? eintrag : i)), zusammengefasst: true, eintrag };
+}
+
+// Verbrauch aus der Kiste: Menge runterzählen, bei 0 verschwindet der Eintrag
+function kisteMengeSetzen(peerId, itemId, menge) {
+    const wert = Math.max(0, Math.round(Number(menge)) || 0);
+    const liste = kisteFuer(peerId);
+    if (!liste.some(i => i.id === itemId)) return;
+    kisten[peerId] = wert === 0 ? liste.filter(i => i.id !== itemId) : liste.map(i => (i.id === itemId ? Object.assign({}, i, { amount: wert }) : i));
+    schiffSichern();
+    kisteVerteilenAn(peerId);
+    renderSchiffGm();
+}
 
 function kisteSenden(peerId, nachricht) {
     const conn = typeof clientConnections !== 'undefined' ? clientConnections[peerId] : null;
@@ -333,13 +395,14 @@ function kisteHinzufuegen(peerId) {
     const name = (nameEl ? nameEl.value : '').trim();
     if (!name) { if (nameEl) nameEl.focus(); return; }
     const liste = kisteFuer(peerId);
-    if (liste.length >= kistenKapazitaet) { alert(`Kiste voll: ${liste.length}/${kistenKapazitaet} Plätze belegt.`); return; }
     const item = {
         id: kisteNeueId(), name,
         amount: Math.max(1, parseInt(mengeEl ? mengeEl.value : 1) || 1),
         description: (descEl ? descEl.value : '').trim()
     };
-    kisten[peerId] = [item].concat(liste);
+    const stapel = kisteZusammenfuehren(liste, item);
+    if (!stapel.zusammengefasst && liste.length >= kistenKapazitaet) { alert(`Kiste voll: ${liste.length}/${kistenKapazitaet} Plätze belegt.`); return; }
+    kisten[peerId] = stapel.liste;
     schiffSichern();
     kisteVerteilenAn(peerId);
     if (typeof addGmLogEntry === 'function') addGmLogEntry('Spielleiter', `legt ${schiffLabel(item)} in ${schiffSpielerName(peerId)}s Kiste.`, '🗝️');
@@ -385,7 +448,8 @@ function kisteAnfrageVerarbeiten(peerId, payload) {
             description: String(roh.description || '').slice(0, 1000)
         };
         const liste = kisteFuer(peerId);
-        if (liste.length >= kistenKapazitaet) {
+        const stapel = kisteZusammenfuehren(liste, item);
+        if (!stapel.zusammengefasst && liste.length >= kistenKapazitaet) {
             // Kein Platz mehr - Spieler hat es lokal schon aus dem eigenen
             // Raster entfernt (siehe kisteAblegen), darum direkt zurückgeben.
             // grund:'voll' siehe schiffAnfrageVerarbeiten (gleicher Bug/Fix,
@@ -395,10 +459,10 @@ function kisteAnfrageVerarbeiten(peerId, payload) {
             if (typeof addGmLogEntry === 'function') addGmLogEntry(name, `wollte ${schiffLabel(item)} in die eigene Kiste legen, aber die ist voll - bleibt bei ${name}.`, '⚠️');
             return true;
         }
-        kisten[peerId] = [item].concat(liste);
+        kisten[peerId] = stapel.liste;
         schiffSichern();
         kisteVerteilenAn(peerId);
-        if (typeof addGmLogEntry === 'function') addGmLogEntry(name, `legt ${schiffLabel(item)} in die eigene Kiste.`, '🗝️');
+        if (typeof addGmLogEntry === 'function') addGmLogEntry(name, `legt ${schiffLabel(item)} in die eigene Kiste${stapel.zusammengefasst ? ` (jetzt ${schiffLabel(stapel.eintrag)})` : ''}.`, '🗝️');
         renderSchiffGm();
         return true;
     }
@@ -415,7 +479,12 @@ function kisteSpielerBlockHtml(peerId) {
             </div>
             ${i.description ? `<div class="tm-item-desc">${escapeHtml(i.description)}</div>` : ''}
             <div class="tm-item-actions">
-                <button class="x-mini x-mini-danger" data-kistedel="${escapeHtml(i.id)}" data-peer="${escapeHtml(peerId)}" title="Entfernen"><i class="fa-solid fa-trash"></i></button>
+                <span class="schiff-menge" title="Menge - bei Verbrauch runterzählen, bei 0 verschwindet der Eintrag">
+                    <button class="x-mini" data-kistemenge="${escapeHtml(i.id)}" data-peer="${escapeHtml(peerId)}" data-delta="-1" title="Eine Einheit verbrauchen"><i class="fa-solid fa-minus"></i></button>
+                    <input type="number" class="x-input schiff-menge-feld" min="0" value="${Number(i.amount) || 1}" data-kistemengeset="${escapeHtml(i.id)}" data-peer="${escapeHtml(peerId)}" aria-label="Menge">
+                    <button class="x-mini" data-kistemenge="${escapeHtml(i.id)}" data-peer="${escapeHtml(peerId)}" data-delta="1" title="Eine Einheit dazu"><i class="fa-solid fa-plus"></i></button>
+                </span>
+                <button class="x-mini x-mini-danger" data-kistedel="${escapeHtml(i.id)}" data-peer="${escapeHtml(peerId)}" title="Ganzen Eintrag entfernen"><i class="fa-solid fa-trash"></i></button>
             </div>
         </div>`).join('');
     return `
@@ -461,8 +530,13 @@ function renderSchiffGm() {
             </div>
             ${i.description ? `<div class="tm-item-desc">${escapeHtml(i.description)}</div>` : ''}
             <div class="tm-item-actions">
+                <span class="schiff-menge" title="Menge - bei Verbrauch einfach runterzählen, bei 0 verschwindet der Eintrag">
+                    <button class="x-mini" data-schiffmenge="${escapeHtml(i.id)}" data-delta="-1" title="Eine Einheit verbrauchen"><i class="fa-solid fa-minus"></i></button>
+                    <input type="number" class="x-input schiff-menge-feld" min="0" value="${Number(i.amount) || 1}" data-schiffmengeset="${escapeHtml(i.id)}" aria-label="Menge">
+                    <button class="x-mini" data-schiffmenge="${escapeHtml(i.id)}" data-delta="1" title="Eine Einheit dazu"><i class="fa-solid fa-plus"></i></button>
+                </span>
                 ${gebenSelect}
-                <button class="x-mini x-mini-danger" data-schiffdel="${escapeHtml(i.id)}" title="Entfernen"><i class="fa-solid fa-trash"></i></button>
+                <button class="x-mini x-mini-danger" data-schiffdel="${escapeHtml(i.id)}" title="Ganzen Eintrag entfernen"><i class="fa-solid fa-trash"></i></button>
             </div>
         </div>`;
     }).join('');
@@ -521,8 +595,15 @@ function renderSchiffGm() {
     const kapazEl = document.getElementById('kisten-kapazitaet');
     if (kapazEl) kapazEl.addEventListener('change', () => kistenKapazitaetAendern(kapazEl.value));
     box.querySelectorAll('[data-kistedel]').forEach(b => b.addEventListener('click', () => kisteEntfernen(b.dataset.peer, b.dataset.kistedel)));
+    box.querySelectorAll('[data-kistemenge]').forEach(b => b.addEventListener('click', () => {
+        const i = kisteFuer(b.dataset.peer).find(x => x.id === b.dataset.kistemenge);
+        if (i) kisteMengeSetzen(b.dataset.peer, i.id, (Number(i.amount) || 1) + Number(b.dataset.delta));
+    }));
+    box.querySelectorAll('[data-kistemengeset]').forEach(f => f.addEventListener('change', () => kisteMengeSetzen(f.dataset.peer, f.dataset.kistemengeset, f.value)));
     box.querySelectorAll('[data-kisteadd]').forEach(b => b.addEventListener('click', () => kisteHinzufuegen(b.dataset.kisteadd)));
     box.querySelectorAll('[data-schiffdel]').forEach(b => b.addEventListener('click', () => schiffEntfernen(b.dataset.schiffdel)));
+    box.querySelectorAll('[data-schiffmenge]').forEach(b => b.addEventListener('click', () => schiffMengeAendern(b.dataset.schiffmenge, Number(b.dataset.delta))));
+    box.querySelectorAll('[data-schiffmengeset]').forEach(f => f.addEventListener('change', () => schiffMengeSetzen(f.dataset.schiffmengeset, f.value)));
     box.querySelectorAll('[data-schiffgeben]').forEach(s => s.addEventListener('change', () => { if (s.value) schiffGebenAn(s.dataset.schiffgeben, s.value); }));
 }
 
